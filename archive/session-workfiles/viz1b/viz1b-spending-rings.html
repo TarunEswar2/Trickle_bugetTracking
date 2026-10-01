@@ -135,14 +135,14 @@ svg.ph [data-go]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
 
 <section>
   <div class="sec-h"><span class="k">D</span><h2>Show previous week, month or period</h2></div>
-  <p class="q">Tap "Show previous week" (or month) inside a category and a slider appears, from 1 to 12 periods back. The grid becomes what it looked like at the same day of that earlier period, and a dashed line marks where you are now. Yash-type has 12 weeks of history, Nishad-type and Harsh-type 5 months, Vaishak-type 2 months. Tarun-type and Gautham-type are in week 1, so there is nothing to compare yet.</p>
+  <p class="q">Tap "Show previous week" (or month) inside a category and a slider appears, from 1 to 12 periods back. Then and now sit side by side as two grids, the earlier one slightly faded, at the same day of that earlier period. Yash-type has 12 weeks of history, Nishad-type and Harsh-type 5 months, Vaishak-type 2 months. Tarun-type and Gautham-type are in week 1, so there is nothing to compare yet.</p>
   <div class="gal" id="secD"></div>
   <div class="notes" id="noteD"></div>
 </section>
 
 <section>
-  <div class="sec-h"><span class="k">E</span><h2>Now and previous together</h2></div>
-  <p class="q">Now and then need to be seen at once. Three ways, same six cases (two of Yash-type, Nishad-type twice, Harsh-type, Vaishak-type). One of Nishad's has more left than the earlier day, so the overlays show a gain as well as a loss.</p>
+  <div class="sec-h"><span class="k">E</span><h2>Now and previous, side by side</h2></div>
+  <p class="q">Decided: two grids side by side, the earlier one slightly faded. Six cases from the pool. One of Nishad-type's has more left now than on the earlier day.</p>
   <div class="gal" id="secE"></div>
   <div class="notes" id="noteE"></div>
 </section>
@@ -154,7 +154,6 @@ svg.ph [data-go]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
     <div id="demo"></div>
     <div class="ctl">
       <div class="grp"><span class="lbl">Student</span><div class="chips" id="cs"></div></div>
-      <div class="grp"><span class="lbl">Together as</span><div class="chips" id="cm"></div></div>
       <div class="grp"><label class="lbl" for="lb">Look back</label><input id="lb" type="range" min="1" max="12" step="1" value="1" disabled></div><span class="small" id="dnote">Tap a name or a ring to open it, then Show previous week.</span>
     </div>
   </div>
@@ -223,9 +222,9 @@ function spendScreen(st){
   return frame(s,`${st.short} spending: rings for ${st.top.map(c=>c.n).join(', ')}`,2)}
 
 /* ---------- detail screen ---------- */
-function liquid(L,color,k,x0,y0){x0=x0==null?35:x0;y0=y0==null?178:y0;let pcs='';
+function liquid(L,color,k,x0,y0,fade){fade=fade==null?1:fade;x0=x0==null?35:x0;y0=y0==null?178:y0;let pcs='';
   for(let i=0;i<100;i++){const r=Math.floor(i/10),c=i%10;pcs+=`<rect x="${c*P}" y="${rowTop(r)}" width="${C}" height="${C}" rx="7" fill="${CELL}"/>`;
-    const fa=Math.max(0,Math.min(1,L-i));if(fa>0)pcs+=`<rect x="${c*P}" y="${rowTop(r)+C*(1-fa)}" width="${C}" height="${C*fa}" rx="${fa>.99?7:2}" fill="${color}"/>`}
+    const fa=Math.max(0,Math.min(1,L-i));if(fa>0)pcs+=`<rect x="${c*P}" y="${rowTop(r)+C*(1-fa)}" width="${C}" height="${C*fa}" rx="${fa>.99?7:2}" fill="${color}" fill-opacity="${fade}"/>`}
   return `<g transform="translate(${x0} ${y0}) scale(${k})">${pcs}</g>`}
 const yOfBoxes=n=>{const rows=n/10;if(rows>=10)return 0;const f=Math.floor(rows+1e-9);return SZ-(f*P+(rows-f)*C)};
 
@@ -280,10 +279,10 @@ function detailScreen(st,name,o){
     if(!tx.length)s+=T(35,456,'Nothing yet this period.',17,{f:MUT});
     return frame(s,`${st.short} ${name} detail, ${over?'gone over':words(pct)}`,2)}
   /* compare with an earlier period */
-  const p=o.p,mode=o.mode||'ghost',L=Math.round(histFrac(st,name,p)*100),fr=L/100;
+  const p=o.p,mode='side',L=Math.round(histFrac(st,name,p)*100),fr=L/100;
   if(mode==='side'){
     s+=T(35,192,`Then · ${p}${st.unit==='week'?'w':'mo'} ago`,14,{f:MUT,w:600})+T(214,192,'Now',14,{w:700});
-    s+=liquid(L,color,.46,35,200)+liquid(curL,color,.46,214,200);
+    s+=liquid(L,color,.46,35,200,.5)+liquid(curL,color,.46,214,200);
     s+=T(35,382,words(fr*100),18,{w:600})+T(35,408,`${fmt(Math.round(L*box))} of ${fmt(b)}`,16,{f:MUT});
     s+=T(214,382,over?'gone over':words(pct),18,{w:600})+T(214,408,over?`${fmt(-l)} over`:`${fmt(l)} of ${fmt(b)}`,16,{f:MUT});
     s+=T(35,448,`Same day: ${st.pos}`,16,{f:MUT});
@@ -316,7 +315,7 @@ document.getElementById('noteB').innerHTML=`
 <div class="note"><b>Colour follows you in</b>The grid's liquid is the same colour as the ring and swatch you tapped, so you know where you are without reading.</div>`;
 document.getElementById('secC').innerHTML=`<div class="opt"><div class="row three">`+[S[4],S[5]].map(st=>fg(othersScreen(st),st.short,`${st.others.length} others`)).join('')+fg(detailScreen(S[5],'Mess & meals'),'Harsh-type · from a ring','Mess & meals, no transactions drawn')+`</div></div>`;
 
-document.getElementById('secD').innerHTML=`<div class="opt"><div class="row">`+[[S[3],'Quick-commerce',1],[S[3],'Quick-commerce',12],[S[4],'Food & beverages',3],[S[0],'Food',2],[S[5],'Eating out',5],[S[2],'Coffee & snacks',null]].map(([st,n,p])=>fg(detailScreen(st,n,{p,mode:'ghost'}),st.short,p?`${p} ${st.unit}${p>1?'s':''} back`:'no history yet')).join('')+`</div></div>`;
+document.getElementById('secD').innerHTML=`<div class="opt"><div class="row">`+[[S[3],'Quick-commerce',1],[S[3],'Quick-commerce',12],[S[4],'Food & beverages',3],[S[0],'Food',2],[S[5],'Eating out',5],[S[2],'Coffee & snacks',null]].map(([st,n,p])=>fg(detailScreen(st,n,{p}),st.short,p?`${p} ${st.unit}${p>1?'s':''} back`:'no history yet')).join('')+`</div></div>`;
 document.getElementById('noteD').innerHTML=`
 <div class="note"><b>Like for like</b>Yash is nearly out of Quick-commerce on Thursday. One week back the same day he had most of it left; twelve weeks back, about half. The dashed line shows where he is now, so the gap reads at a glance.</div>
 <div class="note"><b>Limits are visible</b>Nishad has 5 months of data, so dots 6 to 12 are dimmed and cannot be picked. A new user sees "No earlier weeks yet" where the button would be.</div>
@@ -325,16 +324,16 @@ document.getElementById('noteD').innerHTML=`
 const nishGain=(()=>{const st=S[4],cat=st.cats[0],Ln=Math.max(0,cat[2])/(cat[1]/100);for(let p=1;p<=5;p++){if(Math.round(histFrac(st,cat[0],p)*100)<Ln)return p}return 3})();
 const MODES=[['side','A · Side by side','two grids, then and now'],['ghost','B · Overlay, ghost','dashed outline of what was there'],['tint','C · Overlay, another colour','sand for then, pale for now']];
 const CASES=[[S[3],'Quick-commerce',1],[S[3],'Quick-commerce',12],[S[4],'Food & beverages',3],[S[4],'Food & beverages',nishGain],[S[5],'Eating out',5],[S[0],'Food',2]];
-document.getElementById('secE').innerHTML=MODES.map(([m,n,d])=>`<div class="opt"><h4><b>${m==='side'?'A':m==='ghost'?'B':'C'}</b>${n.slice(4)} <span>${d}</span></h4><div class="row">`+CASES.map(([st,nm,p])=>fg(detailScreen(st,nm,{p,mode:m}),st.short,`${nm}, ${p} ${st.unit}${p>1?'s':''} back`)).join('')+`</div></div>`).join('');
+document.getElementById('secE').innerHTML=`<div class="opt"><div class="row">`+CASES.map(([st,nm,p])=>fg(detailScreen(st,nm,{p}),st.short,`${nm}, ${p} ${st.unit}${p>1?'s':''} back`)).join('')+`</div></div>`;
 document.getElementById('noteE').innerHTML=`
-<div class="note"><b>A · side by side</b>Two grids, each 10×10 and half the size. Exactly the same form, easy to read, but it is two visualisations on one screen and each grid is small. You compare by eye across a gap.</div>
-<div class="note"><b>B · ghost overlay</b>One grid at full size. The solid liquid is now; what was there then and is gone shows as the dashed outline from the pay screen. If you have more now, a dashed line marks the earlier level. Same ghost language as paying.</div>
-<div class="note"><b>C · another colour</b>One grid, three colours: shared liquid, sand for what only the earlier day had, a paler tint for what only now has. It needs a three-part key and a second colour to learn.</div>`;
+<div class="note"><b>Then is faded</b>The earlier grid is the same colour at half strength, the current grid at full strength, so which is which reads before the labels do.</div>
+<div class="note"><b>Same size, same form</b>Both grids are the full 10×10 at the same scale, so the box counts compare directly. Words and the exact figure sit under each grid.</div>
+<div class="note"><b>Gains and losses</b>Nishad-type has less left than a month ago (more on the left grid) and, for another month, more left now. Both read the same way.</div>`;
 
 /* demo */
 const dem={s:3,view:'rings',cat:null,p:null,from:null,mode:'ghost'};
 const demo=document.getElementById('demo'),lb=document.getElementById('lb'),dn=document.getElementById('dnote');
-function draw(){const st=S[dem.s];demo.innerHTML=dem.view==='rings'?spendScreen(st):dem.view==='others'?othersScreen(st):detailScreen(st,dem.cat,{p:dem.p,mode:dem.mode});
+function draw(){const st=S[dem.s];demo.innerHTML=dem.view==='rings'?spendScreen(st):dem.view==='others'?othersScreen(st):detailScreen(st,dem.cat,{p:dem.p});
   lb.disabled=!(dem.view==='detail'&&dem.p);if(dem.p){lb.value=dem.p}
   dn.textContent=dem.view==='detail'?(st.hist>0?`${st.short} has ${st.hist} earlier ${st.unit}s of data.`:`${st.short} has no earlier ${st.unit}s yet.`):'Tap a name or a ring to open it, then Show previous '+st.unit+'.'}
 function act(k){const st=S[dem.s];
@@ -351,8 +350,6 @@ window.addEventListener('pointerup',()=>{drag=false});
 demo.addEventListener('pointermove',e=>{if(!drag||!dem.p)return;const svg=demo.querySelector('svg'),r=svg.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*390;const i=Math.round((x-35)/(320/11));const p=Math.max(1,Math.min(S[dem.s].hist,i+1));if(p!==dem.p){dem.p=p;draw()}});
 demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-go]');if(t){e.preventDefault();act(t.dataset.go)}});
 lb.addEventListener('input',()=>{const st=S[dem.s];dem.p=Math.min(+lb.value,st.hist);draw()});
-const cm=document.getElementById('cm');cm.innerHTML=MODES.map((m,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${m[0]===dem.mode}">${m[1].slice(0,1)} · ${m[1].slice(4)}</button>`).join('');
-cm.onclick=e=>{const b=e.target.closest('button');if(!b)return;dem.mode=MODES[+b.dataset.i][0];[...cm.children].forEach((c,i)=>c.setAttribute('aria-pressed',MODES[i][0]===dem.mode));draw()};
 const el=document.getElementById('cs');
 el.innerHTML=S.map((s,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${i===dem.s}">${s.short.replace('-type','')}</button>`).join('');
 el.onclick=e=>{const b=e.target.closest('button');if(!b)return;dem.s=+b.dataset.i;dem.view='rings';dem.p=null;[...el.children].forEach((c,i)=>c.setAttribute('aria-pressed',i===dem.s));draw()};
