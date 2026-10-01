@@ -32,7 +32,8 @@ v14 so far:
 | Tabs | Decided: Home · Income · Spending · Savings · Insights |
 | Stage 2 — money representation, one visualisation at a time | In progress |
 | Visualisation 1 — budget gauge | Decided (V1-1 … V1-8 in the decisions log) |
-| Visualisation 2 — pay / friction crumble | **Next — waiting for Tarun's inspiration images** |
+| Visualisation 2 — pay / friction | Decided (V2-1 … V2-5): paid boxes fade out in order, dashed-outline ghost |
+| Visualisation 3 — income split | **Next — ask Tarun whether he has inspiration** |
 | Onboarding, per-tab screens, identity, v14 build, user tests | Not started |
 
 ## How Tarun wants to work (this matters more than anything else here)
@@ -94,35 +95,13 @@ green→amber transition, v7's range of data visualisations, sounds/motion from 
 his own gradients in Figma.
 
 ## The exact next step
-**Visualisation 2 — pay / friction: the amount crumbling away.**
+**Visualisation 3 — income split (spending vs savings).**
 
-1. Ask Tarun for his inspiration images for this one (he said he will provide them at each
-   step). Do not draw before he has.
-2. These three questions were put to him and are still unanswered:
-   - What crumbles — boxes out of the category's 10×10 grid, or a separate pile that
-     stands for the payment amount?
-   - When does it crumble — before he confirms (so he can still back out) or after?
-   - How much should it sting?
-3. Draw 3–4 options on one board, each shown for several students from the pool
-   (e.g. a ₹20 tea on a ₹600 budget, a ₹1,400 dinner on a ₹3,000 budget, a payment that
-   takes the category over). Give a recommendation, ask him to choose.
-4. Log the result as "Viz 2" in `docs/claude/v14_decisions.md`, mark it DONE in the queue.
+1. Ask Tarun for inspiration images if he has any (Viz 2 needed none).
+2. Draw 3–4 options on one board, each shown for several students from the pool (income ₹3k–25k, weekly vs monthly, regular vs irregular). Follow `archive/session-workfiles/viz2/viz2-pay-friction.html` as the board pattern. Give a recommendation, ask him to choose.
+3. Log as "Viz 3" in `docs/claude/v14_decisions.md`, mark it DONE in the queue.
 
-Then continue the queue in order:
-
-3. Income split (spending vs savings)
-4. Savings goal (how much, by when, actually saved)
-5. Unspent → saved
-6. Small / repeat purchases
-7. Time patterns (e.g. nights)
-8. Subscriptions coming up (Fixed group)
-9. This week vs last
-10. Transaction history
-11. Exact amounts on tap (progressive-disclosure rules)
-
-After the queue: rebuild onboarding from the original plan (`docs/claude/build_plan.md`,
-`docs/claude/screens_to_design.md`), grey wireframes per tab with one visualisation per
-screen, identity, the v14 build, and then real user tests — which have never been run.
+Then continue the queue from item 4 (savings goal) in `docs/claude/v14_decisions.md`.
 
 ## Read next
 1. `docs/claude/v14_decisions.md` — decision log and queue (authoritative).

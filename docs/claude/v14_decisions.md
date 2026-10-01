@@ -42,12 +42,15 @@ Moved on to Viz 2 without answering; defaults on my recommendation, change any t
 | V2-1 | What crumbles: boxes from the category's own 10x10 grid (same object as Viz 1). |
 | V2-2 | When: "crumble away and indicate a ghost of what left, before paying" - the crumble plays on the pay screen before the payment is confirmed, leaving a ghost of what left. (My reading: boxes crumble out of the grid as a preview; can still back out - confirm with Tarun.) |
 | V2-3 | Sting: "indicate what left until we move to the next screen" - the ghost of the departed boxes stays visible until the user moves on; no red/shake/sound drama. |
-No inspiration images needed ("just like viz1"). Options board drawn: https://claude.ai/artifact/Fsvd6fogygvPdtsrHsqMyN (source archive/session-workfiles/viz2/viz2-pay-friction.html). Waiting on Tarun: crumble A-D, ghost G1-G3, sub-box payments, over-budget confirm, live amount changes.
+| V2-4 | Crumble = **D, fade in order**: the paid boxes fade out one by one, top first, no pieces (~1.5 s). |
+| V2-5 | Ghost = **G2, dashed outline** where the liquid was, kept until the user moves on. |
+Defaults on my recommendation, not explicitly answered (change any time): payments under one box crumble at true size; going over carries V1-4 to the pay screen (everything left fades, then amber floor line + words, no red); the ghost updates live as the amount or category changes and snaps back if you back out.
+Board: https://claude.ai/artifact/Fsvd6fogygvPdtsrHsqMyN (source archive/session-workfiles/viz2/viz2-pay-friction.html). No inspiration images were needed.
 
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
-2. Pay / friction: amount crumbling away — IN PROGRESS (V2-1…V2-3 answered; waiting for inspiration images)
-3. Income split (spending vs savings)
+2. Pay / friction: amount crumbling away — DONE
+3. Income split (spending vs savings) — NEXT
 4. Savings goal (how much, by when, actually saved)
 5. Unspent → saved
 6. Small / repeat purchases

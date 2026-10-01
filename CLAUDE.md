@@ -32,4 +32,4 @@ The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 - `references/inspiration/` — images Tarun supplied as visual references.
 
 ## Next up
-Visualisation 2: pay / friction — the paid amount crumbling away. Waiting on Tarun's inspiration.
+Visualisation 3: income split (spending vs savings). Viz 2 (pay / friction) is decided: V2-1…V2-5.
