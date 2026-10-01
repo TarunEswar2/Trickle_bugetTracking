@@ -42,7 +42,7 @@ Moved on to Viz 2 without answering; defaults on my recommendation, change any t
 | V2-1 | What crumbles: boxes from the category's own 10x10 grid (same object as Viz 1). |
 | V2-2 | When: "crumble away and indicate a ghost of what left, before paying" - the crumble plays on the pay screen before the payment is confirmed, leaving a ghost of what left. (My reading: boxes crumble out of the grid as a preview; can still back out - confirm with Tarun.) |
 | V2-3 | Sting: "indicate what left until we move to the next screen" - the ghost of the departed boxes stays visible until the user moves on; no red/shake/sound drama. |
-Next: Tarun's inspiration images, then a board across the student pool.
+No inspiration images needed ("just like viz1"). Options board drawn: https://claude.ai/artifact/Fsvd6fogygvPdtsrHsqMyN (source archive/session-workfiles/viz2/viz2-pay-friction.html). Waiting on Tarun: crumble A-D, ghost G1-G3, sub-box payments, over-budget confirm, live amount changes.
 
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE

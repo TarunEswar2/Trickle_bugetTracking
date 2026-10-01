@@ -1,0 +1,330 @@
+<title>Trickle v14 — Viz 2: Pay friction</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a design board in the Viz 1 family. Sections A-F; each is a question, a gallery of dark phone
+   frames (rows = options, columns = students or moments), then what the drawing showed. Same tokens as Viz 1. */
+:root{
+  --bg:#f0f1ec; --surface:#fafaf7; --ink:#14181b; --ink2:#444c54; --muted:#727a83; --line:#d6d9d1;
+  --accent:#0d7a64; --accent-soft:#d9ece5; --amber:#a9680f;
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px;padding-block:40px 80px}
+@media (max-width:600px){.wrap{padding-inline:16px;padding-block:24px 56px}}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.12;margin:0}
+h1{font-size:clamp(30px,5vw,50px);font-weight:700;letter-spacing:-.02em}
+h2{font-size:clamp(23px,3vw,31px);font-weight:700;letter-spacing:-.01em}
+h3{font-size:18px;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lead{font-size:18px;color:var(--ink2);max-width:62ch}
+header.top{display:flex;flex-direction:column;gap:16px;padding-bottom:28px}
+section{display:flex;flex-direction:column;gap:18px;padding-block:40px;border-top:1px solid var(--line)}
+.sec-h{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.sec-h .k{font-family:var(--display);font-weight:700;font-size:clamp(23px,3vw,31px);color:var(--accent)}
+.q{color:var(--ink2)}
+ul.plain{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.logged{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.logged div{border-top:2px solid var(--ink);padding-top:10px}
+.logged b{display:block;font-family:var(--display);font-size:17px;margin-bottom:4px}
+.logged span{color:var(--ink2);font-size:15px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right}
+.opt{display:flex;flex-direction:column;gap:10px}
+.opt>h4{margin:0;font-size:15.5px;font-weight:600;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.opt>h4 b{font-family:var(--display);background:var(--ink);color:var(--bg);border-radius:5px;padding:1px 7px;font-size:13.5px}
+.opt>h4 span{color:var(--muted);font-weight:400}
+.gal{display:flex;flex-direction:column;gap:26px}
+.row{display:grid;grid-template-columns:repeat(6,minmax(170px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.row.four{grid-template-columns:repeat(4,minmax(200px,1fr))}
+.row.three{grid-template-columns:repeat(3,minmax(200px,300px))}
+.fg{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fg figcaption{font-size:13px;color:var(--muted);line-height:1.3}
+.fg figcaption b{color:var(--ink);font-weight:600}
+svg.ph{width:100%;height:auto;display:block;font-family:var(--body)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px 28px}
+.note{border-top:1px solid var(--line);padding-top:10px;font-size:15px;color:var(--ink2)}
+.note b{display:block;color:var(--ink);font-family:var(--display);font-size:16px;margin-bottom:3px}
+.demo{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:700px){.demo{grid-template-columns:minmax(0,1fr)}}
+.ctl{display:flex;flex-direction:column;gap:16px}
+.ctl .grp{display:flex;flex-direction:column;gap:7px}
+.ctl .lbl{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font:inherit;font-size:14.5px;font-weight:600;white-space:nowrap;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer}
+.chip:hover{border-color:var(--ink2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn{font:inherit;font-size:15px;font-weight:700;padding:10px 18px;border-radius:10px;border:0;background:var(--accent);color:#04231b;cursor:pointer;align-self:flex-start}
+.chip:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;max-width:420px;accent-color:var(--accent)}
+.small{font-size:13.5px;color:var(--muted)}
+.decide{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px}
+.dq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.dq h3{font-size:17px}
+.dq ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:5px;font-size:15px;color:var(--ink2);list-style:upper-alpha}
+.dq li.s{color:var(--ink)}
+.dq li.s::after{content:" suggested";font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-left:4px}
+</style>
+
+<div id="defs"></div>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Trickle v14 · Visualisation 2 of 11 · 2 Oct 2026</div>
+  <h1>Pay friction</h1>
+  <p class="lead">You pick a category and an amount. On the pay screen the boxes that payment takes crumble out of that category's grid, and a ghost of what left stays until you move on. Below are four ways to crumble and three ways to draw the ghost, tried on all six students. Options only. You decide.</p>
+</header>
+
+<section style="border-top:0;padding-top:0">
+  <div class="sec-h"><h2>Already decided</h2></div>
+  <div class="logged">
+    <div><b>V2-1 · What crumbles</b><span>Boxes from the category's own 10×10 grid. No separate pile.</span></div>
+    <div><b>V2-2 · When</b><span>On the pay screen, before you confirm. It leaves a ghost of what left.</span></div>
+    <div><b>V2-3 · How long</b><span>The ghost stays until you move to the next screen. No red, no shake.</span></div>
+    <div><b>No references</b><span>Same family as Viz 1: dark ground, one liquid colour, rounded boxes, scale stays "1 box = ₹X".</span></div>
+  </div>
+  <p class="small">Pay screen here: title "Paying ₹X", the category, its grid, one line of words that follows the crumble, the scale, then Pay and Back. The caption under each phone carries board-only numbers (rupees and box counts); the phone itself shows only the amount you are paying.</p>
+</section>
+
+<section>
+  <div class="sec-h"><h2>The pool</h2><span class="q">One payment per student, each from Viz 1's pool.</span></div>
+  <div class="tw"><table>
+    <tr><th>Student</th><th>Category</th><th class="n">Budget</th><th class="n">Left</th><th class="n">Paying</th><th class="n">1 box</th><th class="n">Payment in boxes</th></tr>
+    <tbody id="pool"></tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">A</span><h2>How the boxes crumble</h2></div>
+  <p class="q">Tarun-type, Coffee &amp; snacks (₹140 left of ₹400), paying ₹60 for 15 boxes. Each row: before, a third of the way, two thirds, after. Ghost drawn as dashed outline in every row.</p>
+  <div class="gal" id="secA"></div>
+  <div class="notes" id="noteA"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">B</span><h2>How the ghost looks</h2></div>
+  <p class="q">Gautham-type, Food &amp; drinks (₹571 left of ₹652), paying ₹60 for 9.2 boxes. After the crumble, same crumble style in all three.</p>
+  <div class="gal" id="secB"></div>
+  <div class="notes" id="noteB"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">C</span><h2>All six students, every crumble</h2></div>
+  <p class="q">Each row is one crumble style caught about halfway. The last row is the finished ghost. Left to right, by number of categories.</p>
+  <div class="gal" id="secC"></div>
+  <div class="notes" id="noteC"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">D</span><h2>The same ₹20 for three students</h2></div>
+  <p class="q">Crumble A, midway, then after. At ₹60 a box, ₹20 is a third of a box. At ₹4 a box it is five.</p>
+  <div class="gal" id="secD"></div>
+  <div class="notes" id="noteD"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">E</span><h2>When the payment takes it over</h2></div>
+  <p class="q">Yash-type pays ₹312 with ₹90 left. Harsh-type pays a ₹3,500 dinner out of a full ₹1,600. Crumble A, midway and after. Gone over follows Viz 1 (V1-4): amber floor line, words, no red.</p>
+  <div class="gal" id="secE"></div>
+  <div class="notes" id="noteE"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">F</span><h2>Try it</h2></div>
+  <p class="q">Pick a student, a crumble, a ghost, and drag the amount. Release the slider or press Replay to watch it. Reduced motion shows the finished state.</p>
+  <div class="demo">
+    <div id="demo"></div>
+    <div class="ctl">
+      <div class="grp"><span class="lbl">Student</span><div class="chips" id="cs"></div></div>
+      <div class="grp"><span class="lbl">Crumble</span><div class="chips" id="cc"></div></div>
+      <div class="grp"><span class="lbl">Ghost</span><div class="chips" id="cg"></div></div>
+      <div class="grp"><label class="lbl" for="amt">Amount paid</label><input id="amt" type="range" min="10" max="500" step="10" value="60"><span class="small" id="amtv"></span></div>
+      <button class="btn" id="replay" type="button">Replay</button>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>Why these choices</h2></div>
+  <ul class="plain">
+    <li>Soman 2001: past payments only curb spending when the amount is rehearsed and the money leaves at once. The crumble happens at the moment of paying, so the loss is immediate and visible.</li>
+    <li>Knutson et al. 2007: the felt cost is strongest when the price is in front of you at the decision. Showing the loss before you confirm puts it there.</li>
+    <li>Tversky &amp; Kahneman 1981 and Olafsson &amp; Pagel 2018: lead with what is left and keep alarm out. The words say what remains; over is amber, never red.</li>
+    <li>Garcia-Retamero 2010: keep the whole visible. The ghost keeps the departed boxes in the grid, so the payment is seen against the budget.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-h"><h2>Decisions for Tarun</h2></div>
+  <div class="decide">
+    <div class="dq"><h3>1. How do the boxes crumble?</h3><ol><li class="s">Break into chunks that fall a short way where they stand (A).</li><li>Drop out through the bottom of the grid (B).</li><li>Turn to grains that drift off (C).</li><li>Fade away one by one, top first (D).</li></ol></div>
+    <div class="dq"><h3>2. How does the ghost look?</h3><ol><li class="s">Dashed outline where the liquid was (G2).</li><li>Pale fill (G1).</li><li>Pale fill plus a small "this payment" tag (G3).</li></ol></div>
+    <div class="dq"><h3>3. Payment smaller than one box?</h3><ol><li class="s">Crumble its true size: a sliver of a box (as in D).</li><li>No crumble below one box; the words line says it and nothing else.</li></ol><span class="small">At ₹250 a box on a monthly grid a ₹20 chai is under a tenth of a box. Category grids show it, the monthly one cannot.</span></div>
+    <div class="dq"><h3>4. Confirm for going over</h3><ol><li class="s">Everything left crumbles, then the amber floor line and words appear (V1-4 carried to the pay screen).</li><li>Something else.</li></ol></div>
+    <div class="dq"><h3>5. Changing the amount or category</h3><ol><li class="s">The ghost updates live and snaps back if you back out.</li><li>The crumble only plays on the final amount.</li></ol></div>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+const PBG='#0b0d10',EDGE='#2b3038',CELL='#2a3039',LIQ='#62dcb4',HI='#d4faee',INK='#f2f4f5',MUT='#8f97a1',AMB='#e3a43f';
+const C=27.5,G=5,P=32.5,SZ=320;
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const fmt=n=>'₹'+(Math.abs(n-Math.round(n))<1e-9?Math.round(n).toLocaleString('en-IN'):n.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}));
+const T=(x,y,s,sz,o={})=>`<text x="${x}" y="${y}" font-size="${sz}" font-weight="${o.w||400}" fill="${o.f||INK}" text-anchor="${o.a||'start'}">${esc(s)}</text>`;
+const rowTop=r=>SZ-C-r*P;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const rnd=n=>{const x=Math.sin(n*12.9898)*43758.5453;return x-Math.floor(x)};
+
+(function(){let c='';for(let r=0;r<10;r++)for(let k=0;k<10;k++)c+=`<rect x="${k*P}" y="${rowTop(r)}" width="${C}" height="${C}" rx="7"/>`;
+document.getElementById('defs').innerHTML=`<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><g id="gc2">${c}</g><mask id="gm2" maskUnits="userSpaceOnUse" x="-2" y="-2" width="324" height="324"><use href="#gc2" fill="#fff"/></mask><clipPath id="clipB" clipPathUnits="userSpaceOnUse"><rect x="-12" y="-12" width="344" height="${SZ+40}"/></clipPath></defs></svg>`})();
+
+/* ---------- students: one payment each ---------- */
+const S=[
+ {short:'Vaishak-type',per:'this month',nxt:'next month',cat:'Food',b:2400,l:168,pay:90,what:'Mess',n:'2 categories'},
+ {short:'Gautham-type',per:'this week',nxt:'next week',cat:'Food & drinks',b:652,l:571,pay:60,what:'Juice shop',n:'3 categories'},
+ {short:'Tarun-type',per:'this week',nxt:'next week',cat:'Coffee & snacks',b:400,l:140,pay:20,what:'Chai',n:'4 categories'},
+ {short:'Yash-type',per:'this week',nxt:'next week',cat:'Quick-commerce',b:1000,l:90,pay:312,what:'Zepto',n:'7 categories'},
+ {short:'Nishad-type',per:'this month',nxt:'next month',cat:'Food & beverages',b:6000,l:2910,pay:240,what:'Cafe',n:'12 categories'},
+ {short:'Harsh-type',per:'this month',nxt:'next month',cat:'Eating out',b:1600,l:1600,pay:3500,what:'Dinner',n:'18 categories'}
+];
+function words(p){if(p<=0)return'empty';if(p<10)return'nearly empty';if(p<25)return'a little left';if(p<45)return'under half left';if(p<=55)return'about half left';if(p<75)return'over half left';if(p<95)return'most of it left';return'full'}
+
+/* ---------- the pay-screen grid ---------- */
+function gridPay(L,R,o){
+  const t=o.t;let s=`<use href="#gc2" fill="${CELL}"/>`,m='';
+  const nS=Math.ceil(R-1e-9);
+  for(let i=0;i<nS;i++){const fa=Math.min(1,R-i),r=Math.floor(i/10),c=i%10,y=rowTop(r)+C*(1-fa);
+    m+=`<rect x="${c*P}" y="${y}" width="${C}" height="${C*fa}" fill="${LIQ}"/>`;
+    if(fa<.999)m+=`<rect x="${c*P}" y="${y}" width="${C}" height="1.6" fill="${HI}"/>`}
+  s+=`<g mask="url(#gm2)">${m}</g>`;
+  const lo=Math.floor(R+1e-9),hi=Math.ceil(L-1e-9),pcs=[];
+  for(let i=lo;i<hi&&i<100;i++){const fa=clamp(R-i,0,1),fb=clamp(L-i,0,1);if(fb-fa<1e-4)continue;
+    const r=Math.floor(i/10),c=i%10;pcs.push({i,x:c*P,y:rowTop(r)+C*(1-fb),w:C,h:C*(fb-fa),full:fa<.001&&fb>.999})}
+  const n=pcs.length,ga=clamp(t*1.5,0,1);
+  /* ghost */
+  if(t>0&&n){
+    pcs.forEach(q=>{const rx=Math.min(q.full?7:3,q.h/2);
+      if(o.ghost==='g2')s+=`<rect x="${q.x+.8}" y="${q.y+.8}" width="${q.w-1.6}" height="${Math.max(0,q.h-1.6)}" rx="${rx}" fill="none" stroke="${LIQ}" stroke-width="1.6" stroke-dasharray="4 3" opacity="${(.9*ga).toFixed(2)}"/>`;
+      else s+=`<rect x="${q.x}" y="${q.y}" width="${q.w}" height="${q.h}" rx="${rx}" fill="${LIQ}" opacity="${(.26*ga).toFixed(2)}"/>`});
+    if(o.ghost==='g3'&&ga>.5){const top=Math.min(...pcs.map(q=>q.y));const ty=Math.max(-27,top-27);
+      s+=`<rect x="0" y="${ty}" width="124" height="22" rx="11" fill="${PBG}" stroke="${LIQ}" stroke-width="1.2" opacity="${ga}"/>${T(62,ty+15.5,'this payment',14.5,{a:'middle',f:INK,w:600})}`}}
+  /* crumbling pieces */
+  const S0={A:.5,B:.7,C:.5,D:1}[o.style];let g='';
+  pcs.forEach((q,idx)=>{const ord=n-1-idx;const tk=clamp(t*(1+S0)-S0*(n>1?ord/(n-1):0),0,1);
+    if(tk>=1)return;
+    const rx=q.full?7:2;
+    if(tk<=0){g+=`<rect x="${q.x}" y="${q.y}" width="${q.w}" height="${q.h}" rx="${rx}" fill="${LIQ}"/>`;return}
+    if(o.style==='A'){const cols=3,rows=Math.max(1,Math.round(q.h/(q.w/3))),cw=q.w/cols,ch=q.h/rows;
+      for(let a=0;a<cols;a++)for(let b=0;b<rows;b++){const sd=q.i*31+a*7+b*3;
+        const dy=tk*tk*(26+rnd(sd)*54),dx=(rnd(sd+1)-.5)*34*tk,rot=(rnd(sd+2)-.5)*90*tk,op=1-Math.pow(tk,1.6),sc=1-.25*tk;
+        const x=q.x+a*cw,y=q.y+b*ch,cx=x+cw/2,cy=y+ch/2;
+        g+=`<rect x="${(x+.5).toFixed(1)}" y="${(y+.5).toFixed(1)}" width="${(cw-1).toFixed(1)}" height="${(ch-1).toFixed(1)}" rx="2.5" fill="${LIQ}" opacity="${op.toFixed(2)}" transform="translate(${dx.toFixed(1)} ${dy.toFixed(1)}) rotate(${rot.toFixed(1)} ${cx.toFixed(1)} ${cy.toFixed(1)}) translate(${cx.toFixed(1)} ${cy.toFixed(1)}) scale(${sc.toFixed(2)}) translate(${(-cx).toFixed(1)} ${(-cy).toFixed(1)})"/>`}}
+    else if(o.style==='B'){const dy=tk*tk*(SZ-q.y+50),rot=(rnd(q.i)-.5)*40*tk,op=1-clamp((tk-.75)*4,0,1),cx=q.x+q.w/2,cy=q.y+q.h/2;
+      g+=`<rect x="${q.x}" y="${q.y}" width="${q.w}" height="${q.h}" rx="${rx}" fill="${LIQ}" opacity="${op.toFixed(2)}" transform="translate(0 ${dy.toFixed(1)}) rotate(${rot.toFixed(1)} ${cx.toFixed(1)} ${cy.toFixed(1)})"/>`}
+    else if(o.style==='C'){const cols=4,rows=Math.max(1,Math.round(q.h/(q.w/4))),cw=q.w/cols,ch=q.h/rows;
+      for(let a=0;a<cols;a++)for(let b=0;b<rows;b++){const sd=q.i*17+a*5+b*11,tg=clamp(tk*1.3-rnd(sd+3)*.3,0,1);if(tg>=1)continue;
+        const dx=(rnd(sd)*.8+.1)*46*tg,dy=-(rnd(sd+1)*.8+.1)*38*tg+10*tg*tg,op=1-Math.pow(tg,.9)*(.7+.3*rnd(sd+2)),sc=1-.5*tg,x=q.x+a*cw,y=q.y+b*ch,cx=x+cw/2,cy=y+ch/2;
+        g+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(cw-.4).toFixed(1)}" height="${(ch-.4).toFixed(1)}" rx="1.2" fill="${LIQ}" opacity="${op.toFixed(2)}" transform="translate(${dx.toFixed(1)} ${dy.toFixed(1)}) translate(${cx.toFixed(1)} ${cy.toFixed(1)}) scale(${sc.toFixed(2)}) translate(${(-cx).toFixed(1)} ${(-cy).toFixed(1)})"/>`}}
+    else{const sc=1-.15*tk,cx=q.x+q.w/2,cy=q.y+q.h/2;
+      g+=`<rect x="${q.x}" y="${q.y}" width="${q.w}" height="${q.h}" rx="${rx}" fill="${LIQ}" opacity="${(1-tk).toFixed(2)}" transform="translate(${cx.toFixed(1)} ${cy.toFixed(1)}) scale(${sc.toFixed(2)}) translate(${(-cx).toFixed(1)} ${(-cy).toFixed(1)})"/>`}});
+  s+=o.style==='B'?`<g clip-path="url(#clipB)">${g}</g>`:g;
+  if(o.over>0&&ga>.2)s+=`<g opacity="${ga.toFixed(2)}"><rect x="-6" y="${SZ+4}" width="${SZ+12}" height="12" rx="6" fill="${AMB}" opacity=".22"/><rect x="-6" y="${SZ+7}" width="${SZ+12}" height="5" rx="2.5" fill="${AMB}"/></g>`;
+  return s}
+
+/* ---------- the pay screen ---------- */
+function pay(st,o){
+  o=Object.assign({style:'A',t:1,ghost:'g2'},o);
+  const amt=o.amt!=null?o.amt:st.pay,box=st.b/100,L=st.l/box,p=amt/box,R=Math.max(0,L-p),over=Math.max(0,p-L);
+  const bw=words(st.l/st.b*100),aw=words(Math.max(0,st.l-amt)/st.b*100);
+  let main,sub;
+  if(over>0&&o.t>=.5){main=(over*box/st.b)<=.25?'a little over':'gone over';sub=`taken from ${st.nxt}`}
+  else if(o.t>=.5){main=aw;sub=`was ${bw}`}
+  else{main=bw;sub=o.t>0?'paying…':'before this payment'}
+  let s=T(35,76,'Paying',17,{f:MUT})+T(35,112,`${fmt(amt)} · ${st.what}`,30,{w:600})+T(35,144,`${st.cat} · ${st.per}`,19,{f:MUT});
+  s+=`<g transform="translate(35 178)">${gridPay(L,R,{t:o.t,style:o.style,ghost:o.ghost,over})}</g>`;
+  s+=T(35,556,main,28,{w:600})+T(35,586,sub,19,{f:MUT});
+  const sc=st.b/100;
+  s+=`<rect x="35" y="604" width="17" height="17" rx="4.5" fill="none" stroke="${MUT}" stroke-width="1.6"/>${T(60,619,`1 box = ${fmt(sc)}`,19,{f:MUT})}`;
+  s+=`<rect x="35" y="684" width="320" height="58" rx="16" fill="${LIQ}"/>${T(195,721,`Pay ${fmt(amt)}`,22,{a:'middle',f:'#05281f',w:700})}${T(195,786,'Back',19,{a:'middle',f:MUT})}`;
+  return `<svg class="ph" viewBox="0 0 390 844" role="img" aria-label="${esc(st.short)}: paying ${fmt(amt)} from ${esc(st.cat)}, ${esc(main)}"><rect x="1" y="1" width="388" height="842" rx="46" fill="${PBG}" stroke="${EDGE}" stroke-width="2"/><rect x="150" y="16" width="90" height="24" rx="12" fill="#000"/>${s}</svg>`}
+
+const fg=(svg,b,c)=>`<figure class="fg">${svg}<figcaption><b>${esc(b)}</b> ${esc(c)}</figcaption></figure>`;
+const boxesOf=(st,amt)=>{const n=(amt!=null?amt:st.pay)/(st.b/100);return n>100?'all 100, then over':(Math.abs(n-Math.round(n))<.05?Math.round(n):n.toFixed(1))+(n===1?' box':' boxes')};
+const STY=[['A','Crumble in place','chunks break off and fall a short way'],['B','Fall out','the boxes drop out through the bottom'],['C','Grains','each box turns to grains that drift off'],['D','Fade in order','box by box, top first, no pieces']];
+
+/* pool table */
+document.getElementById('pool').innerHTML=S.map(st=>`<tr><td>${st.short}</td><td>${st.cat}</td><td class="n">${fmt(st.b)}</td><td class="n">${fmt(st.l)}</td><td class="n">${fmt(st.pay)}</td><td class="n">${fmt(st.b/100)}</td><td class="n">${boxesOf(st)}</td></tr>`).join('');
+
+/* A */
+const tar=Object.assign({},S[2]);
+document.getElementById('secA').innerHTML=STY.map(([k,n,d])=>`<div class="opt"><h4><b>${k}</b>${n} <span>${d}</span></h4><div class="row four">`+[[0,'before'],[.35,'a third through'],[.7,'two thirds'],[1,'after']].map(([t,c])=>fg(pay(tar,{style:k,t,amt:60}),k+' · '+c,t===1?'ghost stays':'')).join('')+`</div></div>`).join('');
+document.getElementById('noteA').innerHTML=`
+<div class="note"><b>A · crumble in place</b>The boxes keep their place and break into nine pieces that tilt and drop a little. It reads as a crumble and the grid underneath stays readable.</div>
+<div class="note"><b>B · fall out</b>The boxes drop through the lower rows on the way out, so for a big payment they pass in front of boxes that are staying. Strongest sense of money leaving, busiest to look at.</div>
+<div class="note"><b>C · grains</b>Softest "loss" image. At 15 boxes it is 240 small grains, at 100 boxes 1,600.</div>
+<div class="note"><b>D · fade in order</b>Calmest and clearest about how many boxes go, but least like crumbling. It is a fade, not a loss.</div>`;
+
+/* B */
+const gau=S[1];
+document.getElementById('secB').innerHTML=`<div class="opt"><div class="row three">`+[['g2','G2 · dashed outline','the liquid\'s shape stays as an outline'],['g1','G1 · pale fill','the same boxes at a quarter strength'],['g3','G3 · pale fill + tag','as G1 with "this payment" above it']].map(([k,b,c])=>fg(pay(gau,{style:'A',t:1,ghost:k}),b,c)).join('')+`</div></div>`;
+document.getElementById('noteB').innerHTML=`
+<div class="note"><b>G2 dashed outline</b>Keeps the whole visible and cannot be mistaken for liquid or for the grey empty boxes.</div>
+<div class="note"><b>G1 pale fill</b>Easiest to see at a glance. A pale band can read as a second, weaker liquid, and next to a nearly empty grid it can look like money still there.</div>
+<div class="note"><b>G3 tag</b>Names the ghost in words. Adds a label to the grid that G1 and G2 do without.</div>`;
+
+/* C */
+document.getElementById('secC').innerHTML=STY.map(([k,n,d])=>`<div class="opt"><h4><b>${k}</b>${n} <span>midway</span></h4><div class="row">`+S.map(st=>fg(pay(st,{style:k,t:.45}),st.short,`${fmt(st.pay)} · ${boxesOf(st)}`)).join('')+`</div></div>`).join('')
+ +`<div class="opt"><h4><b>After</b>the ghost <span>dashed outline, any crumble</span></h4><div class="row">`+S.map(st=>fg(pay(st,{style:'A',t:1}),st.short,`${st.n} · ${st.per}`)).join('')+`</div></div>`;
+document.getElementById('noteC').innerHTML=`
+<div class="note"><b>Small and large share one picture</b>Tarun's ₹20 is a clump of five boxes, Nishad's ₹240 is four. Gautham's ₹60 is nine boxes. Each reads at a glance in the grid.</div>
+<div class="note"><b>Yash and Harsh</b>All their remaining boxes go, so the grid ends up all ghost and the amber line carries the news. Harsh's 3,500 loses all 100 boxes with 119 more owed.</div>
+<div class="note"><b>Same layout at 2 and 18 categories</b>The pay screen shows one category, so the number of categories changes nothing here.</div>`;
+
+/* D */
+const d3=[S[4],S[0],S[2]];
+document.getElementById('secD').innerHTML=`<div class="opt"><div class="row">`+d3.map(st=>fg(pay(st,{style:'A',t:.5,amt:20}),st.short,`₹20 · ${boxesOf(st,20)} · midway`)+fg(pay(st,{style:'A',t:1,amt:20}),st.short,'after')).join('')+`</div></div>`;
+document.getElementById('noteD').innerHTML=`
+<div class="note"><b>Same payment, different weight</b>At ₹60 a box the crumble is a third of one box. At ₹24 it is most of one. At ₹4 it is a clump of five. Each is true to its own budget.</div>
+<div class="note"><b>The cost</b>For a student with a ₹6,000 budget, a ₹20 chai barely moves the grid. Honest, and low friction. Decision 3 is about this.</div>`;
+
+/* E */
+const ov=[S[3],S[5]];
+document.getElementById('secE').innerHTML=`<div class="opt"><div class="row four">`+ov.map(st=>fg(pay(st,{style:'A',t:.5}),st.short,`${fmt(st.pay)} · midway`)+fg(pay(st,{style:'A',t:1}),st.short,'after')).join('')+`</div></div>`;
+document.getElementById('noteE').innerHTML=`
+<div class="note"><b>Words, not red</b>"a little over" for a small overshoot and "gone over" for a big one, both with "taken from next week or month". The amount over is for the tap, as in Viz 1.</div>
+<div class="note"><b>What the grid cannot say</b>Yash is ₹222 over and Harsh ₹1,900 over, yet both grids end the same: all ghost and an amber line. The size of the overshoot is in the words and the tap.</div>`;
+
+/* F: live demo */
+const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ds={s:2,style:'A',ghost:'g2',amt:null,t:1};let raf=0;
+const demo=document.getElementById('demo'),amtEl=document.getElementById('amt'),amtv=document.getElementById('amtv');
+function draw(){demo.innerHTML=pay(S[ds.s],{style:ds.style,ghost:ds.ghost,amt:ds.amt,t:ds.t});const a=ds.amt!=null?ds.amt:S[ds.s].pay;amtv.textContent=`${fmt(a)} · ${boxesOf(S[ds.s],a)}`}
+function play(){cancelAnimationFrame(raf);if(reduce){ds.t=1;draw();return}
+  const dur={A:1100,B:1100,C:1300,D:1500}[ds.style],t0=performance.now();ds.t=0;
+  const step=n=>{ds.t=Math.min(1,(n-t0)/dur);draw();if(ds.t<1)raf=requestAnimationFrame(step)};raf=requestAnimationFrame(step)}
+function setRange(){const st=S[ds.s];amtEl.max=Math.ceil(Math.max(st.pay*1.5,st.l*1.3,100)/10)*10;amtEl.value=ds.amt!=null?ds.amt:st.pay}
+function chips(id,items,get,set){const el=document.getElementById(id);el.innerHTML=items.map((t,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${get()===i}">${t}</button>`).join('');
+  el.onclick=e=>{const b=e.target.closest('button');if(!b)return;set(+b.dataset.i);[...el.children].forEach((c,i)=>c.setAttribute('aria-pressed',get()===i))}}
+chips('cs',S.map(s=>s.short.replace('-type','')),()=>ds.s,i=>{ds.s=i;ds.amt=null;setRange();play()});
+chips('cc',STY.map(s=>s[0]+' · '+s[1]),()=>'ABCD'.indexOf(ds.style),i=>{ds.style='ABCD'[i];play()});
+chips('cg',['G2 outline','G1 pale','G3 tag'],()=>['g2','g1','g3'].indexOf(ds.ghost),i=>{ds.ghost=['g2','g1','g3'][i];draw()});
+amtEl.addEventListener('input',()=>{ds.amt=+amtEl.value;ds.t=1;cancelAnimationFrame(raf);draw()});
+amtEl.addEventListener('change',()=>play());
+document.getElementById('replay').addEventListener('click',play);
+setRange();draw();
+})();
+</script>
