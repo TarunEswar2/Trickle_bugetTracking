@@ -47,12 +47,13 @@ Moved on to Viz 2 without answering; defaults on my recommendation, change any t
 Defaults on my recommendation, not explicitly answered (change any time): payments under one box crumble at true size; going over carries V1-4 to the pay screen (everything left fades, then amber floor line + words, no red); the ghost updates live as the amount or category changes and snaps back if you back out.
 Board: https://claude.ai/artifact/Fsvd6fogygvPdtsrHsqMyN (source archive/session-workfiles/viz2/viz2-pay-friction.html). No inspiration images were needed.
 
-### Viz 3 — Income split (Tarun's structure, 2 Oct; options board in progress)
+### Viz 3 — Income split (Tarun's structure, 2 Oct; options board drawn)
 | # | Decision |
 |---|---|
 | V3-1 | Income splits into spending and savings. Spending splits into budget and subscriptions. Savings splits into goals. |
 | V3-2 | All of it is drawn from the same grid (the 10x10 box grid). |
 | V3-3 | Colours: income grey, spending orange, savings green; the budget's categories are different colours (matches V1-9). |
+Board: https://claude.ai/artifact/KHq3fHEr8sebrJzRksghMQ (source archive/session-workfiles/viz3/viz3-income-split.html).
 Open (drawn as options, not decided): bands vs columns, which side savings sits on, drill-down vs all at once, how subscriptions differ from budget, many-category colours, empty groups.
 
 ## Visualisation queue (one at a time)
