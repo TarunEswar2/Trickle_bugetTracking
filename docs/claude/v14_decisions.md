@@ -61,7 +61,7 @@ Board: https://claude.ai/artifact/Fsvd6fogygvPdtsrHsqMyN (source archive/session
 | V3-9 | Labels = **L2, drop-downs after the split**: two collapsed lines, "Savings" and "Spending", each opens into its own list. |
 | V3-10 | A **visible gap between the savings band and the spending band inside the grid** (not only in the labels). |
 | V3-11 | **App-wide rule:** the scale line ("1 box = ₹120") must carry visual hierarchy so people don't miss it — a prominent chip, not small grey text, on every screen that shows it (Viz 1 gauge, Viz 2 pay screen, Viz 3 income). Applied to the Viz 2 and Viz 3 boards; the Viz 1 board still has the old small line and gets it in the build. |
-Defaults, not explicitly answered: a group with nothing in it (no subscriptions / no goals) is not drawn; budget is light orange and subscriptions hatched orange.
+Viz 3 closed by Tarun ("done viz 3"). Defaults that stand, not explicitly answered: the stepped edge in the split row (spending boxes sit higher than savings boxes beside them); a group with nothing in it (no subscriptions / no goals) is not drawn; budget is light orange and subscriptions hatched orange.
 Board (updated): https://claude.ai/artifact/KHq3fHEr8sebrJzRksghMQ (source archive/session-workfiles/viz3/viz3-income-split.html).
 
 ### Parked requirement (Tarun, 2 Oct) — Savings tab
@@ -70,8 +70,8 @@ In the Savings tab the user must be able to **add goals**, **make a payment towa
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
-3. Income split (spending vs savings) — IN PROGRESS (V3-1…V3-11 decided; two defaults unconfirmed)
-4. Savings goal (how much, by when, actually saved) — also: add goal, pay into a goal, completed goals (parked requirement above)
+3. Income split (spending vs savings) — DONE (V3-1…V3-11)
+4. Savings goal (how much, by when, actually saved) — NEXT; also: add goal, pay into a goal, completed goals (parked requirement above)
 5. Unspent → saved
 6. Small / repeat purchases
 7. Time patterns (e.g. nights)

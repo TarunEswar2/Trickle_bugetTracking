@@ -33,7 +33,8 @@ v14 so far:
 | Stage 2 — money representation, one visualisation at a time | In progress |
 | Visualisation 1 — budget gauge | Decided (V1-1 … V1-8 in the decisions log) |
 | Visualisation 2 — pay / friction | Decided (V2-1 … V2-5): paid boxes fade out in order, dashed-outline ghost |
-| Visualisation 3 — income split | **Next — ask Tarun whether he has inspiration** |
+| Visualisation 3 — income split | Decided (V3-1 … V3-11): one grid, bands, savings at the bottom, gap, drop-down labels, scale chip |
+| Visualisation 4 — savings goal | **Next** |
 | Onboarding, per-tab screens, identity, v14 build, user tests | Not started |
 
 ## How Tarun wants to work (this matters more than anything else here)
@@ -95,15 +96,16 @@ green→amber transition, v7's range of data visualisations, sounds/motion from 
 his own gradients in Figma.
 
 ## The exact next step
-**Visualisation 3 — income split (spending vs savings).**
+**Visualisation 4 — savings goal (how much, by when, actually saved).**
 
-1. Ask Tarun for inspiration images if he has any (Viz 2 needed none).
-2. Draw 3–4 options on one board, each shown for several students from the pool (income ₹3k–25k, weekly vs monthly, regular vs irregular). Follow `archive/session-workfiles/viz2/viz2-pay-friction.html` as the board pattern. Give a recommendation, ask him to choose.
-3. Log as "Viz 3" in `docs/claude/v14_decisions.md`, mark it DONE in the queue.
+1. Ask Tarun whether he has inspiration images for it (Viz 2 and 3 needed none).
+2. Cover his parked Savings-tab needs: add a goal, make a payment toward a goal, show a few completed goals.
+3. Draw 3–4 options on one board across the student pool (no goal, one goal, three goals; ₹3k–25k incomes; month 1 vs month 6). Patterns: `archive/session-workfiles/viz2/` and `viz3/`. Recommend one, ask him to choose.
+4. Log as "Viz 4" in `docs/claude/v14_decisions.md`, mark it DONE in the queue.
 
-Parked for the Savings tab / Viz 4 (Tarun, 2 Oct): add goals, make a payment toward a goal, show a few completed goals.
+Cross-viz rule from Viz 3 (V3-11): the scale line ("1 box = ₹X") is a prominent chip on every screen that shows it. The Viz 1 board still has the old small line.
 
-Then continue the queue from item 4 (savings goal) in `docs/claude/v14_decisions.md`.
+Then continue the queue from item 5 (unspent → saved).
 
 ## Read next
 1. `docs/claude/v14_decisions.md` — decision log and queue (authoritative).

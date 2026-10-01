@@ -23,4 +23,4 @@ Open a built file in a browser, e.g. `prototypes/v13/app/trickle-final-v13.html#
 (`#demo` skips onboarding). To rebuild: `python3 build13.py` inside `prototypes/v13/app`.
 
 ## Status
-v14 in progress: visualisations 1 (budget gauge) and 2 (pay/friction) decided; visualisation 3 (income split) next.
+v14 in progress: visualisations 1 (budget gauge), 2 (pay/friction) and 3 (income split) decided; visualisation 4 (savings goal) next.
