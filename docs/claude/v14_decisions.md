@@ -36,9 +36,17 @@ Open inside Viz 1: top edge of the liquid (box-by-box vs even level), last week'
 | V1-9 | Rings view: each category gets its own colour. No "outer / 2nd / 3rd" tags and no numbers or word-states beside the rings. Tapping a category opens its detail (F3: grid + scale + transactions). |
 Moved on to Viz 2 without answering; defaults on my recommendation, change any time: (a) a ring's name appears when you press/tap it (no permanent labels); rings show the biggest few and the rest group as "others", tap opens the full list; (b) rings sit beside the words-only list (V1-3), not replacing it. Rings board not redrawn.
 
+### Viz 2 — Pay / friction (answers 2 Oct; options board not drawn yet)
+| # | Decision |
+|---|---|
+| V2-1 | What crumbles: boxes from the category's own 10x10 grid (same object as Viz 1). |
+| V2-2 | When: "crumble away and indicate a ghost of what left, before paying" - the crumble plays on the pay screen before the payment is confirmed, leaving a ghost of what left. (My reading: boxes crumble out of the grid as a preview; can still back out - confirm with Tarun.) |
+| V2-3 | Sting: "indicate what left until we move to the next screen" - the ghost of the departed boxes stays visible until the user moves on; no red/shake/sound drama. |
+Next: Tarun's inspiration images, then a board across the student pool.
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
-2. Pay / friction: amount crumbling away — NEXT (waiting for Tarun's inspiration)
+2. Pay / friction: amount crumbling away — IN PROGRESS (V2-1…V2-3 answered; waiting for inspiration images)
 3. Income split (spending vs savings)
 4. Savings goal (how much, by when, actually saved)
 5. Unspent → saved
