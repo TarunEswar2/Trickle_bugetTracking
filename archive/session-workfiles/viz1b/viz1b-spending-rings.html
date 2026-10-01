@@ -141,12 +141,20 @@ svg.ph [data-go]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
 </section>
 
 <section>
-  <div class="sec-h"><span class="k">E</span><h2>Try it</h2></div>
+  <div class="sec-h"><span class="k">E</span><h2>Now and previous together</h2></div>
+  <p class="q">Now and then need to be seen at once. Three ways, same six cases (two of Yash-type, Nishad-type twice, Harsh-type, Vaishak-type). One of Nishad's has more left than the earlier day, so the overlays show a gain as well as a loss.</p>
+  <div class="gal" id="secE"></div>
+  <div class="notes" id="noteE"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">F</span><h2>Try it</h2></div>
   <p class="q">Pick a student, tap a ring or a name, then Show previous week. Drag the slider or tap a dot; dimmed dots have no data yet.</p>
   <div class="demo">
     <div id="demo"></div>
     <div class="ctl">
       <div class="grp"><span class="lbl">Student</span><div class="chips" id="cs"></div></div>
+      <div class="grp"><span class="lbl">Together as</span><div class="chips" id="cm"></div></div>
       <div class="grp"><label class="lbl" for="lb">Look back</label><input id="lb" type="range" min="1" max="12" step="1" value="1" disabled></div><span class="small" id="dnote">Tap a name or a ring to open it, then Show previous week.</span>
     </div>
   </div>
@@ -215,11 +223,30 @@ function spendScreen(st){
   return frame(s,`${st.short} spending: rings for ${st.top.map(c=>c.n).join(', ')}`,2)}
 
 /* ---------- detail screen ---------- */
-function liquid(L,color,k){let pcs='';
+function liquid(L,color,k,x0,y0){x0=x0==null?35:x0;y0=y0==null?178:y0;let pcs='';
   for(let i=0;i<100;i++){const r=Math.floor(i/10),c=i%10;pcs+=`<rect x="${c*P}" y="${rowTop(r)}" width="${C}" height="${C}" rx="7" fill="${CELL}"/>`;
     const fa=Math.max(0,Math.min(1,L-i));if(fa>0)pcs+=`<rect x="${c*P}" y="${rowTop(r)+C*(1-fa)}" width="${C}" height="${C*fa}" rx="${fa>.99?7:2}" fill="${color}"/>`}
-  return `<g transform="translate(35 178) scale(${k})">${pcs}</g>`}
+  return `<g transform="translate(${x0} ${y0}) scale(${k})">${pcs}</g>`}
 const yOfBoxes=n=>{const rows=n/10;if(rows>=10)return 0;const f=Math.floor(rows+1e-9);return SZ-(f*P+(rows-f)*C)};
+
+const SAND='#d8cfbd';
+const mixW=(hex,t)=>{const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255,f=v=>Math.round(v+(255-v)*t);return `rgb(${f(r)},${f(g)},${f(b)})`};
+function cmpGrid(Ln,Lt,color,k,x0,y0,mode){
+  let g='';
+  for(let i=0;i<100;i++){const r=Math.floor(i/10),c=i%10,X=c*P,top=rowTop(r);
+    g+=`<rect x="${X}" y="${top}" width="${C}" height="${C}" rx="7" fill="${CELL}"/>`;
+    const fn=clamp(Ln-i,0,1),ft=clamp(Lt-i,0,1),com=Math.min(fn,ft);
+    if(com>0)g+=`<rect x="${X}" y="${top+C*(1-com)}" width="${C}" height="${C*com}" rx="${com>.99?7:2}" fill="${color}"/>`;
+    if(ft>fn){const y=top+C*(1-ft),h=C*(ft-com);
+      g+=mode==='ghost'?`<rect x="${X+.8}" y="${y+.8}" width="${C-1.6}" height="${Math.max(0,h-1.6)}" rx="${Math.min(ft>.99&&com<.01?7:3,h/2)}" fill="none" stroke="${color}" stroke-width="1.6" stroke-dasharray="4 3"/>`
+        :`<rect x="${X}" y="${y}" width="${C}" height="${h}" rx="${ft>.99&&com<.01?7:2}" fill="${SAND}"/>`}
+    if(fn>ft){const y=top+C*(1-fn),h=C*(fn-com);
+      g+=`<rect x="${X}" y="${y}" width="${C}" height="${h}" rx="${fn>.99&&com<.01?7:2}" fill="${mode==='ghost'?color:mixW(color,.5)}"/>`}}
+  if(mode==='ghost'&&Lt<Ln){const y=yOfBoxes(Lt);g+=`<line x1="-6" y1="${y}" x2="${SZ+6}" y2="${y}" stroke="${INK}" stroke-width="2.4" stroke-dasharray="7 6" opacity=".9"/>`}
+  return `<g transform="translate(${x0} ${y0}) scale(${k})">${g}</g>`}
+const cmpKey=(mode,color,y)=>mode==='ghost'
+  ?`<rect x="35" y="${y-12}" width="14" height="14" rx="4" fill="${color}"/>${T(56,y,'now',15,{f:MUT})}<rect x="108" y="${y-12}" width="14" height="14" rx="4" fill="none" stroke="${color}" stroke-width="1.6" stroke-dasharray="3 2.5"/>${T(129,y,'then, no longer there',15,{f:MUT})}`
+  :`<rect x="35" y="${y-12}" width="14" height="14" rx="4" fill="${color}"/>${T(56,y,'both',15,{f:MUT})}<rect x="102" y="${y-12}" width="14" height="14" rx="4" fill="${SAND}"/>${T(123,y,'only then',15,{f:MUT})}<rect x="212" y="${y-12}" width="14" height="14" rx="4" fill="${mixW(color,.5)}"/>${T(233,y,'only now',15,{f:MUT})}`;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const rnd=n=>{const x=Math.sin(n*12.9898)*43758.5453;return x-Math.floor(x)};
 const histFrac=(st,name,p)=>clamp(1-st.t*(.5+.9*rnd(name.length*13+p*7+st.short.length*3)),.03,1);
@@ -253,11 +280,18 @@ function detailScreen(st,name,o){
     if(!tx.length)s+=T(35,456,'Nothing yet this period.',17,{f:MUT});
     return frame(s,`${st.short} ${name} detail, ${over?'gone over':words(pct)}`,2)}
   /* compare with an earlier period */
-  const p=o.p,L=Math.round(histFrac(st,name,p)*100),fr=L/100,k=.72;
-  s+=liquid(L,color,k);
-  const ny=178+yOfBoxes(curL)*k;
-  s+=`<line x1="29" y1="${ny.toFixed(1)}" x2="${(35+SZ*k+8).toFixed(1)}" y2="${ny.toFixed(1)}" stroke="${INK}" stroke-width="2" stroke-dasharray="6 5" opacity=".85"/>${T(35+SZ*k+14,ny+5,'now',14.5,{f:MUT})}`;
-  s+=T(35,448,words(fr*100),24,{w:600})+T(35,476,`${fmt(Math.round(L*box))} left of ${fmt(b)}`,18,{f:MUT})+T(35,502,`${ago(st,p)}, same day (${st.pos})`,17,{f:MUT})+T(35,528,`Now: ${over?'gone over':words(pct)}`,17,{f:MUT});
+  const p=o.p,mode=o.mode||'ghost',L=Math.round(histFrac(st,name,p)*100),fr=L/100;
+  if(mode==='side'){
+    s+=T(35,192,`Then · ${p}${st.unit==='week'?'w':'mo'} ago`,14,{f:MUT,w:600})+T(214,192,'Now',14,{w:700});
+    s+=liquid(L,color,.46,35,200)+liquid(curL,color,.46,214,200);
+    s+=T(35,382,words(fr*100),18,{w:600})+T(35,408,`${fmt(Math.round(L*box))} of ${fmt(b)}`,16,{f:MUT});
+    s+=T(214,382,over?'gone over':words(pct),18,{w:600})+T(214,408,over?`${fmt(-l)} over`:`${fmt(l)} of ${fmt(b)}`,16,{f:MUT});
+    s+=T(35,448,`Same day: ${st.pos}`,16,{f:MUT});
+  }else{
+    s+=cmpGrid(curL,L,color,.72,35,178,mode);
+    s+=cmpKey(mode,color,430);
+    s+=T(35,464,`Then: ${words(fr*100)}`,22,{w:600})+T(35,490,`${fmt(Math.round(L*box))} left of ${fmt(b)}`,18,{f:MUT})+T(35,516,`${ago(st,p)}, same day (${st.pos})`,17,{f:MUT})+T(35,542,`Now: ${over?'gone over':words(pct)}`,17,{w:600});
+  }
   s+=slider(st,color,p);
   s+=`<g data-go="uncompare" role="button" tabindex="0" aria-label="Back to this ${st.unit}"><rect x="35" y="690" width="320" height="46" rx="14" fill="#14181d" stroke="${EDGE}"/>${T(195,720,`Back to this ${st.unit}`,18,{a:'middle',w:600})}</g>`;
   return frame(s,`${st.short} ${name} ${ago(st,p)}: ${words(fr*100)}`,2)}
@@ -282,16 +316,25 @@ document.getElementById('noteB').innerHTML=`
 <div class="note"><b>Colour follows you in</b>The grid's liquid is the same colour as the ring and swatch you tapped, so you know where you are without reading.</div>`;
 document.getElementById('secC').innerHTML=`<div class="opt"><div class="row three">`+[S[4],S[5]].map(st=>fg(othersScreen(st),st.short,`${st.others.length} others`)).join('')+fg(detailScreen(S[5],'Mess & meals'),'Harsh-type · from a ring','Mess & meals, no transactions drawn')+`</div></div>`;
 
-document.getElementById('secD').innerHTML=`<div class="opt"><div class="row">`+[[S[3],'Quick-commerce',1],[S[3],'Quick-commerce',12],[S[4],'Food & beverages',3],[S[0],'Food',2],[S[5],'Eating out',5],[S[2],'Coffee & snacks',null]].map(([st,n,p])=>fg(detailScreen(st,n,{p}),st.short,p?`${p} ${st.unit}${p>1?'s':''} back`:'no history yet')).join('')+`</div></div>`;
+document.getElementById('secD').innerHTML=`<div class="opt"><div class="row">`+[[S[3],'Quick-commerce',1],[S[3],'Quick-commerce',12],[S[4],'Food & beverages',3],[S[0],'Food',2],[S[5],'Eating out',5],[S[2],'Coffee & snacks',null]].map(([st,n,p])=>fg(detailScreen(st,n,{p,mode:'ghost'}),st.short,p?`${p} ${st.unit}${p>1?'s':''} back`:'no history yet')).join('')+`</div></div>`;
 document.getElementById('noteD').innerHTML=`
 <div class="note"><b>Like for like</b>Yash is nearly out of Quick-commerce on Thursday. One week back the same day he had most of it left; twelve weeks back, about half. The dashed line shows where he is now, so the gap reads at a glance.</div>
 <div class="note"><b>Limits are visible</b>Nishad has 5 months of data, so dots 6 to 12 are dimmed and cannot be picked. A new user sees "No earlier weeks yet" where the button would be.</div>
 <div class="note"><b>Numbers on this layer</b>The exact figure for that day sits under the grid, with "now" in words below it. The rings screen still has none.</div>`;
 
+const nishGain=(()=>{const st=S[4],cat=st.cats[0],Ln=Math.max(0,cat[2])/(cat[1]/100);for(let p=1;p<=5;p++){if(Math.round(histFrac(st,cat[0],p)*100)<Ln)return p}return 3})();
+const MODES=[['side','A · Side by side','two grids, then and now'],['ghost','B · Overlay, ghost','dashed outline of what was there'],['tint','C · Overlay, another colour','sand for then, pale for now']];
+const CASES=[[S[3],'Quick-commerce',1],[S[3],'Quick-commerce',12],[S[4],'Food & beverages',3],[S[4],'Food & beverages',nishGain],[S[5],'Eating out',5],[S[0],'Food',2]];
+document.getElementById('secE').innerHTML=MODES.map(([m,n,d])=>`<div class="opt"><h4><b>${m==='side'?'A':m==='ghost'?'B':'C'}</b>${n.slice(4)} <span>${d}</span></h4><div class="row">`+CASES.map(([st,nm,p])=>fg(detailScreen(st,nm,{p,mode:m}),st.short,`${nm}, ${p} ${st.unit}${p>1?'s':''} back`)).join('')+`</div></div>`).join('');
+document.getElementById('noteE').innerHTML=`
+<div class="note"><b>A · side by side</b>Two grids, each 10×10 and half the size. Exactly the same form, easy to read, but it is two visualisations on one screen and each grid is small. You compare by eye across a gap.</div>
+<div class="note"><b>B · ghost overlay</b>One grid at full size. The solid liquid is now; what was there then and is gone shows as the dashed outline from the pay screen. If you have more now, a dashed line marks the earlier level. Same ghost language as paying.</div>
+<div class="note"><b>C · another colour</b>One grid, three colours: shared liquid, sand for what only the earlier day had, a paler tint for what only now has. It needs a three-part key and a second colour to learn.</div>`;
+
 /* demo */
-const dem={s:3,view:'rings',cat:null,p:null,from:null};
+const dem={s:3,view:'rings',cat:null,p:null,from:null,mode:'ghost'};
 const demo=document.getElementById('demo'),lb=document.getElementById('lb'),dn=document.getElementById('dnote');
-function draw(){const st=S[dem.s];demo.innerHTML=dem.view==='rings'?spendScreen(st):dem.view==='others'?othersScreen(st):detailScreen(st,dem.cat,{p:dem.p});
+function draw(){const st=S[dem.s];demo.innerHTML=dem.view==='rings'?spendScreen(st):dem.view==='others'?othersScreen(st):detailScreen(st,dem.cat,{p:dem.p,mode:dem.mode});
   lb.disabled=!(dem.view==='detail'&&dem.p);if(dem.p){lb.value=dem.p}
   dn.textContent=dem.view==='detail'?(st.hist>0?`${st.short} has ${st.hist} earlier ${st.unit}s of data.`:`${st.short} has no earlier ${st.unit}s yet.`):'Tap a name or a ring to open it, then Show previous '+st.unit+'.'}
 function act(k){const st=S[dem.s];
@@ -308,6 +351,8 @@ window.addEventListener('pointerup',()=>{drag=false});
 demo.addEventListener('pointermove',e=>{if(!drag||!dem.p)return;const svg=demo.querySelector('svg'),r=svg.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*390;const i=Math.round((x-35)/(320/11));const p=Math.max(1,Math.min(S[dem.s].hist,i+1));if(p!==dem.p){dem.p=p;draw()}});
 demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-go]');if(t){e.preventDefault();act(t.dataset.go)}});
 lb.addEventListener('input',()=>{const st=S[dem.s];dem.p=Math.min(+lb.value,st.hist);draw()});
+const cm=document.getElementById('cm');cm.innerHTML=MODES.map((m,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${m[0]===dem.mode}">${m[1].slice(0,1)} · ${m[1].slice(4)}</button>`).join('');
+cm.onclick=e=>{const b=e.target.closest('button');if(!b)return;dem.mode=MODES[+b.dataset.i][0];[...cm.children].forEach((c,i)=>c.setAttribute('aria-pressed',MODES[i][0]===dem.mode));draw()};
 const el=document.getElementById('cs');
 el.innerHTML=S.map((s,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${i===dem.s}">${s.short.replace('-type','')}</button>`).join('');
 el.onclick=e=>{const b=e.target.closest('button');if(!b)return;dem.s=+b.dataset.i;dem.view='rings';dem.p=null;[...el.children].forEach((c,i)=>c.setAttribute('aria-pressed',i===dem.s));draw()};
