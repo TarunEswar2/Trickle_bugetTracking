@@ -1,0 +1,32 @@
+<title>Trickle v7 Research Board</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=IBM+Plex+Sans:wght@400;600&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#0d0e0c;--card:#171816;--line:#2a2c28;--ink:#f1f3ec;--mut:#9ca097;--lime:#c6f432}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 "IBM Plex Sans",system-ui,sans-serif;padding-inline:16px;padding-block:28px 60px}
+.wrap{max-width:1180px;margin:0 auto;display:grid;gap:40px}
+h1,h2,h4{font-family:"Bricolage Grotesque",system-ui,sans-serif;text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,6vw,52px);font-weight:800;line-height:1}h1 span{color:var(--lime)}
+h2{font-size:22px;font-weight:800;margin-bottom:14px}
+.lede{color:var(--mut);max-width:68ch;margin:10px 0 0}
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.stats div{background:var(--card);border-radius:14px;padding:10px 14px}.stats b{display:block;font:800 24px "Bricolage Grotesque",sans-serif;font-variant-numeric:tabular-nums}.stats div:first-child{background:var(--lime);color:#111}
+.refs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+figure{margin:0;background:var(--card);border-radius:14px;overflow:hidden}figure img{display:block;width:100%;height:130px;object-fit:cover}
+figcaption{padding:8px 10px 10px;font-size:12.5px;color:var(--mut)}figcaption b{display:block;color:var(--ink);font-size:13.5px}
+.tbl{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:620px;font-size:13px}td,th{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.v{padding:2px 8px;border-radius:99px;font-size:12px;white-space:nowrap}.v.keep{background:var(--lime);color:#111}.v.merge{background:#4f6bff;color:#fff}.v.drop{background:#3a2320;color:#ff9b80}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.w{background:var(--card);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:4px}
+.th svg{width:100%;height:auto;display:block;background:#111210;border-radius:10px}
+.meta{display:flex;gap:5px;flex-wrap:wrap;font-size:10.5px;margin-top:4px}.meta span{padding:1px 6px;border-radius:99px;background:#24261f;color:var(--mut)}
+.meta .pin{background:var(--lime);color:#111}.tH{color:#ffcf9f!important}.tM{color:#a9b8ff!important}.tS{color:#ffb3df!important}.tI{color:#8ee3cf!important}
+.w h4{font-size:14.5px;font-weight:800}.w p{margin:0;font-size:12px;color:var(--mut)}.w .f{color:var(--ink)}.w .r{font-size:11px;opacity:.8}
+.key{font-size:12.5px;color:var(--mut);margin:-6px 0 12px}
+</style>
+<div class="wrap">
+<header><h1>Trickle <span>v7</span> research board</h1>
+<p class="lede">Audit of 11 builds (v2 to v6), 9 visual references, and the proposed widget catalogue for the income, pools and savings model. Tracking is UPI linkage or manual entry with Excel/CSV import. No SMS.</p>
+<div class="stats"><div><b>%N%</b>widgets</div><div><b>63</b>charts audited</div><div><b>29 / 19 / 15</b>keep / merge / drop</div><div><b>7 · 11 · 8 · 16</b>Home · Money · Savings · Insights</div></div></header>
+<section><h2>References and what we take</h2><div class="refs">%REFS%</div></section>
+<section><h2>Audit summary</h2><div class="tbl"><table><thead><tr><th>Item</th><th>Seen in</th><th>Verdict</th><th>v7 home</th></tr></thead><tbody>%AUD%</tbody></table></div><p class="key">X = explorations D–I · R = visual redesign. The full 63-row table is in v7_phase1_audit.md.</p></section>
+<section><h2>Widget catalogue</h2><p class="key">Sizes: S square · W wide · L full width. Lime is for actions and primary numbers only; saturated colours mark categories.</p><div class="grid">%CARDS%</div></section>
+</div>

@@ -1,0 +1,256 @@
+<title>Trickle v11 Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;600&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: long design board; phone frames in wrapping rows; tiles drawn by one renderer (■ = ₹100) */
+:root{
+  --bg:#0e0f0e;--surface:#171917;--card:#1f2220;--line:#2e322f;--fg:#f2f3f1;--muted:#9ca29d;--empty:#474c48;--save:#f2f3f1;
+  --food:#3987e5;--travel:#d95926;--fun:#199e70;--study:#c98500;--other:#d55181;--sub:#8d938e;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;--body:"Figtree",ui-sans-serif,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+  color-scheme:dark}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f1f2ef;--surface:#e6e8e4;--card:#ffffff;--line:#d3d7d2;--fg:#121412;--muted:#5a605b;--empty:#b9bfba;--save:#121412;--food:#2a78d6;--travel:#eb6834;--fun:#1baf7a;--study:#eda100;--other:#e87ba4;--sub:#6d736e;color-scheme:light}}
+:root[data-theme="light"]{--bg:#f1f2ef;--surface:#e6e8e4;--card:#ffffff;--line:#d3d7d2;--fg:#121412;--muted:#5a605b;--empty:#b9bfba;--save:#121412;--food:#2a78d6;--travel:#eb6834;--fun:#1baf7a;--study:#eda100;--other:#e87ba4;--sub:#6d736e;color-scheme:light}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--body)}
+.bw{--food:var(--fg);--travel:var(--fg);--fun:var(--fg);--study:var(--fg);--other:var(--fg)}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:32px 72px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.1;text-wrap:balance}
+h1{font-size:clamp(34px,6vw,58px);letter-spacing:-.03em}
+h2{font-size:26px;letter-spacing:-.01em}
+h3{font-size:16px}
+p{max-width:66ch;margin:.4em 0}
+.muted{color:var(--muted)}
+.eb{font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+section{display:grid;gap:16px;margin-top:56px}
+.hero{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-end;justify-content:space-between}
+.hero>div{min-width:0}
+.ctrls{display:flex;gap:8px;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--surface)}
+.seg button{font:600 13px var(--body);border:0;background:none;color:var(--muted);padding:7px 14px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+button:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start}
+.fr{display:grid;gap:8px;width:250px;max-width:100%}
+.fr .cap{font-size:13px;color:var(--muted)}
+.fr .cap b{color:var(--fg);font-family:var(--mono);font-size:11px;margin-right:6px}
+.ph{background:var(--bg);border:1px solid var(--line);border-radius:34px;padding:18px 12px 12px;height:520px;display:flex;flex-direction:column;gap:9px;overflow:hidden;position:relative;box-shadow:0 0 0 6px var(--surface)}
+.ph .t{font:700 24px/1.05 var(--display);letter-spacing:-.02em;padding:6px 4px 2px;display:flex;justify-content:space-between;align-items:center}
+.hb{display:flex;gap:6px}.hb i{width:30px;height:30px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:grid;place-items:center}
+.cardg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.w{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:11px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.w.full{grid-column:1/-1}
+.w .tt{font-weight:600;font-size:13px;line-height:1.2}
+.w .st{font-size:11px;color:var(--muted);line-height:1.2}
+.w .gear{position:absolute;right:10px;top:10px}
+.w{position:relative}
+.q{font:700 19px/1.15 var(--display);padding:4px}
+.sub{font-size:12px;color:var(--muted);padding:0 4px}
+.btn{margin-top:auto;background:var(--fg);color:var(--bg);font:600 14px var(--body);text-align:center;border-radius:999px;padding:11px}
+.lnk{text-align:center;font-size:12px;color:var(--muted);text-decoration:underline}
+.key{font:600 10.5px var(--mono);color:var(--muted);display:inline-flex;gap:5px;align-items:center}
+.key i{width:9px;height:9px;border-radius:2px;background:var(--fg);display:inline-block}
+.tabbar{margin-top:auto;display:flex;justify-content:space-around;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px}
+.tabbar span{opacity:.45;display:grid}.tabbar span.on{opacity:1}
+.tabbar .pay{opacity:1;background:var(--fg);border-radius:50%;width:36px;height:36px;place-items:center}
+.tabbar .pay svg{stroke:var(--bg)}
+.glow{height:44px;border-radius:14px;background:radial-gradient(circle at 30% 50%,color-mix(in srgb,var(--save) 70%,transparent),transparent 62%)}
+.jr{display:grid;grid-template-columns:56px 1fr;gap:6px;align-items:center;font-size:11.5px}
+.jr b{font-weight:600}
+.opt{border:1px solid var(--line);background:var(--card);border-radius:16px;padding:10px;font-size:13px;display:flex;justify-content:space-between;align-items:center}
+.opt.sel{border-color:var(--fg);box-shadow:inset 0 0 0 1px var(--fg)}
+.sheet{position:absolute;inset:auto 0 0 0;background:var(--card);border-top:1px solid var(--line);border-radius:24px 24px 0 0;padding:16px 14px 14px;display:grid;gap:8px}
+.dim{position:absolute;inset:0;background:color-mix(in srgb,var(--bg) 60%,transparent)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.big{font:600 28px var(--mono);padding:0 4px}
+.stepper{display:flex;justify-content:center;gap:18px;align-items:center}
+.stepper i{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-style:normal;font-size:20px}
+svg{display:block;max-width:100%}
+.tabmap{overflow-x:auto}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;min-width:0}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line)}
+th{font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px}
+ol.pr{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px 22px;padding-left:20px;margin:0}
+ol.pr li{font-size:14px}ol.pr li small{display:block;color:var(--muted);font-size:12px}
+.dec{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.dec .panel p{font-size:13.5px}
+@media (prefers-reduced-motion:no-preference){.drop rect.f{animation:dr .5s cubic-bezier(.3,1.4,.5,1) both}}
+@keyframes dr{from{transform:translateY(-10px);opacity:0}}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div>
+    <div class="eb">Trickle · v11 · Phases 5–9</div>
+    <h1>Money you can see, one tile at a time</h1>
+    <p class="muted">Setup flow, tabs, Home and five key screens, palette, loops and principles. Every visual uses one unit: <span class="key"><i></i>= ₹100</span>, rows of 10 = ₹1,000, gap after 5. Seed: Tarun, hostel, ₹9,000 a month.</p>
+  </div>
+  <div class="ctrls" role="group" aria-label="Phone look">
+    <div class="seg"><button id="bColour" aria-pressed="true">Colour</button><button id="bBw" aria-pressed="false">Black &amp; white</button></div>
+  </div>
+</header>
+
+<section id="decisions">
+  <div class="eb">Convergence</div><h2>What each phase decided</h2>
+  <div class="dec">
+    <div class="panel"><h3>5 · Money + setup</h3><p>Suggested plan from income, seeded by one "which is most like you?" pick; later months copy last month. 4 screens, 4 taps, about 25 s. Leftover goes to savings with no question.</p></div>
+    <div class="panel"><h3>6 · Layout</h3><p>Home · Money · Pay · Insights. The v8 Actions tab is gone because every decision is now an inline sheet. Home is a widget grid (ref mood) with the pace glow on top.</p></div>
+    <div class="panel"><h3>7 · Loops</h3><p>Every loop ends on savings. Two loops need no action (subscriptions, leftover). At most 1 notification a day and 4 a week, quiet 22:00–08:00, no badges.</p></div>
+    <div class="panel"><h3>8 · Words</h3><p>"Spending money", "Set aside", "Move tiles", "starts ₹200 lighter". Buttons say what happens. Never: over, debt, carried, cover.</p></div>
+  </div>
+</section>
+
+<section id="setup">
+  <div class="eb">Phase 5 · Storyboard</div><h2>Setting a budget: 4 screens, 1 decision each</h2>
+  <div class="row" id="setupRow"></div>
+</section>
+
+<section id="tabs">
+  <div class="eb">Phase 6 · IA</div><h2>Tab map</h2>
+  <div class="panel tabmap" id="tabmap"></div>
+</section>
+
+<section id="screens">
+  <div class="eb">Phase 6 · Wireframes</div><h2>Home and five key screens</h2>
+  <div class="row" id="screenRow"></div>
+</section>
+
+<section id="palette">
+  <div class="eb">Phase 6 · Palette</div><h2>Tile colours, validated</h2>
+  <div class="grid2">
+    <div class="panel" id="palTable"></div>
+    <div class="panel"><h3>One budget, colour and black &amp; white</h3><p class="muted" style="font-size:13px">B&amp;W uses a pattern per jar so identity never rests on hue. Subscriptions are always hatched grey; friends' money is dashed.</p><div id="palDemo" style="display:grid;gap:14px;margin-top:10px"></div></div>
+  </div>
+</section>
+
+<section id="loops">
+  <div class="eb">Phase 7 · Loops</div><h2>Loop map</h2>
+  <div class="panel tabmap" id="loopmap"></div>
+</section>
+
+<section id="principles">
+  <div class="eb">Phase 7 · Principles</div><h2>Fourteen rules for every screen</h2>
+  <ol class="pr">
+    <li>One decision per screen, default picked<small>Fogg 2009; Madrian &amp; Shea 2001</small></li>
+    <li>At most 2 numbers on first view; exact ₹ on tap<small>Sweller 1988; NN/g progressive disclosure</small></li>
+    <li>One unit forever: ■ = ₹100<small>Neurath, Isotype; v11 Phase 3</small></li>
+    <li>Home never shows budget or balance<small>Karlsson et al. 2009, ostrich effect</small></li>
+    <li>Savings first, then spending money<small>Thaler &amp; Benartzi 2004</small></li>
+    <li>Feel the payment: tiles leave<small>Prelec &amp; Loewenstein 1998; Soman 2003</small></li>
+    <li>Jars with soft edges: move tiles, total stays<small>Thaler 1999, mental accounting</small></li>
+    <li>Start with progress already shown<small>Nunes &amp; Drèze 2006; Kivetz et al. 2006</small></li>
+    <li>Fresh start every week and month<small>Dai, Milkman &amp; Riis 2014</small></li>
+    <li>End each period on the saved number<small>Kahneman et al. 1993, peak-end</small></li>
+    <li>No red, no debt words, no guilt<small>Elliot et al. 2007; Shapiro &amp; Burchell 2012</small></li>
+    <li>No streaks, points, badges or counts<small>Polivy &amp; Herman; v11 audit</small></li>
+    <li>Calm by default: a glow, not alerts<small>Weiser &amp; Brown 1996</small></li>
+    <li>UPI link or manual entry only; data stays on the phone<small>v2 decision; trust interviews</small></li>
+  </ol>
+</section>
+</div>
+
+<script>
+(function(){
+const C={Food:'var(--food)',Travel:'var(--travel)',Fun:'var(--fun)',Study:'var(--study)',Other:'var(--other)',Savings:'var(--save)',Subs:'var(--sub)'};
+const PAT={Food:'',Travel:'p45',Fun:'pdot',Study:'p135',Other:'pgrid'};
+let bw=false;
+// segments: [{amt, kind:'fill'|'spent'|'hatch'|'dash', cat}]
+function tiles(segs,o){
+  o=o||{};const s=o.s||11,g=2,g5=6,rg=4,per=10;let cells=[];
+  segs.forEach(sg=>{let n=sg.amt/100,full=Math.floor(n+1e-9),p=n-full;for(let i=0;i<full;i++)cells.push({...sg,f:1});if(p>0.01)cells.push({...sg,f:p});});
+  let w=0,h=0,out='';
+  cells.forEach((c,i)=>{const r=Math.floor(i/per),k=i%per,x=k*(s+g)+(k>=5?g5:0),y=r*(s+g+rg);w=Math.max(w,x+s);h=Math.max(h,y+s);
+    const col=C[c.cat]||'var(--fg)';const pat=bw&&PAT[c.cat]?`url(#${PAT[c.cat]})`:col;
+    if(c.kind==='spent')out+=`<rect x="${x+.75}" y="${y+.75}" width="${s-1.5}" height="${s-1.5}" rx="2.5" fill="none" stroke="var(--empty)" stroke-width="1.5"/>`;
+    else if(c.kind==='hatch')out+=`<rect x="${x+.75}" y="${y+.75}" width="${s-1.5}" height="${s-1.5}" rx="2.5" fill="url(#phat)" stroke="var(--sub)" stroke-width="1.5"/>`;
+    else if(c.kind==='dash')out+=`<rect x="${x+.75}" y="${y+.75}" width="${s-1.5}" height="${s-1.5}" rx="2.5" fill="none" stroke="${col}" stroke-width="1.5" stroke-dasharray="2.5 2"/>`;
+    else if(c.f<1){const fh=Math.max(2,s*c.f);out+=`<rect x="${x+.75}" y="${y+.75}" width="${s-1.5}" height="${s-1.5}" rx="2.5" fill="none" stroke="${col}" stroke-width="1.2" opacity=".5"/><rect class="f" x="${x}" y="${y+s-fh}" width="${s}" height="${fh}" rx="2" fill="${pat}" ${bw&&PAT[c.cat]?`stroke="var(--fg)" stroke-width="1"`:''}/>`;}
+    else out+=`<rect class="f" x="${x}" y="${y}" width="${s}" height="${s}" rx="2.5" fill="${pat}" ${bw&&PAT[c.cat]?`stroke="var(--fg)" stroke-width="1"`:''} style="animation-delay:${Math.min(i*18,600)}ms"/>`;
+  });
+  const lbl=o.label||segs.map(x=>`${x.cat} ₹${x.amt}`).join(', ');
+  return `<svg class="drop" width="${w||s}" height="${h||s}" viewBox="0 0 ${w||s} ${h||s}" role="img" aria-label="${lbl}">${out}</svg>`;
+}
+const defs=`<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<pattern id="phat" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="4" height="4" fill="none"/><line x1="0" y1="0" x2="0" y2="4" stroke="var(--sub)" stroke-width="1.6"/></pattern>
+<pattern id="p45" width="3.5" height="3.5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="3.5" height="3.5" fill="var(--card)"/><line x1="0" y1="0" x2="0" y2="3.5" stroke="var(--fg)" stroke-width="1.6"/></pattern>
+<pattern id="p135" width="3.5" height="3.5" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="3.5" height="3.5" fill="var(--card)"/><line x1="0" y1="0" x2="0" y2="3.5" stroke="var(--fg)" stroke-width="1.6"/></pattern>
+<pattern id="pdot" width="3.5" height="3.5" patternUnits="userSpaceOnUse"><rect width="3.5" height="3.5" fill="var(--card)"/><circle cx="1.75" cy="1.75" r="1" fill="var(--fg)"/></pattern>
+<pattern id="pgrid" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="4" fill="var(--fg)"/><rect x="1" y="1" width="2" height="2" fill="var(--card)"/></pattern>
+</defs></svg>`;
+document.body.insertAdjacentHTML('afterbegin',defs);
+
+const I={
+ set:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--fg)" stroke-width="2" stroke-linecap="round"><path d="M7 4v6M7 16v4M17 4v2M17 12v8"/><circle cx="7" cy="13" r="2.5"/><circle cx="17" cy="9" r="2.5"/></svg>',
+ add:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--fg)" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="5"/><path d="M12 9v6M9 12h6"/></svg>',
+ home:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--fg)" stroke-width="2"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg>',
+ money:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--fg)" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h11M4 17h7"/></svg>',
+ pay:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></svg>',
+ ins:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--fg)" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="5"/><path d="M8 15l3-3 2 2 3-4"/></svg>'
+};
+const tabbar=on=>`<div class="tabbar"><span class="${on==='h'?'on':''}">${I.home}</span><span class="${on==='m'?'on':''}">${I.money}</span><span class="pay">${I.pay}</span><span class="${on==='i'?'on':''}">${I.ins}</span></div>`;
+const K='<span class="key"><i></i>= ₹100</span>';
+const fr=(id,cap,inner)=>`<div class="fr"><div class="ph">${inner}</div><div class="cap"><b>${id}</b>${cap}</div></div>`;
+
+// seed ledger
+const L={income:9000,save:1400,subs:[['Spotify',119],['Google One',130],['Coursera',399]],cats:{Food:3100,Travel:1000,Study:700,Fun:1400,Other:752}};
+const subT=L.subs.reduce((a,b)=>a+b[1],0), catT=Object.values(L.cats).reduce((a,b)=>a+b,0);
+const ok=L.income===L.save+subT+catT; if(!ok)console.error('ledger mismatch',L.income,L.save+subT+catT);
+const spent={Food:1850,Travel:420,Study:300,Fun:900,Other:260};
+
+function render(){
+ const split=[{amt:L.save,cat:'Savings'},{amt:subT,kind:'hatch',cat:'Subs'},...Object.entries(L.cats).map(([c,a])=>({amt:a,cat:c}))];
+ document.getElementById('setupRow').innerHTML=[
+  fr('S-01','Confirm money in. 1 number.',`<div class="eb" style="padding:4px">1 of 4</div><div class="q">What comes in each month?</div><div class="sub">We found this from your linked UPI.</div><div class="big num">₹9,000</div><div style="padding:4px">${tiles([{amt:9000,cat:'Savings'}],{s:10})}</div><div style="padding:0 4px">${K}</div><div class="btn">That's right</div><div class="lnk">Change</div>`),
+  fr('S-02','Pick one type. 0 numbers.',`<div class="eb" style="padding:4px">2 of 4</div><div class="q">Which is most like you?</div><div class="sub">We'll start your jars from this.</div><div class="opt sel">Hostel<span>●</span></div><div class="opt">Day scholar</div><div class="opt">Renting</div><div class="opt">Earning</div><div class="btn">Next</div>`),
+  fr('S-03','Accept or step savings by one tile.',`<div class="eb" style="padding:4px">3 of 4</div><div class="q">Put this much away first?</div><div class="sub">You can change it any month.</div><div style="padding:8px 4px">${tiles([{amt:1400,cat:'Savings'}],{s:14})}</div><div style="padding:0 4px">${K}</div><div class="stepper"><i>−</i><i>+</i></div><div class="btn">Save ₹1,400</div>`),
+  fr('S-04','Your month. Tap Start. Exact ₹ on tap.',`<div class="eb" style="padding:4px">4 of 4</div><div class="q">Your month</div><div class="sub">Savings, then set aside for subscriptions, then your jars.</div><div style="padding:6px 4px">${tiles(split,{s:10})}</div><div style="padding:0 4px;display:flex;flex-wrap:wrap;gap:4px 10px;font-size:10.5px">${['Savings','Subs','Food','Travel','Study','Fun','Other'].map(c=>`<span>${c==='Subs'?tiles([{amt:100,kind:'hatch',cat:'Subs'}],{s:8}).replace('<svg','<svg style="display:inline;vertical-align:-1px"'):`<span class="sw" style="width:8px;height:8px;background:${C[c]}"></span>`} ${c==='Subs'?'Subscriptions':c}</span>`).join('')}</div><div class="btn">Start</div><div class="lnk">Skip for now</div>`)
+ ].join('');
+
+ const jar=(c)=>tiles([{amt:L.cats[c]-spent[c],cat:c},{amt:spent[c],kind:'spent',cat:c}],{s:6});
+ document.getElementById('screenRow').innerHTML=[
+  fr('H-01','Home. 0 numbers, no budget.',`<div class="t">Hi Tarun<span class="hb"><i>${I.set}</i><i>${I.add}</i></span></div>
+   <div class="cardg">
+    <div class="w full"><div class="glow"></div><div class="tt">Steady</div><div class="st">How it's going this week</div></div>
+    <div class="w"><div>${tiles([{amt:1400,cat:'Savings'}],{s:8})}</div><div class="tt">Saved this month</div><div class="st">${K}</div></div>
+    <div class="w"><div>${tiles([{amt:119,kind:'hatch',cat:'Subs'}],{s:14})}</div><div class="tt">Next to come out</div><div class="st">Spotify · Friday</div></div>
+    <div class="w full"><div style="display:grid;gap:5px"><div class="jr"><span class="st">This week</span>${tiles([{amt:1300,cat:'Food'}],{s:8,label:'this week 13 tiles'})}</div><div class="jr"><span class="st">Last week</span>${tiles([{amt:1500,kind:'spent',cat:'Food'}],{s:8,label:'last week 15 tiles'})}</div></div><div class="tt">This week</div></div>
+    <div class="w full"><div>${tiles([{amt:25,cat:'Other'},{amt:25,cat:'Other'},{amt:25,cat:'Other'},{amt:25,cat:'Other'}],{s:12})}</div><div class="tt">Little things</div><div class="st">Chai ×4 ≈ 1 tile</div></div>
+   </div>${tabbar('h')}`),
+  fr('P-02','Pay: which jar? 1 tap, preselected.',`<div class="eb" style="padding:4px">Pay · tarun@okaxis → Rapido</div><div class="big num">₹60</div><div class="q">Which jar?</div>${['Travel','Food','Fun','Other'].map((c,i)=>`<div class="opt ${i?'':'sel'}"><span><span class="sw" style="background:${C[c]}"></span> ${c}</span>${tiles([{amt:60,cat:c}],{s:12})}</div>`).join('')}<div class="btn">Pay from Travel</div>`),
+  fr('P-03','Tiles leave. Repeat line, no judgement.',`<div class="eb" style="padding:4px">Paid</div><div class="q">₹60 · Travel</div><div class="sub">3rd Rapido this week.</div><div class="w" style="margin:6px 0"><div class="tt">Travel</div>${tiles([{amt:1000-spent.Travel-60,cat:'Travel'},{amt:60,kind:'spent',cat:'Travel'},{amt:spent.Travel,kind:'spent',cat:'Travel'}],{s:12})}<div class="st">${K} · outlined = spent</div></div><div class="btn">Done</div><div class="lnk">Undo</div>`),
+  fr('M-01','Money. 1 number; the model in one bar.',`<div class="t">Money<span class="hb"><i>${I.set}</i></span></div>
+   <div class="w"><div class="st">Money in this month</div><div class="big num" style="padding:0">₹9,000</div>${tiles(split,{s:7})}<div class="st">${K}</div></div>
+   <div class="w"><div class="tt">Spending money</div><div style="display:grid;gap:4px">${Object.keys(L.cats).map(c=>`<div class="jr"><b>${c}</b>${jar(c)}</div>`).join('')}<div class="jr"><b>Subs</b>${tiles([{amt:subT,kind:'hatch',cat:'Subs'}],{s:8})}</div></div></div>${tabbar('m')}`),
+  fr('P-05','Jar empty. One choice, plain words.',`<div class="t">Pay</div><div class="big num">₹450</div><div class="sub">Dominos</div><div class="dim"></div><div class="sheet"><div class="q">Food is empty.</div><div class="sub">Take ₹200 from Fun? Fun still has plenty.</div><div style="display:grid;gap:4px"><div class="jr"><b>Fun</b>${tiles([{amt:300,cat:'Fun'},{amt:200,kind:'dash',cat:'Fun'}],{s:10})}</div><div class="jr"><b>Food</b>${tiles([{amt:200,cat:'Food'}],{s:10})}</div></div><div class="btn">Take from Fun</div><div class="lnk">Pick another jar</div></div>`),
+  fr('I-02','Month story, last card. Ends on savings.',`<div class="eb" style="padding:4px">September · 5 of 5</div><div class="q" style="font-size:24px">You saved ₹2,150</div><div class="sub">₹1,400 put away first, plus ₹750 left over.</div><div style="padding:10px 4px">${tiles([{amt:1400,cat:'Savings'},{amt:750,cat:'Savings'}],{s:14})}</div><div style="padding:0 4px">${K}</div><div class="sub">Laptop goal: 3 of 10 rows.</div><div class="btn">Start October</div>`)
+ ].join('');
+
+ // palette
+ document.getElementById('palTable').innerHTML=`<h3>Jar colours</h3><div class="tabmap"><table><thead><tr><th>Jar</th><th>Dark</th><th>Light</th><th>B&amp;W</th></tr></thead><tbody>${[['Food','#3987e5','#2a78d6','solid'],['Travel','#d95926','#eb6834','45° lines'],['Fun','#199e70','#1baf7a','dots'],['Study','#c98500','#eda100','135° lines'],['Other','#d55181','#e87ba4','grid']].map(r=>`<tr><td><span class="sw" style="background:${C[r[0]]}"></span> ${r[0]}</td><td class="num"><span class="sw" style="background:${r[1]}"></span> ${r[1]}</td><td class="num"><span class="sw" style="background:${r[2]}"></span> ${r[2]}</td><td>${r[3]}</td></tr>`).join('')}<tr><td>Savings</td><td colspan="2">ink (white on dark, black on light)</td><td>solid</td></tr><tr><td>Subscriptions</td><td colspan="2">grey, hatched</td><td>hatched</td></tr></tbody></table></div><p class="muted" style="font-size:12.5px;margin-top:10px">Validator: dark on card <span class="num">#1b1d1c</span> passes all checks (worst colour-blind ΔE 8.4, normal 19.3, contrast ≥3:1). Light passes, with Fun, Study and Other below 3:1 contrast, so every jar row carries its name. No red anywhere.</p>`;
+ const demo=(b)=>{const was=bw;bw=b;const t=tiles(split.map(x=>x.cat==='Savings'?x:x),{s:11});bw=was;return t;};
+ document.getElementById('palDemo').innerHTML=`<div><div class="eb" style="margin-bottom:6px">Colour</div>${demo(false)}</div><div class="bw"><div class="eb" style="margin-bottom:6px">Black &amp; white</div>${demo(true)}</div><div>${K}</div>`;
+}
+
+// tab map
+document.getElementById('tabmap').innerHTML=`<svg viewBox="0 0 900 250" width="900" style="min-width:680px" font-family="Figtree,sans-serif" font-size="12" role="img" aria-label="Tab map">
+${[['Home',80,'H-01',['Pace glow','Saved this month','Next to come out','This week','Little things']],['Money',300,'M-01',['M-02 Jar detail','M-03 Subscriptions','M-04 Savings goals','M-05 Move tiles','M-06 Friends owe you']],['+ Pay',520,'P-01',['P-02 Which jar','P-03 Tiles leave','P-04 Done + undo','P-05 Jar empty','P-06 Split']],['Insights',740,'I-01',['I-02 Month story','I-03 Flow of tiles','N-03 Weekly check-in','Card library','']]].map(([n,x,id,ch])=>`<rect x="${x-70}" y="14" width="140" height="44" rx="22" fill="${n==='+ Pay'?'var(--fg)':'var(--card)'}" stroke="var(--line)"/><text x="${x}" y="41" text-anchor="middle" font-weight="600" font-size="14" fill="${n==='+ Pay'?'var(--bg)':'var(--fg)'}">${n} · ${id}</text><line x1="${x}" y1="58" x2="${x}" y2="${60+ch.filter(Boolean).length*34}" stroke="var(--line)"/>${ch.filter(Boolean).map((c,i)=>`<rect x="${x-62}" y="${72+i*34}" width="124" height="26" rx="8" fill="var(--surface)" stroke="var(--line)"/><text x="${x}" y="${89+i*34}" text-anchor="middle" fill="var(--muted)">${c}</text>`).join('')}`).join('')}
+<text x="450" y="245" text-anchor="middle" fill="var(--muted)">Header: Settings X-01 (Look, Sounds, Less motion, Linked UPI IDs). Setup S-00 to S-04 runs once. Sheets N-01 income, N-02 price change.</text></svg>`;
+
+// loop map
+const nodes=[['Money in',110,70],['Split it (1 tap)',330,70],['Subscriptions come out',560,70],['Weekly check-in ×4',780,70],['Month story',780,230],['Left over → savings',560,230],['Fresh start',330,230],['Pay → tiles leave',110,230]];
+let lp=`<svg viewBox="0 0 900 330" width="900" style="min-width:680px" font-family="Figtree,sans-serif" font-size="13" role="img" aria-label="Loop map"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>`;
+const seq=[0,1,2,3,4,5,6,0];
+for(let i=0;i<seq.length-1;i++){const a=nodes[seq[i]],b=nodes[seq[i+1]];let x1=a[1],y1=a[2],x2=b[1],y2=b[2];if(y1===y2){const d=x2>x1?1:-1;x1+=d*95;x2-=d*95;}else if(x1===x2){const d=y2>y1?1:-1;y1+=d*22;y2-=d*22;}else{y1-=22;y2+=22;x1-=0;} lp+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ar)"/>`;}
+lp+=`<path d="M110 208 C 50 170, 50 130, 110 92" fill="none" stroke="var(--fg)" stroke-width="1.5" stroke-dasharray="4 3"/><path d="M110 252 C 170 300, 50 300, 110 252" fill="none" stroke="var(--fg)" stroke-width="2" marker-end="url(#ar)"/>`;
+nodes.forEach(([t,x,y],i)=>{const hi=i===7||i===5||i===4;lp+=`<rect x="${x-92}" y="${y-22}" width="184" height="44" rx="22" fill="${hi?'var(--fg)':'var(--card)'}" stroke="var(--line)"/><text x="${x}" y="${y+4}" text-anchor="middle" font-weight="600" fill="${hi?'var(--bg)':'var(--fg)'}">${t}</text>`;});
+lp+=`<text x="110" y="318" text-anchor="middle" fill="var(--muted)">Daily loop: pay → glance at Home glow</text><text x="560" y="130" text-anchor="middle" fill="var(--muted)">no action needed</text><text x="560" y="290" text-anchor="middle" fill="var(--muted)">no action needed · peak-end on savings</text><text x="450" y="18" text-anchor="middle" fill="var(--muted)">Notifications: ≤1/day, ≤4/week, quiet 22:00–08:00, never a count</text></svg>`;
+document.getElementById('loopmap').innerHTML=lp;
+
+render();
+const bc=document.getElementById('bColour'),bb=document.getElementById('bBw');
+function setBw(v){bw=v;document.querySelector('#setup').classList.toggle('bw',v);document.querySelector('#screens').classList.toggle('bw',v);bc.setAttribute('aria-pressed',!v);bb.setAttribute('aria-pressed',v);render();try{localStorage.setItem('tv11bw',v?'1':'0')}catch(e){}}
+bc.onclick=()=>setBw(false);bb.onclick=()=>setBw(true);
+try{if(localStorage.getItem('tv11bw')==='1')setBw(true)}catch(e){}
+})();
+</script>

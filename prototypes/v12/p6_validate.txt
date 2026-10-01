@@ -1,0 +1,68 @@
+== A Monochrome glow · dark  [#ad7c26,#5a8ae6,#b9407f,#22a385] on #161618
+  [PASS] Lightness band         all 4 inside L 0.48–0.67
+  [PASS] Chroma floor           all 4 >= 0.1
+  [WARN] CVD separation         worst all-pairs #22a385↔#b9407f ΔE 7.6 (deutan) · tritan 3.8
+  [PASS] Normal-vision floor    worst all-pairs #22a385↔#ad7c26 ΔE 17.2 (normal)
+  [PASS] Contrast vs surface    all 4 >= 3:1
+  → ALL CHECKS PASS  (CVD in the 6–8 floor band is legal ONLY with secondary encoding: direct labels, gaps, or texture)
+== A Monochrome glow · light  [#b7791f,#2f63c9,#93306b,#1f9b84] on #f4f4f2
+  [PASS] Lightness band         all 4 inside L 0.43–0.77
+  [PASS] Chroma floor           all 4 >= 0.1
+  [PASS] CVD separation         worst all-pairs #1f9b84↔#b7791f ΔE 12.0 (protan) · tritan 10.1
+  [PASS] Normal-vision floor    worst all-pairs #1f9b84↔#b7791f ΔE 18.7 (normal)
+  [PASS] Contrast vs surface    all 4 >= 3:1
+  → ALL CHECKS PASS  (CVD in the 6–8 floor band is legal ONLY with secondary encoding: direct labels, gaps, or texture)
+== B Warm paper · light  [#b07818,#2f63c9,#93306b,#1f8f6e] on #fbf8f2
+  [PASS] Lightness band         all 4 inside L 0.43–0.77
+  [PASS] Chroma floor           all 4 >= 0.1
+  [PASS] CVD separation         worst all-pairs #1f8f6e↔#b07818 ΔE 9.1 (protan) · tritan 6.7
+  [PASS] Normal-vision floor    worst all-pairs #1f8f6e↔#b07818 ΔE 17.3 (normal)
+  [PASS] Contrast vs surface    all 4 >= 3:1
+  → ALL CHECKS PASS  (CVD in the 6–8 floor band is legal ONLY with secondary encoding: direct labels, gaps, or texture)
+== B Warm paper · dark  [#ad7c26,#5a8ae6,#b9407f,#22a385] on #1d1b17
+  [PASS] Lightness band         all 4 inside L 0.48–0.67
+  [PASS] Chroma floor           all 4 >= 0.1
+  [WARN] CVD separation         worst all-pairs #22a385↔#b9407f ΔE 7.6 (deutan) · tritan 3.8
+  [PASS] Normal-vision floor    worst all-pairs #22a385↔#ad7c26 ΔE 17.2 (normal)
+  [PASS] Contrast vs surface    all 4 >= 3:1
+  → ALL CHECKS PASS  (CVD in the 6–8 floor band is legal ONLY with secondary encoding: direct labels, gaps, or texture)
+== C Ink & dots · light  [#a86a00,#1f55c4,#8a2a6a,#0f8a5f] on #ffffff
+  [PASS] Lightness band         all 4 inside L 0.43–0.77
+  [PASS] Chroma floor           all 4 >= 0.1
+  [PASS] CVD separation         worst all-pairs #0f8a5f↔#a86a00 ΔE 8.3 (protan) · tritan 8.1
+  [PASS] Normal-vision floor    worst all-pairs #0f8a5f↔#a86a00 ΔE 17.7 (normal)
+  [PASS] Contrast vs surface    all 4 >= 3:1
+  → ALL CHECKS PASS  (CVD in the 6–8 floor band is legal ONLY with secondary encoding: direct labels, gaps, or texture)
+== C Ink & dots · dark  [#ad7c26,#5a8ae6,#b9407f,#22a385] on #000000
+  [PASS] Lightness band         all 4 inside L 0.48–0.67
+  [PASS] Chroma floor           all 4 >= 0.1
+  [WARN] CVD separation         worst all-pairs #22a385↔#b9407f ΔE 7.6 (deutan) · tritan 3.8
+  [PASS] Normal-vision floor    worst all-pairs #22a385↔#ad7c26 ΔE 17.2 (normal)
+  [PASS] Contrast vs surface    all 4 >= 3:1
+  → ALL CHECKS PASS  (CVD in the 6–8 floor band is legal ONLY with secondary encoding: direct labels, gaps, or texture)
+== D Soft night · dark  [#b27a28,#6b8be0,#b0508c,#23a28f] on #1f2430
+  [PASS] Lightness band         all 4 inside L 0.48–0.67
+  [PASS] Chroma floor           all 4 >= 0.1
+  [WARN] CVD separation         worst all-pairs #23a28f↔#b0508c ΔE 6.8 (deutan) · tritan 3.9
+  [PASS] Normal-vision floor    worst all-pairs #23a28f↔#6b8be0 ΔE 16.8 (normal)
+  [PASS] Contrast vs surface    all 4 >= 3:1
+  → ALL CHECKS PASS  (CVD in the 6–8 floor band is legal ONLY with secondary encoding: direct labels, gaps, or texture)
+== D Soft night · light  [#a8721c,#3e6ac4,#94407a,#16917a] on #eef0f4
+  [PASS] Lightness band         all 4 inside L 0.43–0.77
+  [PASS] Chroma floor           all 4 >= 0.1
+  [PASS] CVD separation         worst all-pairs #16917a↔#94407a ΔE 9.0 (deutan) · tritan 6.4
+  [PASS] Normal-vision floor    worst all-pairs #16917a↔#a8721c ΔE 17.4 (normal)
+  [PASS] Contrast vs surface    all 4 >= 3:1
+  → ALL CHECKS PASS  (CVD in the 6–8 floor band is legal ONLY with secondary encoding: direct labels, gaps, or texture)
+== B&W greys, dark (savings, Food, patterned jars; ordinal)  [#ffffff,#a8a8a8,#7a7a7a] on #121212
+  [PASS] Lightness monotone     steps read light→dark
+  [PASS] Adjacent ΔL            all gaps >= 0.06
+  [PASS] Light-end contrast     #7a7a7a at 4.36:1 vs surface
+  [PASS] Single hue             hue spread 0°
+  → ALL CHECKS PASS  (ordinal: one hue, monotone L, visible step gaps, light end clears surface)
+== B&W greys, light (savings, Food, patterned jars; ordinal)  [#111111,#6b6b6b,#9a9a9a] on #ffffff
+  [PASS] Lightness monotone     steps read light→dark
+  [PASS] Adjacent ΔL            all gaps >= 0.06
+  [PASS] Light-end contrast     #9a9a9a at 2.81:1 vs surface
+  [PASS] Single hue             hue spread 0°
+  → ALL CHECKS PASS  (ordinal: one hue, monotone L, visible step gaps, light end clears surface)

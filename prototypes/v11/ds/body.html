@@ -1,0 +1,118 @@
+<title>Trickle v11 — Design System</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: single reading column (≤980px) of spec sections; live tile specimens drawn by the app's own renderer. Dark first. */
+:root{--bg:#0e0f0e;--card:#1b1d1c;--card2:#232624;--line:#2a2d2b;--fg:#f2f3f1;--muted:#9a9f9b;--tile-empty:#565b57;--tile:#cfd2cf;--sav:#f2f3f1;--hatch:#8d938f;--bw:#cfd2cf;
+ --c-Food:#3987e5;--c-Travel:#d95926;--c-Fun:#199e70;--c-Study:#c98500;--c-Other:#d55181;
+ --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;--body:"Figtree",ui-sans-serif,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;color-scheme:dark}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f4f5f3;--card:#fff;--card2:#eef0ed;--line:#dfe3df;--fg:#121412;--muted:#5c625e;--tile-empty:#aab0ab;--tile:#3b403c;--sav:#121412;--hatch:#7a807b;--bw:#6d736e;--c-Food:#2a78d6;--c-Travel:#eb6834;--c-Fun:#1baf7a;--c-Study:#eda100;--c-Other:#e87ba4;color-scheme:light}}
+:root[data-theme="light"]{--bg:#f4f5f3;--card:#fff;--card2:#eef0ed;--line:#dfe3df;--fg:#121412;--muted:#5c625e;--tile-empty:#aab0ab;--tile:#3b403c;--sav:#121412;--hatch:#7a807b;--bw:#6d736e;--c-Food:#2a78d6;--c-Travel:#eb6834;--c-Fun:#1baf7a;--c-Study:#eda100;--c-Other:#e87ba4;color-scheme:light}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 var(--body)}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:32px 72px;display:flex;flex-direction:column;gap:40px}
+h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;text-wrap:balance;letter-spacing:-.015em}
+h1{font-size:clamp(32px,6vw,52px);line-height:1.05}h2{font-size:24px}h3{font-size:16px}
+p{margin:0;max-width:68ch}.muted{color:var(--muted)}
+.eyebrow{font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:14px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.card{background:var(--card);border-radius:20px;padding:16px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+code,.mono{font-family:var(--mono);font-size:13px}
+.key{font:600 12px var(--mono);color:var(--muted)}.key i{font-style:normal;color:var(--fg)}
+svg.tiles{display:block;max-width:100%;height:auto}
+.sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:6px}
+.hero{display:flex;flex-direction:column;gap:14px}
+.links a{color:var(--fg)}
+ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.glowdemo{height:90px;border-radius:20px;background:var(--card);position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:12px 14px;font:600 22px var(--display)}
+.glowdemo::before{content:"";position:absolute;right:-40px;top:-80px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(242,243,241,var(--gi)) 0%,rgba(242,243,241,0) 65%)}
+.glowdemo span{position:relative}
+.wsz{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:340px}.wsz div{background:var(--card2);border-radius:16px;padding:10px;font:600 12px var(--mono);color:var(--muted);min-height:70px;display:flex;align-items:flex-end}
+.wsz .w{grid-column:span 2;min-height:44px}.wsz .l{grid-column:span 2;min-height:120px}
+</style>
+<div class="wrap">
+<header class="hero"><span class="eyebrow">Trickle v11 · handoff</span><h1>One tile. ₹100. Every screen.</h1>
+<p class="muted">The system behind the Trickle v11 prototype: the tile, colours, type, components, motion, sound and words, plus a test script for five students. Money comes from linked UPI IDs or manual entry only.</p>
+<p class="links"><a href="https://claude.ai/artifact/4UpBjSSpxPXQiTjT9e7wGc">Open the prototype</a> · <a href="https://claude.ai/artifact/GqCAwwW9LBbtFJ2jkeSZph">Tile test (Phase 3)</a></p></header>
+
+<section><h2>The tile</h2><p>■ = ₹100, always. Rows of 10 with a gap after 5, so a row reads as ₹1,000 and a half row as ₹500. Amounts under ₹100 are a partial tile that fills from the bottom. Above 100 tiles, rows group into 10×10 squares of ₹10,000; a bigger glyph is never used. The key "■ = ₹100" appears once per screen, on the first tile visual.</p>
+<div class="grid">
+<div class="card"><span class="eyebrow">₹60 · auto</span><div id="t1"></div></div>
+<div class="card"><span class="eyebrow">₹1,400 · savings</span><div id="t2"></div></div>
+<div class="card"><span class="eyebrow">₹3,100 jar · ₹1,300 spent</span><div id="t3"></div></div>
+<div class="card"><span class="eyebrow">Four states</span><div id="t4"></div><p class="muted" style="font-size:13px">Filled = available · outlined = spent · hatched = set aside for a subscription · dashed = a friend owes you</p></div>
+</div>
+<div class="scroll"><table><tr><th>Token</th><th>Value</th></tr>
+<tr><td>Unit</td><td class="mono">UNIT = 100 (one definition in the code)</td></tr><tr><td>Tile size</td><td class="mono">9–16 px; gap = 0.22 × size; 5|5 gap = 0.6 × size; row gap +0.3 × size; radius 2.5</td></tr>
+<tr><td>Home card</td><td>≤30 tiles, no ₹ shown; exact ₹ on tap</td></tr><tr><td>Any card</td><td>≤100 tiles, then 10×10 squares</td></tr>
+<tr><td>Leaves the tile</td><td>Only position data: calendar day, time of day, month trend. These use dots or lines on a different surface and carry no key.</td></tr></table></div></section>
+
+<section><h2>Palette</h2><p>Neutrals carry a slight green bias. Category hues come in a fixed order and none is red. Validator (dark on #1b1d1c): all checks pass, worst CVD ΔE 8.4, worst normal-vision ΔE 19.3, contrast ≥3:1. In light mode, Fun, Study and Other get a contrast warning, so every jar row carries its name.</p>
+<div class="scroll"><table><tr><th>Role</th><th>Dark</th><th>Light</th><th>Black &amp; white</th></tr>
+<tr><td>Food</td><td><span class="sw" style="background:#3987e5"></span>#3987e5</td><td><span class="sw" style="background:#2a78d6"></span>#2a78d6</td><td>solid grey</td></tr>
+<tr><td>Travel</td><td><span class="sw" style="background:#d95926"></span>#d95926</td><td><span class="sw" style="background:#eb6834"></span>#eb6834</td><td>45° lines</td></tr>
+<tr><td>Fun</td><td><span class="sw" style="background:#199e70"></span>#199e70</td><td><span class="sw" style="background:#1baf7a"></span>#1baf7a</td><td>dots</td></tr>
+<tr><td>Study</td><td><span class="sw" style="background:#c98500"></span>#c98500</td><td><span class="sw" style="background:#eda100"></span>#eda100</td><td>135° lines</td></tr>
+<tr><td>Other</td><td><span class="sw" style="background:#d55181"></span>#d55181</td><td><span class="sw" style="background:#e87ba4"></span>#e87ba4</td><td>grid</td></tr>
+<tr><td>Savings</td><td><span class="sw" style="background:#f2f3f1"></span>#f2f3f1</td><td><span class="sw" style="background:#121412"></span>#121412</td><td>pure white / black</td></tr>
+<tr><td>Subscriptions</td><td colspan="3">neutral hatch #8d938f / #7a807b in every mode</td></tr>
+<tr><td>Background · card · line</td><td class="mono">#0e0f0e · #1b1d1c · #2a2d2b</td><td class="mono">#f4f5f3 · #ffffff · #dfe3df</td><td>same as theme</td></tr>
+<tr><td>Text · muted</td><td class="mono">#f2f3f1 · #9a9f9b</td><td class="mono">#121412 · #5c625e</td><td>same as theme</td></tr></table></div>
+<div class="grid"><div class="card"><span class="eyebrow">Colour</span><div id="c1"></div></div><div class="card"><span class="eyebrow">Black &amp; white</span><div id="c2"></div></div></div></section>
+
+<section><h2>Type</h2><div class="scroll"><table><tr><th>Role</th><th>Face</th><th>Size</th></tr>
+<tr><td><span style="font:600 32px var(--display)">Hi Tarun</span></td><td>Bricolage Grotesque 600</td><td>32 title · 22 sheet · 16 card title</td></tr>
+<tr><td>Split it like last time?</td><td>Figtree 400/600</td><td>15 body · 13 secondary</td></tr>
+<tr><td><span class="mono" style="font-size:22px">₹9,000</span></td><td>JetBrains Mono, tabular</td><td>28 hero · 13 inline</td></tr>
+<tr><td><span class="eyebrow">How it's going</span></td><td>JetBrains Mono caps, +0.12em</td><td>11 eyebrow</td></tr></table></div></section>
+
+<section><h2>Components</h2><div class="grid">
+<div class="card"><h3>Tile bar (jar)</h3><div id="k1"></div><p class="muted" style="font-size:13px">Left filled in the jar's colour, spent outlined after it. Tap for exact ₹. Used on Money, jar detail and the pay moment.</p></div>
+<div class="card"><h3>Split bar</h3><div id="k2"></div><p class="muted" style="font-size:13px">Money in, in this order: savings, subscriptions (hatched), then the jars. Used in setup, Money and the story.</p></div>
+<div class="card"><h3>Pace glow</h3><div class="glowdemo" style="--gi:.6"><span>Calm</span></div><div class="glowdemo" style="--gi:.2"><span>Slow down a little</span></div><p class="muted" style="font-size:13px">One neutral glow. Brighter is calmer. The word always carries the meaning. It is never red or amber.</p></div>
+<div class="card"><h3>Widget sizes</h3><div class="wsz"><div>S 1×1</div><div>S 1×1</div><div class="w">W 2×1</div><div class="l">L 2×2</div></div><p class="muted" style="font-size:13px">2-column grid, 10 px gap, radius 24. Title bottom-left, settings glyph top-right. Home holds up to 6 cards.</p></div>
+<div class="card"><h3>Sheet</h3><p class="muted" style="font-size:13px">A bottom sheet with radius 28 and a grab bar. It holds one fact, one primary button that says what happens, and at most one text link. Used for empty jar, split, money in, price change and the weekly check-in.</p></div>
+<div class="card"><h3>Tab bar</h3><p class="muted" style="font-size:13px">A floating pill: Home · Money · Pay (filled, centre) · Insights. Settings sits in a header button. Screens pad 120 px at the bottom so nothing sits under the bar.</p></div>
+</div></section>
+
+<section><h2>Motion and sound</h2><div class="scroll"><table><tr><th>Moment</th><th>Motion</th><th>Sound (WebAudio)</th><th>Reduced motion</th></tr>
+<tr><td>Splash</td><td>20 tiles drop into a two-row jar, 45 ms stagger; logo at 0.95 s; moves on at 2.4 s</td><td>none</td><td>static logo, moves on at 1.2 s</td></tr>
+<tr><td>Money arrives / split</td><td>tile drop, spring 260 ms, stagger ≤18 ms, cap 600 ms</td><td>income + save chime (≤1 per 1.5 s)</td><td>final state</td></tr>
+<tr><td>Pay</td><td>payment tiles fade and rise 8 px over 200 ms, 45 ms stagger, done within 1.2 s</td><td>tick per tile (≤10, then one swish), pay tone</td><td>spent tiles drawn outlined</td></tr>
+<tr><td>Move tiles</td><td>tiles re-render in the new jar</td><td>pour</td><td>same</td></tr>
+<tr><td>Subscription day</td><td>hatched tile turns outlined</td><td>low thud</td><td>same</td></tr>
+<tr><td>Goal row filled</td><td>row fills</td><td>goal chime</td><td>same</td></tr>
+<tr><td>Sheets, notes</td><td>rise 40 px, 280 ms</td><td>soft (notes)</td><td>no animation</td></tr></table></div>
+<p class="muted">All sound goes through a 2.4 kHz lowpass and a compressor, with each voice peaking at 0.15 or lower. Sound is on by default, follows the phone's silent switch, and has one toggle in Settings.</p></section>
+
+<section><h2>Copy rules</h2><ol>
+<li>Talk like a friend who is good with money. Use second person and short sentences.</li>
+<li>Use the words students use: money in, spending money, jars, set aside, left over, move tiles, friends owe you.</li>
+<li>Never write: over, overspent, deficit, carried, debt, cover, sweep, pool, assign, invariant, warning, alert, failed, "you should". The built file is checked with a grep.</li>
+<li>Give the facts, then one choice. Use no exclamation marks, except one on a savings milestone.</li>
+<li>Write ₹ with Indian grouping and no decimals. Write the key as "■ = ₹100".</li>
+<li>Buttons say what happens ("Split it", "Take from Food"). Never "OK" or "Submit".</li>
+<li>Home never shows a number. Other screens show at most two on first view, with exact ₹ on tap. The one exception is the price-change sheet, whose three numbers come from the Phase 8 copy.</li>
+</ol></section>
+
+<section><h2>Usability test: 5 students</h2>
+<p>Recruit five Indian college students aged 18–24 who pay with UPI: two in hostels, one day scholar, one renting, one earning. Each session takes 25 minutes on a phone, with a think-aloud and a stopwatch. Open the prototype fresh for tasks 2–3, and with <code>#demo</code> for the rest.</p>
+<div class="scroll"><table><tr><th>#</th><th>Task / prompt</th><th>Measure</th><th>Pass</th><th>Criterion</th></tr>
+<tr><td>1</td><td>Run the <a href="https://claude.ai/artifact/GqCAwwW9LBbtFJ2jkeSZph" style="color:var(--fg)">tile test</a>, block F only. Then ask: "What is one tile worth?"</td><td>time to answer, accuracy of "which is more"</td><td>≥4/5 answer in ≤5 s; ≥90% compare correctly in ≤3 s</td><td>S1, S2</td></tr>
+<tr><td>2</td><td>"Set up your month." Don't help.</td><td>stopwatch, tap count</td><td>≤30 s, ≤4 taps with defaults</td><td>S3</td></tr>
+<tr><td>3</td><td>On each setup screen: "What is this screen asking you?"</td><td>one answer or several</td><td>one decision named</td><td>S4</td></tr>
+<tr><td>4</td><td>5-second test on Home: show it for 5 s, hide it, then ask "Are you doing OK this month?"</td><td>answer, and any number recalled</td><td>states the pace word, recalls no budget number</td><td>S5, S6, S13</td></tr>
+<tr><td>5</td><td>"Pay the auto driver ₹60."</td><td>steps to hand-off; "what just happened to your Travel tiles?"</td><td>≤3 steps; says the tiles left</td><td>S8</td></tr>
+<tr><td>6</td><td>"Buy the movie tickets." (the Fun jar runs out)</td><td>time to resolve; words used to describe it</td><td>1 tap; no guilt words used</td><td>S4, S11</td></tr>
+<tr><td>7</td><td>Settings → Try a moment → Money comes in. "Deal with this."</td><td>taps; did they find Undo</td><td>1 confirm tap; Undo found</td><td>S9</td></tr>
+<tr><td>8</td><td>"Split last night's dinner with Rahul and Aditi. Then Rahul pays you back."</td><td>completion; "where did Rahul's money go?"</td><td>says "back to Food"</td><td>S12</td></tr>
+<tr><td>9</td><td>5-second test on Money, Insights and the jar detail</td><td>"What does this show?"</td><td>≥4/5 correct per screen</td><td>S13, S7</td></tr>
+<tr><td>10</td><td>Weekly check-in, then the month story to the end</td><td>"How did your month go?" and "Would you open this on Sunday?"</td><td>recalls the saved amount; says yes or maybe</td><td>S10</td></tr>
+<tr><td>11</td><td>Switch to Black &amp; white. "Which tiles are Travel?"</td><td>accuracy</td><td>correct using the pattern and name</td><td>a11y</td></tr>
+</table></div>
+<p class="muted">After each session, write down any word that felt like a scolding, any number the student had to work out, and any moment they asked "what's this tile?". If F fails S2 (below 90%, or a median above 3 s), retest against layout D.</p></section>
+</div>
+<script>

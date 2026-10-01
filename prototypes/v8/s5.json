@@ -1,0 +1,8 @@
+[["goal_home","#demo",["[data-w=goal]"]],
+["reached","#demo",["js:goalById('goa').target=4300;A.goal('goa')","[data-a=gadd][data-x='100']"]],
+["fresh_home","#demo",["js:A.story()","[data-a=stnext]","[data-a=stnext]","[data-a=stnext]","[data-a=fresh]","js:A.close()"]],
+["manual_home","",["[data-a=ob][data-x='2']","[data-x=manual]","[data-a=ob][data-x='4']","[data-x=week]","[data-a=ob][data-x='6']","[data-a=ob][data-x='7']","[data-a=obg]","[data-a=obdone]"]],
+["money_sav_scroll","#demo",["[data-a=tab][data-x=money]","js:document.getElementById('vp').scrollTop=600"]],
+["home_scroll","#demo",["js:document.getElementById('vp').scrollTop=600"]],
+["ins_scroll","#demo",["[data-a=tab][data-x=insights]","js:document.getElementById('vp').scrollTop=1400"]],
+["o4","",["[data-a=ob][data-x='2']","[data-x=upi]","[data-a=oblink]"]]]

@@ -1,0 +1,155 @@
+<title>Trickle v14 — Coin test</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: one centred phone-width card; a question at a time, big tap targets; results as a table + copy block */
+:root{
+ --bg:#f6f7f4;--card:#ffffff;--ink:#1d2321;--ink2:#4a5550;--ink3:#7d8a84;--line:#dfe4e0;
+ --left:#2f7d6d;--save:#c58a2c;--out:#c2562f;--rim:rgba(255,255,255,.55);--hl:#e7f1ee;--ok:#2f7d6d;--bad:#b0452a;
+ --fd:"Bricolage Grotesque",Georgia,serif;--fb:"Source Sans 3",system-ui,sans-serif;--fm:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141816;--card:#1c211f;--ink:#e8ece9;--ink2:#b3bdb8;--ink3:#7f8c86;--line:#2c3330;--left:#5bb8a4;--save:#e0aa52;--out:#e88a63;--rim:rgba(0,0,0,.35);--hl:#1f2e2a;--ok:#5bb8a4;--bad:#e88a63;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141816;--card:#1c211f;--ink:#e8ece9;--ink2:#b3bdb8;--ink3:#7f8c86;--line:#2c3330;--left:#5bb8a4;--save:#e0aa52;--out:#e88a63;--rim:rgba(0,0,0,.35);--hl:#1f2e2a;--ok:#5bb8a4;--bad:#e88a63;color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 var(--fb)}
+.wrap{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:24px 48px}
+h1,h2{font-family:var(--fd);margin:0;text-wrap:balance}
+h1{font-size:30px;line-height:1.1}
+.id{font-family:var(--fm);font-size:12px;color:var(--ink3);letter-spacing:.06em;margin:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-top:16px;display:grid;gap:12px}
+.t{fill:var(--ink);font-family:var(--fb)}.t2{fill:var(--ink2);font-family:var(--fb)}.tb{fill:var(--bg);font-family:var(--fb)}
+button{font:600 16px var(--fb);background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;text-align:left}
+button:hover{border-color:var(--ink3)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--left);outline-offset:2px}
+.primary{background:var(--ink);color:var(--bg);border-color:var(--ink);text-align:center}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opts.one{grid-template-columns:1fr}
+.prog{display:flex;justify-content:space-between;font-family:var(--fm);font-size:12px;color:var(--ink3)}
+.bar{height:4px;background:var(--line);border-radius:2px}.bar i{display:block;height:100%;background:var(--left);border-radius:2px}
+.q{font-family:var(--fd);font-size:20px}
+.fig{background:var(--bg);border-radius:10px;padding:12px;overflow-x:auto}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pair button{text-align:center;padding:10px}
+.rule{background:var(--hl);border-radius:10px;padding:12px;font-size:18px}
+label{font-size:14px;color:var(--ink2);display:grid;gap:4px}
+input{font:16px var(--fb);padding:10px;border-radius:8px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}
+.cl{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.cl li button{width:100%;display:grid;grid-template-columns:minmax(0,8em) 1fr;gap:8px;align-items:center;padding:5px 8px;border-radius:6px;font-size:14px}
+.cl li button .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cv{display:flex;align-items:center;gap:4px}.cx{font-size:12px;font-variant-numeric:tabular-nums}
+.fam{font-family:var(--fd);font-size:15px;margin:8px 0 2px;display:flex;gap:8px;align-items:center}
+.sub{padding-left:12px}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left}
+.tbl{overflow-x:auto}
+pre{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;font:12px/1.45 var(--fm);white-space:pre-wrap;word-break:break-word;max-height:320px;overflow:auto;margin:0}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.muted{color:var(--ink2);font-size:14px;margin:0}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+@media (max-width:420px){.opts{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:no-preference){.card{animation:in .18s ease-out}@keyframes in{from{transform:translateY(4px)}to{transform:none}}}
+</style>
+<div class="wrap">
+<p class="id">TRICKLE · V14 · STAGE 2B</p>
+<h1>Coin test</h1>
+<p class="muted">For Tarun to run with one person at a time. About 3 minutes, 13 questions. Answer as fast as you comfortably can; each answer is timed.</p>
+<div id="app"></div>
+</div>
+<script>
+(function(){
+var NS='http://www.w3.org/2000/svg',uid=0;
+function fmt(n){var w=Math.floor(n+1e-9),f=Math.round((n-w)*100)/100;var s={0.25:'¼',0.5:'½',0.75:'¾'}[f];if(!f)return ''+w;if(s)return (w?w:'')+s;return ''+Math.round(n);}
+function coin(cx,cy,r,frac,st){
+ var o='',stroke=st==='out'?'var(--out)':'var(--ink3)',da=(st==='ghost'||st==='out')?' stroke-dasharray="2 2"':'';
+ o+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+stroke+'" stroke-width="1.3"'+da+'/>';
+ var col=st==='left'?'var(--left)':st==='save'?'var(--save)':null;
+ if(col&&frac>0){
+  if(frac>=.999){o+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+col+'"/><circle cx="'+cx+'" cy="'+cy+'" r="'+(r*.7)+'" fill="none" stroke="var(--rim)" stroke-width="1"/>';}
+  else{var id='q'+(uid++),top=cy+r-2*r*frac;o+='<clipPath id="'+id+'"><rect x="'+(cx-r)+'" y="'+top+'" width="'+2*r+'" height="'+2*r*frac+'"/></clipPath><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+col+'" clip-path="url(#'+id+')"/>';}
+ }
+ return o;}
+function txt(x,y,s,size,cls,w){return '<text x="'+x+'" y="'+y+'" font-size="'+(size||12)+'" class="'+(cls||'t')+'" font-weight="'+(w||400)+'">'+s+'</text>';}
+function rowc(x,y,n,st,r,cols){var o='',i=0,rem=n,g=2*r+4;cols=cols||10;while(rem>1e-9){var f=Math.min(1,rem);o+=coin(x+r+(i%cols)*g,y+r+Math.floor(i/cols)*g,r,f,st);rem-=f;i++;}return {b:o,ex:x+Math.min(i,cols)*g,ey:y+Math.max(1,Math.ceil(i/cols))*g};}
+// Variant A = V4 (draw ≤20, then handful of 5 ×N). Variant B = V1 (draw ≤10, then one coin ×N).
+var V={A:{T:20,k:5,name:'V4 handful'},B:{T:10,k:1,name:'V1 one coin'}};
+function draw(segs,v,r){r=r||9;var P=V[v],tot=0,o='',y=6;segs.forEach(function(s){tot+=s[0]});
+ if(tot<=P.T+1e-9){var i=0,g=2*r+4;segs.forEach(function(s){var rem=s[0];while(rem>1e-9){var f=Math.min(1,rem);o+=coin(6+r+(i%10)*g,y+r+Math.floor(i/10)*g,r,f,s[1]);rem-=f;i++;}});
+  y+=Math.ceil(i/10)*g+2;var words=segs.filter(function(s){return s[2]}).map(function(s){return fmt(s[0])+' '+s[2]}).join(' · ');if(words){o+=txt(6,y+10,words,12,'t2');y+=16;}}
+ else segs.forEach(function(s){var n=s[0];
+  if(P.T>=20&&n<=P.T){var R=rowc(6,y,n,s[1],r);o+=R.b+txt(R.ex+4,y+r+4,fmt(n)+' '+s[2],12,'t2');y=R.ey+6;}
+  else if(P.T<20&&n<=P.T){var R2=rowc(6,y,n,s[1],r);o+=R2.b+txt(R2.ex+4,y+r+4,fmt(n)+' '+s[2],12,'t2');y=R2.ey+6;}
+  else{var R3=rowc(6,y,P.k,s[1],r);var ex=R3.ex+6;o+=R3.b+txt(ex,y+r+5,'×'+fmt(n),16,'t',700)+txt(ex+11*fmt(n).length+18,y+r+5,s[2]||'',12,'t2');y+=2*r+12;}});
+ return '<svg viewBox="0 0 260 '+(y+4)+'" width="100%" style="max-width:340px" role="img" aria-label="coins">'+o+'</svg>';}
+// categories
+var CATS=[["Hostel mess",2000,"Fixed"],["Food",2800,"Needs"],["Bike EMI",1500,"Fixed"],["Travel",1200,"Needs"],["Fun",1000,"Wants"],["Clothes",800,"Wants"],["Outings",700,"Wants"],["Quick-commerce",650,"Wants"],["Study",600,"Needs"],["Subs",548,"Fixed"],["Gym",500,"Fixed"],["Movies",450,"Wants"],["Snacks",420,"Wants"],["Gifts",350,"Wants"],["Chai",300,"Wants"],["Phone",299,"Fixed"],["Laundry",200,"Needs"],["Haircut",150,"Needs"],["Stationery",120,"Needs"],["Printouts",90,"Needs"]];
+function inl(amt,v){var n=amt/100,P=V[v],r=5;if(n<=P.T){var R=rowc(0,1,n,'left',r,20);return '<svg viewBox="0 0 '+(R.ex+2)+' 13" width="'+(R.ex+2)+'" height="13" aria-hidden="true">'+R.b+'</svg>';}
+ var R2=rowc(0,1,P.k,'left',r);return '<svg viewBox="0 0 '+(R2.ex+2)+' 13" width="'+(R2.ex+2)+'" height="13" aria-hidden="true">'+R2.b+'</svg><b class="cx">×'+fmt(n)+'</b>';}
+function catList(layout,coinV,order){var cats=CATS.slice();
+ function li(c){return '<li><button type="button" data-ans="'+c[0]+'"><span class="nm">'+c[0]+'</span><span class="cv">'+inl(c[1],coinV)+'</span></button></li>';}
+ if(layout==='rank'){cats.sort(function(a,b){return b[1]-a[1]});return '<ul class="cl">'+cats.map(li).join('')+'</ul>';}
+ var fams={};cats.forEach(function(c){(fams[c[2]]=fams[c[2]]||[]).push(c)});var o='';
+ Object.keys(fams).sort(function(a,b){return sum(fams[b])-sum(fams[a])}).forEach(function(f){var l=fams[f].sort(function(a,b){return b[1]-a[1]});o+='<div class="fam">'+f+' <span class="cv">'+inl(sum(l),coinV)+'</span></div><ul class="cl sub">'+l.map(li).join('')+'</ul>';});return o;}
+function sum(l){return l.reduce(function(s,c){return s+c[1]},0)}
+// question bank: kind coin|cat
+var BANK=[
+ {id:'Q1',k:'coin',q:'How much money is this?',f:function(v){return draw([[2.25,'left','']],v)},o:['₹22','₹225','₹2,250','₹2.25'],a:'₹225'},
+ {id:'Q2',k:'coin',q:'How much money is this?',f:function(v){return draw([[35,'left','']],v)},o:['₹350','₹3,500','₹35,000','₹35'],a:'₹3,500'},
+ {id:'Q3',k:'coin',q:'Which is more money?',pair:true,f:function(v){return [draw([[60,'left','']],v),draw([[45,'left','']],v)]},o:['Left','Right'],a:'Left'},
+ {id:'Q4',k:'coin',q:'Which is more money?',pair:true,f:function(v){return [draw([[18,'left','']],v),draw([[22,'left','']],v)]},o:['Left','Right'],a:'Right'},
+ {id:'Q5',k:'coin',q:'How much is left this week?',f:function(v){return draw([[7,'spent','spent'],[10.5,'left','left']],v)},o:['₹700','₹1,050','₹1,750','₹105'],a:'₹1,050'},
+ {id:'Q6',k:'coin',q:'You are about to pay. How much will this payment take?',f:function(v){return draw([[7,'spent','spent'],[7,'left','stay'],[3.5,'out','leave']],v)},o:['₹35','₹350','₹700','₹1,050'],a:'₹350'},
+ {id:'Q7',k:'coin',q:'About how big is your whole goal?',f:function(v){return draw([[81.1,'save','saved'],[58.9,'ghost','to go']],v)},o:['₹1,400','₹8,100','₹14,000','₹140'],a:'₹14,000'},
+ {id:'Q8',k:'coin',q:'How much money is this laptop goal?',f:function(v){return draw([[450,'ghost','to save']],v)},o:['₹450','₹4,500','₹45,000','₹4.5 lakh'],a:'₹45,000'},
+ {id:'Q9',k:'coin',q:'How much is left this month?',f:function(v){return draw([[26,'left','left'],[44,'spent','spent']],v)},o:['₹260','₹2,600','₹4,400','₹7,000'],a:'₹2,600'},
+ {id:'C1',k:'cat',q:'Where did you spend the most this month? Tap it.',a:'Food'},
+ {id:'C2',k:'cat',q:'Find Gym and tap it.',a:'Gym'},
+ {id:'C3',k:'cat',q:'Find Bike EMI and tap it.',a:'Bike EMI'},
+ {id:'C4',k:'cat',q:'Which did you spend more on: Snacks or Gifts? Tap it.',a:'Snacks'}
+];
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+var S,app=document.getElementById('app');
+function load(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function start(){var coins=BANK.filter(function(b){return b.k==='coin'}),cats=BANK.filter(function(b){return b.k==='cat'});
+ var cv=shuffle(['A','A','A','A','B','B','B','B','A'].slice(0,coins.length)); if(Math.random()<.5)cv=cv.map(function(x){return x==='A'?'B':'A'});
+ var lv=shuffle(['rank','rank','fam','fam']);
+ var qs=shuffle(coins.map(function(q,i){return {q:q,v:cv[i]}})).concat(shuffle(cats.map(function(q,i){return {q:q,v:lv[i]}})));
+ S={who:'',qs:qs,i:-1,res:[],t0:0,catCoin:Math.random()<.5?'A':'B'};intro();}
+function intro(){app.innerHTML='<div class="card"><div class="rule">Every coin is <b>₹100</b>.</div>'+
+ '<div class="fig">'+draw([[3,'left','']],'A')+'<p class="muted">3 coins = ₹300. A part of a coin is part of ₹100.</p></div>'+
+ '<label for="who">Tester (initials or a number)<input id="who" autocomplete="off" placeholder="e.g. P3"></label>'+
+ '<button type="button" class="primary" id="go">Start the test</button>'+(history().length?'<p class="muted">'+history().length+' tester(s) saved in this browser. <button type="button" id="hist" style="padding:4px 8px;font-size:13px">See all results</button></p>':'')+'</div>';
+ document.getElementById('go').onclick=function(){S.who=(document.getElementById('who').value||'').trim()||('T'+(history().length+1));next();};
+ var h=document.getElementById('hist');if(h)h.onclick=function(){summary(null)};}
+function next(){S.i++;if(S.i>=S.qs.length)return finish();var it=S.qs[S.i],q=it.q,n=S.qs.length;
+ var head='<div class="prog"><span>'+(S.i+1)+' / '+n+'</span><span id="tm">0.0 s</span></div><div class="bar"><i style="width:'+(100*S.i/n)+'%"></i></div><div class="q">'+q.q+'</div>';
+ var body='';
+ if(q.k==='coin'){if(q.pair){var f=q.f(it.v);body='<div class="pair"><button type="button" data-ans="Left"><div class="fig">'+f[0]+'</div>Left</button><button type="button" data-ans="Right"><div class="fig">'+f[1]+'</div>Right</button></div>';}
+  else body='<div class="fig">'+q.f(it.v)+'</div><div class="opts">'+q.o.map(function(o){return '<button type="button" data-ans="'+o+'">'+o+'</button>'}).join('')+'</div>';}
+ else body='<p class="muted">20 categories · 1 coin = ₹100</p><div>'+catList(it.v,S.catCoin)+'</div>';
+ app.innerHTML='<div class="card">'+head+body+'</div>';S.t0=performance.now();
+ var tm=document.getElementById('tm');clearInterval(S.tick);S.tick=setInterval(function(){tm.textContent=((performance.now()-S.t0)/1000).toFixed(1)+' s'},100);
+ app.querySelectorAll('[data-ans]').forEach(function(b){b.onclick=function(){answer(b.getAttribute('data-ans'))}});
+ window.scrollTo(0,0);}
+function answer(a){clearInterval(S.tick);var it=S.qs[S.i],ms=Math.round(performance.now()-S.t0);
+ S.res.push({id:it.q.id,kind:it.q.k,variant:it.q.k==='coin'?V[it.v].name:(it.v==='rank'?'B1 name-ranked':'B5 families'),ok:a===it.q.a,ms:ms,ans:a,correct:it.q.a});next();}
+function history(){return load('trickle-coin-test')||[]}
+function finish(){var h=history();h.push({who:S.who,at:new Date().toISOString().slice(0,16).replace('T',' '),catCoin:V[S.catCoin].name,res:S.res});save('trickle-coin-test',h);summary(S.res);}
+function agg(rows){var g={};rows.forEach(function(r){var k=r.variant;g[k]=g[k]||{n:0,ok:0,ms:[]};g[k].n++;if(r.ok)g[k].ok++;g[k].ms.push(r.ms)});
+ Object.keys(g).forEach(function(k){var m=g[k].ms.slice().sort(function(a,b){return a-b});g[k].med=m[Math.floor(m.length/2)]});return g;}
+function textBlock(sessions){var L=['Trickle v14 coin test · '+sessions.length+' tester(s)','A = V4 draw ≤20 then handful of 5 ×N; B = V1 one coin ×N past 10. Categories: B1 name-ranked vs B5 families (20 cats).',''];
+ var all=[];sessions.forEach(function(s){L.push('Tester '+s.who+' · '+s.at+' · cat coins: '+s.catCoin);s.res.forEach(function(r){all.push(r);L.push('  '+r.id+' | '+r.variant+' | '+(r.ok?'correct':'WRONG ('+r.ans+', want '+r.correct+')')+' | '+(r.ms/1000).toFixed(1)+'s')});L.push('');});
+ var g=agg(all);L.push('Totals by variant:');Object.keys(g).forEach(function(k){L.push('  '+k+': '+g[k].ok+'/'+g[k].n+' correct, median '+(g[k].med/1000).toFixed(1)+'s')});return L.join('\n');}
+function summary(res){var hist=history();var mine=res?[hist[hist.length-1]]:hist;var rows=[];mine.forEach(function(s){rows=rows.concat(s.res)});var g=agg(rows);
+ var tbl='<div class="tbl"><table><thead><tr><th>Variant</th><th>Correct</th><th>Median time</th></tr></thead><tbody>'+Object.keys(g).map(function(k){return '<tr><td>'+k+'</td><td>'+g[k].ok+' / '+g[k].n+'</td><td>'+(g[k].med/1000).toFixed(1)+' s</td></tr>'}).join('')+'</tbody></table></div>';
+ var per=res?'<div class="tbl"><table><thead><tr><th>Q</th><th>Shown as</th><th>Result</th><th>Time</th></tr></thead><tbody>'+res.map(function(r){return '<tr><td>'+r.id+'</td><td>'+r.variant+'</td><td class="'+(r.ok?'ok':'bad')+'">'+(r.ok?'Right':'Wrong')+'</td><td>'+(r.ms/1000).toFixed(1)+' s</td></tr>'}).join('')+'</tbody></table></div>':'';
+ app.innerHTML='<div class="card"><h2>'+(res?'Done, '+mine[0].who:'All testers in this browser')+'</h2>'+tbl+per+
+ '<p class="muted">Copy this and paste it back to Claude:</p><pre id="out"></pre><div class="row"><button type="button" class="primary" id="cp">Copy results</button><button type="button" id="cpall">Copy all testers ('+hist.length+')</button></div>'+
+ '<div class="row"><button type="button" class="primary" id="again">Next person</button><button type="button" id="clear">Clear saved results</button></div><p class="muted" id="msg" aria-live="polite"></p></div>';
+ var pre=document.getElementById('out');pre.textContent=textBlock(mine);
+ function copy(t){pre.textContent=t;var m=document.getElementById('msg');try{navigator.clipboard.writeText(t).then(function(){m.textContent='Copied.'},function(){sel()})}catch(e){sel()}function sel(){var r=document.createRange();r.selectNodeContents(pre);var s=getSelection();s.removeAllRanges();s.addRange(r);m.textContent='Text selected. Press copy on your keyboard.'}}
+ document.getElementById('cp').onclick=function(){copy(textBlock(mine))};
+ document.getElementById('cpall').onclick=function(){copy(textBlock(history()))};
+ document.getElementById('again').onclick=start;
+ var cl=document.getElementById('clear');cl.onclick=function(){if(cl.dataset.arm){save('trickle-coin-test',[]);document.getElementById('msg').textContent='Saved results cleared.';cl.textContent='Cleared';delete cl.dataset.arm;}else{cl.dataset.arm=1;cl.textContent='Tap again to clear all';}};}
+start();
+})();
+</script>

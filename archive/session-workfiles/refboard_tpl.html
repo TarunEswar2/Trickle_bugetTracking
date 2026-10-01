@@ -1,0 +1,52 @@
+<title>Trickle v6 — Research Board</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#0d0e0f;--bg2:#17181a;--line:#2a2c30;--ink:#f1f0ec;--mut:#9a9ca1;--acc:#5bb98c;--warn:#c98500}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 "IBM Plex Sans",system-ui,sans-serif;margin:0;padding-inline:clamp(16px,4vw,48px);padding-block:40px 64px}
+main{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3,h4{font-family:"Bricolage Grotesque",system-ui,sans-serif;text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,5vw,48px);letter-spacing:-.02em}
+h2{font-size:24px;margin-bottom:6px}
+.eyebrow{font:12px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--acc)}
+.lede{max-width:65ch;color:var(--mut);margin:10px 0 0}
+.phases{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.phases span{font:12px "IBM Plex Mono",monospace;padding:5px 10px;border:1px solid var(--line);border-radius:20px;color:var(--mut)}
+.phases span.on{border-color:var(--acc);color:var(--ink)}
+.rule{padding:12px 14px;border-left:3px solid var(--warn);background:var(--bg2);max-width:70ch;font-size:14px}
+.refs{columns:3 320px;column-gap:20px}
+.ref{break-inside:avoid;margin:0 0 20px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.ref img{display:block;width:100%;height:auto}
+.ref figcaption{padding:12px 14px 14px}
+.ref h3{font-size:16px;margin-bottom:4px}
+.ref p{margin:0;font-size:13.5px;color:var(--mut)}
+.ref b{color:var(--ink);font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.tile{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:4px}
+.art{background:var(--bg);border-radius:6px;padding:6px}
+.art svg{display:block;width:100%;height:auto}
+.tile h4{font-size:14.5px;line-height:1.3;margin-top:6px}
+.tile .form{margin:0;font-size:13px;color:var(--acc)}
+.tile .where{margin:0;font:11.5px "IBM Plex Mono",monospace;color:var(--mut)}
+footer{color:var(--mut);font-size:13px;max-width:70ch}
+</style>
+<main>
+<header>
+  <div class="eyebrow">Trickle v6 · Phase 1 + 2</div>
+  <h1>Research board</h1>
+  <p class="lede">The references behind v6, what we're taking from each, and the 20 strongest chart forms from the 36-pairing catalogue. Each thumbnail is labelled with the budget question it answers and the screen it goes on.</p>
+  <div class="phases"><span class="on">1 Audit ✓</span><span class="on">2 Research ✓</span><span>3 Design spec</span><span>4 Build</span><span>5 Validate</span></div>
+</header>
+<p class="rule"><b>Hard rule:</b> transactions come only from UPI account linking or manual entry. No SMS tracking anywhere.</p>
+<section>
+  <h2>References, annotated</h2>
+  <p class="lede" style="margin-bottom:18px">The user assigned Ref 1 and Ref 2 to specific jobs. The others set the layout language and the pool of chart forms.</p>
+  <div class="refs">%%REFS%%</div>
+</section>
+<section>
+  <h2>Chosen forms: top 20</h2>
+  <p class="lede" style="margin-bottom:18px">These are sketches with sample values, not real data. They use v5's fixed category colour order. Each form answers one question and has one home screen.</p>
+  <div class="grid">%%TILES%%</div>
+</section>
+<footer>Full detail is in the project docs: <code>claude/v6_phase1_audit.md</code> (screen-by-screen audit and data inventory) and <code>claude/v6_phase2_catalogue.md</code> (competitor research, 36 pairings, and a fit or no-fit verdict for every reference chart type).</footer>
+</main>

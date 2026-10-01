@@ -1,0 +1,7 @@
+[["home","#demo",[]],
+["money","#demo",["[data-a=tab][data-x=money]","[data-a=open][data-x=income]"]],
+["insights","#demo",["[data-a=tab][data-x=insights]"]],
+["pay","#demo",["[data-a=pay][data-x=upi]","[data-a=payee][data-x='0']","[data-a=quick][data-x='50']","[data-a=pstep][data-x=cat]","[data-a=pcat][data-x=Food]"]],
+["rb","#demo",["js:A.rbopen()"]],
+["bwins","#demo",["js:A.look('bw')","[data-a=tab][data-x=insights]"]],
+["bwhome","#demo",["js:A.look('bw')"]]]

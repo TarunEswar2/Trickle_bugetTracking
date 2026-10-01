@@ -1,0 +1,2902 @@
+<title>Trickle Onboarding</title>
+<style>
+:root{
+  --bg:#ffffff;
+  --black:#000000;
+  --gray1:#d9d9d9;
+  --gray2:#b3b3b3;
+  --gray3:#999999;
+  --gray4:#666666;
+  --gray5:#333333;
+  --gray6:#1a1a1a;
+  --line:#e5e5e5;
+  --error:#b3261e;
+  --error-bg:#fbeceb;
+  --success:#2e7d32;
+}
+/* Light mode only, deliberately — this prototype always renders the light
+   wireframe palette regardless of system/browser theme. */
+
+*{box-sizing:border-box;}
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+@media (prefers-reduced-motion: reduce){
+  *{transition-duration:0.001ms !important; animation-duration:0.001ms !important;}
+}
+.outline-field:focus-visible, .rec-search-input:focus-visible{
+  outline:2px solid var(--black); outline-offset:2px;
+}
+.pill-btn:focus-visible, .continue-btn:focus-visible, .start-btn:focus-visible,
+.small-add-btn:focus-visible, .chevron-back:focus-visible, .rec-search:focus-visible,
+.rec-bar:focus-visible, .cat-pill button:focus-visible, #frame-welcome:focus-visible,
+.nav-item:focus-visible, .qa-btn:focus-visible, .edit-cats-btn:focus-visible,
+.account-row:focus-visible, .eye-btn:focus-visible, .profile-btn:focus-visible{
+  outline:2px solid var(--black); outline-offset:2px;
+}
+
+html,body{height:100%;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--black);
+  font-family:'Poppins',-apple-system,sans-serif;
+  min-height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  padding:24px 16px 40px;
+}
+
+.meta-row{
+  font-size:11px;
+  color:var(--gray4);
+  text-align:center;
+}
+
+.stage{
+  width:434px;
+  max-width:100%;
+}
+.phone-shell{
+  width:434px;
+  height:906px;
+  background:#151515;
+  border-radius:52px;
+  padding:16px;
+  transform-origin:top center;
+  box-shadow:0 24px 50px -18px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.12);
+}
+.frame-outer{
+  width:402px;
+  height:874px;
+  position:relative;
+  background:var(--bg);
+  border-radius:36px;
+  overflow:hidden;
+}
+.notch{
+  position:absolute;
+  top:0; left:50%;
+  transform:translateX(-50%);
+  width:120px; height:24px;
+  background:#151515;
+  border-radius:0 0 16px 16px;
+  z-index:80;
+}
+.home-indicator{
+  position:absolute;
+  bottom:8px; left:50%;
+  transform:translateX(-50%);
+  width:120px; height:4px;
+  background:var(--gray5);
+  border-radius:2px;
+  opacity:0.35;
+  z-index:80;
+}
+.frame{
+  position:absolute;
+  inset:0;
+  background:var(--bg);
+  overflow:hidden;
+  display:none;
+}
+.frame.active{display:block;}
+
+/* shared primitives, positioned exactly per source */
+.abs{position:absolute;}
+.pill-btn{
+  background:var(--gray1);
+  border-radius:19px;
+  cursor:pointer;
+  border:none;
+  display:block;
+  text-align:left;
+  font-family:inherit;
+  padding:0;
+}
+.pill-btn:hover{filter:brightness(0.97);}
+.pill-btn .lbl{
+  position:absolute;
+  font-weight:500;
+  font-size:16px;
+  color:var(--gray6);
+}
+
+.heavy{font-weight:700;}
+.book{font-weight:500;}
+
+.step-title{
+  position:absolute; left:24px; top:67px; width:354px; /* snapped to 24px page margin, §2 gutter rule */
+  font-size:24px; font-weight:700; color:var(--black); margin:0;
+}
+.step-sub{
+  position:absolute; left:24px; top:106px; width:354px;
+  font-size:24px; font-weight:700; color:var(--gray4); margin:0; /* was gray3 — failed WCAG 3:1 large-text contrast on white */
+}
+
+.dots-row{
+  position:absolute; left:50%; top:743px; transform:translateX(-50%); height:10px;
+  display:flex; gap:7px; align-items:center;
+}
+.dots-row span{width:7px;height:7px;border-radius:50%;background:var(--gray1); transition:background .15s, transform .15s;}
+.dots-row span.on{background:var(--black); transform:scale(1.15);}
+.dots-row span.done{background:var(--gray2);}
+
+.chevron-back{
+  position:absolute; left:9px; top:11px; width:42px; height:42px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:26px; color:var(--black); cursor:pointer; background:none; border:none; font-family:inherit;
+}
+
+.continue-btn{
+  position:absolute; left:24px; top:770px; width:354px; height:65px; /* snapped to 24px page margin */
+  background:var(--gray1); border:none; border-radius:24px;
+  font-size:24px; font-weight:700; color:var(--gray5);
+  cursor:pointer; font-family:inherit;
+}
+.continue-btn:hover{filter:brightness(0.97);}
+
+.outline-field{
+  position:absolute;
+  background:transparent;
+  border:2px solid var(--black);
+  border-radius:16px;
+  font-family:inherit;
+  font-size:16px;
+  color:var(--gray5);
+  padding:0 0 0 19px;
+  outline:none;
+}
+.outline-field::placeholder{color:var(--gray5);}
+
+.small-add-btn{
+  position:absolute;
+  background:var(--gray2);
+  border:none;
+  border-radius:9px;
+  font-size:10px;
+  color:var(--gray6);
+  cursor:pointer;
+  font-family:inherit;
+  font-weight:500;
+}
+.small-add-btn:hover{filter:brightness(0.95);}
+
+.field-error{
+  position:absolute;
+  font-size:11.5px;
+  color:var(--error);
+  font-family:'Inter',sans-serif;
+  font-weight:600;
+  display:none;
+  align-items:center;
+  gap:5px;
+  line-height:1.3;
+}
+.field-error.show{display:flex;}
+.field-error .ico{
+  width:14px; height:14px; border-radius:50%;
+  background:var(--error); color:#fff;
+  font-size:9px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.outline-field.invalid{border-color:var(--error);}
+.opt-card.invalid-flash{box-shadow:0 0 0 2px var(--error);}
+.continue-btn.invalid-flash, .start-btn.invalid-flash{box-shadow:0 0 0 2px var(--error);}
+
+/* ===== Screen 1: Welcome ===== */
+#frame-welcome{cursor:pointer;}
+.trickle-word{
+  position:absolute; left:91px; top:641px; width:220px; height:96px;
+  font-size:40px; font-weight:700; text-align:center;
+}
+.swipe-bar{
+  position:absolute; left:-7px; top:804px; width:409px; height:70px;
+  background:var(--gray1);
+}
+.swipe-bar span{
+  position:absolute; left:0; right:0; top:12px; text-align:center;
+  font-size:40px; font-weight:700;
+}
+
+/* ===== Screen 2: Tracking method (re-synced with current Figma) ===== */
+.opt-card{
+  position:absolute; width:339px; height:65px;
+}
+#opt-upi{left:20px; top:155px;}
+#opt-manual{left:20px; top:341px;}
+.opt-card .lbl{left:20px; top:23px;}
+.upi-badge{
+  position:absolute; right:16px; top:14px; width:52px; height:18px;
+}
+.upi-badge img{width:100%; height:100%; object-fit:contain; display:block;}
+
+.note-txt{
+  position:absolute; left:20px; width:339px;
+  font-size:12px; color:var(--gray4); font-weight:400; font-family:'Inter',sans-serif; line-height:1.4;
+}
+
+/* ===== Screen 3: Connect UPI (unchanged in current Figma — verified 1:1) ===== */
+.upi-field{ left:19px; top:138px; width:339px; height:65px; padding-left:19px; }
+.upi-add-btn{ left:305px; top:163px; width:36px; height:17px; }
+.accounts-panel{
+  position:absolute; left:19px; top:250px; width:347px; height:221px;
+  background:var(--gray1); border-radius:33px; overflow-y:auto;
+}
+.recap-panel{overflow-y:auto;}
+.accounts-title{position:absolute; left:19px; top:13px; font-size:16px; font-weight:500; color:var(--gray5);}
+.acct-chip{position:absolute; height:26px; background:var(--gray2); border-radius:6px; display:flex; align-items:center; padding:0 12px; font-size:14px;}
+
+/* ===== Screen 4: Categories (re-synced — "Lofi Initial Categories") ===== */
+.cat-panel{
+  position:absolute; left:25px; top:156px; width:347px; height:221px;
+  background:var(--gray1); border-radius:33px; overflow-y:auto; overflow-x:hidden;
+}
+.cat-panel .accounts-title{left:22px; top:7px;}
+.cat-pill{
+  position:absolute; display:inline-flex; align-items:center; gap:5px;
+  background:var(--gray2); border-radius:9px; padding:0 8px;
+  height:17px; font-size:10px; color:var(--gray6); white-space:nowrap;
+}
+.cat-pill button{
+  position:relative;
+  border:none; background:none; color:var(--gray6); cursor:pointer;
+  font-size:10px; padding:0; line-height:1;
+}
+/* invisible hit-area extension — visual pill stays exact size, but the tappable
+   region meets the WCAG 2.2 24x24px target floor without resizing the pill */
+.cat-pill button::after{
+  content:''; position:absolute; top:-9px; bottom:-9px; left:-9px; right:-9px;
+}
+.cat-input-field{ left:29px; top:391px; width:339px; height:65px; padding-left:19px;}
+.cat-add-btn{ left:323px; top:415px; width:36px; height:17px; }
+.rec-title{
+  position:absolute; left:39px; top:478px; font-size:16px; font-weight:500; color:var(--gray5);
+}
+.rec-list{
+  position:absolute; left:43px; top:510px; width:270px; height:130px;
+  display:flex; flex-direction:column; gap:6px;
+  overflow-y:auto;
+}
+.rec-bar{
+  height:17px; border-radius:9px; background:var(--gray2);
+  border:none; cursor:pointer; font-family:inherit;
+  display:flex; align-items:center;
+  padding:0 10px;
+  font-size:10px; font-weight:500; color:var(--gray6);
+  width:fit-content;
+  white-space:nowrap;
+}
+.rec-bar:hover{background:var(--gray3);}
+.rec-bar.added{
+  background:var(--gray1);
+  color:var(--gray3);
+  cursor:default;
+}
+.rec-bar.added:hover{background:var(--gray1);}
+.rec-search{
+  position:absolute; left:274px; top:510px; width:43px; height:27px;
+  background:var(--gray1); border-radius:21.5px;
+  display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--gray6);
+  border:none; cursor:pointer; font-family:inherit;
+}
+.rec-search:hover{background:var(--gray2);}
+.rec-search.active{background:var(--gray2); color:var(--black);}
+.rec-search-input{
+  position:absolute; left:39px; top:474px; width:225px; height:24px;
+  border:none; border-bottom:1.5px solid var(--gray3);
+  background:transparent; font-family:'Inter',sans-serif; font-size:13px; color:var(--gray6);
+  outline:none; padding:0 0 2px;
+  display:none;
+}
+.rec-search-input.show{display:block;}
+.rec-title.hidden-by-search{display:none;}
+.rec-empty{
+  font-size:11.5px; color:var(--gray4); font-family:'Inter',sans-serif; padding:6px 0;
+}
+.rec-scrollbar{
+  position:absolute; left:334px; top:508px; width:7px; height:150px;
+  background:var(--gray1); border-radius:3.5px;
+}
+.rec-scrollbar .thumb{
+  position:absolute; left:0; top:0; width:7px; height:55px;
+  background:#aca9a9; border-radius:3.5px;
+}
+.cat-continue-btn{ top:681px !important; }
+.cat-continue-btn.compact{ top:478px !important; }
+
+/* ===== Screen 5: Security PIN (re-synced — fields now smaller, Step 2) ===== */
+.pin-field{width:325px; height:51px; padding-left:14px; border-radius:10px; border-width:3px;}
+#pin-field-1{ left:20px; top:167px; }
+#pin-field-2{ left:20px; top:238px; }
+.pin-title{
+  position:absolute; left:20px; top:67px; width:363px;
+  font-size:24px; font-weight:700; margin:0;
+}
+
+/* ===== Screen 6: All set (re-synced — no dots row in current source) ===== */
+.allset-title{
+  position:absolute; left:20px; top:67px; width:354px; font-size:24px; font-weight:700; margin:0;
+}
+.allset-sub{
+  position:absolute; left:20px; top:115px; width:354px;
+  font-size:14px; color:var(--gray4); font-family:'Inter',sans-serif; line-height:1.4;
+}
+.recap-panel{
+  position:absolute; left:20px; width:347px; height:221px;
+  background:var(--gray1); border-radius:33px;
+}
+#recap-cats{top:168px;}
+#recap-accts{top:408px;}
+.recap-heading{position:absolute; left:22px; top:7px; font-size:16px; font-weight:500; color:var(--gray5);}
+.start-btn{
+  position:absolute; left:31px; top:772px; width:339px; height:65px;
+  background:var(--gray1); border:none; border-radius:24px;
+  font-size:24px; font-weight:700; color:var(--gray5); cursor:pointer; font-family:inherit;
+}
+.start-btn:hover{filter:brightness(0.97);}
+
+/* ===== Bottom nav bar (new — present on Home / Categories tab / Insight tab) ===== */
+.bottom-nav{
+  position:absolute; left:50%; top:759px; transform:translateX(-50%);
+  width:370px; height:88px; background:var(--gray1); border-radius:18px;
+  display:flex; align-items:center; justify-content:space-between; padding:0 14px;
+}
+.nav-item{
+  background:none; border:none; font-family:inherit; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  width:60px; padding:4px 0; color:var(--gray5);
+}
+.nav-item svg{width:26px; height:26px; display:block;}
+.nav-item span{font-size:11px; font-family:'Inter',sans-serif;}
+.nav-item.active .nav-icon-wrap{
+  width:52px; height:52px; border-radius:50%; background:var(--bg);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 0 1px var(--gray2);
+}
+.nav-item .nav-icon-wrap{width:26px; height:26px; display:flex; align-items:center; justify-content:center;}
+.nav-item.disabled{opacity:0.45; cursor:default;}
+
+/* ===== Screen 7: Home (was an empty placeholder — now fully designed in Figma) ===== */
+.profile-btn{
+  position:absolute; left:20px; top:30px; width:39px; height:39px;
+  border-radius:50%; background:var(--gray1); border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.balance-panel{
+  position:absolute; left:27px; top:111px; width:347px; height:221px;
+  background:var(--gray1); border-radius:33px;
+}
+.account-row{
+  position:absolute; left:27px; top:19px; width:293px; height:24px;
+  display:flex; align-items:center; gap:6px; background:none; border:none;
+  cursor:pointer; font-family:'Futura Bk BT','Poppins',sans-serif; padding:0;
+}
+.account-row span{font-size:16px; color:var(--gray5);}
+.account-row svg{width:16px; height:16px;}
+.spend-row{
+  position:absolute; left:23px; display:flex; align-items:baseline; gap:8px;
+  font-size:16px; color:var(--black);
+}
+.spend-row .amt{font-size:16px;}
+.spend-row .amt-sub{font-size:10px;}
+.trend{width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent;}
+.trend.down{border-top:7px solid var(--success);}
+.trend.up{border-bottom:7px solid var(--error);}
+.balance-row{
+  position:absolute; left:23px; top:150px; width:301px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.balance-row .bal-amt{font-size:24px; font-weight:700; color:var(--gray5);}
+.eye-btn{background:none; border:none; cursor:pointer; padding:4px; display:flex; align-items:center;}
+.eye-btn svg{width:26px; height:26px;}
+.quick-actions{
+  position:absolute; left:34px; top:364px; width:335px; height:99px;
+  display:flex; gap:27px;
+}
+.qa-btn{
+  background:none; border:none; cursor:pointer; font-family:inherit;
+  display:flex; flex-direction:column; align-items:center; gap:9px; width:73px; padding:0;
+}
+.qa-icon{
+  width:73px; height:73px; border-radius:10px; background:var(--gray1);
+  display:flex; align-items:center; justify-content:center;
+}
+.qa-icon svg{width:38px; height:38px;}
+.qa-btn span{font-size:16px; color:var(--black); text-align:center;}
+.qa-btn.disabled{opacity:0.4; cursor:default;}
+
+.framing-toggle{
+  position:absolute; right:20px; top:30px; height:26px; padding:0 12px;
+  background:var(--gray1); border:none; border-radius:13px; font-family:'Inter',sans-serif;
+  font-size:11px; font-weight:600; color:var(--gray6); cursor:pointer;
+}
+.framing-toggle:hover{filter:brightness(0.95);}
+
+.home-empty{
+  display:none; position:absolute; left:20px; top:220px; width:354px;
+  flex-direction:column; align-items:center; text-align:center; gap:4px;
+}
+.home-empty.show{display:flex;}
+.home-empty-icon{
+  width:64px; height:64px; border-radius:50%; background:var(--gray1);
+  display:flex; align-items:center; justify-content:center; color:var(--gray4); margin-bottom:10px;
+}
+.home-empty-title{font-size:18px; font-weight:700; margin:0;}
+.home-empty-sub{font-size:13px; color:var(--gray4); font-family:'Inter',sans-serif; margin:6px 0 4px; line-height:1.4;}
+
+.accum-module{
+  position:absolute; left:27px; top:480px; width:347px; min-height:110px;
+  background:var(--gray1); border-radius:24px; border:none; cursor:pointer;
+  font-family:inherit; text-align:left; padding:16px;
+}
+.accum-module:hover{filter:brightness(0.98);}
+.accum-module-head{
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:14px; font-weight:700; color:var(--black); margin-bottom:10px;
+}
+.accum-module-head .arrow{color:var(--gray4); font-size:16px; font-weight:400;}
+.accum-item-row{display:flex; justify-content:space-between; font-size:12.5px; color:var(--gray6); font-family:'Inter',sans-serif; margin-bottom:6px;}
+.accum-item-row .amt{font-weight:700; color:var(--black); font-family:'Poppins',sans-serif;}
+.accum-empty-note{font-size:12px; color:var(--gray4); font-family:'Inter',sans-serif;}
+
+.home-quick-links{
+  position:absolute; left:27px; top:612px; width:347px; display:flex; gap:10px;
+}
+.home-quick-links .reset-btn{flex:1; text-align:center; padding:9px 10px;}
+
+.toast{
+  position:absolute; left:50%; bottom:96px; transform:translateX(-50%) translateY(20px);
+  background:var(--gray6); color:#fff; font-family:'Inter',sans-serif; font-size:12.5px;
+  padding:10px 16px; border-radius:14px; max-width:320px; text-align:center;
+  opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; z-index:95;
+}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+/* ===== Screen 8: Categories tab (new — reachable from bottom nav) ===== */
+.cattab-title{
+  position:absolute; left:20px; top:62px; font-size:24px; font-weight:700; color:var(--black); margin:0;
+}
+.wheel-wrap{
+  position:absolute; left:50%; top:143px; transform:translateX(-50%); width:311px; height:311px;
+}
+.edit-cats-btn{
+  position:absolute; left:251px; top:114px; width:135px; height:29px;
+  background:#b2b2b2; border:none; border-radius:10px; font-family:inherit;
+  font-size:16px; color:var(--black); cursor:pointer;
+}
+.edit-cats-btn:hover{filter:brightness(0.95);}
+.spend-list-row{
+  position:absolute; left:22px; display:flex; align-items:center; gap:13px;
+}
+.spend-list-pill{
+  background:var(--gray1); border-radius:15px; height:29px; width:240px;
+  display:flex; align-items:center; padding:0 14px; font-size:16px; color:var(--gray5);
+}
+
+/* ===== Screen 9: Insight tab (new — graph, highest contributor, accumulated
+   smaller categories, savings goal) ===== */
+.insight-sub{
+  position:absolute; left:20px; top:100px; width:354px; font-size:13px; color:var(--gray4); font-family:'Inter',sans-serif;
+}
+.bar-chart-wrap{
+  position:absolute; left:20px; top:130px; width:354px; height:200px;
+}
+.top-spender-callout{
+  position:absolute; left:20px; top:346px; width:354px; height:50px;
+  background:var(--gray1); border-radius:16px; display:flex; align-items:center; padding:0 16px;
+  font-size:13px; color:var(--gray6); font-family:'Inter',sans-serif;
+}
+.top-spender-callout b{font-family:'Poppins',sans-serif; font-weight:700; color:var(--black);}
+.accum-row{
+  position:absolute; left:20px; top:406px; width:354px; height:50px;
+  background:var(--gray1); border-radius:16px; display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+  font-size:13px; color:var(--gray6); font-family:'Inter',sans-serif;
+}
+.accum-row .amt{font-size:15px; font-weight:700; color:var(--black); font-family:'Poppins',sans-serif;}
+.goal-wrap{
+  position:absolute; left:20px; top:474px; width:354px;
+  background:none; border:none; padding:0; cursor:pointer; font-family:inherit; text-align:left;
+}
+.goal-head{display:flex; justify-content:space-between; font-size:14px; color:var(--gray6); font-family:'Inter',sans-serif; margin-bottom:8px;}
+.goal-track{height:14px; border-radius:7px; background:var(--gray1); overflow:hidden;}
+.goal-fill{height:100%; border-radius:7px; background:var(--gray5);}
+
+/* ===== Account overlay (new — bottom sheet triggered from Home) ===== */
+.overlay-scrim{
+  position:absolute; inset:0; background:rgba(0,0,0,0.25);
+  display:none; z-index:90;
+}
+.overlay-scrim.show{display:block;}
+.account-sheet{
+  position:absolute; left:0; bottom:0; width:402px; height:250px;
+  background:var(--bg); border-radius:28px 28px 0 0; z-index:91;
+  box-shadow:0 -8px 30px rgba(0,0,0,0.18);
+  transform:translateY(100%); transition:transform .22s ease-out;
+}
+.account-sheet.show{transform:translateY(0);}
+.sheet-heading{
+  position:absolute; left:18px; top:14px; font-size:24px; font-weight:700; color:var(--black); margin:0;
+}
+.sheet-panel{
+  position:absolute; left:18px; top:56px; width:347px; height:98px;
+  background:var(--gray1); border-radius:33px;
+}
+.sheet-panel-title{position:absolute; left:23px; top:15px; font-size:16px; color:var(--gray5);}
+.sheet-chip{position:absolute; left:23px; background:var(--gray2); border-radius:9px; height:17px; display:flex; align-items:center; padding:0 11px; font-size:10px; color:var(--gray6);}
+.add-accounts-link{
+  position:absolute; left:31px; top:167px; background:none; border:none; cursor:pointer;
+  font-family:inherit; font-size:16px; color:var(--gray4);
+}
+
+/* ===== Pay flow (new — Scan QR / Pay Anyone, both feed the same recipient+amount form,
+   the exact function each icon on Home obviously implies) ===== */
+.pay-title{
+  position:absolute; left:20px; top:62px; font-size:24px; font-weight:700; color:var(--black); margin:0;
+}
+.pay-sub{
+  position:absolute; left:20px; top:98px; width:354px; font-size:13px; color:var(--gray4); font-family:'Inter',sans-serif;
+}
+.qr-box{
+  position:absolute; left:50%; top:150px; transform:translateX(-50%); width:220px; height:220px;
+  background:var(--gray1); border-radius:18px;
+}
+.qr-corner{position:absolute; width:28px; height:28px; border:3px solid var(--gray5);}
+.qr-corner.tl{left:10px; top:10px; border-right:none; border-bottom:none; border-radius:6px 0 0 0;}
+.qr-corner.tr{right:10px; top:10px; border-left:none; border-bottom:none; border-radius:0 6px 0 0;}
+.qr-corner.bl{left:10px; bottom:10px; border-right:none; border-top:none; border-radius:0 0 0 6px;}
+.qr-corner.br{right:10px; bottom:10px; border-left:none; border-top:none; border-radius:0 0 6px 0;}
+.qr-hint{position:absolute; left:50%; top:388px; transform:translateX(-50%); width:260px; text-align:center; font-size:12px; color:var(--gray4); font-family:'Inter',sans-serif;}
+.pay-field-label{position:absolute; left:20px; font-size:13px; color:var(--gray4); font-family:'Inter',sans-serif;}
+.pay-recipient-field{ left:20px; width:354px; height:56px; padding-left:19px; }
+.pay-amount-field{ left:20px; width:354px; height:56px; padding-left:19px; font-size:20px; }
+.pay-recipient-chip{
+  position:absolute; left:20px; width:354px; height:56px; background:var(--gray1); border-radius:16px;
+  display:flex; align-items:center; padding:0 19px; font-size:16px; color:var(--gray6); gap:10px;
+}
+.pay-recipient-chip .tag{font-size:11px; color:var(--gray4); font-family:'Inter',sans-serif;}
+.pay-step{display:none;}
+.pay-step.show{display:block;}
+
+/* shared success screen (Pay + Bank Transfer both land here) */
+.success-check{
+  position:absolute; left:50%; top:300px; transform:translateX(-50%);
+  width:84px; height:84px; border-radius:50%; background:var(--gray1);
+  display:flex; align-items:center; justify-content:center;
+}
+.success-title{position:absolute; left:20px; top:410px; width:354px; text-align:center; font-size:22px; font-weight:700; margin:0;}
+.success-sub{position:absolute; left:20px; top:448px; width:354px; text-align:center; font-size:14px; color:var(--gray4); font-family:'Inter',sans-serif;}
+
+/* ===== Bank Transfer (new) ===== */
+.acct-pick-row{
+  position:absolute; left:20px; width:354px;
+  display:flex; flex-direction:column; gap:8px;
+}
+.acct-pick-btn{
+  background:var(--gray1); border:2px solid transparent; border-radius:14px; height:50px;
+  display:flex; align-items:center; padding:0 16px; font-size:15px; color:var(--gray6);
+  cursor:pointer; font-family:inherit; text-align:left; width:100%;
+}
+.acct-pick-btn.selected{border-color:var(--black); background:var(--gray1);}
+.acct-pick-btn:hover{filter:brightness(0.97);}
+
+/* ===== Budget tab (new — daily/weekly cadence, editable per-category amounts) ===== */
+.cadence-toggle{
+  position:absolute; left:20px; top:100px; width:354px; display:flex; gap:10px;
+}
+.cadence-btn{
+  flex:1; background:var(--gray1); border:2px solid transparent; border-radius:12px; height:38px;
+  font-family:inherit; font-size:13px; color:var(--gray5); cursor:pointer;
+}
+.cadence-btn.active{border-color:var(--black); color:var(--black); font-weight:700;}
+.budget-panel{
+  position:absolute; left:27px; top:150px; width:347px; height:96px;
+  background:var(--gray1); border-radius:33px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+}
+.budget-panel .lbl{font-size:14px; color:var(--gray4); font-family:'Inter',sans-serif;}
+.budget-panel .amt{font-size:28px; font-weight:700; color:var(--gray5);}
+.budget-edit-btn{
+  position:absolute; right:20px; top:152px; background:var(--gray2); border:none; border-radius:9px;
+  font-size:11px; color:var(--gray6); padding:5px 10px; cursor:pointer; font-family:inherit;
+}
+.budget-list-title{position:absolute; left:27px; top:264px; font-size:16px; font-weight:500; color:var(--gray5);}
+.budget-list{position:absolute; left:27px; top:296px; width:347px; max-height:420px; overflow-y:auto; display:flex; flex-direction:column; gap:16px;}
+.budget-row .head{display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--gray6); font-family:'Inter',sans-serif; margin-bottom:6px; gap:8px;}
+.budget-row .head .name{flex-shrink:0;}
+.budget-row .head .set-wrap{display:flex; align-items:center; gap:4px; color:var(--gray4);}
+.budget-row .head input{
+  width:70px; text-align:right; border:1.5px solid var(--gray3); border-radius:7px;
+  padding:3px 7px; font-size:12px; font-family:'Inter',sans-serif; color:var(--gray6); background:var(--bg);
+}
+.budget-row .head input:focus-visible{outline:2px solid var(--black); outline-offset:1px;}
+.budget-row .spent-lbl{font-size:11px; color:var(--gray4); font-family:'Inter',sans-serif; margin-bottom:4px;}
+.budget-row .track{height:9px; border-radius:5px; background:var(--gray1); overflow:hidden;}
+.budget-row .fill{height:100%; border-radius:5px; background:var(--gray4);}
+.budget-row .fill.over{background:var(--error);}
+
+/* ===== Settings tab (new) ===== */
+.settings-list{
+  position:absolute; left:20px; top:100px; width:362px; max-height:610px; overflow-y:auto;
+  display:flex; flex-direction:column; gap:8px; padding-bottom:4px;
+}
+.settings-row{
+  background:var(--gray1); border:none; border-radius:15px; height:46px; width:100%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:space-between; padding:0 18px;
+  font-family:inherit; font-size:14px; color:var(--gray6); cursor:pointer;
+}
+.settings-row:hover{filter:brightness(0.97);}
+.settings-row .arrow{color:var(--gray4); font-size:18px;}
+.toggle-switch{
+  width:40px; height:22px; border-radius:11px; background:var(--gray3); position:relative;
+  border:none; cursor:pointer; flex-shrink:0;
+}
+.toggle-switch .knob{
+  position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%; background:#fff;
+  transition:left .15s;
+}
+.toggle-switch.on{background:var(--gray6);}
+.toggle-switch.on .knob{left:20px;}
+.settings-row.danger{color:var(--error);}
+.privacy-note{
+  position:absolute; left:20px; top:722px; width:362px;
+  display:flex; align-items:flex-start; gap:8px;
+  font-size:11px; color:var(--gray4); font-family:'Inter',sans-serif; line-height:1.4;
+}
+.privacy-note svg{flex-shrink:0; margin-top:1px;}
+
+/* ===== Accumulation, Transactions, Category drill-down (new) ===== */
+.pattern-list{position:absolute; left:20px; top:140px; width:354px; display:flex; flex-direction:column; gap:12px; max-height:680px; overflow-y:auto;}
+.pattern-card{
+  background:var(--gray1); border-radius:20px; padding:16px; border:none; width:100%;
+  text-align:left; cursor:pointer; font-family:inherit;
+}
+.pattern-card:hover{filter:brightness(0.97);}
+.pattern-card-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;}
+.pattern-card-head .name{font-size:15px; font-weight:700; color:var(--black);}
+.pattern-card-head .amt{font-size:16px; font-weight:700; color:var(--black);}
+.pattern-card-sub{font-size:12px; color:var(--gray4); font-family:'Inter',sans-serif; display:flex; justify-content:space-between;}
+.pattern-empty{font-size:13px; color:var(--gray4); font-family:'Inter',sans-serif; padding:20px 0; text-align:center;}
+
+.txn-list{position:absolute; left:20px; top:140px; width:354px; display:flex; flex-direction:column; gap:8px; max-height:640px; overflow-y:auto;}
+.txn-row{
+  background:var(--gray1); border-radius:16px; padding:12px 16px; border:none; width:100%;
+  display:flex; align-items:center; justify-content:space-between; cursor:pointer; font-family:inherit; text-align:left;
+}
+.txn-row:hover{filter:brightness(0.97);}
+.txn-row .left{display:flex; flex-direction:column; gap:2px;}
+.txn-row .merchant{font-size:14px; color:var(--black); font-weight:600;}
+.txn-row .meta{font-size:11px; color:var(--gray4); font-family:'Inter',sans-serif;}
+.txn-row .amt{font-size:15px; font-weight:700; color:var(--black);}
+.txn-source-tag{
+  display:inline-block; margin-left:6px; padding:1px 7px; border-radius:8px; font-size:9px;
+  font-weight:700; letter-spacing:0.3px; background:var(--gray2); color:var(--gray6); font-family:'Inter',sans-serif;
+}
+
+.cat-select-row{position:absolute; left:20px; width:354px; display:flex; flex-wrap:wrap; gap:8px;}
+.cat-select-chip{
+  background:var(--gray1); border:2px solid transparent; border-radius:14px; padding:8px 14px;
+  font-size:13px; color:var(--gray6); cursor:pointer; font-family:'Inter',sans-serif;
+}
+.cat-select-chip.selected{border-color:var(--black); color:var(--black); font-weight:700;}
+
+.txn-detail-amt{position:absolute; left:20px; top:96px; width:354px; font-size:32px; font-weight:700; text-align:center;}
+.txn-detail-rows{position:absolute; left:20px; top:170px; width:354px; display:flex; flex-direction:column; gap:10px;}
+.txn-detail-row{display:flex; justify-content:space-between; font-size:13px; color:var(--gray6); font-family:'Inter',sans-serif;}
+.txn-detail-row .v{color:var(--black); font-weight:600;}
+
+.link-btn{
+  position:absolute; left:20px; width:354px; text-align:center; background:none; border:none;
+  color:var(--gray4); font-family:'Inter',sans-serif; font-size:12.5px; text-decoration:underline; cursor:pointer; padding:6px;
+}
+
+/* ===== Pre-payment interstitial + widget concept (new) ===== */
+.prepay-panel{
+  position:absolute; left:27px; top:110px; width:347px; padding:18px 20px;
+  background:var(--gray1); border-radius:24px; display:flex; flex-direction:column; gap:12px;
+}
+.prepay-row{display:flex; justify-content:space-between; font-size:14px; color:var(--gray6); font-family:'Inter',sans-serif;}
+.prepay-row .v{color:var(--black); font-weight:700; font-family:'Poppins',sans-serif;}
+.prepay-note{position:absolute; left:20px; top:300px; width:354px; text-align:center; font-size:12px; color:var(--gray4); font-family:'Inter',sans-serif;}
+
+.mock-notif{
+  position:absolute; left:20px; top:250px; width:354px; background:var(--gray1); border-radius:16px; padding:14px 16px;
+}
+.mock-notif-head{font-size:11px; font-weight:700; color:var(--gray4); letter-spacing:0.4px; text-transform:uppercase; margin-bottom:4px;}
+.mock-notif-title{font-size:14px; font-weight:700; color:var(--black); margin-bottom:2px;}
+.mock-notif-body{font-size:12.5px; color:var(--gray6); font-family:'Inter',sans-serif; line-height:1.4;}
+.mock-widget{
+  position:absolute; left:20px; top:400px; width:170px; height:130px; background:var(--gray1); border-radius:20px; padding:16px;
+}
+.mock-widget-head{font-size:11px; color:var(--gray4); font-family:'Inter',sans-serif; margin-bottom:8px;}
+.mock-widget-amt{font-size:20px; font-weight:700; color:var(--black); margin-bottom:12px;}
+.mock-widget-amt span{font-size:11px; font-weight:400; color:var(--gray4);}
+.mock-widget-track{height:8px; border-radius:4px; background:var(--gray2); overflow:hidden;}
+.mock-widget-fill{width:64%; height:100%; background:var(--gray5);}
+
+/* ===== Funds, Goals, Subscriptions (new — reuse .fund-list/.fund-card as a
+   generic card list for all three, plus .budget-panel/.track/.fill already
+   defined by the Budget tab, so progress bars stay visually consistent) ===== */
+.fund-list{position:absolute; left:20px; top:150px; width:354px; display:flex; flex-direction:column; gap:12px; max-height:660px; overflow-y:auto;}
+.fund-card{
+  background:var(--gray1); border-radius:20px; padding:16px; border:none; width:100%;
+  text-align:left; cursor:pointer; font-family:inherit;
+}
+.fund-card:hover{filter:brightness(0.97);}
+.fund-card-head{display:flex; justify-content:space-between; font-size:14px; font-weight:700; color:var(--black); margin-bottom:8px;}
+.fund-card-sub{font-size:12px; color:var(--gray4); font-family:'Inter',sans-serif; margin-bottom:8px;}
+.fund-card .track{height:8px; border-radius:4px; background:var(--gray2); overflow:hidden;}
+.fund-card .fill{height:100%; border-radius:4px; background:var(--gray5);}
+.fund-card .fill.over{background:var(--error);}
+
+/* ===== Alert settings (new) ===== */
+.alert-example{
+  position:absolute; left:20px; top:140px; width:354px; background:var(--gray1); border-radius:16px; padding:14px 16px;
+}
+.alert-example-label{font-size:10px; font-weight:700; color:var(--gray4); letter-spacing:0.4px; text-transform:uppercase; margin-bottom:6px;}
+.alert-example-body{font-size:13px; color:var(--black); font-family:'Inter',sans-serif; line-height:1.4;}
+.threshold-row{position:absolute; left:20px; top:322px; width:354px; display:flex; gap:10px;}
+.threshold-chip{
+  flex:1; background:var(--gray1); border:2px solid transparent; border-radius:12px; height:40px;
+  font-family:inherit; font-size:13px; color:var(--gray5); cursor:pointer;
+}
+.threshold-chip.active{border-color:var(--black); color:var(--black); font-weight:700;}
+
+.stage-controls{
+  display:flex; gap:8px; justify-content:center; align-items:center; margin-top:4px;
+}
+.reset-btn{
+  border:1px solid var(--line); background:var(--bg); color:var(--gray4);
+  border-radius:999px; padding:7px 14px; font-size:11px; cursor:pointer; font-family:inherit;
+}
+.reset-btn:hover{background:var(--gray1);}
+</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;700&display=swap">
+
+<div class="meta-row">Trickle — lo-fi flow, re-synced with current Figma (onboarding + Home/Categories/Insight tabs)</div>
+
+<div class="stage">
+  <div class="phone-shell" id="phoneShell">
+  <div class="frame-outer" id="frameOuter">
+    <div class="notch"></div>
+    <div class="home-indicator"></div>
+
+    <!-- 1. Welcome -->
+    <div class="frame active" id="frame-welcome" data-frame="welcome" onclick="go('tracking')"
+         role="button" tabindex="0" aria-label="Swipe up to begin — Trickle"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();go('tracking');}">
+      <div class="trickle-word">Trickle</div>
+      <div class="swipe-bar"><span>Swipe up</span></div>
+    </div>
+
+    <!-- 2. Tracking method -->
+    <div class="frame" data-frame="tracking">
+      <p class="step-title" style="left:20px; width:339px;">Setup your Account</p>
+      <p class="step-sub" style="left:20px; top:91px; width:339px;">Step 1</p>
+
+      <button class="pill-btn opt-card" id="opt-upi" onclick="go('smsRationale')">
+        <span class="lbl">Connect UPI</span>
+        <span class="upi-badge" aria-hidden="true"><img src="data:image/png;base64,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" alt=""></span>
+      </button>
+
+      <p class="note-txt" style="top:253px;">Trickle tracks UPI transaction to auto-log spends. Nothing is sent anywhere else.</p>
+      <p class="note-txt" style="top:293px;">🔒 Your transaction data stays on this device.</p>
+
+      <button class="pill-btn opt-card" id="opt-manual" onclick="go('categories')">
+        <span class="lbl">Manual Tracking</span>
+      </button>
+
+      <div class="dots-row" data-step="1"></div>
+    </div>
+
+    <!-- 3. Connect UPI (unchanged) -->
+    <div class="frame" data-frame="upi">
+      <button class="chevron-back" onclick="go('tracking')" aria-label="Back">‹</button>
+      <p class="step-title" style="top:67px;">Connect UPI</p>
+
+      <label class="sr-only" for="upi-input">UPI ID</label>
+      <input class="outline-field upi-field" id="upi-input" placeholder="Type Your UPI ID" aria-describedby="err-upi-input" oninput="clearError('upi-input','err-upi-input')">
+      <button class="small-add-btn upi-add-btn" id="upi-add-btn" onclick="addAccount()" aria-label="Add UPI ID">Add</button>
+      <div class="field-error" id="err-upi-input" role="alert" aria-live="polite" style="left:19px; top:206px; width:339px;">
+        <span class="ico" aria-hidden="true">!</span><span id="err-upi-input-text">Enter a valid UPI ID, like yourname@bank.</span>
+      </div>
+
+      <div class="accounts-panel" role="region" aria-label="Connected accounts">
+        <div class="accounts-title">Connected Accounts</div>
+        <div id="account-list"></div>
+      </div>
+
+      <div class="field-error" id="err-upi-continue" role="alert" aria-live="polite" style="left:31px; top:733px; width:339px;">
+        <span class="ico" aria-hidden="true">!</span><span>Add at least one UPI ID before continuing.</span>
+      </div>
+
+      <div class="dots-row" data-step="1"></div>
+      <button class="continue-btn" style="left:31px; width:339px;" onclick="continueFromUpi()">Continue</button>
+    </div>
+
+    <!-- 4. Categories (re-synced: Continue moved up, dots removed, bottom nav added, recommended list trimmed to 7) -->
+    <div class="frame" data-frame="categories">
+      <button class="chevron-back" onclick="go(lastMethod==='upi' ? 'upi' : 'tracking')" aria-label="Back">‹</button>
+      <p class="step-title">Choose your categories</p>
+
+      <div class="cat-panel" role="region" aria-label="Chosen categories">
+        <div class="accounts-title" style="left:22px; top:7px;">Categories</div>
+        <div id="chosen-cats"></div>
+      </div>
+
+      <label class="sr-only" for="cat-input">Category name</label>
+      <input class="outline-field cat-input-field" id="cat-input" placeholder="Type Category" aria-describedby="err-cat-input" oninput="clearError('cat-input','err-cat-input')" onkeydown="if(event.key==='Enter')addCustomCategory();">
+      <button class="small-add-btn cat-add-btn" onclick="addCustomCategory()" aria-label="Add category">Add</button>
+      <div class="field-error" id="err-cat-input" role="alert" aria-live="polite" style="left:29px; top:459px; width:339px;">
+        <span class="ico" aria-hidden="true">!</span><span id="err-cat-input-text">Type a category name first.</span>
+      </div>
+
+      <!-- Recommended Categories only ever shows the first time this screen opens — a
+           returning visit (e.g. via Settings > Categories) skips straight to editing
+           the list already chosen. -->
+      <div id="rec-section">
+        <div class="rec-title" id="rec-title">Recommended Categories</div>
+        <label class="sr-only" for="rec-search-input">Search recommended categories</label>
+        <input class="rec-search-input" id="rec-search-input" placeholder="Search categories…" oninput="filterRecList()">
+        <div class="rec-list" id="rec-list" role="list" aria-label="Recommended categories"></div>
+        <button class="rec-search" id="rec-search-btn" onclick="toggleCatSearch()" aria-label="Search recommended categories">🔍</button>
+        <div class="rec-scrollbar" aria-hidden="true"><div class="thumb"></div></div>
+      </div>
+
+      <div class="field-error" id="err-cat-continue" role="alert" aria-live="polite" style="left:29px; top:640px; width:339px;">
+        <span class="ico" aria-hidden="true">!</span><span>Pick at least one category before continuing.</span>
+      </div>
+
+      <button class="continue-btn cat-continue-btn" style="left:32px; width:339px;" onclick="continueFromCategories()">Continue</button>
+
+      <nav class="bottom-nav" aria-label="Main navigation">
+        <button class="nav-item" onclick="go('budgetTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="14.5" r="1.4" fill="currentColor" stroke="none"/></svg></span><span>Budget</span>
+        </button>
+        <button class="nav-item active" onclick="go('categoriesTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></span><span>Categories</span>
+        </button>
+        <button class="nav-item" onclick="go('home')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg></span><span>Home</span>
+        </button>
+        <button class="nav-item" onclick="go('insightTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9"/><path d="M10 19V5"/><path d="M16 19v-7"/><path d="M20 19V3"/></svg></span><span>Insight</span>
+        </button>
+        <button class="nav-item" onclick="go('settingsTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V19a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H10a1.7 1.7 0 0 0 1-1.55V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V10a1.7 1.7 0 0 0 1.55 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1z"/></svg></span><span>Settings</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- 5. Security PIN (re-synced: Step 2, smaller fields, "Confirm your Security Pin") -->
+    <div class="frame" data-frame="pin">
+      <button class="chevron-back" onclick="go('categories')" aria-label="Back">‹</button>
+      <p class="pin-title">Set up your Security Pin</p>
+      <p class="step-sub" style="left:20px; top:106px; width:339px;">Step 2</p>
+
+      <label class="sr-only" for="pin-field-1">Security PIN, 4 digits</label>
+      <input class="outline-field pin-field" id="pin-field-1" placeholder="Security PIN" inputmode="numeric" maxlength="4" autocomplete="off" aria-describedby="err-pin-1" oninput="onPinInput(this,'err-pin-1')">
+      <div class="field-error" id="err-pin-1" role="alert" aria-live="polite" style="left:20px; top:222px; width:339px;">
+        <span class="ico" aria-hidden="true">!</span><span id="err-pin-1-text">PIN must be exactly 4 digits.</span>
+      </div>
+
+      <label class="sr-only" for="pin-field-2">Confirm your Security Pin</label>
+      <input class="outline-field pin-field" id="pin-field-2" placeholder="Confirm your Security Pin" inputmode="numeric" maxlength="4" autocomplete="off" aria-describedby="err-pin-2" oninput="onPinInput(this,'err-pin-2')">
+      <div class="field-error" id="err-pin-2" role="alert" aria-live="polite" style="left:20px; top:293px; width:339px;">
+        <span class="ico" aria-hidden="true">!</span><span id="err-pin-2-text">PINs don't match.</span>
+      </div>
+
+      <div class="skip-hint" style="position:absolute; left:20px; top:330px; width:339px; font-size:12px; color:var(--gray4); font-family:'Inter',sans-serif;">This step is optional — leave both fields blank to skip.</div>
+
+      <div class="dots-row" style="top:734px;" data-step="2"></div>
+      <button class="continue-btn" style="left:32px; width:339px;" onclick="continueFromPin()">Continue</button>
+    </div>
+
+    <!-- 6. All set (re-synced: no dots row) -->
+    <div class="frame" data-frame="allset">
+      <button class="chevron-back" onclick="go('pin')" aria-label="Back">‹</button>
+      <p class="allset-title">You're all set</p>
+      <p class="allset-sub">We'll start tracking automatically and show you where it goes — starting today.</p>
+
+      <div class="recap-panel" id="recap-cats">
+        <div class="recap-heading">Categories</div>
+        <div id="recap-cats-list"></div>
+      </div>
+
+      <div class="recap-panel" id="recap-accts">
+        <div class="recap-heading">Connected Accounts</div>
+        <div id="recap-accts-list"></div>
+      </div>
+
+      <button class="start-btn" onclick="go('home')">Start your jounery</button>
+    </div>
+
+    <!-- 7. Home (now fully designed in Figma — was an empty placeholder) -->
+    <div class="frame" data-frame="home">
+      <button class="profile-btn" onclick="toggleAccountSheet()" aria-label="Account overview" aria-haspopup="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></button>
+      <button class="framing-toggle" id="framing-toggle" onclick="toggleFraming()">Remaining</button>
+
+      <!-- Empty-first-run state: shown instead of everything below when there's
+           no transaction history yet (toggled from Settings > "Preview empty state"). -->
+      <div class="home-empty" id="home-empty">
+        <div class="home-empty-icon" aria-hidden="true">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg>
+        </div>
+        <p class="home-empty-title">No transactions yet</p>
+        <p class="home-empty-sub">Connect a UPI account for automatic tracking, or add your first spend manually.</p>
+        <button class="continue-btn" style="position:static; width:280px; height:52px; font-size:16px; margin-top:8px;" onclick="go('smsRationale')">Connect UPI</button>
+        <button class="reset-btn" style="margin-top:10px;" onclick="go('manualEntry')">Add manually instead</button>
+      </div>
+
+      <div class="home-populated" id="home-populated">
+        <div class="balance-panel" role="region" aria-label="Account balance">
+          <button class="account-row" onclick="toggleAccountSheet()" aria-haspopup="true">
+            <span>Account : abc@bank</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="spend-row" style="top:56px;">
+            <span>Weekly spending :</span><span class="amt" id="wk-amt">₹0.00</span><span class="amt-sub" id="wk-sub"></span><span class="trend" id="wk-trend" aria-hidden="true"></span>
+          </div>
+          <div class="spend-row" style="top:84px;">
+            <span>Daily spending&nbsp;&nbsp;&nbsp;&nbsp;:</span><span class="amt" id="day-amt">₹0.00</span><span class="amt-sub" id="day-sub"></span><span class="trend" id="day-trend" aria-hidden="true"></span>
+          </div>
+          <div class="balance-row">
+            <span class="bal-amt" id="balance-amt">₹0.00</span>
+            <button class="eye-btn" onclick="toggleBalance()" aria-label="Hide balance" id="balance-eye"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+        </div>
+
+        <div class="quick-actions">
+          <button class="qa-btn" onclick="openPay('scanqr')"><span class="qa-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7V4h3"/><path d="M21 7V4h-3"/><path d="M3 17v3h3"/><path d="M21 17v3h-3"/><rect x="9" y="9" width="6" height="6"/></svg></span><span>Scan QR</span></button>
+          <button class="qa-btn" onclick="openPay('payanyone')"><span class="qa-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M17 8h4M19 6v4"/></svg></span><span>Pay Anyone</span></button>
+          <button class="qa-btn" onclick="go('transfer')"><span class="qa-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10l9-6 9 6"/><path d="M5 10v8M10 10v8M14 10v8M19 10v8"/><path d="M3 21h18"/></svg></span><span>Bank Transfer</span></button>
+        </div>
+
+        <button class="accum-module" id="accum-module" onclick="go('accumulation')">
+          <div class="accum-module-head"><span>Small purchases add up</span><span class="arrow">›</span></div>
+          <div id="accum-module-body"></div>
+        </button>
+
+        <div class="home-quick-links">
+          <button class="reset-btn" onclick="go('manualEntry')">+ Add manually</button>
+          <button class="reset-btn" onclick="simulateIncomingSms()">↻ Simulate incoming SMS</button>
+        </div>
+      </div>
+
+      <div class="toast" id="home-toast" role="status" aria-live="polite"></div>
+
+      <nav class="bottom-nav" aria-label="Main navigation">
+        <button class="nav-item" onclick="go('budgetTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="14.5" r="1.4" fill="currentColor" stroke="none"/></svg></span><span>Budget</span>
+        </button>
+        <button class="nav-item" onclick="go('categoriesTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></span><span>Categories</span>
+        </button>
+        <button class="nav-item active">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg></span><span>Home</span>
+        </button>
+        <button class="nav-item" onclick="go('insightTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9"/><path d="M10 19V5"/><path d="M16 19v-7"/><path d="M20 19V3"/></svg></span><span>Insight</span>
+        </button>
+        <button class="nav-item" onclick="go('settingsTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V19a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H10a1.7 1.7 0 0 0 1-1.55V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V10a1.7 1.7 0 0 0 1.55 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1z"/></svg></span><span>Settings</span>
+        </button>
+      </nav>
+
+      <div class="overlay-scrim" id="overlay-scrim" onclick="toggleAccountSheet()"></div>
+      <div class="account-sheet" id="account-sheet" role="dialog" aria-label="Account overview" aria-hidden="true">
+        <p class="sheet-heading">Account overview</p>
+        <div class="sheet-panel">
+          <p class="sheet-panel-title">Connected Accounts</p>
+          <span class="sheet-chip" style="top:37px;">Sample@okbi</span>
+          <span class="sheet-chip" style="top:64px;">Sample2@oksbi</span>
+        </div>
+        <button class="add-accounts-link" onclick="go('upi')">Add accounts +</button>
+      </div>
+    </div>
+
+    <!-- 8. Categories tab (new — reachable from bottom nav; example spending data, disconnected from the onboarding demo) -->
+    <div class="frame" data-frame="categoriesTab">
+      <button class="chevron-back" onclick="go('home')" aria-label="Back">‹</button>
+      <p class="cattab-title">Daily Spending</p>
+      <div class="wheel-wrap" id="spend-wheel" aria-label="Spending by category wheel" role="img"></div>
+      <button class="edit-cats-btn" onclick="go('categories')">Edit categories</button>
+      <div id="spend-list"></div>
+
+      <nav class="bottom-nav" aria-label="Main navigation">
+        <button class="nav-item" onclick="go('budgetTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="14.5" r="1.4" fill="currentColor" stroke="none"/></svg></span><span>Budget</span>
+        </button>
+        <button class="nav-item active">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></span><span>Categories</span>
+        </button>
+        <button class="nav-item" onclick="go('home')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg></span><span>Home</span>
+        </button>
+        <button class="nav-item" onclick="go('insightTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9"/><path d="M10 19V5"/><path d="M16 19v-7"/><path d="M20 19V3"/></svg></span><span>Insight</span>
+        </button>
+        <button class="nav-item" onclick="go('settingsTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V19a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H10a1.7 1.7 0 0 0 1-1.55V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V10a1.7 1.7 0 0 0 1.55 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1z"/></svg></span><span>Settings</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- 9. Insight tab (new — unfinished in the source Figma file; built out per
+         request: a spending graph, the highest contributor called out, smaller
+         categories accumulated into one total, and a savings-goal tracker.
+         Same example spending data as Categories tab. ) -->
+    <div class="frame" data-frame="insightTab">
+      <button class="chevron-back" onclick="go('home')" aria-label="Back">‹</button>
+      <p class="cattab-title">Insight</p>
+      <p class="insight-sub">Spending by category, this week</p>
+
+      <div class="bar-chart-wrap" id="insight-bars" role="img" aria-label="Spending by category bar chart"></div>
+
+      <div class="top-spender-callout" id="top-spender-callout"></div>
+
+      <div class="accum-row" id="accum-row"></div>
+
+      <button class="goal-wrap" onclick="go('goals')" aria-label="View all savings goals">
+        <div class="goal-head">
+          <span>Savings goals ›</span><span id="goal-amt"></span>
+        </div>
+        <div class="goal-track"><div class="goal-fill" id="goal-fill"></div></div>
+      </button>
+
+      <nav class="bottom-nav" aria-label="Main navigation">
+        <button class="nav-item" onclick="go('budgetTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="14.5" r="1.4" fill="currentColor" stroke="none"/></svg></span><span>Budget</span>
+        </button>
+        <button class="nav-item" onclick="go('categoriesTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></span><span>Categories</span>
+        </button>
+        <button class="nav-item" onclick="go('home')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg></span><span>Home</span>
+        </button>
+        <button class="nav-item active">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9"/><path d="M10 19V5"/><path d="M16 19v-7"/><path d="M20 19V3"/></svg></span><span>Insight</span>
+        </button>
+        <button class="nav-item" onclick="go('settingsTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V19a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H10a1.7 1.7 0 0 0 1-1.55V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V10a1.7 1.7 0 0 0 1.55 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1z"/></svg></span><span>Settings</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- 10. Pay (new — Scan QR and Pay Anyone both feed this: exact function each
+         quick-action icon obviously implies, no extra behavior invented) -->
+    <div class="frame" data-frame="pay">
+      <button class="chevron-back" onclick="go('home')" aria-label="Back">‹</button>
+      <p class="pay-title" id="pay-title">Scan QR</p>
+
+      <div class="pay-step" id="pay-step-scan">
+        <p class="pay-sub">Point your camera at a QR code to pay.</p>
+        <div class="qr-box">
+          <div class="qr-corner tl"></div><div class="qr-corner tr"></div>
+          <div class="qr-corner bl"></div><div class="qr-corner br"></div>
+        </div>
+        <p class="qr-hint">Camera preview isn't available in this prototype — tap below to simulate a scan.</p>
+        <button class="continue-btn" style="left:20px; top:440px; width:354px;" onclick="simulateScan()">Simulate scan</button>
+      </div>
+
+      <div class="pay-step" id="pay-step-recipient">
+        <p class="pay-sub">Who are you paying?</p>
+        <label class="sr-only" for="pay-recipient-input">UPI ID or phone number</label>
+        <input class="outline-field pay-recipient-field" id="pay-recipient-input" style="top:150px;" placeholder="UPI ID or phone number" oninput="clearError('pay-recipient-input','err-pay-recipient')">
+        <div class="field-error" id="err-pay-recipient" role="alert" aria-live="polite" style="left:20px; top:212px; width:354px;">
+          <span class="ico" aria-hidden="true">!</span><span>Enter a UPI ID or phone number.</span>
+        </div>
+        <button class="continue-btn" style="left:20px; top:440px; width:354px;" onclick="confirmRecipient()">Next</button>
+      </div>
+
+      <div class="pay-step" id="pay-step-amount">
+        <div class="pay-recipient-chip" style="top:150px;">
+          <span id="pay-recipient-display">—</span><span class="tag" id="pay-recipient-tag"></span>
+        </div>
+        <label class="sr-only" for="pay-amount-input">Amount</label>
+        <input class="outline-field pay-amount-field" id="pay-amount-input" style="top:222px;" placeholder="₹0.00" inputmode="decimal" oninput="clearError('pay-amount-input','err-pay-amount')">
+        <div class="field-error" id="err-pay-amount" role="alert" aria-live="polite" style="left:20px; top:284px; width:354px;">
+          <span class="ico" aria-hidden="true">!</span><span>Enter an amount before paying.</span>
+        </div>
+        <button class="continue-btn" style="left:20px; top:440px; width:354px;" onclick="submitPay()">Pay</button>
+      </div>
+    </div>
+
+    <!-- 11. Bank Transfer (new — same "pick an account, enter amount" function
+         every transfer flow obviously needs) -->
+    <div class="frame" data-frame="transfer">
+      <button class="chevron-back" onclick="go('home')" aria-label="Back">‹</button>
+      <p class="pay-title">Bank Transfer</p>
+      <p class="pay-sub">Choose an account to transfer to.</p>
+      <div class="acct-pick-row" id="transfer-acct-list" style="top:150px;" role="radiogroup" aria-label="Choose an account"></div>
+
+      <div class="pay-step" id="transfer-step-amount">
+        <label class="sr-only" for="transfer-amount-input">Amount</label>
+        <input class="outline-field pay-amount-field" id="transfer-amount-input" style="top:340px;" placeholder="₹0.00" inputmode="decimal" oninput="clearError('transfer-amount-input','err-transfer-amount')">
+        <div class="field-error" id="err-transfer-amount" role="alert" aria-live="polite" style="left:20px; top:402px; width:354px;">
+          <span class="ico" aria-hidden="true">!</span><span>Enter an amount before transferring.</span>
+        </div>
+      </div>
+      <div class="field-error" id="err-transfer-acct" role="alert" aria-live="polite" style="left:20px; top:305px; width:354px;">
+        <span class="ico" aria-hidden="true">!</span><span>Choose an account first.</span>
+      </div>
+
+      <button class="continue-btn" style="left:20px; top:770px; width:354px;" onclick="submitTransfer()">Transfer</button>
+    </div>
+
+    <!-- 12. Pay/Transfer success (new — shared confirmation for both flows) -->
+    <div class="frame" data-frame="paySuccess">
+      <div class="success-check" aria-hidden="true">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <p class="success-title" id="success-title">Payment sent</p>
+      <p class="success-sub" id="success-sub"></p>
+      <button class="continue-btn" style="left:20px; top:770px; width:354px;" onclick="go('home')">Done</button>
+    </div>
+
+    <!-- 13. Budget tab (new — reachable from bottom nav; per-category budget vs.
+         the same example spending data used on the Categories/Insight tabs) -->
+    <div class="frame" data-frame="budgetTab">
+      <p class="cattab-title">Budget</p>
+      <div class="cadence-toggle" role="radiogroup" aria-label="Budget period">
+        <button class="cadence-btn" id="cadence-daily" onclick="setCadence('daily')">Daily</button>
+        <button class="cadence-btn active" id="cadence-weekly" onclick="setCadence('weekly')">Weekly</button>
+      </div>
+      <button class="budget-edit-btn" onclick="editMonthlyBudget()">Edit total</button>
+      <div class="budget-panel">
+        <span class="lbl" id="budget-panel-lbl">Weekly Budget</span>
+        <span class="amt" id="budget-monthly-amt">₹0.00</span>
+      </div>
+      <div class="budget-list-title">Set a budget per category</div>
+      <div class="budget-list" id="budget-list"></div>
+
+      <nav class="bottom-nav" aria-label="Main navigation">
+        <button class="nav-item active">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="14.5" r="1.4" fill="currentColor" stroke="none"/></svg></span><span>Budget</span>
+        </button>
+        <button class="nav-item" onclick="go('categoriesTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></span><span>Categories</span>
+        </button>
+        <button class="nav-item" onclick="go('home')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg></span><span>Home</span>
+        </button>
+        <button class="nav-item" onclick="go('insightTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9"/><path d="M10 19V5"/><path d="M16 19v-7"/><path d="M20 19V3"/></svg></span><span>Insight</span>
+        </button>
+        <button class="nav-item" onclick="go('settingsTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V19a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H10a1.7 1.7 0 0 0 1-1.55V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V10a1.7 1.7 0 0 0 1.55 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1z"/></svg></span><span>Settings</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- 14. Settings tab (new — reachable from bottom nav; routes into the real
+         existing screens for anything that already has one: PIN, connected
+         accounts, categories) -->
+    <div class="frame" data-frame="settingsTab">
+      <p class="cattab-title">Settings</p>
+      <div class="settings-list">
+        <button class="settings-row" onclick="toggleAccountSheet()">Profile &amp; connected accounts<span class="arrow">›</span></button>
+        <button class="settings-row" onclick="go('pin')">Security PIN<span class="arrow">›</span></button>
+        <button class="settings-row" onclick="go('categories')">Categories<span class="arrow">›</span></button>
+        <button class="settings-row" onclick="go('upi')">Connected UPI IDs<span class="arrow">›</span></button>
+        <button class="settings-row" onclick="go('transactions')">Transaction history<span class="arrow">›</span></button>
+        <button class="settings-row" onclick="go('funds')">Funds<span class="arrow">›</span></button>
+        <button class="settings-row" onclick="go('goals')">Savings goals<span class="arrow">›</span></button>
+        <button class="settings-row" onclick="go('subscriptions')">Subscriptions<span class="arrow">›</span></button>
+        <button class="settings-row" onclick="go('alertSettings')">Spending alerts<span class="arrow">›</span></button>
+        <button class="settings-row" style="cursor:default;">
+          Notifications
+          <button class="toggle-switch on" id="notif-toggle" onclick="event.stopPropagation();toggleNotif()" aria-pressed="true" aria-label="Notifications"><span class="knob"></span></button>
+        </button>
+        <button class="settings-row" onclick="togglePreviewEmpty()" id="preview-empty-row"><span id="preview-empty-label">Preview empty state</span><span class="arrow">›</span></button>
+        <button class="settings-row danger" onclick="resetProto()">Log out<span class="arrow">›</span></button>
+      </div>
+
+      <div class="privacy-note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        Your transaction data stays on this device. Nothing is synced to the cloud.
+      </div>
+
+      <nav class="bottom-nav" aria-label="Main navigation">
+        <button class="nav-item" onclick="go('budgetTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16" cy="14.5" r="1.4" fill="currentColor" stroke="none"/></svg></span><span>Budget</span>
+        </button>
+        <button class="nav-item" onclick="go('categoriesTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></span><span>Categories</span>
+        </button>
+        <button class="nav-item" onclick="go('home')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg></span><span>Home</span>
+        </button>
+        <button class="nav-item" onclick="go('insightTab')">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9"/><path d="M10 19V5"/><path d="M16 19v-7"/><path d="M20 19V3"/></svg></span><span>Insight</span>
+        </button>
+        <button class="nav-item active">
+          <span class="nav-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V19a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H10a1.7 1.7 0 0 0 1-1.55V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V10a1.7 1.7 0 0 0 1.55 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1z"/></svg></span><span>Settings</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- 15. Accumulation view (new — the headline differentiator: small,
+         repeated purchases rolled up so they're visible before they're big) -->
+    <div class="frame" data-frame="accumulation">
+      <button class="chevron-back" onclick="go('home')" aria-label="Back">‹</button>
+      <p class="cattab-title">Small purchases add up</p>
+      <p class="insight-sub">Merchants you've paid 2 or more times this week</p>
+      <div class="pattern-list" id="pattern-list"></div>
+    </div>
+
+    <!-- 16. Accumulation detail (new — the individual purchases behind one pattern) -->
+    <div class="frame" data-frame="accumulationDetail">
+      <button class="chevron-back" onclick="go('accumulation')" aria-label="Back">‹</button>
+      <p class="cattab-title" id="pattern-detail-title">Merchant</p>
+      <p class="insight-sub" id="pattern-detail-sub"></p>
+      <div class="txn-list" id="pattern-detail-list"></div>
+    </div>
+
+    <!-- 17. Manual entry (new — the actual form behind "Manual Tracking",
+         and the denied-SMS-permission fallback) -->
+    <div class="frame" data-frame="manualEntry">
+      <button class="chevron-back" onclick="go('home')" aria-label="Back">‹</button>
+      <p class="pay-title">Add a transaction</p>
+
+      <label class="sr-only" for="me-amount">Amount</label>
+      <input class="outline-field pay-amount-field" id="me-amount" style="top:100px;" placeholder="₹0.00" inputmode="decimal" oninput="clearError('me-amount','err-me-amount')">
+      <div class="field-error" id="err-me-amount" role="alert" aria-live="polite" style="left:20px; top:162px; width:354px;">
+        <span class="ico" aria-hidden="true">!</span><span>Enter an amount first.</span>
+      </div>
+
+      <label class="sr-only" for="me-merchant">Merchant or note</label>
+      <input class="outline-field pay-amount-field" id="me-merchant" style="top:186px; font-size:16px;" placeholder="Merchant or note" oninput="clearError('me-merchant','err-me-merchant')">
+      <div class="field-error" id="err-me-merchant" role="alert" aria-live="polite" style="left:20px; top:248px; width:354px;">
+        <span class="ico" aria-hidden="true">!</span><span>Enter a merchant or short note.</span>
+      </div>
+
+      <p class="pay-field-label" style="top:270px;">Category</p>
+      <div class="cat-select-row" id="me-cat-row" style="top:296px;"></div>
+
+      <button class="continue-btn" style="left:20px; top:480px; width:354px;" onclick="submitManualEntry()">Add transaction</button>
+    </div>
+
+    <!-- 18. Transactions list (new — the searchable log several other
+         screens/features silently depend on) -->
+    <div class="frame" data-frame="transactions">
+      <button class="chevron-back" onclick="go('home')" aria-label="Back">‹</button>
+      <p class="cattab-title">Transactions</p>
+      <label class="sr-only" for="txn-search">Search transactions</label>
+      <input class="rec-search-input show" id="txn-search" style="left:20px; top:100px; width:354px;" placeholder="Search merchant or category…" oninput="renderTransactionsList()">
+      <div class="txn-list" id="txn-list" style="top:134px;"></div>
+    </div>
+
+    <!-- 19. Transaction detail (new — single transaction, with recategorize) -->
+    <div class="frame" data-frame="transactionDetail">
+      <button class="chevron-back" onclick="go('transactions')" aria-label="Back">‹</button>
+      <p class="pay-title">Transaction</p>
+      <div class="txn-detail-amt" id="txn-detail-amt"></div>
+      <div class="txn-detail-rows" id="txn-detail-rows"></div>
+      <p class="pay-field-label" style="top:330px;">Category</p>
+      <div class="cat-select-row" id="txn-detail-cat-row" style="top:356px;"></div>
+      <button class="continue-btn" style="left:20px; top:770px; width:354px;" onclick="saveTransactionCategory()">Save</button>
+    </div>
+
+    <!-- 20. Category drill-down (new — tapping a category now goes somewhere) -->
+    <div class="frame" data-frame="categoryDrilldown">
+      <button class="chevron-back" onclick="go('categoriesTab')" aria-label="Back">‹</button>
+      <p class="cattab-title" id="drilldown-title">Category</p>
+      <p class="insight-sub" id="drilldown-sub"></p>
+      <div class="txn-list" id="drilldown-list"></div>
+    </div>
+
+    <!-- 21. SMS permission rationale (new — just-in-time, contextual, with a
+         real reason, per Wijesekera/Bonné — inserted between choosing UPI
+         tracking and connecting an account) -->
+    <div class="frame" data-frame="smsRationale">
+      <button class="chevron-back" onclick="go('tracking')" aria-label="Back">‹</button>
+      <p class="step-title" style="left:20px; width:339px;">Read your transaction SMS?</p>
+      <p class="note-txt" style="top:130px; width:354px;">Trickle reads bank and UPI debit SMS on this device to log spends automatically — nothing else is read, and nothing leaves your phone. You can still add transactions manually if you'd rather not.</p>
+      <p class="note-txt" style="top:200px; width:354px;">🔒 This is asked now, not at first launch, because it only matters once you've chosen automatic tracking.</p>
+      <button class="continue-btn" style="left:20px; top:600px; width:354px;" onclick="grantSms()">Allow</button>
+      <button class="reset-btn" style="position:absolute; left:20px; top:676px; width:354px; text-align:center; padding:12px;" onclick="denySms()">Not now</button>
+    </div>
+
+    <!-- 22. SMS denied fallback (new — a graceful path, not a dead end) -->
+    <div class="frame" data-frame="smsDenied">
+      <button class="chevron-back" onclick="go('smsRationale')" aria-label="Back">‹</button>
+      <p class="step-title" style="left:20px; width:339px;">No problem</p>
+      <p class="note-txt" style="top:130px; width:354px;">Automatic tracking is off. You can still track everything by adding transactions manually — or turn this back on anytime from Settings.</p>
+      <button class="continue-btn" style="left:20px; top:600px; width:354px;" onclick="go('categories')">Continue setup</button>
+    </div>
+
+    <!-- 23. Pre-payment interstitial — concept A, a true blocking screen (new —
+         inserted into the Pay flow between amount and confirmation) -->
+    <div class="frame" data-frame="prePay">
+      <p class="pay-title">Before you pay</p>
+      <div class="prepay-panel">
+        <div class="prepay-row"><span>Paying</span><span class="v" id="prepay-amt"></span></div>
+        <div class="prepay-row"><span>To</span><span class="v" id="prepay-to"></span></div>
+        <div class="prepay-row"><span>Weekly spend so far</span><span class="v" id="prepay-spent"></span></div>
+        <div class="prepay-row"><span>Left after this</span><span class="v" id="prepay-left"></span></div>
+      </div>
+      <p class="prepay-note">Just a heads-up, not a block — you decide.</p>
+      <button class="link-btn" style="top:560px;" onclick="go('prePayWidget')">See this as a notification instead</button>
+      <button class="continue-btn" style="left:20px; top:770px; width:354px;" onclick="confirmPrePay()">Pay anyway</button>
+      <button class="reset-btn" style="position:absolute; left:20px; top:706px; width:354px; text-align:center; padding:12px;" onclick="go('home')">Cancel</button>
+    </div>
+
+    <!-- 24. Pre-payment widget concept — concept B, the more realistic shipping
+         shape since UPI payments happen inside GPay/PhonePe, not this app (new) -->
+    <div class="frame" data-frame="prePayWidget">
+      <button class="chevron-back" onclick="go('prePay')" aria-label="Back">‹</button>
+      <p class="pay-title">As a notification</p>
+      <p class="insight-sub">Since UPI payments happen inside apps like GPay or PhonePe, a true blocking screen likely isn't buildable — a home-screen widget or notification is the more realistic shipping shape.</p>
+      <div class="mock-notif">
+        <div class="mock-notif-head">Trickle</div>
+        <div class="mock-notif-title">Heads up before you confirm</div>
+        <div class="mock-notif-body">This payment would leave you with ₹640 of your weekly budget. Tap to review.</div>
+      </div>
+      <div class="mock-widget">
+        <div class="mock-widget-head">This week</div>
+        <div class="mock-widget-amt">₹640 <span>left</span></div>
+        <div class="mock-widget-track"><div class="mock-widget-fill"></div></div>
+      </div>
+    </div>
+
+    <!-- 25–27. Purpose-based Funds (new — distinct from the Budget tab: named
+         funds with an allocated amount, a progress bar, and their own feed) -->
+    <div class="frame" data-frame="funds">
+      <button class="chevron-back" onclick="go('home')" aria-label="Back">‹</button>
+      <p class="cattab-title">Funds</p>
+      <button class="edit-cats-btn" style="top:64px;" onclick="go('fundCreate')">New fund</button>
+      <div class="fund-list" id="fund-list"></div>
+    </div>
+
+    <div class="frame" data-frame="fundCreate">
+      <button class="chevron-back" onclick="go('funds')" aria-label="Back">‹</button>
+      <p class="pay-title">New fund</p>
+      <label class="sr-only" for="fund-name">Fund name</label>
+      <input class="outline-field pay-recipient-field" id="fund-name" style="top:100px;" placeholder="Fund name (e.g. Food, Fun, Travel)" oninput="clearError('fund-name','err-fund-name')">
+      <div class="field-error" id="err-fund-name" role="alert" aria-live="polite" style="left:20px; top:162px; width:354px;">
+        <span class="ico" aria-hidden="true">!</span><span>Give the fund a name.</span>
+      </div>
+      <label class="sr-only" for="fund-amount">Allocated amount</label>
+      <input class="outline-field pay-amount-field" id="fund-amount" style="top:186px;" placeholder="₹ Allocated amount" inputmode="decimal" oninput="clearError('fund-amount','err-fund-amount')">
+      <div class="field-error" id="err-fund-amount" role="alert" aria-live="polite" style="left:20px; top:248px; width:354px;">
+        <span class="ico" aria-hidden="true">!</span><span>Enter how much to allocate.</span>
+      </div>
+      <button class="continue-btn" style="left:20px; top:480px; width:354px;" onclick="submitFundCreate()">Create fund</button>
+    </div>
+
+    <div class="frame" data-frame="fundDetail">
+      <button class="chevron-back" onclick="go('funds')" aria-label="Back">‹</button>
+      <p class="pay-title" id="fund-detail-title">Fund</p>
+      <div class="budget-panel" style="top:100px;">
+        <span class="lbl">Allocated / Spent</span>
+        <span class="amt" id="fund-detail-amt">₹0.00 / ₹0.00</span>
+      </div>
+      <div class="track" id="fund-detail-track" style="position:absolute; left:27px; top:210px; width:347px; height:10px; border-radius:5px; background:var(--gray1); overflow:hidden;"><div class="fill" id="fund-detail-fill" style="height:100%; border-radius:5px; background:var(--gray4);"></div></div>
+      <p class="budget-list-title" style="top:236px;">Transactions from this fund</p>
+      <div class="txn-list" id="fund-detail-txns" style="top:270px;"></div>
+    </div>
+
+    <!-- 28–31. Savings Goals — full flow (new — replaces the single hardcoded
+         meter that was on Insight) -->
+    <div class="frame" data-frame="goals">
+      <button class="chevron-back" onclick="go('home')" aria-label="Back">‹</button>
+      <p class="cattab-title">Savings goals</p>
+      <button class="edit-cats-btn" style="top:64px;" onclick="go('goalCreate')">New goal</button>
+      <div class="fund-list" id="goal-list"></div>
+    </div>
+
+    <div class="frame" data-frame="goalCreate">
+      <button class="chevron-back" onclick="go('goals')" aria-label="Back">‹</button>
+      <p class="pay-title">New goal</p>
+      <label class="sr-only" for="goal-name">Goal name</label>
+      <input class="outline-field pay-recipient-field" id="goal-name" style="top:100px;" placeholder="What are you saving for?" oninput="clearError('goal-name','err-goal-name')">
+      <div class="field-error" id="err-goal-name" role="alert" aria-live="polite" style="left:20px; top:162px; width:354px;">
+        <span class="ico" aria-hidden="true">!</span><span>Give the goal a name.</span>
+      </div>
+      <label class="sr-only" for="goal-target">Target amount</label>
+      <input class="outline-field pay-amount-field" id="goal-target" style="top:186px;" placeholder="₹ Target amount" inputmode="decimal" oninput="clearError('goal-target','err-goal-target')">
+      <div class="field-error" id="err-goal-target" role="alert" aria-live="polite" style="left:20px; top:248px; width:354px;">
+        <span class="ico" aria-hidden="true">!</span><span>Enter a target amount.</span>
+      </div>
+      <button class="continue-btn" style="left:20px; top:480px; width:354px;" onclick="submitGoalCreate()">Create goal</button>
+    </div>
+
+    <div class="frame" data-frame="goalDetail">
+      <button class="chevron-back" onclick="go('goals')" aria-label="Back">‹</button>
+      <p class="pay-title" id="goal-detail-title">Goal</p>
+      <div class="budget-panel" style="top:100px;">
+        <span class="lbl">Saved / Target</span>
+        <span class="amt" id="goal-detail-amt">₹0.00 / ₹0.00</span>
+      </div>
+      <div class="track" style="position:absolute; left:27px; top:210px; width:347px; height:10px; border-radius:5px; background:var(--gray1); overflow:hidden;"><div id="goal-detail-fill" style="height:100%; border-radius:5px; background:var(--gray5);"></div></div>
+      <label class="sr-only" for="goal-contribute">Add contribution</label>
+      <input class="outline-field pay-amount-field" id="goal-contribute" style="top:250px;" placeholder="₹ Add a contribution">
+      <button class="small-add-btn" style="left:305px; top:275px; width:48px; height:22px;" onclick="contributeToGoal()">Add</button>
+      <p class="budget-list-title" style="top:330px;">Contribution history</p>
+      <div class="txn-list" id="goal-detail-history" style="top:364px;"></div>
+    </div>
+
+    <div class="frame" data-frame="goalCelebration">
+      <div class="success-check" aria-hidden="true">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <p class="success-title">Goal reached!</p>
+      <p class="success-sub" id="goal-celebration-sub"></p>
+      <button class="continue-btn" style="left:20px; top:770px; width:354px;" onclick="go('goals')">Nice</button>
+    </div>
+
+    <!-- 32–34. Subscription / recurring-payment detection (new) -->
+    <div class="frame" data-frame="subscriptions">
+      <button class="chevron-back" onclick="go('home')" aria-label="Back">‹</button>
+      <p class="cattab-title">Subscriptions</p>
+      <p class="insight-sub">Recurring charges detected from your transaction history</p>
+      <div class="fund-list" id="sub-list"></div>
+      <button class="link-btn" style="top:730px;" onclick="go('subscriptionConfirm')">+ Add one manually</button>
+    </div>
+
+    <div class="frame" data-frame="subscriptionDetail">
+      <button class="chevron-back" onclick="go('subscriptions')" aria-label="Back">‹</button>
+      <p class="pay-title" id="sub-detail-title">Subscription</p>
+      <div class="txn-detail-rows" id="sub-detail-rows"></div>
+      <p class="budget-list-title" style="top:280px;">Charge history</p>
+      <div class="txn-list" id="sub-detail-history" style="top:314px;"></div>
+    </div>
+
+    <div class="frame" data-frame="subscriptionConfirm">
+      <button class="chevron-back" onclick="go('subscriptions')" aria-label="Back">‹</button>
+      <p class="pay-title">Is this a subscription?</p>
+      <p class="insight-sub" id="sub-confirm-sub">A charge repeated at a regular interval — flag it so Trickle tracks it as recurring.</p>
+      <div id="sub-confirm-body"></div>
+      <button class="continue-btn" style="left:20px; top:770px; width:354px;" onclick="confirmSubscription()">Yes, track this</button>
+    </div>
+
+    <!-- 35. Alert settings (new — threshold/tone control, replacing the bare
+         on/off toggle; tone is flagged in the research as the highest-risk
+         design element, so it gets real controls, not just a switch) -->
+    <div class="frame" data-frame="alertSettings">
+      <button class="chevron-back" onclick="go('settingsTab')" aria-label="Back">‹</button>
+      <p class="cattab-title">Spending alerts</p>
+      <p class="insight-sub">Alerts are informational, never restrictive — they tell you what's safe to spend, not that you did something wrong.</p>
+
+      <div class="alert-example">
+        <div class="alert-example-label">Example</div>
+        <div class="alert-example-body" id="alert-example-body"></div>
+      </div>
+
+      <p class="budget-list-title" style="top:290px;">Alert me when weekly spend reaches</p>
+      <div class="threshold-row" id="threshold-row"></div>
+
+      <button class="settings-row" style="position:absolute; left:20px; top:420px; width:362px; cursor:default;">
+        Daily summary
+        <button class="toggle-switch on" id="daily-summary-toggle" onclick="event.stopPropagation();toggleDailySummary()" aria-pressed="true" aria-label="Daily summary"><span class="knob"></span></button>
+      </button>
+    </div>
+
+  </div>
+  </div>
+</div>
+
+<div class="stage-controls">
+  <button class="reset-btn" onclick="resetProto()">↺ Restart</button>
+</div>
+
+<script>
+var lastMethod = null;
+var accounts = [];
+var chosenCats = []; // onboarding "Choose your categories" screen now starts empty in the current Figma file
+var RECOMMENDED = ['Transport','College','Fun','Savings','Subscriptions','Shopping','Rent']; // Food/Travel dropped from the list — they're pre-chosen in the current source, so no longer worth recommending
+var TOTAL_STEPS = 3; // 1 Set up account (UPI or manual)  2 Security PIN  — Categories/All-set show no dot row in the current source
+
+// static example dataset for the post-onboarding "returning user" screens
+// (Home / Categories tab / Insight tab) — these are reached via bottom nav,
+// not the live onboarding state, matching the separate static content shown
+// for them in Figma (their own "Food"/"Travel" chips, independent of what a
+// user picks while walking through onboarding in this same demo).
+var SPEND_CATS = [
+  { name: 'Food', pct: 72 },
+  { name: 'Snacks/Beverages', pct: 45 },
+  { name: 'Groceries', pct: 60 },
+  { name: 'Buffer', pct: 30 },
+  { name: 'Stationery', pct: 20 },
+  { name: 'Transport', pct: 50 },
+  { name: 'Necessities', pct: 15 }
+];
+
+/* ---- Example spending amounts (stand in for real transaction data) ----
+   Every "XX.XX" in the source Figma file marks a number that only real
+   transaction history could fill in. Since this is a demo with no real
+   accounts behind it, we generate plausible example amounts once per
+   session (seeded so a category's amount roughly tracks its % of spend)
+   rather than leaving the literal placeholder text on screen. */
+var HOME_STATS = {};
+function rndAmt(min, max){ return Math.round((min + Math.random() * (max - min)) * 100) / 100; }
+function fmtMoney(n){ return '₹' + n.toFixed(2); }
+function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+function fmtDate(d){
+  var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()];
+}
+function isToday(d){ var t = new Date(); return d.toDateString() === t.toDateString(); }
+
+/* ---- Transactions: the shared record every other screen (accumulation,
+   category drill-down, funds, insights) reads from, instead of each screen
+   inventing its own numbers. Small, frequent merchants (Campus Coffee, Chai
+   Point, etc.) are seeded with several low-value repeats on purpose — that
+   repetition is exactly what the accumulation view is meant to surface. ---- */
+var TRANSACTIONS = [];
+var MERCHANTS = [
+  { name: 'Campus Coffee',    cat: 'Food',              min: 30,  max: 70,  perWeek: 6 },
+  { name: 'Canteen',          cat: 'Food',               min: 60,  max: 160, perWeek: 4 },
+  { name: 'Chai Point',       cat: 'Snacks/Beverages',   min: 15,  max: 40,  perWeek: 7 },
+  { name: 'Vending Machine',  cat: 'Snacks/Beverages',   min: 20,  max: 50,  perWeek: 3 },
+  { name: 'BigBasket',        cat: 'Groceries',          min: 250, max: 700, perWeek: 1 },
+  { name: 'Zepto',            cat: 'Groceries',          min: 80,  max: 300, perWeek: 2 },
+  { name: 'Metro Card',       cat: 'Transport',          min: 20,  max: 60,  perWeek: 5 },
+  { name: 'Uber',             cat: 'Transport',          min: 90,  max: 220, perWeek: 2 },
+  { name: 'Stationery Store', cat: 'Stationery',         min: 40,  max: 150, perWeek: 1 },
+  { name: 'Coursera',         cat: 'Necessities',        min: 2500,max: 2500,perWeek: 0.14 }, // ~monthly, deliberately catches the subscription pattern
+  { name: 'Hostel Mess Fine', cat: 'Necessities',        min: 50,  max: 120, perWeek: 0.5 }
+];
+
+function genTransactions(){
+  var list = [];
+  var id = 1;
+  var now = new Date();
+  MERCHANTS.forEach(function(m){
+    var count = Math.round(m.perWeek * 2 + rndAmt(-0.5, 0.5)); // ~2 weeks of history
+    for(var i = 0; i < Math.max(0, count); i++){
+      var daysAgo = Math.floor(Math.random() * 14);
+      var d = new Date(now.getTime() - daysAgo * 86400000);
+      list.push({
+        id: id++,
+        merchant: m.name,
+        category: m.cat,
+        amount: rndAmt(m.min, m.max),
+        date: d,
+        source: Math.random() < 0.85 ? 'auto' : 'manual'
+      });
+    }
+  });
+  list.sort(function(a,b){ return b.date - a.date; });
+  return list;
+}
+
+/* ---- Transaction query helpers, shared by Accumulation, Transactions list,
+   Category drill-down, and Insights ---- */
+function weekAgo(){ return new Date(Date.now() - 7 * 86400000); }
+function txnsInWeek(){ var wk = weekAgo(); return TRANSACTIONS.filter(function(t){ return t.date >= wk; }); }
+function txnsToday(){ return TRANSACTIONS.filter(function(t){ return isToday(t.date); }); }
+function txnsByMerchant(name){ return TRANSACTIONS.filter(function(t){ return t.merchant === name; }); }
+function txnsByCategory(cat){ return TRANSACTIONS.filter(function(t){ return t.category === cat; }); }
+function sumAmt(list){ return list.reduce(function(s,t){ return s + t.amount; }, 0); }
+
+/* Accumulation patterns: merchants with 2+ purchases in the last week, i.e.
+   the small-repeated-purchase pattern the feature exists to surface —
+   sorted by weekly total so the biggest silent drain shows first. */
+function getAccumulationPatterns(){
+  var wk = txnsInWeek();
+  var byMerchant = {};
+  wk.forEach(function(t){
+    (byMerchant[t.merchant] = byMerchant[t.merchant] || []).push(t);
+  });
+  var patterns = [];
+  Object.keys(byMerchant).forEach(function(name){
+    var list = byMerchant[name];
+    if(list.length >= 2){
+      patterns.push({
+        merchant: name,
+        category: list[0].category,
+        count: list.length,
+        weekTotal: sumAmt(list),
+        todayTotal: sumAmt(list.filter(function(t){ return isToday(t.date); })),
+        txns: list
+      });
+    }
+  });
+  patterns.sort(function(a,b){ return b.weekTotal - a.weekTotal; });
+  return patterns;
+}
+
+function seedExampleAmounts(){
+  TRANSACTIONS = genTransactions();
+  SPEND_CATS.forEach(function(c){
+    c.amt = rndAmt(60, 40 + c.pct * 9);
+    c.amtPrev = rndAmt(60, 40 + c.pct * 9);
+  });
+  HOME_STATS.weekly = rndAmt(900, 2600);
+  HOME_STATS.weeklyPrev = rndAmt(900, 2600);
+  HOME_STATS.daily = rndAmt(90, 420);
+  HOME_STATS.dailyPrev = rndAmt(90, 420);
+  HOME_STATS.balance = rndAmt(2800, 18500);
+  HOME_STATS.savingsGoal = 5000;
+  HOME_STATS.savingsSaved = rndAmt(800, 4600);
+  initCategoryBudgets();
+  seedFunds();
+  seedGoals();
+  seedSubscriptions();
+}
+
+function initDots(){
+  document.querySelectorAll('.dots-row[data-step]').forEach(function(row){
+    var current = parseInt(row.dataset.step, 10);
+    row.innerHTML = '';
+    row.setAttribute('role','img');
+    row.setAttribute('aria-label', 'Step ' + current + ' of ' + TOTAL_STEPS);
+    for(var i = 1; i <= TOTAL_STEPS; i++){
+      var dot = document.createElement('span');
+      if(i === current) dot.className = 'on';
+      else if(i < current) dot.className = 'done';
+      row.appendChild(dot);
+    }
+  });
+}
+
+function go(name){
+  document.querySelectorAll('.frame').forEach(function(f){
+    f.classList.toggle('active', f.dataset.frame === name);
+  });
+  document.querySelectorAll('.field-error').forEach(function(e){ e.classList.remove('show'); });
+  document.querySelectorAll('.invalid').forEach(function(e){ e.classList.remove('invalid'); });
+  if(name === 'upi') lastMethod = 'upi';
+  if(name === 'categories') applyCategoriesFirstVisit();
+  closeAccountSheet();
+  renderAll();
+  moveFocusToHeading(name);
+}
+
+/* Recommended Categories only ever shows the first time the Categories screen
+   opens — after that (e.g. reopening it later from Settings), it's just the
+   chosen-categories editor with nothing to recommend anymore. */
+var categoriesFirstVisitDone = false;
+function applyCategoriesFirstVisit(){
+  var section = document.getElementById('rec-section');
+  var btn = document.querySelector('.cat-continue-btn');
+  var err = document.getElementById('err-cat-continue');
+  if(!section) return;
+  if(categoriesFirstVisitDone){
+    section.style.display = 'none';
+    if(btn){ btn.classList.add('compact'); }
+    if(err){ err.style.top = '437px'; }
+  } else {
+    section.style.display = '';
+    if(btn){ btn.classList.remove('compact'); }
+    if(err){ err.style.top = '640px'; }
+    categoriesFirstVisitDone = true;
+  }
+}
+
+function moveFocusToHeading(name){
+  var frame = document.querySelector('.frame[data-frame="' + name + '"]');
+  if(!frame) return;
+  var heading = frame.querySelector('.step-title, .pin-title, .allset-title, .trickle-word, .cattab-title, .pay-title, .success-title');
+  if(!heading) return;
+  if(!heading.hasAttribute('tabindex')) heading.setAttribute('tabindex','-1');
+  heading.focus({preventScroll:true});
+}
+
+var UPI_RE = /^[a-zA-Z0-9.\-_]{2,}@[a-zA-Z][a-zA-Z0-9]{1,}$/;
+
+function showError(id){ document.getElementById(id).classList.add('show'); }
+function hideError(id){ document.getElementById(id).classList.remove('show'); }
+function clearError(fieldId, errId){
+  document.getElementById(fieldId).classList.remove('invalid');
+  hideError(errId);
+}
+
+function addAccount(){
+  var input = document.getElementById('upi-input');
+  var val = input.value.trim();
+  var errTextEl = document.getElementById('err-upi-input-text');
+
+  if(!val){
+    errTextEl.textContent = 'Enter a UPI ID before adding.';
+    input.classList.add('invalid');
+    showError('err-upi-input');
+    return;
+  }
+  if(!UPI_RE.test(val)){
+    errTextEl.textContent = 'That doesn\'t look like a UPI ID — try something like yourname@bank.';
+    input.classList.add('invalid');
+    showError('err-upi-input');
+    return;
+  }
+  if(accounts.indexOf(val) > -1){
+    errTextEl.textContent = 'That account is already connected.';
+    input.classList.add('invalid');
+    showError('err-upi-input');
+    return;
+  }
+
+  clearError('upi-input','err-upi-input');
+  hideError('err-upi-continue');
+  accounts.push(val);
+  input.value = '';
+  renderAccounts();
+}
+
+function continueFromUpi(){
+  if(accounts.length === 0){
+    showError('err-upi-continue');
+    return;
+  }
+  hideError('err-upi-continue');
+  go('categories');
+}
+
+function renderAccounts(){
+  var list = document.getElementById('account-list');
+  list.innerHTML = '';
+  var top = 46;
+  accounts.forEach(function(acc){
+    var chip = document.createElement('div');
+    chip.className = 'acct-chip';
+    chip.style.left = '19px';
+    chip.style.top = top + 'px';
+    chip.style.width = Math.max(100, acc.length * 8 + 24) + 'px';
+    chip.textContent = acc;
+    list.appendChild(chip);
+    top += 37;
+  });
+}
+
+function renderChosenCats(){
+  var wrap = document.getElementById('chosen-cats');
+  wrap.innerHTML = '';
+  var left = 22;
+  var top = 29;
+  var maxLeft = 354 - 22;
+  chosenCats.forEach(function(c, i){
+    var w = 34 + c.length * 7;
+    if(left + w > maxLeft){ left = 22; top += 24; }
+    var pill = document.createElement('div');
+    pill.className = 'cat-pill';
+    pill.style.left = left + 'px';
+    pill.style.top = top + 'px';
+    pill.style.width = w + 'px';
+    pill.innerHTML = c + ' <button onclick="removeCat(' + i + ')">✕</button>';
+    wrap.appendChild(pill);
+    left += w + 8;
+  });
+}
+
+function removeCat(i){
+  chosenCats.splice(i,1);
+  renderAll();
+}
+
+function addCustomCategory(){
+  var input = document.getElementById('cat-input');
+  var val = input.value.trim();
+  var errTextEl = document.getElementById('err-cat-input-text');
+
+  if(!val){
+    errTextEl.textContent = 'Type a category name first.';
+    input.classList.add('invalid');
+    showError('err-cat-input');
+    return;
+  }
+  if(chosenCats.some(function(c){ return c.toLowerCase() === val.toLowerCase(); })){
+    errTextEl.textContent = '"' + val + '" is already on your list.';
+    input.classList.add('invalid');
+    showError('err-cat-input');
+    return;
+  }
+  if(val.length > 20){
+    errTextEl.textContent = 'Keep category names under 20 characters.';
+    input.classList.add('invalid');
+    showError('err-cat-input');
+    return;
+  }
+
+  clearError('cat-input','err-cat-input');
+  hideError('err-cat-continue');
+  chosenCats.push(val);
+  input.value = '';
+  renderAll();
+}
+
+function continueFromCategories(){
+  if(chosenCats.length === 0){
+    showError('err-cat-continue');
+    return;
+  }
+  hideError('err-cat-continue');
+  go('pin');
+}
+
+function addRecommended(name){
+  if(chosenCats.some(function(c){ return c.toLowerCase() === name.toLowerCase(); })) return;
+  chosenCats.push(name);
+  hideError('err-cat-continue');
+  renderAll();
+}
+
+var catSearchOpen = false;
+
+function toggleCatSearch(){
+  catSearchOpen = !catSearchOpen;
+  var input = document.getElementById('rec-search-input');
+  var title = document.getElementById('rec-title');
+  var btn = document.getElementById('rec-search-btn');
+  input.classList.toggle('show', catSearchOpen);
+  title.classList.toggle('hidden-by-search', catSearchOpen);
+  btn.classList.toggle('active', catSearchOpen);
+  if(catSearchOpen){
+    input.focus();
+  } else {
+    input.value = '';
+    renderRecList();
+  }
+}
+
+function filterRecList(){
+  renderRecList();
+}
+
+function renderRecList(){
+  var list = document.getElementById('rec-list');
+  list.innerHTML = '';
+  var query = (document.getElementById('rec-search-input').value || '').trim().toLowerCase();
+  var matches = RECOMMENDED.filter(function(name){
+    return !query || name.toLowerCase().indexOf(query) > -1;
+  });
+
+  if(matches.length === 0){
+    var empty = document.createElement('div');
+    empty.className = 'rec-empty';
+    empty.textContent = 'No categories match "' + query + '".';
+    list.appendChild(empty);
+    return;
+  }
+
+  matches.forEach(function(name){
+    var already = chosenCats.some(function(c){ return c.toLowerCase() === name.toLowerCase(); });
+    var bar = document.createElement('button');
+    bar.className = 'rec-bar' + (already ? ' added' : '');
+    bar.textContent = already ? (name + ' ✓') : name;
+    bar.disabled = already;
+    if(!already){ bar.onclick = function(){ addRecommended(name); }; }
+    list.appendChild(bar);
+  });
+}
+
+function renderRecap(){
+  var catsList = document.getElementById('recap-cats-list');
+  catsList.innerHTML = '';
+  var left = 22;
+  var top = 29;
+  var maxLeft = 347 - 22;
+  chosenCats.forEach(function(c){
+    var w = 20 + c.length * 7;
+    if(left + w > maxLeft){ left = 22; top += 24; }
+    var pill = document.createElement('div');
+    pill.className = 'cat-pill';
+    pill.style.position = 'absolute';
+    pill.style.left = left + 'px';
+    pill.style.top = top + 'px';
+    pill.style.width = w + 'px';
+    pill.textContent = c;
+    catsList.appendChild(pill);
+    left += w + 8;
+  });
+
+  var acctsList = document.getElementById('recap-accts-list');
+  acctsList.innerHTML = '';
+  var top2 = 47;
+  var displayAccts = accounts.length ? accounts : ['Sample@oksbi', 'Sample2@oksbi'];
+  displayAccts.forEach(function(acc){
+    var chip = document.createElement('div');
+    chip.className = 'acct-chip';
+    chip.style.left = '23px';
+    chip.style.top = top2 + 'px';
+    chip.style.width = Math.max(100, acc.length * 8 + 24) + 'px';
+    chip.textContent = acc;
+    acctsList.appendChild(chip);
+    top2 += 37;
+  });
+}
+
+function onPinInput(el, errId){
+  el.value = el.value.replace(/\D/g,'').slice(0,4);
+  el.classList.remove('invalid');
+  hideError(errId);
+}
+
+function continueFromPin(){
+  var pin1 = document.getElementById('pin-field-1').value;
+  var pin2 = document.getElementById('pin-field-2').value;
+
+  hideError('err-pin-1');
+  hideError('err-pin-2');
+  document.getElementById('pin-field-1').classList.remove('invalid');
+  document.getElementById('pin-field-2').classList.remove('invalid');
+
+  if(pin1 === '' && pin2 === ''){
+    go('allset');
+    return;
+  }
+
+  var ok = true;
+  if(pin1.length !== 4){
+    document.getElementById('err-pin-1-text').textContent = 'PIN must be exactly 4 digits.';
+    document.getElementById('pin-field-1').classList.add('invalid');
+    showError('err-pin-1');
+    ok = false;
+  }
+  if(pin2.length !== 4){
+    document.getElementById('err-pin-2-text').textContent = 'Confirm your 4-digit PIN.';
+    document.getElementById('pin-field-2').classList.add('invalid');
+    showError('err-pin-2');
+    ok = false;
+  } else if(pin1.length === 4 && pin1 !== pin2){
+    document.getElementById('err-pin-2-text').textContent = 'PINs don\'t match — try again.';
+    document.getElementById('pin-field-2').classList.add('invalid');
+    showError('err-pin-2');
+    ok = false;
+  }
+
+  if(!ok) return;
+  go('allset');
+}
+
+/* ---- Home: balance visibility toggle ---- */
+var balanceVisible = true;
+function toggleBalance(){
+  balanceVisible = !balanceVisible;
+  document.getElementById('balance-amt').textContent = balanceVisible ? fmtMoney(HOME_STATS.balance) : '••••••';
+  document.getElementById('balance-eye').setAttribute('aria-label', balanceVisible ? 'Hide balance' : 'Show balance');
+}
+
+/* ---- Home: account overview sheet ---- */
+var sheetOpen = false;
+function toggleAccountSheet(){
+  sheetOpen = !sheetOpen;
+  var scrim = document.getElementById('overlay-scrim');
+  var sheet = document.getElementById('account-sheet');
+  if(!scrim || !sheet) return;
+  scrim.classList.toggle('show', sheetOpen);
+  sheet.classList.toggle('show', sheetOpen);
+  sheet.setAttribute('aria-hidden', sheetOpen ? 'false' : 'true');
+}
+function closeAccountSheet(){
+  sheetOpen = false;
+  var scrim = document.getElementById('overlay-scrim');
+  var sheet = document.getElementById('account-sheet');
+  if(!scrim || !sheet) return;
+  scrim.classList.remove('show');
+  sheet.classList.remove('show');
+  sheet.setAttribute('aria-hidden','true');
+}
+
+/* ---- Categories tab: spending wheel + list (static example data) ---- */
+function renderSpendWheel(){
+  var wrap = document.getElementById('spend-wheel');
+  if(!wrap) return;
+  var size = 311, cx = size/2, cy = size/2, r0 = 46, rMax = 108, gap = 3;
+  var n = SPEND_CATS.length, step = 360/n;
+  function grayFor(p){ return p>=60?'#666':(p>=35?'#999':'#c7c7c7'); }
+  var svg = '<svg viewBox="0 0 '+size+' '+size+'" width="100%" height="100%">';
+  SPEND_CATS.forEach(function(c, i){
+    var a0 = (i*step + gap/2 - 90) * Math.PI/180;
+    var a1 = ((i+1)*step - gap/2 - 90) * Math.PI/180;
+    var rOuter = r0 + (c.pct/100)*(rMax-r0)*2;
+    var x0 = cx + Math.cos(a0)*rOuter, y0 = cy + Math.sin(a0)*rOuter;
+    var x1 = cx + Math.cos(a1)*rOuter, y1 = cy + Math.sin(a1)*rOuter;
+    var xi0 = cx + Math.cos(a0)*r0, yi0 = cy + Math.sin(a0)*r0;
+    var xi1 = cx + Math.cos(a1)*r0, yi1 = cy + Math.sin(a1)*r0;
+    var large = (a1-a0) > Math.PI ? 1 : 0;
+    var d = 'M'+xi0+','+yi0+' L'+x0+','+y0+' A'+rOuter+','+rOuter+' 0 '+large+' 1 '+x1+','+y1+' L'+xi1+','+yi1+' A'+r0+','+r0+' 0 '+large+' 0 '+xi0+','+yi0+' Z';
+    svg += '<path d="'+d+'" fill="'+grayFor(c.pct)+'" stroke="#fff" stroke-width="2"></path>';
+    var amid = (a0+a1)/2, lr = (r0+rOuter)/2 + 6;
+    var lx = cx + Math.cos(amid)*lr, ly = cy + Math.sin(amid)*lr;
+    svg += '<text x="'+lx+'" y="'+ly+'" font-size="9" font-family="Inter, sans-serif" fill="#fff" text-anchor="middle" dominant-baseline="middle">'+c.name.split('/')[0]+'</text>';
+  });
+  svg += '</svg>';
+  wrap.innerHTML = svg;
+}
+function renderSpendList(){
+  var list = document.getElementById('spend-list');
+  if(!list) return;
+  list.innerHTML = '';
+  var top = 459;
+  SPEND_CATS.forEach(function(c){
+    var row = document.createElement('button');
+    row.className = 'spend-list-row';
+    row.style.top = top + 'px';
+    row.style.cursor = 'pointer';
+    row.style.border = 'none';
+    row.style.background = 'none';
+    row.style.font = 'inherit';
+    row.style.padding = '0';
+    row.style.textAlign = 'left';
+    row.setAttribute('aria-label', 'View ' + c.name + ' transactions');
+    row.onclick = function(){ openCategoryDrilldown(c.name); };
+    var up = c.amt >= c.amtPrev;
+    row.innerHTML =
+      '<span class="spend-list-pill">'+c.name+'</span>' +
+      '<span class="amt" style="font-size:16px;">'+fmtMoney(c.amt)+'</span>' +
+      '<span class="amt-sub" style="font-size:10px;">'+fmtMoney(c.amtPrev)+'</span>' +
+      '<span class="trend '+(up?'up':'down')+'" aria-hidden="true"></span>';
+    list.appendChild(row);
+    top += 40;
+  });
+}
+
+/* ---- Home: weekly/daily spending + balance, from the same seeded example data ---- */
+/* 'remaining' vs 'spent' framing — a named Phase 1 test question, so it's a
+   real toggle rather than a design decision baked in silently. Weekly
+   "budget" for the remaining view borrows the same monthlyBudget total the
+   Budget tab uses, converted to a weekly figure, so the two screens agree. */
+var homeFraming = 'remaining';
+function toggleFraming(){
+  homeFraming = homeFraming === 'remaining' ? 'spent' : 'remaining';
+  renderHome();
+}
+
+var showEmptyState = false;
+function renderHome(){
+  var wkAmt = document.getElementById('wk-amt');
+  if(!wkAmt) return;
+
+  document.getElementById('home-empty').classList.toggle('show', showEmptyState);
+  document.getElementById('home-populated').style.display = showEmptyState ? 'none' : '';
+  if(showEmptyState) return;
+
+  var toggleBtn = document.getElementById('framing-toggle');
+  var weeklyBudget = monthlyBudget * (7 / 30);
+  if(homeFraming === 'remaining'){
+    toggleBtn.textContent = 'Remaining';
+    document.getElementById('wk-amt').textContent = fmtMoney(Math.max(0, weeklyBudget - HOME_STATS.weekly));
+    document.getElementById('wk-sub').textContent = 'of ' + fmtMoney(weeklyBudget);
+    document.getElementById('wk-trend').className = 'trend';
+  } else {
+    toggleBtn.textContent = 'Spent';
+    var wkUp = HOME_STATS.weekly >= HOME_STATS.weeklyPrev;
+    document.getElementById('wk-amt').textContent = fmtMoney(HOME_STATS.weekly);
+    document.getElementById('wk-sub').textContent = fmtMoney(HOME_STATS.weeklyPrev);
+    document.getElementById('wk-trend').className = 'trend ' + (wkUp ? 'up' : 'down');
+  }
+
+  var dayUp = HOME_STATS.daily >= HOME_STATS.dailyPrev;
+  document.getElementById('day-amt').textContent = fmtMoney(HOME_STATS.daily);
+  document.getElementById('day-sub').textContent = fmtMoney(HOME_STATS.dailyPrev);
+  document.getElementById('day-trend').className = 'trend ' + (dayUp ? 'up' : 'down');
+
+  document.getElementById('balance-amt').textContent = balanceVisible ? fmtMoney(HOME_STATS.balance) : '••••••';
+
+  renderAccumModule();
+}
+
+function renderAccumModule(){
+  var body = document.getElementById('accum-module-body');
+  if(!body) return;
+  var patterns = getAccumulationPatterns().slice(0, 2);
+  if(patterns.length === 0){
+    body.innerHTML = '<div class="accum-empty-note">Nothing repeating yet this week.</div>';
+    return;
+  }
+  body.innerHTML = patterns.map(function(p){
+    return '<div class="accum-item-row"><span>' + p.merchant + ' · ' + p.count + 'x this week</span><span class="amt">' + fmtMoney(p.weekTotal) + '</span></div>';
+  }).join('');
+}
+
+/* Simulates a new SMS-parsed transaction arriving — the "detected/parsed
+   confirmation" state from the screen plan, as a real transient UI event
+   rather than a separate frame. */
+function simulateIncomingSms(){
+  var m = pick(MERCHANTS);
+  var txn = {
+    id: TRANSACTIONS.length + 1,
+    merchant: m.name,
+    category: m.cat,
+    amount: rndAmt(m.min, m.max),
+    date: new Date(),
+    source: 'auto'
+  };
+  TRANSACTIONS.unshift(txn);
+  HOME_STATS.daily += txn.amount;
+  HOME_STATS.weekly += txn.amount;
+  HOME_STATS.balance = Math.max(0, HOME_STATS.balance - txn.amount);
+  showToast('New transaction detected: ' + fmtMoney(txn.amount) + ' at ' + txn.merchant);
+  renderAll();
+}
+
+var toastTimer = null;
+function showToast(msg){
+  var el = document.getElementById('home-toast');
+  if(!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2400);
+}
+
+/* ---- Insight tab: bar chart + highest contributor + accumulated smaller
+   categories + savings goal, all from the same seeded example spend data ---- */
+function renderInsight(){
+  var wrap = document.getElementById('insight-bars');
+  if(!wrap) return;
+
+  var sorted = SPEND_CATS.slice().sort(function(a,b){ return b.amt - a.amt; });
+  var top = sorted[0];
+  var others = sorted.slice(1);
+  var othersTotal = others.reduce(function(sum, c){ return sum + c.amt; }, 0);
+
+  // bar chart — tallest (top contributor) drawn solid black, the rest in grays
+  var w = 354, h = 200, gap = 10, barW = (w - gap * (SPEND_CATS.length - 1)) / SPEND_CATS.length;
+  var maxAmt = Math.max.apply(null, SPEND_CATS.map(function(c){ return c.amt; }));
+  var svg = '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="100%">';
+  SPEND_CATS.forEach(function(c, i){
+    var barH = Math.max(4, (c.amt / maxAmt) * (h - 34));
+    var x = i * (barW + gap);
+    var y = h - 24 - barH;
+    var isTop = c === top;
+    svg += '<rect x="'+x+'" y="'+y+'" width="'+barW+'" height="'+barH+'" rx="4" fill="'+(isTop ? '#1a1a1a' : '#b3b3b3')+'"></rect>';
+    svg += '<text x="'+(x + barW/2)+'" y="'+(h-8)+'" font-size="9" font-family="Inter, sans-serif" fill="#666" text-anchor="middle">'+c.name.split('/')[0].slice(0,4)+'</text>';
+  });
+  svg += '</svg>';
+  wrap.innerHTML = svg;
+
+  document.getElementById('top-spender-callout').innerHTML =
+    'Highest contributor this week: <b>' + top.name + '</b> at ' + fmtMoney(top.amt) + '.';
+
+  document.getElementById('accum-row').innerHTML =
+    '<span>All other categories combined</span><span class="amt">' + fmtMoney(othersTotal) + '</span>';
+
+  // primary goal shown here is the first in the list — Insight links through
+  // to the full Goals screen (Batch 5) for the rest
+  var primaryGoal = GOALS[0];
+  if(primaryGoal){
+    var goalPct = Math.min(100, Math.round((primaryGoal.saved / primaryGoal.target) * 100));
+    document.getElementById('goal-amt').textContent = fmtMoney(primaryGoal.saved) + ' / ' + fmtMoney(primaryGoal.target);
+    document.getElementById('goal-fill').style.width = goalPct + '%';
+  }
+}
+
+/* ---- Pay: Scan QR + Pay Anyone, same recipient+amount function either way ---- */
+var payMode = 'scanqr';   // 'scanqr' | 'payanyone' — which quick-action opened this screen
+var payRecipient = '';
+var payFrom = 'home';     // where "Done"/back should return to — always Home for the quick actions
+
+function openPay(mode){
+  payMode = mode;
+  payRecipient = '';
+  payFrom = 'home';
+  document.getElementById('pay-title').textContent = mode === 'scanqr' ? 'Scan QR' : 'Pay Anyone';
+  document.getElementById('pay-recipient-input').value = '';
+  clearError('pay-recipient-input','err-pay-recipient');
+  document.getElementById('pay-amount-input').value = '';
+  clearError('pay-amount-input','err-pay-amount');
+  showPayStep(mode === 'scanqr' ? 'scan' : 'recipient');
+  go('pay');
+}
+
+function showPayStep(step){
+  ['scan','recipient','amount'].forEach(function(s){
+    document.getElementById('pay-step-' + s).classList.toggle('show', s === step);
+  });
+}
+
+function simulateScan(){
+  // stands in for a real camera read — fills in a sample merchant the same way
+  // an actual QR scan would resolve to a payee, then moves straight to amount
+  payRecipient = 'merchant@upi';
+  document.getElementById('pay-recipient-display').textContent = payRecipient;
+  document.getElementById('pay-recipient-tag').textContent = 'via QR';
+  showPayStep('amount');
+  document.getElementById('pay-amount-input').focus();
+}
+
+function confirmRecipient(){
+  var input = document.getElementById('pay-recipient-input');
+  var val = input.value.trim();
+  if(!val){
+    input.classList.add('invalid');
+    showError('err-pay-recipient');
+    return;
+  }
+  clearError('pay-recipient-input','err-pay-recipient');
+  payRecipient = val;
+  document.getElementById('pay-recipient-display').textContent = val;
+  document.getElementById('pay-recipient-tag').textContent = '';
+  showPayStep('amount');
+  document.getElementById('pay-amount-input').focus();
+}
+
+/* Pending payment context, handed from Pay's amount step to the pre-payment
+   interstitial (Batch 4) rather than finalizing immediately. */
+var pendingPayment = null;
+
+function submitPay(){
+  var input = document.getElementById('pay-amount-input');
+  var val = input.value.trim();
+  if(!val || isNaN(parseFloat(val)) || parseFloat(val) <= 0){
+    input.classList.add('invalid');
+    showError('err-pay-amount');
+    return;
+  }
+  clearError('pay-amount-input','err-pay-amount');
+  pendingPayment = { amount: parseFloat(val), to: payRecipient, kind: 'Payment sent' };
+  go('prePay');
+}
+
+/* ---- Pre-payment interstitial (concept A) — shows weekly-spend impact
+   before the payment is confirmed, per Vaishak's "some friction before
+   paying" request. Not a block: Cancel returns to Home, Pay anyway finalizes. ---- */
+function renderPrePay(){
+  var el = document.getElementById('prepay-amt');
+  if(!el || !pendingPayment) return;
+  var weeklyBudget = monthlyBudget * (7 / 30);
+  var spentSoFar = HOME_STATS.weekly;
+  var left = Math.max(0, weeklyBudget - spentSoFar - pendingPayment.amount);
+  document.getElementById('prepay-amt').textContent = fmtMoney(pendingPayment.amount);
+  document.getElementById('prepay-to').textContent = pendingPayment.to;
+  document.getElementById('prepay-spent').textContent = fmtMoney(spentSoFar) + ' of ' + fmtMoney(weeklyBudget);
+  document.getElementById('prepay-left').textContent = fmtMoney(left);
+
+  var mockLeftPct = Math.min(100, Math.round((left / weeklyBudget) * 100));
+  var fillEl = document.querySelector('.mock-widget-fill');
+  if(fillEl) fillEl.style.width = mockLeftPct + '%';
+  var amtEl = document.querySelector('.mock-widget-amt');
+  if(amtEl) amtEl.innerHTML = fmtMoney(left) + ' <span>left</span>';
+  var bodyEl = document.querySelector('.mock-notif-body');
+  if(bodyEl) bodyEl.textContent = 'This payment would leave you with ' + fmtMoney(left) + ' of your weekly budget. Tap to review.';
+}
+
+function confirmPrePay(){
+  if(!pendingPayment) { go('home'); return; }
+  TRANSACTIONS.unshift({
+    id: TRANSACTIONS.length + 1, merchant: pendingPayment.to, category: 'Necessities',
+    amount: pendingPayment.amount, date: new Date(), source: 'auto'
+  });
+  HOME_STATS.weekly += pendingPayment.amount;
+  HOME_STATS.daily += pendingPayment.amount;
+  HOME_STATS.balance = Math.max(0, HOME_STATS.balance - pendingPayment.amount);
+  document.getElementById('success-title').textContent = pendingPayment.kind;
+  document.getElementById('success-sub').textContent = fmtMoney(pendingPayment.amount) + ' to ' + pendingPayment.to;
+  pendingPayment = null;
+  go('paySuccess');
+}
+
+/* ---- Bank Transfer: pick a connected account, enter amount ---- */
+function renderTransferAccounts(){
+  var wrap = document.getElementById('transfer-acct-list');
+  if(!wrap) return;
+  var list = accounts.length ? accounts : ['Sample@oksbi', 'Sample2@oksbi'];
+  wrap.innerHTML = '';
+  list.forEach(function(acc, i){
+    var btn = document.createElement('button');
+    btn.className = 'acct-pick-btn' + (i === selectedTransferAcct ? ' selected' : '');
+    btn.setAttribute('role','radio');
+    btn.setAttribute('aria-checked', i === selectedTransferAcct ? 'true' : 'false');
+    btn.textContent = acc;
+    btn.onclick = function(){ selectedTransferAcct = i; renderTransferAccounts(); hideError('err-transfer-acct'); };
+    wrap.appendChild(btn);
+  });
+}
+var selectedTransferAcct = -1;
+
+function submitTransfer(){
+  if(selectedTransferAcct < 0){
+    showError('err-transfer-acct');
+    return;
+  }
+  var input = document.getElementById('transfer-amount-input');
+  var val = input.value.trim();
+  if(!val || isNaN(parseFloat(val)) || parseFloat(val) <= 0){
+    input.classList.add('invalid');
+    showError('err-transfer-amount');
+    return;
+  }
+  hideError('err-transfer-acct');
+  clearError('transfer-amount-input','err-transfer-amount');
+  var list = accounts.length ? accounts : ['Sample@oksbi', 'Sample2@oksbi'];
+  document.getElementById('success-title').textContent = 'Transfer sent';
+  document.getElementById('success-sub').textContent = '₹' + parseFloat(val).toFixed(2) + ' to ' + list[selectedTransferAcct];
+  go('paySuccess');
+}
+
+/* ---- Budget tab: this is where amounts actually get set — a daily/weekly
+   cadence toggle plus an editable budget per category, each compared against
+   the same example spend data shown on Categories/Insight. Budgets are stored
+   as monthly amounts internally and converted to whichever cadence is
+   selected, so switching Daily/Weekly never loses what was typed. ---- */
+var monthlyBudget = 5000;         // overall total, editable via "Edit total"
+var categoryBudgets = {};         // name -> monthly amount
+var budgetCadence = 'weekly';     // 'daily' | 'weekly'
+
+function cadenceFactor(){ return budgetCadence === 'daily' ? (1/30) : (7/30); }
+function cadenceLabel(){ return budgetCadence === 'daily' ? 'Daily Budget' : 'Weekly Budget'; }
+
+function initCategoryBudgets(){
+  var share = monthlyBudget / SPEND_CATS.length;
+  categoryBudgets = {};
+  SPEND_CATS.forEach(function(c){ categoryBudgets[c.name] = share; });
+}
+
+function setCadence(mode){
+  budgetCadence = mode;
+  document.getElementById('cadence-daily').classList.toggle('active', mode === 'daily');
+  document.getElementById('cadence-weekly').classList.toggle('active', mode === 'weekly');
+  renderBudgetList();
+}
+
+function renderBudgetList(){
+  var lblEl = document.getElementById('budget-panel-lbl');
+  if(!lblEl) return; // budget tab not in the DOM path yet on first paint — fine, renderAll() re-runs on every go()
+  var factor = cadenceFactor();
+  lblEl.textContent = cadenceLabel();
+  document.getElementById('budget-monthly-amt').textContent = fmtMoney(monthlyBudget * factor);
+
+  var list = document.getElementById('budget-list');
+  list.innerHTML = '';
+  SPEND_CATS.forEach(function(c){
+    var monthlyForCat = categoryBudgets[c.name] != null ? categoryBudgets[c.name] : (monthlyBudget / SPEND_CATS.length);
+    var cadenceAmt = monthlyForCat * factor;
+    var spent = c.amt; // same example "spent this period" figure used on Categories/Insight
+    var pct = cadenceAmt > 0 ? Math.min(100, Math.round((spent / cadenceAmt) * 100)) : 0;
+
+    var row = document.createElement('div');
+    row.className = 'budget-row';
+    row.innerHTML =
+      '<div class="head"><span class="name">' + c.name + '</span>' +
+        '<span class="set-wrap">₹<input type="text" inputmode="decimal" value="' + cadenceAmt.toFixed(2) + '" aria-label="' + cadenceLabel() + ' for ' + c.name + '"></span>' +
+      '</div>' +
+      '<div class="spent-lbl">' + fmtMoney(spent) + ' spent · ' + pct + '%</div>' +
+      '<div class="track"><div class="fill' + (pct >= 90 ? ' over' : '') + '" style="width:' + pct + '%;"></div></div>';
+
+    var input = row.querySelector('input');
+    input.addEventListener('change', function(){
+      var n = parseFloat(input.value);
+      if(!isNaN(n) && n >= 0){
+        categoryBudgets[c.name] = n / cadenceFactor();
+      }
+      renderBudgetList();
+    });
+    list.appendChild(row);
+  });
+}
+
+function editMonthlyBudget(){
+  var factor = cadenceFactor();
+  var current = (monthlyBudget * factor).toFixed(2);
+  var val = window.prompt ? window.prompt('Set your ' + cadenceLabel().toLowerCase(), current) : null;
+  if(val === null) return;
+  var n = parseFloat(val);
+  if(!isNaN(n) && n > 0){
+    monthlyBudget = n / factor;
+    initCategoryBudgets();
+    renderBudgetList();
+  }
+}
+
+/* ---- Settings tab: notifications toggle (local demo state) ---- */
+var notifOn = true;
+function toggleNotif(){
+  notifOn = !notifOn;
+  var btn = document.getElementById('notif-toggle');
+  if(!btn) return;
+  btn.classList.toggle('on', notifOn);
+  btn.setAttribute('aria-pressed', notifOn ? 'true' : 'false');
+}
+
+/* ---- Settings tab: preview the Home empty state on demand, rather than
+   faking it with a separate unreachable frame ---- */
+function togglePreviewEmpty(){
+  showEmptyState = !showEmptyState;
+  var label = document.getElementById('preview-empty-label');
+  if(label) label.textContent = showEmptyState ? 'Showing empty state — tap to restore' : 'Preview empty state';
+  renderHome();
+  if(showEmptyState) go('home');
+}
+
+/* ================= Batch 1: Accumulation view ================= */
+var selectedPatternMerchant = null;
+
+function renderPatternList(){
+  var wrap = document.getElementById('pattern-list');
+  if(!wrap) return;
+  var patterns = getAccumulationPatterns();
+  if(patterns.length === 0){
+    wrap.innerHTML = '<div class="pattern-empty">Nothing repeating yet this week — patterns show up once a merchant is paid 2+ times.</div>';
+    return;
+  }
+  wrap.innerHTML = patterns.map(function(p){
+    return '<button class="pattern-card" onclick="openPatternDetail(\'' + p.merchant.replace(/'/g,"\\'") + '\')">' +
+      '<div class="pattern-card-head"><span class="name">' + p.merchant + '</span><span class="amt">' + fmtMoney(p.weekTotal) + '</span></div>' +
+      '<div class="pattern-card-sub"><span>' + p.category + ' · ' + p.count + ' purchases this week</span>' +
+      (p.todayTotal > 0 ? '<span>' + fmtMoney(p.todayTotal) + ' today</span>' : '<span></span>') + '</div>' +
+    '</button>';
+  }).join('');
+}
+
+function openPatternDetail(merchant){
+  selectedPatternMerchant = merchant;
+  go('accumulationDetail');
+}
+
+function renderPatternDetail(){
+  if(!selectedPatternMerchant) return;
+  var pattern = getAccumulationPatterns().filter(function(p){ return p.merchant === selectedPatternMerchant; })[0];
+  if(!pattern) return;
+  document.getElementById('pattern-detail-title').textContent = pattern.merchant;
+  document.getElementById('pattern-detail-sub').textContent = pattern.count + ' purchases this week · ' + fmtMoney(pattern.weekTotal) + ' total';
+  var list = document.getElementById('pattern-detail-list');
+  list.innerHTML = pattern.txns.sort(function(a,b){ return b.date - a.date; }).map(function(t){
+    return '<div class="txn-row" style="cursor:default;"><div class="left"><span class="merchant">' + fmtDate(t.date) + '</span><span class="meta">' + t.category + '</span></div><span class="amt">' + fmtMoney(t.amount) + '</span></div>';
+  }).join('');
+}
+
+/* ================= Batch 2: Transactions as first-class objects ================= */
+var CATEGORY_NAMES_FALLBACK = ['Food','Snacks/Beverages','Groceries','Buffer','Stationery','Transport','Necessities'];
+function categoryChoices(){ return chosenCats.length ? chosenCats : CATEGORY_NAMES_FALLBACK; }
+
+function renderCategorySelect(rowId, selected, onSelect){
+  var row = document.getElementById(rowId);
+  if(!row) return;
+  row.innerHTML = categoryChoices().map(function(c){
+    return '<button type="button" class="cat-select-chip' + (c === selected ? ' selected' : '') + '" onclick="' + onSelect + '(\'' + c.replace(/'/g,"\\'") + '\')">' + c + '</button>';
+  }).join('');
+}
+
+var manualEntryCategory = null;
+function pickManualCategory(cat){
+  manualEntryCategory = cat;
+  renderCategorySelect('me-cat-row', manualEntryCategory, 'pickManualCategory');
+}
+
+function submitManualEntry(){
+  var amtInput = document.getElementById('me-amount');
+  var merchInput = document.getElementById('me-merchant');
+  var amt = parseFloat(amtInput.value);
+  var merch = merchInput.value.trim();
+  var ok = true;
+  if(!amt || amt <= 0){ amtInput.classList.add('invalid'); showError('err-me-amount'); ok = false; }
+  if(!merch){ merchInput.classList.add('invalid'); showError('err-me-merchant'); ok = false; }
+  if(!ok) return;
+  if(!manualEntryCategory) manualEntryCategory = categoryChoices()[0];
+
+  TRANSACTIONS.unshift({
+    id: TRANSACTIONS.length + 1, merchant: merch, category: manualEntryCategory,
+    amount: amt, date: new Date(), source: 'manual'
+  });
+  HOME_STATS.daily += amt;
+  HOME_STATS.weekly += amt;
+  HOME_STATS.balance = Math.max(0, HOME_STATS.balance - amt);
+
+  amtInput.value = ''; merchInput.value = ''; manualEntryCategory = null;
+  clearError('me-amount','err-me-amount'); clearError('me-merchant','err-me-merchant');
+  showToast('Added ' + fmtMoney(amt) + ' at ' + merch);
+  renderAll();
+  go('transactions');
+}
+
+function renderTransactionsList(){
+  var list = document.getElementById('txn-list');
+  if(!list) return;
+  var q = (document.getElementById('txn-search').value || '').trim().toLowerCase();
+  var rows = TRANSACTIONS.filter(function(t){
+    return !q || t.merchant.toLowerCase().indexOf(q) > -1 || t.category.toLowerCase().indexOf(q) > -1;
+  });
+  if(rows.length === 0){
+    list.innerHTML = '<div class="pattern-empty">No transactions match "' + q + '".</div>';
+    return;
+  }
+  list.innerHTML = rows.map(function(t){
+    return '<button class="txn-row" onclick="openTransactionDetail(' + t.id + ')">' +
+      '<div class="left"><span class="merchant">' + t.merchant + '</span><span class="meta">' + t.category + ' · ' + fmtDate(t.date) + '<span class="txn-source-tag">' + (t.source === 'auto' ? 'AUTO' : 'MANUAL') + '</span></span></div>' +
+      '<span class="amt">' + fmtMoney(t.amount) + '</span>' +
+    '</button>';
+  }).join('');
+}
+
+var selectedTxnId = null;
+var selectedTxnCategory = null;
+function openTransactionDetail(id){
+  selectedTxnId = id;
+  var t = TRANSACTIONS.filter(function(x){ return x.id === id; })[0];
+  selectedTxnCategory = t ? t.category : null;
+  go('transactionDetail');
+}
+
+function renderTransactionDetail(){
+  var t = TRANSACTIONS.filter(function(x){ return x.id === selectedTxnId; })[0];
+  if(!t) return;
+  document.getElementById('txn-detail-amt').textContent = fmtMoney(t.amount);
+  document.getElementById('txn-detail-rows').innerHTML =
+    '<div class="txn-detail-row"><span>Merchant</span><span class="v">' + t.merchant + '</span></div>' +
+    '<div class="txn-detail-row"><span>Date</span><span class="v">' + fmtDate(t.date) + '</span></div>' +
+    '<div class="txn-detail-row"><span>Source</span><span class="v">' + (t.source === 'auto' ? 'Auto (SMS)' : 'Manual') + '</span></div>';
+  renderCategorySelect('txn-detail-cat-row', selectedTxnCategory, 'setTxnDetailCategory');
+}
+
+function setTxnDetailCategory(cat){
+  selectedTxnCategory = cat;
+  renderCategorySelect('txn-detail-cat-row', selectedTxnCategory, 'setTxnDetailCategory');
+}
+
+function saveTransactionCategory(){
+  var t = TRANSACTIONS.filter(function(x){ return x.id === selectedTxnId; })[0];
+  if(t && selectedTxnCategory){ t.category = selectedTxnCategory; }
+  showToast('Saved');
+  renderAll();
+  go('transactions');
+}
+
+var selectedDrilldownCategory = null;
+function openCategoryDrilldown(cat){
+  selectedDrilldownCategory = cat;
+  go('categoryDrilldown');
+}
+
+function renderCategoryDrilldown(){
+  if(!selectedDrilldownCategory) return;
+  var rows = txnsByCategory(selectedDrilldownCategory).sort(function(a,b){ return b.date - a.date; });
+  document.getElementById('drilldown-title').textContent = selectedDrilldownCategory;
+  document.getElementById('drilldown-sub').textContent = rows.length + ' transactions · ' + fmtMoney(sumAmt(rows)) + ' total';
+  var list = document.getElementById('drilldown-list');
+  if(rows.length === 0){
+    list.innerHTML = '<div class="pattern-empty">No transactions in this category yet.</div>';
+    return;
+  }
+  list.innerHTML = rows.map(function(t){
+    return '<button class="txn-row" onclick="openTransactionDetail(' + t.id + ')">' +
+      '<div class="left"><span class="merchant">' + t.merchant + '</span><span class="meta">' + fmtDate(t.date) + '</span></div>' +
+      '<span class="amt">' + fmtMoney(t.amount) + '</span>' +
+    '</button>';
+  }).join('');
+}
+
+/* ================= Batch 3: SMS permission rationale ================= */
+var smsGranted = null; // null = not asked yet, true/false after the rationale screen
+function grantSms(){
+  smsGranted = true;
+  go('upi');
+}
+function denySms(){
+  smsGranted = false;
+  go('smsDenied');
+}
+
+/* ================= Batch 5: Funds, Goals, Subscriptions, Alerts ================= */
+var FUNDS = [];
+function seedFunds(){
+  FUNDS = [
+    { id: 1, name: 'Food',    allocated: 2200, category: 'Food' },
+    { id: 2, name: 'Fun',     allocated: 900,  category: null },
+    { id: 3, name: 'Travel',  allocated: 1300, category: 'Transport' }
+  ];
+  FUNDS.forEach(function(f){
+    f.spent = f.category ? sumAmt(txnsByCategory(f.category)) : rndAmt(100, 700);
+  });
+}
+
+function renderFundList(){
+  var wrap = document.getElementById('fund-list');
+  if(!wrap) return;
+  wrap.innerHTML = FUNDS.map(function(f){
+    var pct = Math.min(100, Math.round((f.spent / f.allocated) * 100));
+    return '<button class="fund-card" onclick="openFundDetail(' + f.id + ')">' +
+      '<div class="fund-card-head"><span>' + f.name + '</span><span>' + fmtMoney(f.spent) + ' / ' + fmtMoney(f.allocated) + '</span></div>' +
+      '<div class="fund-card-sub">' + pct + '% used</div>' +
+      '<div class="track"><div class="fill' + (pct >= 90 ? ' over' : '') + '" style="width:' + pct + '%;"></div></div>' +
+    '</button>';
+  }).join('');
+}
+
+var selectedFundId = null;
+function openFundDetail(id){ selectedFundId = id; go('fundDetail'); }
+function renderFundDetail(){
+  var f = FUNDS.filter(function(x){ return x.id === selectedFundId; })[0];
+  if(!f) return;
+  document.getElementById('fund-detail-title').textContent = f.name;
+  document.getElementById('fund-detail-amt').textContent = fmtMoney(f.allocated) + ' / ' + fmtMoney(f.spent);
+  var pct = Math.min(100, Math.round((f.spent / f.allocated) * 100));
+  document.getElementById('fund-detail-fill').style.width = pct + '%';
+  document.getElementById('fund-detail-fill').style.background = pct >= 90 ? 'var(--error)' : 'var(--gray4)';
+  var rows = f.category ? txnsByCategory(f.category) : [];
+  var list = document.getElementById('fund-detail-txns');
+  list.innerHTML = rows.length ? rows.map(function(t){
+    return '<div class="txn-row" style="cursor:default;"><div class="left"><span class="merchant">' + t.merchant + '</span><span class="meta">' + fmtDate(t.date) + '</span></div><span class="amt">' + fmtMoney(t.amount) + '</span></div>';
+  }).join('') : '<div class="pattern-empty">No linked transactions yet.</div>';
+}
+
+function submitFundCreate(){
+  var nameInput = document.getElementById('fund-name');
+  var amtInput = document.getElementById('fund-amount');
+  var name = nameInput.value.trim();
+  var amt = parseFloat(amtInput.value);
+  var ok = true;
+  if(!name){ nameInput.classList.add('invalid'); showError('err-fund-name'); ok = false; }
+  if(!amt || amt <= 0){ amtInput.classList.add('invalid'); showError('err-fund-amount'); ok = false; }
+  if(!ok) return;
+  FUNDS.push({ id: FUNDS.length + 1, name: name, allocated: amt, category: null, spent: 0 });
+  nameInput.value = ''; amtInput.value = '';
+  clearError('fund-name','err-fund-name'); clearError('fund-amount','err-fund-amount');
+  renderFundList();
+  go('funds');
+}
+
+var GOALS = [];
+function seedGoals(){
+  GOALS = [
+    { id: 1, name: 'New laptop', target: 40000, saved: rndAmt(8000, 22000) },
+    { id: 2, name: 'Trip with friends', target: 15000, saved: rndAmt(2000, 9000) }
+  ];
+  GOALS.forEach(function(g){ g.history = [{ amt: g.saved, date: new Date(Date.now() - 5 * 86400000) }]; });
+}
+
+function renderGoalList(){
+  var wrap = document.getElementById('goal-list');
+  if(!wrap) return;
+  wrap.innerHTML = GOALS.map(function(g){
+    var pct = Math.min(100, Math.round((g.saved / g.target) * 100));
+    return '<button class="fund-card" onclick="openGoalDetail(' + g.id + ')">' +
+      '<div class="fund-card-head"><span>' + g.name + '</span><span>' + pct + '%</span></div>' +
+      '<div class="fund-card-sub">' + fmtMoney(g.saved) + ' of ' + fmtMoney(g.target) + '</div>' +
+      '<div class="track"><div class="fill" style="width:' + pct + '%; background:var(--gray5);"></div></div>' +
+    '</button>';
+  }).join('');
+}
+
+var selectedGoalId = null;
+function openGoalDetail(id){ selectedGoalId = id; go('goalDetail'); }
+function renderGoalDetail(){
+  var g = GOALS.filter(function(x){ return x.id === selectedGoalId; })[0];
+  if(!g) return;
+  document.getElementById('goal-detail-title').textContent = g.name;
+  document.getElementById('goal-detail-amt').textContent = fmtMoney(g.saved) + ' / ' + fmtMoney(g.target);
+  var pct = Math.min(100, Math.round((g.saved / g.target) * 100));
+  document.getElementById('goal-detail-fill').style.width = pct + '%';
+  var hist = document.getElementById('goal-detail-history');
+  hist.innerHTML = g.history.slice().sort(function(a,b){ return b.date - a.date; }).map(function(h){
+    return '<div class="txn-row" style="cursor:default;"><div class="left"><span class="merchant">Contribution</span><span class="meta">' + fmtDate(h.date) + '</span></div><span class="amt">' + fmtMoney(h.amt) + '</span></div>';
+  }).join('');
+}
+
+function submitGoalCreate(){
+  var nameInput = document.getElementById('goal-name');
+  var targetInput = document.getElementById('goal-target');
+  var name = nameInput.value.trim();
+  var target = parseFloat(targetInput.value);
+  var ok = true;
+  if(!name){ nameInput.classList.add('invalid'); showError('err-goal-name'); ok = false; }
+  if(!target || target <= 0){ targetInput.classList.add('invalid'); showError('err-goal-target'); ok = false; }
+  if(!ok) return;
+  GOALS.push({ id: GOALS.length + 1, name: name, target: target, saved: 0, history: [] });
+  nameInput.value = ''; targetInput.value = '';
+  clearError('goal-name','err-goal-name'); clearError('goal-target','err-goal-target');
+  renderGoalList();
+  go('goals');
+}
+
+function contributeToGoal(){
+  var g = GOALS.filter(function(x){ return x.id === selectedGoalId; })[0];
+  if(!g) return;
+  var input = document.getElementById('goal-contribute');
+  var amt = parseFloat(input.value);
+  if(!amt || amt <= 0) return;
+  var wasIncomplete = g.saved < g.target;
+  g.saved += amt;
+  g.history.push({ amt: amt, date: new Date() });
+  input.value = '';
+  if(wasIncomplete && g.saved >= g.target){
+    document.getElementById('goal-celebration-sub').textContent = 'You hit ' + fmtMoney(g.target) + ' for "' + g.name + '".';
+    go('goalCelebration');
+    return;
+  }
+  renderGoalDetail();
+  renderGoalList();
+}
+
+var SUBSCRIPTIONS = [];
+function seedSubscriptions(){
+  var courseraTxns = txnsByMerchant('Coursera');
+  SUBSCRIPTIONS = courseraTxns.length ? [{
+    id: 1, merchant: 'Coursera', amount: courseraTxns[0].amount, frequency: 'Monthly',
+    history: courseraTxns
+  }] : [];
+}
+
+function renderSubList(){
+  var wrap = document.getElementById('sub-list');
+  if(!wrap) return;
+  if(SUBSCRIPTIONS.length === 0){
+    wrap.innerHTML = '<div class="pattern-empty">No recurring charges detected yet.</div>';
+    return;
+  }
+  wrap.innerHTML = SUBSCRIPTIONS.map(function(s){
+    return '<button class="fund-card" onclick="openSubDetail(' + s.id + ')">' +
+      '<div class="fund-card-head"><span>' + s.merchant + '</span><span>' + fmtMoney(s.amount) + '</span></div>' +
+      '<div class="fund-card-sub">' + s.frequency + ' · detected from ' + s.history.length + ' charges</div>' +
+    '</button>';
+  }).join('');
+}
+
+var selectedSubId = null;
+function openSubDetail(id){ selectedSubId = id; go('subscriptionDetail'); }
+function renderSubDetail(){
+  var s = SUBSCRIPTIONS.filter(function(x){ return x.id === selectedSubId; })[0];
+  if(!s) return;
+  document.getElementById('sub-detail-title').textContent = s.merchant;
+  document.getElementById('sub-detail-rows').innerHTML =
+    '<div class="txn-detail-row"><span>Amount</span><span class="v">' + fmtMoney(s.amount) + '</span></div>' +
+    '<div class="txn-detail-row"><span>Frequency</span><span class="v">' + s.frequency + '</span></div>';
+  var hist = document.getElementById('sub-detail-history');
+  hist.innerHTML = s.history.slice().sort(function(a,b){ return b.date - a.date; }).map(function(t){
+    return '<div class="txn-row" style="cursor:default;"><div class="left"><span class="merchant">' + fmtDate(t.date) + '</span></div><span class="amt">' + fmtMoney(t.amount) + '</span></div>';
+  }).join('');
+}
+
+function confirmSubscription(){
+  var body = document.getElementById('sub-confirm-body');
+  var merch = body ? body.querySelector('#new-sub-merchant') : null;
+  var amt = body ? body.querySelector('#new-sub-amount') : null;
+  if(!merch || !merch.value.trim() || !amt || !amt.value || parseFloat(amt.value) <= 0) return;
+  SUBSCRIPTIONS.push({ id: SUBSCRIPTIONS.length + 1, merchant: merch.value.trim(), amount: parseFloat(amt.value), frequency: 'Monthly', history: [] });
+  renderSubList();
+  go('subscriptions');
+}
+
+function renderSubConfirm(){
+  var body = document.getElementById('sub-confirm-body');
+  if(!body) return;
+  body.innerHTML =
+    '<label class="sr-only" for="new-sub-merchant">Merchant</label>' +
+    '<input class="outline-field pay-recipient-field" id="new-sub-merchant" style="top:180px;" placeholder="Merchant name">' +
+    '<label class="sr-only" for="new-sub-amount">Amount</label>' +
+    '<input class="outline-field pay-amount-field" id="new-sub-amount" style="top:266px;" placeholder="₹ Amount" inputmode="decimal">';
+}
+
+/* ---- Alert settings ---- */
+var alertThreshold = 80; // % of weekly budget
+var dailySummaryOn = true;
+function renderAlertSettings(){
+  var body = document.getElementById('alert-example-body');
+  if(!body) return;
+  var weeklyBudget = monthlyBudget * (7 / 30);
+  var left = Math.max(0, weeklyBudget - HOME_STATS.weekly);
+  body.textContent = 'You have ' + fmtMoney(left) + ' left for the week — on track.';
+  var row = document.getElementById('threshold-row');
+  row.innerHTML = [50, 80, 100].map(function(p){
+    return '<button class="threshold-chip' + (p === alertThreshold ? ' active' : '') + '" onclick="setThreshold(' + p + ')">' + p + '%</button>';
+  }).join('');
+}
+function setThreshold(p){ alertThreshold = p; renderAlertSettings(); }
+function toggleDailySummary(){
+  dailySummaryOn = !dailySummaryOn;
+  var btn = document.getElementById('daily-summary-toggle');
+  if(btn){ btn.classList.toggle('on', dailySummaryOn); btn.setAttribute('aria-pressed', dailySummaryOn ? 'true' : 'false'); }
+}
+
+function renderAll(){
+  renderAccounts();
+  renderChosenCats();
+  renderRecList();
+  renderRecap();
+  renderSpendWheel();
+  renderSpendList();
+  renderTransferAccounts();
+  renderBudgetList();
+  renderHome();
+  renderInsight();
+  renderPatternList();
+  renderPatternDetail();
+  renderCategorySelect('me-cat-row', manualEntryCategory, 'pickManualCategory');
+  renderTransactionsList();
+  renderTransactionDetail();
+  renderCategoryDrilldown();
+  renderPrePay();
+  renderFundList();
+  renderFundDetail();
+  renderGoalList();
+  renderGoalDetail();
+  renderSubList();
+  renderSubDetail();
+  renderSubConfirm();
+  renderAlertSettings();
+}
+
+function resetProto(){
+  lastMethod = null;
+  accounts = [];
+  chosenCats = [];
+  balanceVisible = true;
+  payMode = 'scanqr';
+  payRecipient = '';
+  selectedTransferAcct = -1;
+  monthlyBudget = 5000;
+  notifOn = true;
+  categoriesFirstVisitDone = false;
+  showEmptyState = false;
+  homeFraming = 'remaining';
+  smsGranted = null;
+  var previewLbl = document.getElementById('preview-empty-label');
+  if(previewLbl) previewLbl.textContent = 'Preview empty state';
+  budgetCadence = 'weekly';
+  var cd = document.getElementById('cadence-daily'), cw = document.getElementById('cadence-weekly');
+  if(cd) cd.classList.remove('active');
+  if(cw) cw.classList.add('active');
+  seedExampleAmounts();
+  var recSection = document.getElementById('rec-section');
+  if(recSection) recSection.style.display = '';
+  var catBtn = document.querySelector('.cat-continue-btn');
+  if(catBtn) catBtn.classList.remove('compact');
+  document.getElementById('upi-input').value = '';
+  document.getElementById('cat-input').value = '';
+  document.getElementById('pin-field-1').value = '';
+  document.getElementById('pin-field-2').value = '';
+  document.getElementById('rec-search-input').value = '';
+  document.getElementById('pay-recipient-input').value = '';
+  document.getElementById('pay-amount-input').value = '';
+  document.getElementById('transfer-amount-input').value = '';
+  document.getElementById('me-amount').value = '';
+  document.getElementById('me-merchant').value = '';
+  document.getElementById('txn-search').value = '';
+  document.getElementById('fund-name').value = '';
+  document.getElementById('fund-amount').value = '';
+  document.getElementById('goal-name').value = '';
+  document.getElementById('goal-target').value = '';
+  document.getElementById('goal-contribute').value = '';
+  manualEntryCategory = null;
+  selectedPatternMerchant = null;
+  selectedTxnId = null;
+  selectedTxnCategory = null;
+  selectedDrilldownCategory = null;
+  selectedFundId = null;
+  selectedGoalId = null;
+  selectedSubId = null;
+  pendingPayment = null;
+  alertThreshold = 80;
+  dailySummaryOn = true;
+  var dsBtn = document.getElementById('daily-summary-toggle');
+  if(dsBtn){ dsBtn.classList.add('on'); dsBtn.setAttribute('aria-pressed','true'); }
+  var notifBtn = document.getElementById('notif-toggle');
+  if(notifBtn){ notifBtn.classList.add('on'); notifBtn.setAttribute('aria-pressed','true'); }
+  if(catSearchOpen) toggleCatSearch();
+  ['err-upi-input','err-upi-continue','err-cat-input','err-cat-continue','err-pin-1','err-pin-2',
+   'err-pay-recipient','err-pay-amount','err-transfer-acct','err-transfer-amount',
+   'err-me-amount','err-me-merchant','err-fund-name','err-fund-amount','err-goal-name','err-goal-target'].forEach(hideError);
+  closeAccountSheet();
+  go('welcome');
+}
+
+function fitStage(){
+  var shell = document.getElementById('phoneShell');
+  var avail = Math.min(window.innerWidth - 32, 434);
+  var scale = avail / 434;
+  shell.style.transform = 'scale(' + scale + ')';
+  shell.parentElement.style.height = (906 * scale) + 'px';
+}
+window.addEventListener('resize', fitStage);
+fitStage();
+initDots();
+seedExampleAmounts();
+renderAll();
+</script>

@@ -1,0 +1,44 @@
+PASS [S3] Setup UPI path: taps with defaults — taps=4, scripted time 465 ms, lands on H-01; splash present=true
+PASS [S3/S12] Setup default plan matches Phase 5 seed — Food..Other=3100/1000/700/1400/752, savings 1400, subs 648
+PASS [copy] Home empty state copy on day 1 — fresh setup shows the Phase 8 empty-state line
+PASS [S3] Setup manual path (no UPI link) — income 12000, savings 1800, subs 0, jars 3600/2000/1000/2600/1000, taps 5 (+typing)
+PASS [copy] Zero amount error copy — shown: "Type an amount above ₹0."
+PASS [S4] All 25 frames render — 25 frames: H-01 I-01 I-02 I-03 M-01 M-02 M-03 M-04 M-05 M-06 N-01 N-02 N-03 P-01 P-02 P-03 P-04 P-05 P-06 S-00 S-01 S-02 S-03 S-04 X-01
+PASS [quality] Every nav target exists — targets H-01, I-01, I-03, M-01, M-03, M-04, M-05, M-06, P-01, X-01; missing: none
+PASS [S5/S6] Home: 0 numbers on first view (0 budget numbers) — Home tokens: []
+PASS [S6] Other screens: ≤2 numbers on first view — per frame: H-01=0 P-01=0 P-02=2 P-03=0 P-04=1 M-01=1 M-02=1 M-03=0 M-04=2 M-05=1 M-06=0 I-01=0 I-02=0 I-03=0 X-01=0 S-01=1 S-02=0 S-03=1 S-04=0 P-05=1 P-06=1 N-01=1 N-02=3 N-03=1 S-00=0 | over 2: N-02 [₹139,₹119,₹20]
+PASS [S7] Key "■ = ₹100" once on every screen with tiles — missing/duplicate: none
+PASS [S7] One glyph per visual (no size ladders) — visuals with mixed tile sizes: none
+PASS [S11] No red hues on any screen (colour scan) — 0 red elements across all frames (hue <12° or >348°, sat>45%)
+PASS [a11y] Tap targets ≥44 px — all visible buttons/inputs ≥44×44
+PASS [quality] No horizontal overflow at 412 px — overflowing: none
+PASS [quality] Tab bar never clipped; content clears it — clipped: none
+PASS [S4] One primary action per screen — frames with >1 primary: none
+PASS [S11] Banned words: none in visible copy — hits: 0
+PASS [S11] Banned words: none anywhere in the built file — hits in source: 0
+PASS [constraint] grep -i sms = 0 — matches: 0
+PASS [copy] No exclamation marks except one savings milestone — visible "!" on load: 0
+PASS [S8] Pay: ≤3 steps to UPI hand-off — 3 taps (Pay tab → Auto → Pay ₹60 with UPI); hand-off: "Opening your UPI app tarun@okaxis to ramesh.auto@okhdfc"
+PASS [S8] Pay: tiles leave the jar in ≤1.2 s — 1 leaving tile(s), last finishes at 200 ms
+PASS [S12] Pay: done screen + ledger — Paid ₹60 · Travel; Travel left 580→520
+PASS [S12] Pay undo restores tiles — Travel left back to 580
+PASS [S10] Repeat-buy line at pay (neutral) — P-04 shows: "5th chai this week."
+PASS [S4/S12] Empty jar: one choice, 1 tap resolves — sheet: "Fun is empty. /  / Take ₹200 from Food? /  / Take from Food / Pick another jar"; Fun left 800→50, Food 1600
+PASS [S11/S12] Whole budget used up: start next month lighter — sheet: "Your spending money is used up this month."; next month lighter by ₹100
+PASS [S9] Income: one confirm tap + undo — notif→sheet "₹1,500 came in. "; savings 1400→1600; toast "Split. Undo"; undo → 1 income
+PASS [S4] Unknown credit asks one question — owed now ₹0, Food got ₹155 back
+PASS [S10/S12] Subscription: note day before, auto-deduct on due day — note "Spotify comes out tomorrow. ₹119 is already set aside."; Spotify state → spent (hatched → outlined)
+PASS [S4/S12] Subscription price change: one tap — "Spotify now costs ₹139 (was ₹119)." → Spotify ₹139, spending money still ₹7600
+PASS [S4/S12] Add subscription in 3 one-field steps — subs: Spotify,Google One,Coursera,Netflix
+PASS [S12] Split + repayment returns tiles to Food — after split owed ₹687 (3 friends incl. Rahul's earlier ₹155); after pay-backs owed ₹0, Food got ₹687 back; empty state "true"
+PASS [S10] Goal milestone (row fills, one "!") — ₹4160→₹4860; toast "Row 6 done. Goa trip is 60% there!"
+PASS [S12] Move tiles keeps the total — jars total/left before 6952|4282, after 6952|4282|1
+PASS [S10] Return triggers day 2 / 7 / 30 exist — check-in: "A fresh week. "; notes day2, lapsed, story simulated
+PASS [S10/S12] Month end: left over → savings, fresh start — story "You saved ₹5,682"; savings 5400→9682; October starts with 0 income; next income ₹9000 → savings ₹1400, jars 3100/1000/700/1400/752
+PASS [S12] Ledger checks 1–8 pass after every action — 152 fuzz checks + 18 flow checks + a check on every render; errors: none
+PASS [S7] Tile unit fixed at ₹100 (code + render) — UNIT=100 defined 1×, no adaptive unit; Food jar renders 31 tiles for ceil(left/100)+ceil(spent/100)=31
+PASS [quality] Reduced motion: final states, no animation — splash animation=none; pay shows 0 leaving tiles (spent drawn outlined), P-04 after ≈400 ms
+PASS [quality] B&W mode: patterns replace hues — 34 patterned tiles on Insights, no --c-* fills, 0 red
+PASS [quality] Light theme renders, no red — light Home + Money screenshots
+PASS [quality] Sound: soft WebAudio, mute works, peak ≤0.15 — recipes tap,toggle,tile,pour,pay,save,income,goal,soft,thud,swish,flow; muted play()→false; peak cap 0.15; lowpass 2.4 kHz + compressor
+PASS [quality] No console errors — 0 app errors (Google Fonts blocked by sandbox proxy, ignored)

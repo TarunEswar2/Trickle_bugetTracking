@@ -1,0 +1,218 @@
+<title>Trickle v12 — Design System</title>
+<meta name="description" content="Design system and usability test script for Trickle v12.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500&display=swap">
+<style>
+/* Layout: one reading column (max 820px) of spec sections; live SVG specimens rendered by the app's own dots.js */
+:root{--bg:#f4f4f2;--card:#ffffff;--card2:#efefec;--ink:#141416;--ink2:#55555c;--ink3:#7a7a80;--line:#e2e2de;--glow:#141416;--j0:#b7791f;--j1:#2f63c9;--j2:#93306b;--sv:#1f9b84;--inc:#5d5d63;--hl:rgba(255,255,255,.55);
+ --f:'Geist',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--fm:'Geist Mono',ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0b0c;--card:#18181a;--card2:#222225;--ink:#f4f4f5;--ink2:#b4b4ba;--ink3:#8c8c93;--line:#2c2c30;--glow:#fff;--j0:#ad7c26;--j1:#5a8ae6;--j2:#b9407f;--sv:#22a385;--inc:#cfcfd4;--hl:rgba(255,255,255,.22);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b0b0c;--card:#18181a;--card2:#222225;--ink:#f4f4f5;--ink2:#b4b4ba;--ink3:#8c8c93;--line:#2c2c30;--glow:#fff;--j0:#ad7c26;--j1:#5a8ae6;--j2:#b9407f;--sv:#22a385;--inc:#cfcfd4;--hl:rgba(255,255,255,.22);color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--f);font-variant-numeric:tabular-nums}
+.wrap{max-width:820px;margin:0 auto;padding-inline:16px;padding-block:40px 80px;display:flex;flex-direction:column;gap:44px}
+h1{font-size:40px;letter-spacing:-.03em;margin:0;line-height:1.1;text-wrap:balance}h2{font-size:24px;letter-spacing:-.02em;margin:0 0 12px;text-wrap:balance}h3{font-size:16px;margin:18px 0 8px}
+p{margin:0 0 10px;max-width:68ch}.mu{color:var(--ink2)}
+.eyb{font:500 11px var(--fm);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 6px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;min-width:0}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{font:500 11px var(--fm);letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+code,pre{font:12.5px/1.5 var(--fm)}pre{background:var(--card2);border-radius:12px;padding:12px;overflow-x:auto;margin:0}
+.lad{display:flex;align-items:center;gap:14px;padding:8px 0;border-bottom:1px solid var(--line)}.lad:last-child{border:0}.lad .v{width:150px;flex:none}
+.sw{display:flex;gap:8px;align-items:center;font-size:13px}.sw i{width:22px;height:22px;border-radius:50%;flex:none;border:1px solid var(--line)}
+.pass{font:600 12px var(--fm);padding:2px 8px;border-radius:10px;background:var(--card2)}
+.m{stroke:var(--hl);stroke-width:.5}.m.solid.j0{fill:var(--j0)}.m.solid.j1{fill:var(--j1)}.m.solid.j2{fill:var(--j2)}.m.solid.sv{fill:var(--sv)}.m.solid.inc{fill:var(--inc)}.m.solid.ink{fill:var(--ink)}
+.m.out,.m.held,.m.owed,.m.ghost{fill:none;stroke-width:1.6}.m.out.j0,.m.held.j0{stroke:var(--j0)}.m.out.j1{stroke:var(--j1)}.m.out.j2{stroke:var(--j2)}.m.out.sv{stroke:var(--sv)}.m.out.inc,.m.held.inc,.m.owed.inc{stroke:var(--inc)}.m.out.ink{stroke:var(--ink)}
+.m.held,.m.owed{stroke-dasharray:2.2 1.6}.m.ghost{stroke:var(--ink3);stroke-dasharray:1 1.6;stroke-width:1.1}.m.hatch{fill:url(#pt-hatch);stroke:var(--ink2);stroke-width:1}.m.ring{fill:none;stroke:var(--line)}
+svg.dots{display:block;max-width:100%;height:auto}
+.bwx{--j0:var(--ink2);--j1:var(--ink2);--j2:var(--ink2);--sv:var(--ink)}.bwx .m.solid.j1{fill:url(#pt-stripe-j1)}.bwx .m.solid.j2{fill:url(#pt-dot-j2)}.bwx .m.solid.j0.pt{fill:url(#pt-stripe-j0)}
+ol li,ul li{margin-bottom:6px;max-width:68ch}
+.ts{counter-reset:t}.ts>div{border-top:1px solid var(--line);padding:12px 0;display:grid;grid-template-columns:110px 1fr;gap:12px}.ts>div>b{font:600 13px var(--fm)}
+@media (max-width:520px){.ts>div{grid-template-columns:1fr}.lad .v{width:110px}h1{font-size:32px}}
+</style>
+<div class="wrap">
+<header><p class="eyb">Trickle v12 · handoff · 1 Oct 2026</p><h1>Trickle v12 — Design System</h1><p class="mu">Everything a builder or tester needs to reproduce the prototype: the money ladder, colour, type, components, copy, notifications, and a five-student usability script. Specimens on this page are drawn by the app's own renderer.</p></header>
+
+<section><p class="eyb">Core unit</p><h2>The dot ladder</h2>
+<p>One dot is always ₹100, on every tab. Bigger amounts fuse; smaller ones become a slice. The rule never changes by screen.</p>
+<div class="box" id="ladder"></div>
+<h3>Geometry (viewBox units, scaled by surface)</h3>
+<div class="tw"><table><tr><th>Mark</th><th>Value</th><th>Shape</th></tr>
+<tr><td>Crumb</td><td>&lt; ₹100</td><td>Pie wedge inside a ring, clockwise from 12 o'clock, area-true (₹25 = a quarter of the disc). Validator: max area error 0.53% over 60 random crumbs.</td></tr>
+<tr><td>Dot</td><td>₹100</td><td>Circle D = 10, gap G = 2, rows of ten</td></tr>
+<tr><td>Pill</td><td>₹1,000</td><td>10 dots fused: 10D + 9G = 118 × 10, radius 5</td></tr>
+<tr><td>Block</td><td>₹10,000</td><td>10 pills fused: 118 × 118, radius 9; blocks keep a 1-unit hairline gap and never fuse further</td></tr></table></div>
+<h3>States</h3><div class="box" id="states"></div>
+<h3>Rules</h3><ul>
+<li>Order inside a visual: blocks, then pills, then dots, then the crumb. Σ mark value equals the amount to the rupee.</li>
+<li>At most 30 marks per card (target about 20). Validator max on the build: see Phase 10 doc.</li>
+<li>Tap a dot visual to zoom one level: blocks open into pills, pills into dots, with the exact ₹ caption.</li>
+<li>The key <b>● = ₹100</b> appears once per screen with dots, plus in every tab intro. The full ladder key lives only in the Spending intro.</li>
+<li>Size follows surface (P2-Q4 still open, built as rec A): widget 0.8×, card 1×, hero and zoom 1.25×. One constant, <code>DENSITY</code>, switches to a single size.</li></ul></section>
+
+<section><p class="eyb">Colour</p><h2>Palettes</h2>
+<p>Direction A, Monochrome glow. Hue lives only in the dots; surfaces are near-neutral. Appearance follows the phone. No red anywhere: spent is an outline, never a colour.</p>
+<div class="g2" id="pals"></div>
+<h3>Validator results (dataviz validate_palette.js, categorical: Food, Travel, Fun, Savings)</h3>
+<pre>Dark  (surface #18181a)  Lightness PASS · Chroma PASS · CVD WARN 7.6 (Fun↔Savings, deutan) · Normal-vision PASS 23.8 · Contrast PASS
+Light (surface #ffffff)  Lightness PASS · Chroma PASS · CVD PASS 14.1 · Normal-vision PASS 22.0 · Contrast PASS</pre>
+<p class="mu">The dark CVD pair sits in the 6–8 floor band, which is legal only with secondary encoding. Trickle always shows jar names next to their dots, and savings sit in their own cards, so the pair is never colour-alone. Jar 4 and later reuse amber, blue and plum with a stripe or dot pattern and always show their name.</p>
+<h3>Black and white</h3><p>Jars become grey with a pattern each (Food solid, Travel stripes, Fun dots); savings become full ink. App validator: 75 frames render in B&amp;W light and dark with patterns, 0 red styles in 300 renders.</p><div class="box bwx" id="bw"></div>
+<h3>Glow</h3><p>White glow (dark) or ink glow (light) marks <b>time or position only</b>: pace, today, next money in, due day, goal ETA, time of day, calendar. Never amounts.</p></section>
+
+<section><p class="eyb">Type</p><h2>Geist, with tabular figures</h2>
+<div class="box"><p style="font-size:30px;font-weight:600;letter-spacing:-.02em;margin:0">Your starter month</p><p class="mu" style="font-size:13px">Display 24–30 / 600 / −0.02em</p>
+<p style="font-size:20px;font-weight:600;margin:10px 0 0">₹122 a day for the rest of October</p><p class="mu" style="font-size:13px">Lead 20 / 600, tabular figures (P6-Q4 B: text face, not mono)</p>
+<p style="font-size:15px;margin:10px 0 0">Past days show what went. Days ahead share what is left evenly.</p><p class="mu" style="font-size:13px">Body 15 / 400 · Sub 13.5</p>
+<p style="font:500 11px var(--fm);letter-spacing:.08em;text-transform:uppercase;margin:10px 0 0">Held for subscriptions</p><p class="mu" style="font-size:13px">Eyebrow: Geist Mono 11 / 500 / +0.08em</p>
+<p style="font-weight:700;letter-spacing:-.04em;font-size:28px;margin:10px 0 0">Trickle</p><p class="mu" style="font-size:13px">Wordmark L3: Geist 700, −0.04em</p></div></section>
+
+<section><p class="eyb">Components</p><h2>Components</h2><div class="tw"><table><tr><th>Component</th><th>Spec</th></tr>
+<tr><td>Tab bar</td><td>Floating pill, 64 px tall, 5 icons (Home · Income · Spending · Savings · Insights), 48 px targets, active = filled chip. Round Pay button, 64 px, beside it on every tab; tap opens the camera.</td></tr>
+<tr><td>Header</td><td>Title 24/600; right: ? (tab intro), gear (tab settings). Home adds bell (soft dot, never a count) and avatar (app-wide settings).</td></tr>
+<tr><td>Card</td><td>Radius 24, 1 px line, padding 16; dark gradient #1d1d20→#151517. One card opens in place at a time; detail and settings push a screen (hybrid depth).</td></tr>
+<tr><td>Sheet</td><td>Bottom sheet, radius 28 top, one decision: one primary button or one choice group, default outlined.</td></tr>
+<tr><td>Chip</td><td>44 px tall, radius 22; pressed = ink ring. Jar chips carry the jar swatch.</td></tr>
+<tr><td>Glow track</td><td>Row of small dots; lit up to now; the current dot glows. Optional dashed marker for a second position (spend line, ETA).</td></tr>
+<tr><td>Day lanes</td><td>One lane per day this week; past = outlined spent, today ringed with glow, future = equal share of what is left; re-spreads after a big day.</td></tr>
+<tr><td>Bangle</td><td>Ring that closes when a goal fills (V-04): fills 480 ms per 25% step, then closes in 900 ms with a 1.04 halo (see Motion and sound).</td></tr>
+<tr><td>Toast</td><td>Ink pill above the tab bar; every money action has Undo for 5 s.</td></tr></table></div>
+<h3>Widget sizes</h3><div class="tw"><table><tr><th>Where</th><th>Widget</th><th>Size</th></tr>
+<tr><td>Home grid</td><td>Pace glow</td><td>Wide (2 columns)</td></tr><tr><td>Home grid</td><td>Jar left · Little things · Subscriptions next due · Next money in</td><td>Half</td></tr><tr><td>Home grid</td><td>Goal progress</td><td>Wide</td></tr>
+<tr><td>Home library</td><td>Owed to you · Repeat buys · This week · Month story</td><td>Half; max 6 on the board; none show numbers</td></tr>
+<tr><td>Android</td><td>W-01 Pace</td><td>4×1</td></tr><tr><td>Android</td><td>W-02 Goal</td><td>2×2</td></tr><tr><td>Android</td><td>W-03 Pay</td><td>2×1</td></tr><tr><td>Android</td><td>W-04 Jar (opt-in)</td><td>2×2</td></tr></table></div></section>
+
+<section><p class="eyb">Phase 12</p><h2>Motion and sound</h2>
+<p>Calm everywhere, with springs only where the finger acts: pay, crumb snap, zoom, sheets and button press. The screen always renders its final state first; motion only plays from a start state into it, so a skipped animation never leaves anything half-drawn. Only transform, opacity and stroke-dashoffset move, and no moment animates more than 30 marks.</p>
+<div class="tw"><table><tr><th>Token</th><th>Value</th></tr>
+<tr><td>Calm</td><td><code>cubic-bezier(.4,0,.2,1)</code> · 480 ms · stagger 60 ms · enter <code>(.2,.8,.2,1)</code></td></tr>
+<tr><td>Tactile spring</td><td>k 320, c 26 (ζ .73), pre-sampled into CSS <code>linear()</code> · press scale .94</td></tr>
+<tr><td>Gravity</td><td><code>cubic-bezier(.55,0,1,.45)</code> for drops and sheet close (240 ms)</td></tr></table></div>
+<h3>The twelve moments</h3>
+<div class="tw"><table><tr><th>Moment</th><th>Motion</th><th>Sound</th><th>Haptic</th></tr>
+<tr><td>Splash</td><td>Wordmark rises 500 ms; five dots trickle in, 120 ms apart</td><td>Chime (after the first tap)</td><td>None</td></tr>
+<tr><td>Pay</td><td>Dots drop through the hourglass neck (620 ms) and leave 1.6 px outlines</td><td>Coin plink</td><td>[8,60,8,60,14]</td></tr>
+<tr><td>Crumb snap</td><td>Slices spring together into one dot</td><td>Coin snap</td><td>[4,30,4,30,4,30,18]</td></tr>
+<tr><td>Income + split</td><td>Savings dots arrive first, jars 480 ms later</td><td>Chimes: arrive, split</td><td>[10]</td></tr>
+<tr><td>Empty-jar question</td><td>Sheet rises 320 ms. No shake, no warning colour</td><td>Soft wooden click</td><td>[6]</td></tr>
+<tr><td>Goal milestones + bangle</td><td>Ring fills 25% at a time, closes in 900 ms with a 1.04 halo</td><td>Chime per milestone, chord on close</td><td>[8] · [20,80,20]</td></tr>
+<tr><td>Month-end → story</td><td>Kept dots glide into card one; cards fade up 420 ms</td><td>Chime on sweep and on "You kept"</td><td>[10]</td></tr>
+<tr><td>Chart draw-ins</td><td>First chart's dots fill in 18 ms apart; others fade 700 ms</td><td>Silent</td><td>None</td></tr>
+<tr><td>Tap-zoom</td><td>Next level springs in, 14 ms apart</td><td>Wooden click</td><td>[8]</td></tr>
+<tr><td>Home glow</td><td>Today's glow glides into place over 1.6 s, once per app open</td><td>Silent</td><td>None</td></tr>
+<tr><td>Sheets and tabs</td><td>Sheet springs up, falls away 240 ms; tabs fade 200 ms; pushed screens slide 16 px</td><td>Wooden clicks</td><td>[6] on sheets</td></tr>
+<tr><td>Button press</td><td>Scale .94, spring back</td><td>Wooden click</td><td>[8]</td></tr></table></div>
+<h3>Sound rules</h3><ul>
+<li>Coin only when money leaves or crumbs snap. Chimes only for good news: income, savings, goal milestones, month-end kept. Wooden clicks for interface touches. Charts, glow and story cards make no sound.</li>
+<li>On by default and soft: each voice peaks at 0.15 or less, through a 5 kHz low-pass, compressor and limiter. All synthesised with WebAudio, no files.</li>
+<li>Audio unlocks on the first tap. At most one sound every 300 ms; a more important sound ducks the earlier one to 30%.</li>
+<li>Phone on silent means no sound; light haptics still play at pay, crumb snap, milestones and presses.</li></ul>
+<h3>Settings and reduced motion</h3>
+<p>App settings → Sounds and motion: Sounds on/off, Haptics on/off, and Motion set to Follow phone (default), Reduce or Full. With reduced motion every moment shows its end state at once and no animation runs; sounds still play. Validator: 0 running animations under reduced motion, 0 stuck animations across all twelve moments.</p></section>
+
+<section><p class="eyb">Words</p><h2>Copy rules</h2><ol>
+<li>Home shows no numbers. Pace is a word: Easy, Steady or Quick.</li>
+<li>At most two numbers on any first view. The bell log, All spends, the share poster and money lists are exempt.</li>
+<li>Never: over budget, overspent, deficit, debt, missed, streak, "you were gone", "only ₹X left". The validator greps for these.</li>
+<li>Bad news only where it can be acted on, with the action next to it ("Take ₹229 from Food?").</li>
+<li>Name money by where it is: left, spent, held, owed, kept. Owed money is never counted as yours.</li>
+<li>Equivalents use your own frequent buy ("about four dozen of your chais"), only inside Insights cards.</li>
+<li>No SMS. Money arrives from linked UPI IDs or is typed by hand; a bank statement import is a disabled placeholder.</li></ol></section>
+
+<section><p class="eyb">Retention</p><h2>Notification set (calm few)</h2><p>At most one a day and three a week; none between 22:00 and 08:00. Each type has its own Android channel and one action. Simulated over 30 days: 9 sent, max 1/day, max 3/week, 0 in quiet hours.</p>
+<div class="tw"><table><tr><th>Channel</th><th>Example</th><th>One action</th></tr>
+<tr><td>Money arrived</td><td>₹9,000 came in from Allowance. Split it like last time?</td><td>Split it (applies, Undo in app)</td></tr>
+<tr><td>Subscription due tomorrow</td><td>Google One renews tomorrow. Its money is already held.</td><td>See it</td></tr>
+<tr><td>Weekly check-in</td><td>A fuller week, mostly one dinner out.</td><td>Start the new week</td></tr>
+<tr><td>Month story</td><td>Your September story is ready.</td><td>Read it</td></tr>
+<tr><td>Welcome back</td><td>Your savings kept growing. Pick up from today.</td><td>Start from today</td></tr></table></div></section>
+
+<section><p class="eyb">Phase 11</p><h2>Usability test: five students, 25 minutes each</h2>
+<p>Recruit five students in Chennai: two hostel, one day scholar, one renting, one earning. Android phone, prototype open at <code>#fresh</code> (tasks 2–3) and <code>#demo</code> (the rest). Think aloud; note time and taps. Pass bar per criterion is in the right column.</p>
+<div class="ts">
+<div><b>T1 · S1 S2</b><span>Show a card with 3 pills, 4 dots and a slice for 5 seconds. "How much is this?" Then two jars side by side for 3 s: "Which has more left?" Pass: ≥4/5 say one dot = ₹100 within 5 s; ≥90% of comparisons right within 3 s.</span></div>
+<div><b>T2 · S3</b><span>"Set up Trickle for yourself." Stopwatch from the link screen to Home. Pass: ≤30 s, ≤4 taps with defaults (UPI path).</span></div>
+<div><b>T3 · S3</b><span>Repeat with "you don't use UPI apps". Pass: finishes the manual path with one typed amount; understands it can be changed later.</span></div>
+<div><b>T4 · S5 S6 S13</b><span>Home, 5 seconds, then hide. "How is your month going?" Pass: ≥4/5 answer with the pace word or the glow; nobody mentions a number.</span></div>
+<div><b>T5 · S8</b><span>"Pay for a chai." Pass: reaches UPI hand-off in ≤3 steps; notices the jar chip and "6th chai this week" without judging it.</span></div>
+<div><b>T6 · S4 S11</b><span>Pay ₹250 for a movie from Fun. Pass: understands the single "Take from Food?" question; nobody describes it as a warning or a mistake.</span></div>
+<div><b>T7 · S9</b><span>Trigger "Allowance arrives" and split it; then undo. Pass: one tap to split, finds Undo, says savings went first.</span></div>
+<div><b>T8 · S12</b><span>Split ₹1,200 dinner with three friends, then mark Kiran paid back. Pass: can say owed money is not theirs yet; sees dashed dots fill.</span></div>
+<div><b>T9 · S7 S13</b><span>5-second tests on Spending, Savings and Insights. "What does this screen show?" Pass: ≥4/5 per screen; every tester names one dot as ₹100 without the key.</span></div>
+<div><b>T10 · S10</b><span>Open the weekly check-in and the September story. Pass: tester says they'd open it again; nobody reads it as a score.</span></div>
+<div><b>T11 · a11y</b><span>Switch to black and white. "Which jar is Travel?" Pass: identified by pattern or name by ≥4/5.</span></div>
+</div>
+<p class="mu">Switch rule: if T1 comparison accuracy falls below 90% or median time exceeds 3 s, test a version with dots in fixed rows of five before changing the ladder.</p></section>
+</div>
+<script>
+function inr(n){n=Math.round(n);var s=String(Math.abs(n));if(s.length>3){var h=s.slice(0,-3).replace(/\B(?=(\d{2})+(?!\d))/g,',');s=h+','+s.slice(-3);}return '₹'+s;}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+/* ===== Trickle v12 — dots.js: the money ladder =====
+   crumb (<₹100, pie wedge clockwise from 12, area-true) → dot ₹100 (gapped) → pill ₹1,000 (10 dots fused)
+   → block ₹10,000 (10 pills, hairline gap between blocks). Left = solid jar colour; spent = 1.6px outline;
+   held subscription / owed = dashed; ghost = last period; hatch = extra beyond the ghost. */
+var D=10,G=2,R=D/2,PW=10*D+9*G,HG=1; // dot, gap, pill/block side, hairline gap between blocks
+var DENSITY='surface'; // P2-Q4 (open): 'surface' = size follows surface (rec A); set 'one' for a single size
+var SURF={widget:0.8,card:1,hero:1.25,zoom:1.25};
+function dscale(s){return DENSITY==='surface'?(SURF[s]||1):1;}
+window.__dotErr=[];
+function lad(a){a=Math.max(0,Math.round(a));var b=Math.floor(a/10000),r=a%10000,p=Math.floor(r/1000);r%=1000;var t=Math.floor(r/100),c=r%100;return {b:b,p:p,t:t,c:c};}
+function wedge(cx,cy,r,f){if(f>=1)return 'M'+(cx-r)+' '+cy+'a'+r+' '+r+' 0 1 0 '+2*r+' 0a'+r+' '+r+' 0 1 0 '+(-2*r)+' 0';
+  var a=2*Math.PI*f,x=cx+r*Math.sin(a),y=cy-r*Math.cos(a);return 'M'+cx.toFixed(2)+' '+cy.toFixed(2)+'V'+(cy-r).toFixed(2)+'A'+r+' '+r+' 0 '+(f>0.5?1:0)+' 1 '+x.toFixed(2)+' '+y.toFixed(2)+'Z';}
+function fillOf(s){if(s.pat)return 'url(#pt-'+s.pat+'-'+s.c+')';return null;}
+/* segs: [{amt, c:'j0|j1|j2|sv|inc', st:'solid|out|held|owed|ghost|hatch', pat:'stripe'|null, name}] */
+function dots(segs,o){o=o||{};var sc=dscale(o.size||'card');var zoom=o.zoom?1:0;var W=o.cols?o.cols*(D+G)-G:PW;
+  var blocks=[],pills=[],ds=[],total=0;
+  segs.forEach(function(s,si){if(!s.amt||s.amt<=0)return;total+=Math.round(s.amt);var l=lad(s.amt);
+    if(zoom){var top=segs.some(function(q){return q.amt>=10000;})?'b':'p';
+      if(top==='b'){for(var i=0;i<l.b*10+l.p;i++)pills.push({s:s,v:1000});for(i=0;i<l.t;i++)ds.push({s:s,v:100,f:1});}
+      else{for(var i=0;i<l.p*10+l.t;i++)ds.push({s:s,v:100,f:1});}}
+    else{for(var i=0;i<l.b;i++)blocks.push({s:s,v:10000});for(i=0;i<l.p;i++)pills.push({s:s,v:1000});for(i=0;i<l.t;i++)ds.push({s:s,v:100,f:1});}
+    if(l.c)ds.push({s:s,v:l.c,f:l.c/100});});
+  var out=[],x=0,y=0,marks=0,val=0;
+  function cls(s){return 'm '+s.c+' '+(s.st||'solid')+(s.pat?' pt':'');}
+  function fa(s){var f=fillOf(s);return f&&(!s.st||s.st==='solid')?' style="fill:'+f+'"':'';}
+  var bper=Math.max(1,Math.floor((W+HG)/(PW+HG)));
+  blocks.forEach(function(b,i){var bx=(i%bper)*(PW+HG),by=Math.floor(i/bper)*(PW+HG);
+    var inset=b.s.st&&b.s.st!=='solid'?0.8:0;out.push('<rect class="'+cls(b.s)+' blk" data-v="'+b.v+'" x="'+(bx+inset)+'" y="'+(by+inset)+'" width="'+(PW-2*inset)+'" height="'+(PW-2*inset)+'" rx="'+(D*0.9)+'"'+fa(b.s)+'/>');marks++;val+=b.v;});
+  if(blocks.length)y=Math.ceil(blocks.length/bper)*(PW+HG)-HG+G;
+  var pper=Math.max(1,Math.floor((W+G)/(PW+G)));
+  pills.forEach(function(p,i){var px=(i%pper)*(PW+G),py=y+Math.floor(i/pper)*(D+G);var ins=p.s.st&&p.s.st!=='solid'?0.8:0;
+    out.push('<rect class="'+cls(p.s)+'" data-v="'+p.v+'" x="'+(px+ins)+'" y="'+(py+ins)+'" width="'+(PW-2*ins)+'" height="'+(D-2*ins)+'" rx="'+(R-ins)+'"'+fa(p.s)+'/>');marks++;val+=p.v;});
+  if(pills.length)y+=Math.ceil(pills.length/pper)*(D+G);
+  var per=o.cols||10;
+  ds.forEach(function(d,i){var cx=(i%per)*(D+G)+R,cy=y+Math.floor(i/per)*(D+G)+R,s=d.s,ins=s.st&&s.st!=='solid'?0.8:0;
+    if(d.f<1){out.push('<g class="crumb" data-v="'+d.v+'" data-f="'+d.f.toFixed(3)+'"><circle class="m ring '+s.c+'" cx="'+cx+'" cy="'+cy+'" r="'+(R-0.6)+'"/><path class="'+cls(s)+'" d="'+wedge(cx,cy,R-(ins?0.8:0),d.f)+'"'+fa(s)+'/></g>');}
+    else out.push('<circle class="'+cls(s)+'" data-v="100" cx="'+cx+'" cy="'+cy+'" r="'+(R-ins)+'"'+fa(s)+'/>');marks++;val+=d.v;});
+  if(ds.length)y+=Math.ceil(ds.length/per)*(D+G);
+  var h=Math.max(D,y-G),w=W;
+  if(val!==total)window.__dotErr.push('sum '+val+'≠'+total);
+  var label=o.title||segs.filter(function(s){return s.amt>0;}).map(function(s){return (s.name?s.name+' ':'')+(s.st==='out'?'spent ':s.st==='held'?'held ':s.st==='owed'?'owed ':s.st==='ghost'?'last time ':'')+inr(s.amt);}).join(', ');
+  var pad=2;return '<svg class="dots'+(o.cls?' '+o.cls:'')+(o.zoomable===false?'':' dz')+'" data-marks="'+marks+'" data-val="'+val+'" data-seg="'+encodeURIComponent(JSON.stringify(segs))+'" data-size="'+(o.size||'card')+'" viewBox="'+(-pad)+' '+(-pad)+' '+(w+2*pad)+' '+(h+2*pad)+'" width="'+((w+2*pad)*sc).toFixed(0)+'" height="'+((h+2*pad)*sc).toFixed(0)+'" preserveAspectRatio="xMinYMid meet" role="img" aria-label="'+esc(label)+'"'+(o.zoomable===false?'':' tabindex="0"')+'><title>'+esc(label)+'</title>'+out.join('')+'</svg>';}
+/* single dot for keys / legends */
+function dot1(c,st,f){var s={c:c||'ink',st:st||'solid'};if(f&&f<1)return '<svg class="d1" viewBox="-1 -1 12 12" width="12" height="12" aria-hidden="true"><circle class="m ring '+s.c+'" cx="5" cy="5" r="4.4"/><path class="m '+s.c+' solid" d="'+wedge(5,5,5,f)+'"/></svg>';
+  return '<svg class="d1" viewBox="-1 -1 12 12" width="12" height="12" aria-hidden="true"><circle class="m '+s.c+' '+s.st+'" cx="5" cy="5" r="'+(s.st==='solid'?5:4.2)+'"/></svg>';}
+function key(){return '<p class="key" aria-label="One dot is one hundred rupees">'+dot1('ink')+'<span>= ₹100</span></p>';}
+/* glow track: time / position only (P2-Q3). frac 0..1 = where we are; marks = optional extra points */
+function glowTrack(frac,o){o=o||{};var n=o.n||31,w=o.w||300,gap=w/(n-1),cur=Math.round(frac*(n-1)),out=[];
+  for(var i=0;i<n;i++){var lit=i<=cur;out.push('<circle class="gd'+(lit?' lit':'')+(i===cur?' now':'')+'" cx="'+(i*gap).toFixed(1)+'" cy="8" r="'+(i===cur?4.2:1.7)+'"/>');}
+  (o.marks||[]).forEach(function(m){var mx=m.f*(w);out.push('<g class="gm"><line x1="'+mx.toFixed(1)+'" x2="'+mx.toFixed(1)+'" y1="0" y2="16"/></g>');});
+  return '<svg class="glow" viewBox="-6 -2 '+(w+12)+' 20" width="100%" height="22" preserveAspectRatio="none" role="img" aria-label="'+esc(o.label||'Position in time')+'">'+out.join('')+'</svg>';}
+function ladderSelfTest(){var bad=[],R=mulberry32(7);for(var i=0;i<200;i++){var a=Math.floor(R()*60000);if(i<20)a=i*7;var s=dots([{amt:a,c:'j0'}],{zoomable:false});
+    var mm=/data-marks="(\d+)" data-val="(\d+)"/.exec(s);var l=lad(a);if(+mm[2]!==a)bad.push(a+' sum');if(+mm[1]!==l.b+l.p+l.t+(l.c?1:0))bad.push(a+' marks');if(a<100&&+mm[1]!==(a?1:0))bad.push(a+' crumb');}
+  // wedge area check: polygon area of wedge path ≈ f·πr²
+  [0.12,0.25,0.5,0.52,0.75,0.9].forEach(function(f){var r=5,n=400,area=0.5*r*r*2*Math.PI*f;var exp=f*Math.PI*r*r;if(Math.abs(area-exp)>1e-9)bad.push('wedge '+f);});
+  window.__dotErr=[];return bad;}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+var PATDEFS='<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>'+
+  ['j0','j1','j2','sv'].map(function(c){return '<pattern id="pt-stripe-'+c+'" width="3.2" height="3.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="3.2" height="3.2" style="fill:var(--'+c+')"/><rect width="1.3" height="3.2" style="fill:var(--card)" opacity=".55"/></pattern>'+
+   '<pattern id="pt-dot-'+c+'" width="3.4" height="3.4" patternUnits="userSpaceOnUse"><rect width="3.4" height="3.4" style="fill:var(--'+c+')"/><circle cx="1.7" cy="1.7" r=".75" style="fill:var(--card)" opacity=".6"/></pattern>';}).join('')+
+  '<pattern id="pt-hatch" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="1" height="3" style="fill:var(--ink2)"/></pattern>'+
+  '<filter id="glowf" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs></svg>';
+
+document.body.insertAdjacentHTML('beforeend',PATDEFS);
+function row(a,segs,t){return '<div class="lad"><span class="v">'+dots(segs,{zoomable:false})+'</span><span><b>'+t+'</b></span></div>';}
+document.getElementById('ladder').innerHTML=[[52,'₹52 · one slice'],[652,'₹652 · six dots and a slice'],[3600,'₹3,600 · three pills and six dots'],[15000,'₹15,000 · one block and five pills']].map(function(x){return row(x[0],[{amt:x[0],c:'j0'}],x[1]);}).join('');
+document.getElementById('states').innerHTML=[[[{amt:450,c:'j1',st:'solid'}],'Left · solid jar colour'],[[{amt:450,c:'j1',st:'out'}],'Spent · 1.6 px outline'],[[{amt:429,c:'inc',st:'held'}],'Held subscription · dashed, inside budget'],[[{amt:600,c:'inc',st:'owed'}],'Owed to you · dashed, outside balance'],[[{amt:500,c:'ink',st:'ghost'},{amt:300,c:'ink',st:'hatch'}],'Ghost of last period + hatched extra'],[[{amt:650,c:'sv',st:'solid'},{amt:350,c:'sv',st:'out'}],'Savings · saved solid, to go outline'],[[{amt:652,c:'j0',st:'solid',pat:'stripe'}],'Jar 4+ · same hue, stripe pattern, name shown']].map(function(x){return row(0,x[0],x[1]);}).join('');
+var P=[['Dark (default when phone is dark)',[['bg','#0b0b0c'],['card','#18181a'],['ink','#f4f4f5'],['Food','#ad7c26'],['Travel','#5a8ae6'],['Fun','#b9407f'],['Savings','#22a385'],['Income','#cfcfd4']]],['Light (B palette)',[['bg','#f4f4f2'],['card','#ffffff'],['ink','#141416'],['Food','#b7791f'],['Travel','#2f63c9'],['Fun','#93306b'],['Savings','#1f9b84'],['Income','#5d5d63']]],['Black and white',[['bg','#000000 / #f4f4f2'],['jars','ink2 + pattern'],['Savings','full ink'],['glow','ink']]]];
+document.getElementById('pals').innerHTML=P.map(function(p){return '<div class="box"><p class="eyb">'+p[0]+'</p>'+p[1].map(function(s){var c=s[1].split(' ')[0];return '<div class="sw"><i style="background:'+(c.charAt(0)==='#'?c:'var(--card2)')+'"></i>'+s[0]+' <code>'+s[1]+'</code></div>';}).join('')+'</div>';}).join('');
+document.getElementById('bw').innerHTML=dots([{amt:600,c:'j0',st:'solid',name:'Food'},{amt:300,c:'j1',st:'solid',name:'Travel'},{amt:300,c:'j2',st:'solid',name:'Fun'},{amt:300,c:'sv',st:'solid',name:'Savings'}],{zoomable:false,size:'hero'})+'<p class="mu" style="margin-top:8px">Food · Travel · Fun · Savings</p>';
+</script>

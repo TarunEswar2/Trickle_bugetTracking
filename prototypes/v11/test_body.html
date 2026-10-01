@@ -1,0 +1,72 @@
+<title>Trickle v11 Tile Test</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Figtree:wght@400;600&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>/*CSS*/
+.stage{min-height:340px;display:grid;gap:16px;align-content:start}
+.q{font:700 22px/1.25 var(--display)}
+.opts{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.opts button{font-size:16px;padding:14px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pair button{display:grid;gap:8px;justify-items:center;padding:16px 8px}
+.prog{height:6px;background:var(--line);border-radius:3px;overflow:hidden}.prog b{display:block;height:100%;background:var(--accent);transition:width .2s}
+.fb{font:600 13px var(--mono);min-height:1.2em}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input{font:15px var(--body);padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg)}
+@media (prefers-reduced-motion:reduce){.prog b{transition:none}}
+</style>
+<div class="wrap">
+<div class="eyebrow">Trickle v11 · Phase 3</div>
+<h1>Tile Test</h1>
+<p class="muted">Three tile systems, 12 timed questions each, in random order. Each block starts by showing the key once; after that the key is hidden, so the test measures whether it stuck. Answer as fast as you can. Results stay in this browser; copy them as CSV to share.</p>
+<div class="card stage" id="stage"></div>
+<h2>Results</h2>
+<div class="card scroll" id="results"><p class="muted">No runs yet in this browser. Example below is the simulated baseline from the heuristic model, marked as such.</p></div>
+<div class="row" style="margin-top:12px"><button id="copy">Copy all runs as CSV</button><button id="clear">Clear runs</button><span class="fb" id="copyMsg"></span></div>
+<textarea id="csv" hidden rows="6" style="width:100%;margin-top:8px"></textarea>
+</div>
+<script>/*TILES*/</script>
+<script>
+const SYS={F:{name:'Tile = ₹100, rows of 10',key:'One tile = ₹100. A full row = ₹1,000.'},
+ D:{name:'Ten-frame blocks',key:'One tile = ₹100. A full 2×5 block = ₹1,000.'},
+ B:{name:'Day tiles',key:'One tile = one day of your budget (₹200 at ₹6,000 a month).'}};
+const $=id=>document.getElementById(id), stage=$('stage');
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1)), shuf=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+const inr=v=>'₹'+v.toLocaleString('en-IN');
+let runs=[]; try{runs=JSON.parse(localStorage.getItem('tt_runs')||'[]')}catch(e){}
+const save=()=>{try{localStorage.setItem('tt_runs',JSON.stringify(runs))}catch(e){}};
+function opts(v,step){const s=new Set([v]);const d=[-2,-1,1,2,3];while(s.size<4){const c=v+shuf(d)[0]*step;if(c>0)s.add(c)}return shuf([...s]);}
+function makeTasks(m){const u=TILE.UNIT[m],t=[];
+ t.push({type:'unit',q:'What is one tile worth?',amt:u,ans:u,opts:shuf([u,u===100?50:100,u===200?500:200,1000].filter((x,i,a)=>a.indexOf(x)===i)).slice(0,4)});
+ for(let i=0;i<3;i++){const n=rnd(3,38),v=n*u;t.push({type:'worth',q:'What is this worth?',amt:v,ans:v,opts:opts(v,u)});}
+ for(let i=0;i<3;i++){const a=rnd(8,45),b=a+rnd(1,5)*(Math.random()<.5?1:-1);t.push({type:'more',q:'Which is more?',a:a*u,b:Math.max(1,b)*u});}
+ for(let i=0;i<3;i++){const tot=rnd(20,40),sp=rnd(4,tot-4);t.push({type:'left',q:'How much is left? (outlined = spent)',amt:tot*u,spent:sp,ans:(tot-sp)*u,opts:opts((tot-sp)*u,u)});}
+ for(let i=0;i<2;i++){const v=rnd(15,60)*u;const r=Math.round(v/500)*500||500;t.push({type:'estimate',q:'Roughly how much, to the nearest ₹500?',amt:v,ans:r,opts:shuf([r,r+1000,Math.max(500,r-1000),r+2000].filter((x,i,a)=>a.indexOf(x)===i))});}
+ return shuf(t.slice(1)).concat().reduce((a,x)=>a.concat([x]),[t[0]]);}
+let cur=null;
+function intro(){stage.innerHTML=`<div class="q">Ready?</div><p>Three short blocks, about 3 minutes in total.</p><div class="row"><input id="who" placeholder="Your name or initials" aria-label="Your name"><button class="primary" id="go">Start test</button></div>`;
+ $('go').onclick=()=>{cur={who:$('who').value||'anon',at:new Date().toISOString(),order:shuf(['F','D','B']),bi:0,res:[]};block();};}
+function block(){const m=cur.order[cur.bi];cur.tasks=makeTasks(m);cur.ti=0;
+ stage.innerHTML=`<div class="eyebrow">Block ${cur.bi+1} of 3</div><div class="q">${SYS[m].key}</div><div>${TILE.svg(m,m==='B'?2400:2400,{size:18}).html}</div><p class="muted">This is ${m==='B'?'12 days (₹2,400)':'₹2,400'}. The key will be hidden from now on.</p><button class="primary" id="nx">Begin block</button>`;
+ $('nx').onclick=task;}
+function task(){const m=cur.order[cur.bi],t=cur.tasks[cur.ti],N=cur.tasks.length;
+ let body='';
+ if(t.type==='more'){body=`<div class="pair"><button data-v="a">${TILE.svg(m,t.a,{size:12}).html}<span class="muted">Left</span></button><button data-v="b">${TILE.svg(m,t.b,{size:12}).html}<span class="muted">Right</span></button></div>`;}
+ else {const s=t.type==='unit'?TILE.svg(m,TILE.UNIT[m],{size:34}):TILE.svg(m,t.amt,{size:16,spent:t.spent||0});
+  body=`<div>${s.html}</div><div class="opts">${t.opts.map(o=>`<button data-v="${o}">${inr(o)}</button>`).join('')}</div>`;}
+ stage.innerHTML=`<div class="prog"><b style="width:${cur.ti/N*100}%"></b></div><div class="eyebrow">${SYS[m].name} · ${cur.ti+1}/${N}</div><div class="q">${t.q}</div>${body}<div class="fb" id="fb"></div>`;
+ const t0=performance.now();
+ stage.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{const ms=Math.round(performance.now()-t0);let ok;
+  if(t.type==='more'){ok=(b.dataset.v==='a')===(t.a>t.b)} else ok=+b.dataset.v===t.ans;
+  cur.res.push({sys:m,type:t.type,ok,ms});$('fb').textContent=ok?'Correct':'Not quite';
+  setTimeout(()=>{cur.ti++;if(cur.ti<N)task();else{cur.bi++;if(cur.bi<3)block();else finish();}},350);});}
+function finish(){runs.push(cur);save();render();stage.innerHTML=`<div class="q">Done. Thank you.</div><p>Your results are in the table below.</p><button class="primary" id="again">Run another person</button>`;$('again').onclick=intro;}
+const med=a=>{if(!a.length)return 0;const s=[...a].sort((x,y)=>x-y);return s[Math.floor(s.length/2)]};
+function render(){const all=runs.flatMap(r=>r.res);
+ const rows=['F','D','B'].map(m=>{const r=all.filter(x=>x.sys===m);const by=ty=>{const q=r.filter(x=>x.type===ty);return q.length?`${Math.round(q.filter(x=>x.ok).length/q.length*100)}% · ${(med(q.map(x=>x.ms))/1000).toFixed(1)} s`:'–'};
+  return `<tr><td><b>${m}</b> ${SYS[m].name}</td><td class="num">${r.length?Math.round(r.filter(x=>x.ok).length/r.length*100)+'%':'–'}</td>${['unit','worth','more','left','estimate'].map(ty=>`<td class="num">${by(ty)}</td>`).join('')}</tr>`}).join('');
+ const sim=`<tr class="muted"><td colspan="7"><i>Simulated baseline (model, not people): median read F 1.8 s · D 2.0 s · B 3.3 s; S1 target ≤5 s, S2 target ≤3 s.</i></td></tr>`;
+ $('results').innerHTML=`<p class="muted">${runs.length} run(s) in this browser. Cells show accuracy · median time.</p><table><tr><th>System</th><th class="num">All</th><th class="num">Tile value</th><th class="num">Worth</th><th class="num">Which more</th><th class="num">Left</th><th class="num">Estimate</th></tr>${rows}${sim}</table>`;}
+$('copy').onclick=()=>{const csv='who,at,system,type,correct,ms\n'+runs.flatMap(r=>r.res.map(x=>[r.who,r.at,x.sys,x.type,x.ok,x.ms].join(','))).join('\n');
+ const ta=$('csv');ta.value=csv;navigator.clipboard.writeText(csv).then(()=>$('copyMsg').textContent='Copied').catch(()=>{ta.hidden=false;ta.select();$('copyMsg').textContent='Select and copy the text below'});};
+$('clear').onclick=()=>{runs=[];save();render();};
+intro();render();
+</script>

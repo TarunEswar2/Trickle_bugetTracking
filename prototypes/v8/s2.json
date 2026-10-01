@@ -1,0 +1,11 @@
+[["home","#demo",[]],
+["money","#demo",["[data-a=tab][data-x=money]"]],
+["money_budget","#demo",["[data-a=tab][data-x=money]","[data-a=open][data-x=budget]"]],
+["money_income","#demo",["[data-a=tab][data-x=money]","[data-a=open][data-x=income]"]],
+["actions","#demo",["[data-a=tab][data-x=actions]"]],
+["insights","#demo",["[data-a=tab][data-x=insights]"]],
+["pay_who","#demo",["[data-a=pay][data-x=upi]"]],
+["pay_cat","#demo",["[data-a=pay][data-x=upi]","[data-a=payee][data-x='0']","[data-a=quick][data-x='180']","[data-a=pstep][data-x=cat]"]],
+["pay_tiles","#demo",["[data-a=pay][data-x=upi]","[data-a=payee][data-x='0']","[data-a=quick][data-x='180']","[data-a=pstep][data-x=cat]","[data-a=pcat][data-x=Food]"]],
+["pay_over","#demo",["[data-a=pay][data-x=upi]","[data-a=payee][data-x='1']","[data-a=quick][data-x='600']","[data-a=pstep][data-x=cat]","[data-a=pcat][data-x=Fun]"]],
+["pay_done","#demo",["[data-a=pay][data-x=upi]","[data-a=payee][data-x='1']","[data-a=quick][data-x='600']","[data-a=pstep][data-x=cat]","[data-a=pcat][data-x=Fun]","[data-a=pcover]","[data-a=pdone]"]]]

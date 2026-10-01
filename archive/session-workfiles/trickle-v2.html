@@ -1,0 +1,2407 @@
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#ffffff;
+    --panel:#d9d9d9;
+    --panel2:#ececec;
+    --panel3:#f4f4f4;
+    --ink:#111111;
+    --ink2:#5a5a5a;
+    --ink3:#8e8e8e;
+    --line:#c4c4c4;
+    --dark:#333333;
+    --mid:#6f6f6f;
+    --stage:#e6e6e6;
+  }
+  html,body{background:var(--stage);color:var(--ink);
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    font-size:15px;line-height:1.35;}
+  body{min-height:100vh;display:flex;flex-direction:column;align-items:center;
+    padding:24px 12px 48px;gap:14px}
+
+  .stage-head{width:412px;max-width:100%;display:flex;align-items:center;
+    justify-content:space-between;gap:10px;color:var(--ink2);font-size:12px}
+  .stage-head b{color:var(--ink);font-size:13px;font-weight:600}
+  .stage-btn{border:1px solid var(--line);background:#fff;color:var(--ink);
+    font:inherit;font-size:11px;padding:5px 11px;border-radius:20px;cursor:pointer}
+  .stage-btn:hover{background:var(--panel3)}
+
+  /* ---------- phone shell: Pixel 8, 412 x 915 ---------- */
+  .phone{position:relative;width:412px;height:915px;max-width:100%;
+    background:var(--bg);border:1px solid #bdbdbd;border-radius:28px;
+    overflow:hidden;display:flex;flex-direction:column;flex:none}
+
+  .statusbar{flex:none;height:30px;display:flex;align-items:center;
+    justify-content:space-between;padding:0 18px;font-size:11px;color:var(--ink2);
+    letter-spacing:.2px}
+  .statusbar .sb-right{display:flex;gap:5px;align-items:center}
+
+  .viewport{position:relative;flex:1 1 auto;overflow:hidden}
+  .frame{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;
+    display:none;padding:0 0 18px}
+  .frame.active{display:block}
+  .frame::-webkit-scrollbar{width:0}
+  body.with-nav .frame{padding-bottom:96px}
+
+  /* ---------- bottom tab bar ---------- */
+  .tabbar{position:absolute;left:12px;right:12px;bottom:10px;height:76px;
+    background:var(--panel);border-radius:22px;display:none;
+    align-items:flex-end;justify-content:space-around;padding:0 6px 9px;z-index:40}
+  body.with-nav .tabbar{display:flex}
+  .tab{flex:1;background:none;border:none;font:inherit;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+    color:var(--ink2);padding:0}
+  .tab span{font-size:10px;letter-spacing:.1px}
+  .tab svg{width:26px;height:26px;display:block}
+  .tab.on{color:var(--ink)}
+  .tab.home-tab{position:relative}
+  .tab.home-tab .home-cradle{width:54px;height:54px;border-radius:50%;
+    background:var(--bg);display:flex;align-items:center;justify-content:center;
+    margin-bottom:1px;margin-top:-20px;border:1px solid var(--line)}
+  .tab.home-tab svg{width:28px;height:28px}
+
+  /* ---------- generic building blocks ---------- */
+  .pad{padding:0 20px}
+  .topbar{display:flex;align-items:center;gap:8px;padding:8px 14px 2px;min-height:44px}
+  .chev-back{width:38px;height:38px;border:none;background:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;color:var(--ink);flex:none}
+  .topbar h2{font-size:21px;font-weight:700;letter-spacing:-.2px}
+  .topbar .spacer{flex:1}
+
+  h1.screen-title{font-size:24px;font-weight:700;letter-spacing:-.3px;padding:10px 20px 2px}
+  p.step-label{font-size:17px;color:var(--ink3);font-weight:600;padding:0 20px 14px}
+  p.hint{font-size:12px;color:var(--ink2);line-height:1.45}
+  p.micro{font-size:11px;color:var(--ink3)}
+
+  .panel{background:var(--panel);border-radius:16px;padding:16px}
+  .panel-lite{background:var(--panel2);border-radius:16px;padding:16px}
+  .sec-title{font-size:15px;font-weight:700;margin-bottom:10px}
+
+  .field{width:100%;background:var(--panel);border:none;border-radius:14px;
+    height:54px;padding:0 18px;font:inherit;font-size:15px;color:var(--ink);
+    display:flex;align-items:center}
+  input.field::placeholder{color:var(--ink2)}
+  input.field:focus,textarea:focus,select:focus{outline:2px solid var(--mid);outline-offset:1px}
+  .field-row{position:relative;display:flex;align-items:center;gap:8px}
+  .inline-add{position:absolute;right:14px;top:50%;transform:translateY(-50%);
+    background:var(--bg);border:1px solid var(--line);border-radius:12px;
+    font:inherit;font-size:11px;padding:4px 12px;cursor:pointer;color:var(--ink)}
+  .inline-add:hover{background:var(--panel3)}
+
+  .btn{display:block;width:100%;height:58px;border:none;border-radius:16px;
+    background:var(--panel);color:var(--ink);font:inherit;font-size:18px;
+    font-weight:600;cursor:pointer}
+  .btn:hover{background:#cfcfcf}
+  .btn.solid{background:var(--dark);color:#fff}
+  .btn.solid:hover{background:#1f1f1f}
+  .btn.ghost{background:none;border:1px solid var(--line);font-size:15px;height:48px}
+  .btn-sm{height:40px;font-size:14px;border-radius:12px;width:auto;padding:0 18px;
+    display:inline-flex;align-items:center;justify-content:center}
+
+  .pill{display:inline-flex;align-items:center;gap:6px;background:var(--panel2);
+    border:1px solid var(--line);border-radius:20px;padding:5px 11px;
+    font-size:12px;color:var(--ink);cursor:pointer;font-family:inherit}
+  .pill.on{background:var(--dark);color:#fff;border-color:var(--dark)}
+  .pill .x{width:14px;height:14px;border-radius:50%;background:var(--ink);color:#fff;
+    font-size:9px;line-height:14px;text-align:center;flex:none}
+  .pill.on .x{background:#fff;color:var(--ink)}
+  .chip-wrap{display:flex;flex-wrap:wrap;gap:7px}
+
+  .dots{display:flex;gap:6px;justify-content:center;padding:6px 0 14px}
+  .dots i{width:9px;height:9px;border-radius:50%;background:var(--line);display:block}
+  .dots i.on{background:var(--ink)}
+
+  .row-link{display:flex;width:100%;align-items:center;gap:10px;background:none;
+    border:none;font:inherit;text-align:left;cursor:pointer;color:var(--ink);
+    padding:13px 4px;border-bottom:1px solid var(--line)}
+  .row-link:last-child{border-bottom:none}
+  .row-link .rl-main{flex:1;min-width:0}
+  .row-link .rl-sub{font-size:11px;color:var(--ink2);margin-top:2px}
+  .row-link .rl-val{font-size:13px;color:var(--ink2);flex:none}
+
+  .toggle{width:46px;height:26px;border-radius:14px;background:var(--line);
+    border:none;cursor:pointer;position:relative;flex:none;padding:0}
+  .toggle i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;
+    background:#fff;transition:left .14s}
+  .toggle.on{background:var(--dark)}
+  .toggle.on i{left:23px}
+
+  .bar{height:10px;border-radius:6px;background:var(--panel);overflow:hidden}
+  .bar > i{display:block;height:100%;background:var(--dark);border-radius:6px}
+
+  .delta{font-size:11px;color:var(--ink2);display:inline-flex;align-items:center;gap:2px}
+
+  .err{color:#a01c1c;font-size:11.5px;padding:5px 2px 0;display:none}
+  .err.show{display:block}
+
+  .stack{display:flex;flex-direction:column;gap:14px}
+  .gap8{display:flex;flex-direction:column;gap:8px}
+  .between{display:flex;align-items:center;justify-content:space-between;gap:10px}
+
+  .empty-note{font-size:12.5px;color:var(--ink2);text-align:center;padding:26px 10px}
+
+  /* ---------- sheets / overlays ---------- */
+  .scrim{position:absolute;inset:0;background:rgba(0,0,0,.34);display:none;z-index:60}
+  .scrim.show{display:block}
+  .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--bg);
+    border-radius:22px 22px 0 0;padding:16px 20px 24px;max-height:82%;overflow-y:auto;
+    border-top:1px solid var(--line)}
+  .sheet .grab{width:44px;height:4px;border-radius:3px;background:var(--line);
+    margin:0 auto 14px}
+  .sheet h3{font-size:19px;font-weight:700;margin-bottom:12px}
+
+  /* ---------- home ---------- */
+  .home-head{display:flex;align-items:center;gap:10px;padding:8px 20px 14px}
+  .avatar{width:40px;height:40px;border-radius:50%;background:var(--panel2);
+    border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;flex:none}
+  .search-pill{flex:1;height:36px;border-radius:18px;background:var(--panel);
+    border:none;font:inherit;font-size:12.5px;color:var(--ink2);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:7px}
+
+  .acct-btn{display:inline-flex;align-items:center;gap:4px;background:none;border:none;
+    font:inherit;font-size:14px;color:var(--ink);cursor:pointer;padding:0}
+  .spend-line{display:flex;align-items:baseline;gap:8px;font-size:14px;margin-top:9px}
+  .spend-line .lbl{color:var(--ink);min-width:126px}
+  .spend-line .amt{font-weight:600}
+  .balance-line{display:flex;align-items:center;justify-content:space-between;
+    margin-top:22px}
+  .balance-line .bal{font-size:26px;font-weight:700;letter-spacing:-.4px}
+  .eye-btn{background:none;border:none;cursor:pointer;color:var(--ink);padding:4px}
+
+  .tiles{display:flex;gap:16px;padding:18px 20px 4px}
+  .tile{flex:1;background:none;border:none;font:inherit;cursor:pointer;color:var(--ink);
+    display:flex;flex-direction:column;align-items:center;gap:8px;padding:0}
+  .tile .tbox{width:100%;aspect-ratio:1;max-width:82px;border-radius:16px;
+    background:var(--panel);display:flex;align-items:center;justify-content:center}
+  .tile span{font-size:12.5px}
+
+  .card-btn{display:block;width:100%;text-align:left;background:var(--panel);
+    border:none;border-radius:16px;padding:14px 16px;font:inherit;color:var(--ink);
+    cursor:pointer}
+  .card-btn:hover{background:#d2d2d2}
+  .card-head{display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:10px}
+  .card-head .ch-t{font-size:15px;font-weight:700}
+
+  .trend-row{display:flex;align-items:baseline;gap:8px;font-size:13.5px;padding:3px 0}
+  .trend-row .tr-name{min-width:78px}
+  .trend-row .tr-count{flex:1;color:var(--ink2);font-size:12.5px}
+  .trend-row .tr-amt{font-size:12px;color:var(--ink)}
+
+  .txn-row{display:flex;align-items:baseline;gap:8px;font-size:13.5px;padding:4px 0;
+    width:100%;background:none;border:none;font-family:inherit;color:var(--ink);
+    text-align:left;cursor:pointer}
+  .txn-row .t-merch{flex:0 0 108px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .txn-row .t-cat{flex:1;color:var(--ink2);font-size:12.5px;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap}
+  .txn-row .t-amt{font-size:12px;flex:none}
+  .txn-row .t-src{font-size:9px;color:var(--ink3);border:1px solid var(--line);
+    border-radius:8px;padding:1px 5px;flex:none}
+
+  /* ---------- categories ---------- */
+  .period-btn{display:inline-flex;align-items:center;gap:5px;background:none;border:none;
+    font:inherit;font-size:21px;font-weight:700;color:var(--ink);cursor:pointer;padding:0}
+  .cat-row{display:flex;align-items:center;gap:10px;width:100%;background:none;
+    border:none;font:inherit;color:var(--ink);cursor:pointer;padding:5px 0;text-align:left}
+  .cat-row .cr-name{flex:1;background:var(--panel2);border-radius:14px;padding:7px 14px;
+    font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .cat-row .cr-amt{font-size:13.5px;font-weight:600;flex:none;min-width:64px;text-align:right}
+  .cat-row .cr-delta{flex:none;min-width:52px;text-align:right}
+
+  .donut-wrap{display:flex;justify-content:center;padding:6px 0 4px}
+  .legend{display:flex;flex-wrap:wrap;gap:6px 12px;justify-content:center;
+    padding:6px 20px 2px;font-size:11px;color:var(--ink2)}
+  .legend i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:4px}
+
+  /* ---------- insight ---------- */
+  .icard{background:var(--panel2);border:1px solid var(--line);border-radius:16px;
+    padding:14px 16px;width:100%;text-align:left;font:inherit;color:var(--ink);
+    cursor:pointer;display:block}
+  .icard:hover{background:#e3e3e3}
+  .icard .ic-kicker{font-size:10.5px;letter-spacing:.7px;text-transform:uppercase;
+    color:var(--ink3);margin-bottom:5px}
+  .icard .ic-head{font-size:15.5px;font-weight:700;margin-bottom:5px;line-height:1.3}
+  .icard .ic-sub{font-size:12px;color:var(--ink2);line-height:1.45}
+  .icard .ic-body{margin:11px 0 3px}
+
+  /* ---------- savings ---------- */
+  .goal-card{background:var(--panel2);border:1px solid var(--line);border-radius:16px;
+    padding:14px 16px;width:100%;text-align:left;font:inherit;color:var(--ink);
+    cursor:pointer;display:block}
+  .goal-card:hover{background:#e3e3e3}
+  .sub-row{display:flex;align-items:center;gap:10px;width:100%;background:none;
+    border:none;font:inherit;color:var(--ink);cursor:pointer;text-align:left;
+    padding:11px 2px;border-bottom:1px solid var(--line)}
+  .sub-row:last-child{border-bottom:none}
+  .sub-row .rl-main{flex:1;min-width:0}
+  .sub-row .rl-main > span{display:block}
+  .sub-row .rl-val{flex:none;font-size:13.5px;font-weight:600}
+  .sub-row .sr-due{font-size:11px;color:var(--ink2);margin-top:3px}
+
+  /* ---------- friction sheet ---------- */
+  .friction-bar{display:flex;gap:4px;height:40px;margin:10px 0 6px}
+  .friction-bar i{display:block;border-radius:6px}
+  .fb-spent{background:var(--dark)}
+  .fb-this{background:var(--mid)}
+  .fb-left{background:var(--panel)}
+  .friction-legend{display:flex;justify-content:space-between;font-size:11px;
+    color:var(--ink2);padding:0 2px}
+
+  /* ---------- scan ---------- */
+  .scan-box{width:262px;height:262px;margin:0 auto;position:relative;
+    background:var(--panel3);border:1px solid var(--line);border-radius:10px}
+  .scan-box b{position:absolute;width:44px;height:44px;border:4px solid var(--dark)}
+  .scan-box b.tl{top:-1px;left:-1px;border-right:none;border-bottom:none;border-radius:10px 0 0 0}
+  .scan-box b.tr{top:-1px;right:-1px;border-left:none;border-bottom:none;border-radius:0 10px 0 0}
+  .scan-box b.bl{bottom:-1px;left:-1px;border-right:none;border-top:none;border-radius:0 0 0 10px}
+  .scan-box b.br{bottom:-1px;right:-1px;border-left:none;border-top:none;border-radius:0 0 10px 0}
+  .scan-box u{position:absolute;left:8%;right:8%;top:50%;height:2px;background:var(--dark);
+    opacity:.55;display:block}
+
+  .upi-mark{height:26px;width:auto;display:block}
+
+  .toast{position:absolute;left:20px;right:20px;bottom:104px;background:var(--dark);
+    color:#fff;border-radius:12px;padding:12px 15px;font-size:12.5px;z-index:70;
+    display:none}
+  .toast.show{display:block}
+
+  .confirm-mark{width:112px;height:112px;border-radius:50%;background:var(--panel);
+    display:flex;align-items:center;justify-content:center;margin:0 auto}
+</style>
+
+<div class="stage-head">
+  <b>Trickle — lo-fi clickable mockup</b>
+  <button class="stage-btn" onclick="restartProto()">Restart</button>
+</div>
+
+<div class="phone">
+  <div class="statusbar">
+    <span>9:41</span>
+    <span class="sb-right"><span>UPI</span><span>&#9679;&#9679;&#9679;</span><span>86%</span></span>
+  </div>
+
+  <div class="viewport" id="viewport">
+
+    <!-- ========== 0. SPLASH ========== -->
+    <section class="frame" data-frame="splash">
+      <div style="height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:0">
+        <div style="flex:1;display:flex;align-items:center;justify-content:center">
+          <div style="font-size:54px;font-weight:700;letter-spacing:-1px">Trickle</div>
+        </div>
+        <button class="btn" style="border-radius:22px 22px 0 0;height:74px;font-size:17px"
+          onclick="go('method')">Swipe up</button>
+      </div>
+    </section>
+
+    <!-- ========== 1. TRACKING METHOD ========== -->
+    <section class="frame" data-frame="method">
+      <h1 class="screen-title">Setup your Account</h1>
+      <p class="step-label">Step 1</p>
+      <div class="pad stack">
+        <button class="field" style="justify-content:space-between;cursor:pointer"
+          onclick="chooseTracking('upi')">
+          <span>Connect UPI</span>
+          <img class="upi-mark" id="upi-logo-1" alt="UPI">
+        </button>
+        <div>
+          <p class="hint">Trickle tracks UPI transactions to auto-log spends. Nothing is sent anywhere else.</p>
+          <p class="micro" style="margin-top:8px">&#128274; Your transaction data stays on this device.</p>
+        </div>
+        <button class="field" style="cursor:pointer" onclick="chooseTracking('manual')">
+          Manual Tracking
+        </button>
+      </div>
+      <div class="dots" id="dots-method" style="margin-top:34px"></div>
+    </section>
+
+    <!-- ========== 1b. UPI SETUP ========== -->
+    <section class="frame" data-frame="upiSetup">
+      <div class="topbar"><button class="chev-back" onclick="go('method')">&#10094;</button></div>
+      <h1 class="screen-title">Connect UPI</h1>
+      <p class="step-label">Step 1</p>
+      <div class="pad stack">
+        <div>
+          <div class="field-row">
+            <input class="field" id="upi-input" placeholder="Type Your UPI ID"
+              onkeydown="if(event.key==='Enter'){addUpi()}">
+            <button class="inline-add" onclick="addUpi()">Add</button>
+          </div>
+          <p class="err" id="err-upi">Enter a UPI ID like name@oksbi</p>
+        </div>
+        <div class="panel">
+          <div class="sec-title">Connected Accounts</div>
+          <div class="chip-wrap" id="upi-list"></div>
+        </div>
+        <button class="btn" onclick="finishUpi()">Continue</button>
+      </div>
+      <div class="dots" id="dots-upiSetup"></div>
+    </section>
+
+    <!-- ========== 2. CATEGORIES ========== -->
+    <section class="frame" data-frame="onbCategories">
+      <div class="topbar"><button class="chev-back" onclick="backFromCategories()">&#10094;</button></div>
+      <h1 class="screen-title">Choose your categories</h1>
+      <p class="step-label">Step 2</p>
+      <div class="pad stack">
+        <div class="panel">
+          <div class="sec-title">Categories</div>
+          <div class="chip-wrap" id="chosen-cats"></div>
+        </div>
+        <div>
+          <div class="field-row">
+            <input class="field" id="cat-input" placeholder="Type Category"
+              onkeydown="if(event.key==='Enter'){addTypedCat()}">
+            <button class="inline-add" onclick="addTypedCat()">Add</button>
+          </div>
+          <p class="err" id="err-cat">Add at least one category to continue</p>
+        </div>
+        <div class="panel-lite" id="rec-block">
+          <div class="between" style="margin-bottom:10px">
+            <div class="sec-title" style="margin:0">Recommended Categories</div>
+            <input id="rec-search" placeholder="Search"
+              style="width:104px;height:28px;border-radius:12px;border:1px solid var(--line);
+                     background:#fff;padding:0 10px;font:inherit;font-size:11.5px"
+              oninput="renderRecommended()">
+          </div>
+          <div class="chip-wrap" id="rec-list" style="max-height:150px;overflow-y:auto"></div>
+        </div>
+        <button class="btn" onclick="finishCategories()">Continue</button>
+      </div>
+      <div class="dots" id="dots-onbCategories"></div>
+    </section>
+
+    <!-- ========== 3. SECURITY PIN ========== -->
+    <section class="frame" data-frame="pin">
+      <div class="topbar"><button class="chev-back" onclick="go('onbCategories')">&#10094;</button></div>
+      <h1 class="screen-title">Set up your Security Pin</h1>
+      <p class="step-label">Step 3</p>
+      <div class="pad stack">
+        <input class="field" id="pin1" type="password" inputmode="numeric" maxlength="4"
+          placeholder="Security PIN">
+        <input class="field" id="pin2" type="password" inputmode="numeric" maxlength="4"
+          placeholder="Confirm your Security Pin">
+        <p class="err" id="err-pin">Enter a 4-digit PIN in both fields, and make them match</p>
+        <button class="btn" onclick="submitPin()">Continue</button>
+      </div>
+      <div class="dots" id="dots-pin"></div>
+    </section>
+
+    <!-- ========== 4. PERMISSIONS ========== -->
+    <section class="frame" data-frame="permissions">
+      <div class="topbar"><button class="chev-back" onclick="go('pin')">&#10094;</button></div>
+      <h1 class="screen-title">App permission</h1>
+      <p class="step-label">Step 4</p>
+      <div class="pad stack">
+        <div class="panel" style="padding:4px 16px">
+          <div class="row-link" style="cursor:default">
+            <div class="rl-main"><div>Notifications</div>
+              <div class="rl-sub">Gentle nudges when a budget is close</div></div>
+            <button class="toggle on" id="perm-notif" onclick="togglePerm('perm-notif')"><i></i></button>
+          </div>
+          <div class="row-link" style="cursor:default">
+            <div class="rl-main"><div>Contacts</div>
+              <div class="rl-sub">Pick people to pay without typing numbers</div></div>
+            <button class="toggle on" id="perm-contacts" onclick="togglePerm('perm-contacts')"><i></i></button>
+          </div>
+          <div class="row-link" style="cursor:default">
+            <div class="rl-main"><div>Camera</div>
+              <div class="rl-sub">Scan UPI QR codes to pay</div></div>
+            <button class="toggle on" id="perm-camera" onclick="togglePerm('perm-camera')"><i></i></button>
+          </div>
+        </div>
+        <p class="micro">You can always change it in app Settings.</p>
+        <button class="btn" onclick="go('allSet')">Continue</button>
+      </div>
+      <div class="dots" id="dots-permissions"></div>
+    </section>
+
+    <!-- ========== 5. ALL SET ========== -->
+    <section class="frame" data-frame="allSet">
+      <div class="topbar"><button class="chev-back" onclick="go('permissions')">&#10094;</button></div>
+      <h1 class="screen-title">You're all set</h1>
+      <div class="pad" style="padding-bottom:14px">
+        <p class="hint" id="allset-sub"></p>
+      </div>
+      <div class="pad stack">
+        <div class="panel" id="allset-accounts-panel">
+          <div class="sec-title">Connected Accounts</div>
+          <div class="chip-wrap" id="allset-accounts"></div>
+        </div>
+        <div class="panel-lite">
+          <div class="sec-title">Your categories</div>
+          <div class="chip-wrap" id="allset-cats"></div>
+        </div>
+        <button class="btn solid" onclick="enterApp()">Start your journey</button>
+      </div>
+    </section>
+
+    <!-- ========== HOME ========== -->
+    <section class="frame" data-frame="home">
+      <div class="home-head">
+        <button class="avatar" onclick="go('settings')" aria-label="Profile">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#111" stroke-width="1.6">
+            <circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20c.8-3.8 3.8-5.6 7.2-5.6s6.4 1.8 7.2 5.6"/>
+          </svg>
+        </button>
+        <button class="search-pill" onclick="go('transactions')">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#5a5a5a" stroke-width="2">
+            <circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+          Search
+        </button>
+      </div>
+
+      <div class="pad">
+        <div class="panel">
+          <button class="acct-btn" onclick="openSheet('accountSheet')">
+            <span id="home-account">Account : abc@bank</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#111" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="spend-line">
+            <span class="lbl">Weekly spending :</span>
+            <span class="amt" id="home-weekly">&#8377;0</span>
+            <span class="delta" id="home-weekly-delta"></span>
+          </div>
+          <div class="spend-line">
+            <span class="lbl">Daily spending :</span>
+            <span class="amt" id="home-daily">&#8377;0</span>
+            <span class="delta" id="home-daily-delta"></span>
+          </div>
+          <div class="balance-line">
+            <span class="bal" id="home-balance">Balance : &#8377;0</span>
+            <button class="eye-btn" onclick="toggleBalance()" aria-label="Hide balance">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#111" stroke-width="1.7" id="eye-icon">
+                <path d="M2 12s3.6-6.4 10-6.4S22 12 22 12s-3.6 6.4-10 6.4S2 12 2 12z"/>
+                <circle cx="12" cy="12" r="2.7"/><path d="M3.5 3.5l17 17" id="eye-slash"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- UPI-linked: three payment tiles -->
+      <div class="tiles" id="home-tiles">
+        <button class="tile" onclick="go('scan')">
+          <span class="tbox">
+            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#111" stroke-width="1.8">
+              <path d="M3 8V4h4M17 3h4v4M21 16v4h-4M7 21H3v-4"/><path d="M3.5 12h17"/></svg>
+          </span><span>Scan QR</span>
+        </button>
+        <button class="tile" onclick="go('payAnyone')">
+          <span class="tbox">
+            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#111" stroke-width="1.7">
+              <circle cx="12" cy="8" r="3.8"/><path d="M4.5 20.5c.9-4 4-6 7.5-6s6.6 2 7.5 6"/></svg>
+          </span><span>Pay Anyone</span>
+        </button>
+        <button class="tile" onclick="go('bankTransfer')">
+          <span class="tbox">
+            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#111" stroke-width="1.7">
+              <path d="M3 9.5L12 4l9 5.5M4.5 9.5v9M9.5 9.5v9M14.5 9.5v9M19.5 9.5v9M2.5 19.5h19"/></svg>
+          </span><span>Bank Transfer</span>
+        </button>
+      </div>
+
+      <!-- Manual mode: single entry button -->
+      <div class="pad" id="home-manual" style="padding-top:18px;display:none">
+        <button class="btn" style="height:80px;font-size:19px" onclick="go('manualEntry')">
+          Enter Transaction
+        </button>
+      </div>
+
+      <div class="pad" style="padding-top:18px">
+        <button class="card-btn" onclick="go('accumulation')">
+          <div class="card-head">
+            <span class="ch-t">Small Purchases Trends</span>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#111" stroke-width="1.8">
+              <path d="M4 12h15M13.5 6.5L20 12l-6.5 5.5"/></svg>
+          </div>
+          <div id="home-trends"></div>
+        </button>
+      </div>
+
+      <div class="pad" style="padding-top:14px">
+        <button class="card-btn" onclick="go('transactions')">
+          <div class="card-head">
+            <span class="ch-t">Transaction History</span>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#111" stroke-width="1.8">
+              <path d="M4 12h15M13.5 6.5L20 12l-6.5 5.5"/></svg>
+          </div>
+          <div id="home-txns"></div>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== ACCUMULATION ========== -->
+    <section class="frame" data-frame="accumulation">
+      <div class="topbar">
+        <button class="chev-back" onclick="go('home')">&#10094;</button>
+        <h2>Small Purchases</h2>
+      </div>
+      <div class="pad">
+        <p class="hint" style="padding-bottom:12px">
+          Repeat buys add up quietly. Here's what you bought more than once this week.
+        </p>
+        <div class="stack" id="accum-list"></div>
+      </div>
+    </section>
+
+    <section class="frame" data-frame="accumulationDetail">
+      <div class="topbar">
+        <button class="chev-back" onclick="go('accumulation')">&#10094;</button>
+        <h2 id="accd-title">Detail</h2>
+      </div>
+      <div class="pad">
+        <div class="panel" style="margin-bottom:14px">
+          <div class="between"><span class="hint">This week</span>
+            <span style="font-size:20px;font-weight:700" id="accd-total">&#8377;0</span></div>
+          <div class="between" style="margin-top:6px"><span class="hint">Purchases</span>
+            <span id="accd-count" style="font-size:13px">0</span></div>
+          <div class="between" style="margin-top:6px"><span class="hint">Average each</span>
+            <span id="accd-avg" style="font-size:13px">&#8377;0</span></div>
+        </div>
+        <div class="sec-title">Every purchase</div>
+        <div id="accd-list"></div>
+      </div>
+    </section>
+
+    <!-- ========== TRANSACTIONS ========== -->
+    <section class="frame" data-frame="transactions">
+      <div class="topbar">
+        <button class="chev-back" onclick="go('home')">&#10094;</button>
+        <h2>Transaction History</h2>
+      </div>
+      <div class="pad">
+        <input class="field" id="txn-search" placeholder="Search merchant or category"
+          style="height:46px;font-size:13.5px;margin-bottom:10px" oninput="renderTxnList()">
+        <div class="chip-wrap" id="txn-filters" style="margin-bottom:12px"></div>
+        <div id="txn-list"></div>
+      </div>
+    </section>
+
+    <section class="frame" data-frame="transactionDetail">
+      <div class="topbar">
+        <button class="chev-back" onclick="go('transactions')">&#10094;</button>
+        <h2>Transaction</h2>
+      </div>
+      <div class="pad">
+        <div style="font-size:34px;font-weight:700;letter-spacing:-.6px;padding:6px 0 14px"
+          id="td-amt">&#8377;0</div>
+        <div class="panel" style="padding:4px 16px;margin-bottom:16px">
+          <div class="row-link" style="cursor:default"><div class="rl-main">Merchant</div>
+            <div class="rl-val" id="td-merch">&mdash;</div></div>
+          <div class="row-link" style="cursor:default"><div class="rl-main">Date</div>
+            <div class="rl-val" id="td-date">&mdash;</div></div>
+          <div class="row-link" style="cursor:default"><div class="rl-main">Logged by</div>
+            <div class="rl-val" id="td-src">&mdash;</div></div>
+        </div>
+        <div class="sec-title">Category</div>
+        <p class="hint" style="padding-bottom:9px">Tap to recategorise if Trickle guessed wrong.</p>
+        <div class="chip-wrap" id="td-cats" style="margin-bottom:16px"></div>
+        <button class="btn" onclick="saveTxnCategory()">Save</button>
+      </div>
+    </section>
+
+    <!-- ========== MANUAL ENTRY ========== -->
+    <section class="frame" data-frame="manualEntry">
+      <div class="topbar">
+        <button class="chev-back" onclick="go('home')">&#10094;</button>
+        <h2>Enter Transaction</h2>
+      </div>
+      <div class="pad stack">
+        <input class="field" id="me-amount" inputmode="decimal" placeholder="Amount (&#8377;)">
+        <input class="field" id="me-merchant" placeholder="Paid to (shop, person, app)">
+        <div>
+          <div class="sec-title">Category</div>
+          <div class="chip-wrap" id="me-cats"></div>
+        </div>
+        <p class="err" id="err-me">Enter an amount and pick a category</p>
+        <button class="btn" onclick="submitManual()">Add transaction</button>
+      </div>
+    </section>
+
+    <!-- ========== SCAN ========== -->
+    <section class="frame" data-frame="scan">
+      <div class="topbar"><button class="chev-back" onclick="go('home')">&#10094;</button></div>
+      <div class="pad">
+        <div class="panel-lite" style="margin-bottom:22px">
+          <div style="font-size:18px;font-weight:700">Scan QR and Select Category</div>
+        </div>
+      </div>
+      <div class="scan-box"><b class="tl"></b><b class="tr"></b><b class="bl"></b><b class="br"></b><u></u></div>
+      <div class="pad" style="padding-top:22px">
+        <div class="between">
+          <span style="font-size:16px">Quick Category</span>
+          <button class="pill" onclick="openSheet('quickCatSheet')">
+            <span id="scan-cat">Food</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/></svg>
+          </button>
+        </div>
+        <p class="hint" style="padding-top:10px">
+          The scanned payment will be logged under this category straight away.
+        </p>
+        <button class="btn" style="margin-top:26px" onclick="startPayment('scan')">Simulate Payment</button>
+      </div>
+    </section>
+
+    <!-- ========== PAY ANYONE ========== -->
+    <section class="frame" data-frame="payAnyone">
+      <div class="topbar"><button class="chev-back" onclick="go('home')">&#10094;</button></div>
+      <div class="pad">
+        <input class="field" id="contact-search" placeholder="Search phone number or name"
+          oninput="renderContacts()">
+        <div class="panel" style="margin-top:20px;padding:14px 16px">
+          <div class="sec-title">Contact list</div>
+          <div id="contact-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== BANK TRANSFER ========== -->
+    <section class="frame" data-frame="bankTransfer">
+      <div class="topbar"><button class="chev-back" onclick="go('home')">&#10094;</button></div>
+      <div class="pad stack" style="padding-top:34px">
+        <input class="field" id="bank-acct" inputmode="numeric" placeholder="Bank Account">
+        <input class="field" id="bank-ifsc" placeholder="IFSC code">
+        <p class="err" id="err-bank">Enter an account number and IFSC code</p>
+        <button class="btn" onclick="submitBank()">Continue</button>
+      </div>
+    </section>
+
+    <!-- ========== PAY AMOUNT ========== -->
+    <section class="frame" data-frame="payAmount">
+      <div class="topbar"><button class="chev-back" onclick="go('home')">&#10094;</button></div>
+      <div class="pad">
+        <p class="hint" style="padding-bottom:12px">Paying <b id="pay-to">&mdash;</b></p>
+        <div class="field-row">
+          <input class="field" id="pay-amount" inputmode="decimal" placeholder="Enter Amount"
+            style="padding-right:96px" onkeydown="if(event.key==='Enter'){checkPayment()}">
+          <button class="inline-add" style="padding:8px 16px;font-size:13px"
+            onclick="checkPayment()">Check</button>
+        </div>
+        <p class="err" id="err-pay">Enter an amount greater than zero</p>
+        <div style="margin-top:22px">
+          <div class="sec-title">Category</div>
+          <div class="chip-wrap" id="pay-cats"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PAY CONFIRMED ========== -->
+    <section class="frame" data-frame="payConfirm">
+      <div style="padding-top:150px">
+        <div class="confirm-mark">
+          <svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="#111" stroke-width="2">
+            <path d="M4 12.5l5.2 5.2L20 7"/></svg>
+        </div>
+        <div style="text-align:center;font-size:22px;font-weight:700;margin-top:22px">Payment Confirmed</div>
+        <div style="text-align:center;font-size:14px;color:var(--ink2);margin-top:7px" id="confirm-line"></div>
+        <div class="pad" style="padding-top:30px">
+          <button class="btn ghost" onclick="go('home')">Back to Home</button>
+        </div>
+      </div>
+      <button class="card-btn" id="savings-peek" onclick="openSheet('savingsSheet')"
+        style="position:absolute;left:16px;right:16px;bottom:16px;width:auto;
+               border-radius:18px 18px 0 0;padding-top:10px">
+        <div style="display:flex;justify-content:center;margin-bottom:6px">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#111" stroke-width="2">
+            <path d="M6 15l6-6 6 6"/></svg>
+        </div>
+        <div style="font-size:16px;font-weight:700">Savings Goals</div>
+        <div style="font-size:11.5px;color:var(--ink2);margin-top:3px" id="peek-sub"></div>
+      </button>
+    </section>
+
+    <!-- ========== CATEGORIES TAB ========== -->
+    <section class="frame" data-frame="categories">
+      <div class="topbar" style="padding-bottom:0">
+        <button class="period-btn" onclick="openSheet('periodSheet')">
+          <span id="cat-period-label">Daily Spending</span>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#111" stroke-width="2">
+            <path d="M6 9l6 6 6-6"/></svg>
+        </button>
+      </div>
+      <div class="pad" style="padding-top:12px;display:flex;gap:10px">
+        <button class="pill btn-sm" style="border-radius:12px;height:36px"
+          onclick="openSheet('budgetSheet')">Edit Budget</button>
+        <div style="flex:1"></div>
+        <button class="pill btn-sm" style="border-radius:12px;height:36px"
+          onclick="openSheet('editCatsSheet')">Edit categories</button>
+      </div>
+      <div class="donut-wrap"><svg id="donut" width="250" height="250" viewBox="0 0 250 250"></svg></div>
+      <div class="legend" id="cat-legend"></div>
+      <div class="pad" style="padding-top:12px">
+        <div id="cat-rows"></div>
+      </div>
+    </section>
+
+    <section class="frame" data-frame="categoryDetail">
+      <div class="topbar">
+        <button class="chev-back" onclick="go('categories')">&#10094;</button>
+        <h2 id="cd-title">Category</h2>
+      </div>
+      <div class="pad">
+        <div class="panel" style="margin-bottom:16px">
+          <div class="between">
+            <span style="font-size:24px;font-weight:700" id="cd-spent">&#8377;0</span>
+            <span class="hint" id="cd-period">this week</span>
+          </div>
+          <div class="bar" style="margin-top:12px"><i id="cd-fill" style="width:0%"></i></div>
+          <div class="between" style="margin-top:7px">
+            <span class="micro" id="cd-budget-line">Budget &#8377;0</span>
+            <span class="micro" id="cd-left-line">&#8377;0 left</span>
+          </div>
+          <button class="btn ghost" style="margin-top:14px" onclick="openBudgetFor()">Edit budget</button>
+        </div>
+        <div class="sec-title">Transactions</div>
+        <div id="cd-txns"></div>
+      </div>
+    </section>
+
+    <!-- ========== INSIGHT TAB ========== -->
+    <section class="frame" data-frame="insight">
+      <div class="topbar"><h2 style="padding-left:6px">Insights</h2></div>
+      <div class="pad stack" id="insight-feed"></div>
+    </section>
+
+    <!-- ========== SAVINGS TAB ========== -->
+    <section class="frame" data-frame="savings">
+      <div class="topbar"><h2 style="padding-left:6px">Savings</h2></div>
+      <div class="pad">
+        <div class="between" style="margin-bottom:10px">
+          <span class="sec-title" style="margin:0">Goals</span>
+          <button class="pill" onclick="go('goalCreate')">+ New goal</button>
+        </div>
+        <div class="stack" id="goal-list"></div>
+
+        <div class="between" style="margin:24px 0 4px">
+          <span class="sec-title" style="margin:0">Subscriptions</span>
+          <button class="pill" onclick="go('subAdd')">+ Add</button>
+        </div>
+        <p class="hint" id="sub-summary" style="padding-bottom:6px"></p>
+        <div class="panel" style="padding:4px 16px"><div id="sub-list"></div></div>
+      </div>
+    </section>
+
+    <section class="frame" data-frame="goalCreate">
+      <div class="topbar">
+        <button class="chev-back" onclick="go('savings')">&#10094;</button>
+        <h2>New savings goal</h2>
+      </div>
+      <div class="pad stack">
+        <input class="field" id="gc-name" placeholder="What are you saving for?">
+        <input class="field" id="gc-target" inputmode="decimal" placeholder="Target amount (&#8377;)">
+        <input class="field" id="gc-by" placeholder="By when? (e.g. December)">
+        <p class="err" id="err-gc">Give the goal a name and a target amount</p>
+        <button class="btn" onclick="submitGoal()">Create goal</button>
+      </div>
+    </section>
+
+    <section class="frame" data-frame="goalDetail">
+      <div class="topbar">
+        <button class="chev-back" onclick="go('savings')">&#10094;</button>
+        <h2 id="gd-title">Goal</h2>
+      </div>
+      <div class="pad">
+        <div class="panel" style="margin-bottom:16px">
+          <div style="font-size:26px;font-weight:700" id="gd-saved">&#8377;0</div>
+          <div class="hint" id="gd-of" style="margin-top:3px"></div>
+          <div class="bar" style="margin-top:12px"><i id="gd-fill" style="width:0%"></i></div>
+          <div class="between" style="margin-top:7px">
+            <span class="micro" id="gd-pct">0%</span>
+            <span class="micro" id="gd-by"></span>
+          </div>
+        </div>
+        <div class="sec-title">Add to this goal</div>
+        <div class="field-row" style="margin-bottom:8px">
+          <input class="field" id="gd-add" inputmode="decimal" placeholder="Amount (&#8377;)"
+            style="padding-right:86px">
+          <button class="inline-add" style="padding:8px 14px;font-size:12.5px"
+            onclick="contributeGoal()">Add</button>
+        </div>
+        <p class="err" id="err-gd">Enter an amount to add</p>
+        <div class="sec-title" style="margin-top:20px">Contributions</div>
+        <div id="gd-hist"></div>
+      </div>
+    </section>
+
+    <section class="frame" data-frame="goalReached">
+      <div style="padding-top:170px;text-align:center">
+        <div class="confirm-mark">
+          <svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="#111" stroke-width="1.8">
+            <path d="M8 21h8M12 17v4M5 4h14v4a7 7 0 01-14 0V4zM5 6H2.5v2A3.5 3.5 0 005 11.4M19 6h2.5v2a3.5 3.5 0 01-2.5 3.4"/></svg>
+        </div>
+        <div style="font-size:22px;font-weight:700;margin-top:22px">Goal reached</div>
+        <div style="font-size:14px;color:var(--ink2);margin-top:8px;padding:0 34px" id="gr-line"></div>
+        <div class="pad" style="padding-top:30px">
+          <button class="btn" onclick="go('savings')">Back to Savings</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="frame" data-frame="subDetail">
+      <div class="topbar">
+        <button class="chev-back" onclick="go('savings')">&#10094;</button>
+        <h2 id="sd-title">Subscription</h2>
+      </div>
+      <div class="pad">
+        <div style="font-size:32px;font-weight:700;padding:4px 0 16px" id="sd-amt">&#8377;0</div>
+        <div class="panel" style="padding:4px 16px;margin-bottom:16px">
+          <div class="row-link" style="cursor:default"><div class="rl-main">Billing cycle</div>
+            <div class="rl-val" id="sd-cycle">Monthly</div></div>
+          <div class="row-link" style="cursor:default"><div class="rl-main">Next due</div>
+            <div class="rl-val" id="sd-due">&mdash;</div></div>
+          <div class="row-link" style="cursor:default"><div class="rl-main">Category</div>
+            <div class="rl-val" id="sd-cat">&mdash;</div></div>
+          <div class="row-link" style="cursor:default"><div class="rl-main">Yearly cost</div>
+            <div class="rl-val" id="sd-year">&mdash;</div></div>
+        </div>
+        <p class="hint" id="sd-note" style="padding-bottom:14px"></p>
+        <button class="btn ghost" onclick="removeSub()">Remove from subscriptions</button>
+      </div>
+    </section>
+
+    <section class="frame" data-frame="subAdd">
+      <div class="topbar">
+        <button class="chev-back" onclick="go('savings')">&#10094;</button>
+        <h2>Add subscription</h2>
+      </div>
+      <div class="pad stack">
+        <input class="field" id="sa-name" placeholder="Name (e.g. Spotify)">
+        <input class="field" id="sa-amt" inputmode="decimal" placeholder="Amount per cycle (&#8377;)">
+        <input class="field" id="sa-day" inputmode="numeric" placeholder="Bills on day of month (1-28)">
+        <p class="err" id="err-sa">Enter a name, an amount, and a billing day between 1 and 28</p>
+        <button class="btn" onclick="submitSub()">Add</button>
+      </div>
+    </section>
+
+    <!-- ========== SETTINGS TAB ========== -->
+    <section class="frame" data-frame="settings">
+      <div class="topbar"><h2 style="padding-left:6px">Settings</h2></div>
+      <div class="pad">
+        <div class="panel" style="padding:12px 16px;margin-bottom:16px;display:flex;
+          align-items:center;gap:12px">
+          <span class="avatar" style="cursor:default">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#111" stroke-width="1.6">
+              <circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20c.8-3.8 3.8-5.6 7.2-5.6s6.4 1.8 7.2 5.6"/></svg>
+          </span>
+          <div>
+            <div style="font-weight:600">Your account</div>
+            <div class="micro" id="set-acct-sub"></div>
+          </div>
+        </div>
+
+        <div class="panel" style="padding:2px 16px">
+          <button class="row-link" onclick="openSheet('accountSheet')">
+            <div class="rl-main">Connected accounts</div>
+            <div class="rl-val" id="set-acct-count">0</div>
+          </button>
+          <button class="row-link" onclick="openSheet('trackingSheet')">
+            <div class="rl-main">Tracking method</div>
+            <div class="rl-val" id="set-tracking">UPI</div>
+          </button>
+          <button class="row-link" onclick="openSheet('editCatsSheet')">
+            <div class="rl-main">Categories</div>
+            <div class="rl-val" id="set-cat-count">0</div>
+          </button>
+          <button class="row-link" onclick="openSheet('budgetSheet')">
+            <div class="rl-main">Budgets</div>
+            <div class="rl-val">Daily &amp; weekly</div>
+          </button>
+          <button class="row-link" onclick="go('alerts')">
+            <div class="rl-main">Spending alerts</div>
+            <div class="rl-val" id="set-alert-val">80%</div>
+          </button>
+          <button class="row-link" onclick="go('transactions')">
+            <div class="rl-main">Transaction history</div>
+            <div class="rl-val" id="set-txn-count">0</div>
+          </button>
+          <button class="row-link" onclick="go('pinChange')">
+            <div class="rl-main">Security PIN</div>
+            <div class="rl-val">Change</div>
+          </button>
+          <button class="row-link" onclick="go('permissionsSettings')">
+            <div class="rl-main">App permissions</div>
+            <div class="rl-val" id="set-perm-val">3 on</div>
+          </button>
+        </div>
+
+        <div class="panel-lite" style="margin-top:16px;display:flex;gap:10px;align-items:flex-start">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#111" stroke-width="1.7"
+            style="flex:none;margin-top:1px">
+            <rect x="4.5" y="10" width="15" height="10" rx="2"/><path d="M8 10V7.5a4 4 0 018 0V10"/></svg>
+          <p class="hint">Your transaction data stays on this device. Nothing is synced to the cloud.</p>
+        </div>
+
+        <button class="btn ghost" style="margin-top:16px" onclick="restartProto()">Restart prototype</button>
+      </div>
+    </section>
+
+    <section class="frame" data-frame="alerts">
+      <div class="topbar">
+        <button class="chev-back" onclick="go('settings')">&#10094;</button>
+        <h2>Spending alerts</h2>
+      </div>
+      <div class="pad">
+        <p class="hint" style="padding-bottom:14px">
+          Trickle tells you where you stand. It never tells you off.
+        </p>
+        <div class="sec-title">Nudge me when a category reaches</div>
+        <div class="chip-wrap" id="alert-thresholds" style="margin-bottom:20px"></div>
+        <div class="panel" style="padding:2px 16px">
+          <div class="row-link" style="cursor:default">
+            <div class="rl-main"><div>Daily summary</div>
+              <div class="rl-sub">One quiet recap each evening</div></div>
+            <button class="toggle on" id="alert-daily" onclick="togglePerm('alert-daily');renderAlerts()"><i></i></button>
+          </div>
+          <div class="row-link" style="cursor:default">
+            <div class="rl-main"><div>Repeat-buy nudge</div>
+              <div class="rl-sub">When the same shop shows up 5+ times a week</div></div>
+            <button class="toggle on" id="alert-repeat" onclick="togglePerm('alert-repeat')"><i></i></button>
+          </div>
+        </div>
+        <div class="panel-lite" style="margin-top:18px">
+          <div class="micro" style="margin-bottom:6px">Preview</div>
+          <div style="font-size:13.5px" id="alert-preview"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="frame" data-frame="pinChange">
+      <div class="topbar">
+        <button class="chev-back" onclick="go('settings')">&#10094;</button>
+        <h2>Change Security PIN</h2>
+      </div>
+      <div class="pad stack">
+        <input class="field" id="pc1" type="password" inputmode="numeric" maxlength="4" placeholder="New PIN">
+        <input class="field" id="pc2" type="password" inputmode="numeric" maxlength="4" placeholder="Confirm new PIN">
+        <p class="err" id="err-pc">Enter a 4-digit PIN in both fields, and make them match</p>
+        <button class="btn" onclick="changePin()">Save</button>
+      </div>
+    </section>
+
+    <section class="frame" data-frame="permissionsSettings">
+      <div class="topbar">
+        <button class="chev-back" onclick="go('settings')">&#10094;</button>
+        <h2>App permissions</h2>
+      </div>
+      <div class="pad">
+        <div class="panel" style="padding:2px 16px">
+          <div class="row-link" style="cursor:default">
+            <div class="rl-main"><div>Notifications</div>
+              <div class="rl-sub">Gentle nudges when a budget is close</div></div>
+            <button class="toggle" id="perm-notif-2" onclick="mirrorPerm('perm-notif')"><i></i></button>
+          </div>
+          <div class="row-link" style="cursor:default">
+            <div class="rl-main"><div>Contacts</div>
+              <div class="rl-sub">Pick people to pay without typing numbers</div></div>
+            <button class="toggle" id="perm-contacts-2" onclick="mirrorPerm('perm-contacts')"><i></i></button>
+          </div>
+          <div class="row-link" style="cursor:default">
+            <div class="rl-main"><div>Camera</div>
+              <div class="rl-sub">Scan UPI QR codes to pay</div></div>
+            <button class="toggle" id="perm-camera-2" onclick="mirrorPerm('perm-camera')"><i></i></button>
+          </div>
+        </div>
+        <p class="micro" style="margin-top:14px">
+          Turning off Camera hides Scan QR on Home. Turning off Contacts hides Pay Anyone.
+        </p>
+      </div>
+    </section>
+
+  </div><!-- /viewport -->
+
+  <!-- ========== BOTTOM NAV ========== -->
+  <nav class="tabbar">
+    <button class="tab" data-tab="savings" onclick="go('savings')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <path d="M3.5 12.5c0-3.6 3.4-6 7.5-6 1 0 2 .14 2.9.4L17 5.2l.5 3a6 6 0 012 3.1l2 .6v3.4l-2 .3-1.2 1.7V20h-3v-1.6a12 12 0 01-4.6 0V20h-3v-2.8c-1.9-1.1-3.2-2.8-3.2-4.7z"/>
+        <circle cx="8.6" cy="11.4" r=".9" fill="currentColor" stroke="none"/></svg>
+      <span>Savings</span>
+    </button>
+    <button class="tab" data-tab="categories" onclick="go('categories')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M4 7h16M4 12h11M4 17h7"/></svg>
+      <span>Categories</span>
+    </button>
+    <button class="tab home-tab" data-tab="home" onclick="go('home')">
+      <span class="home-cradle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M3.5 10.6L12 4l8.5 6.6V20H3.5z"/></svg>
+      </span>
+      <span>Home</span>
+    </button>
+    <button class="tab" data-tab="insight" onclick="go('insight')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M3 15l4.5-6 3.5 4 4-7 6 9"/></svg>
+      <span>Insight</span>
+    </button>
+    <button class="tab" data-tab="settings" onclick="go('settings')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <circle cx="12" cy="12" r="3.1"/>
+        <path d="M12 2.8l1.3 2.1 2.4-.5.4 2.4 2.2 1-1 2.2 1 2.2-2.2 1-.4 2.4-2.4-.5L12 21.2l-1.3-2.1-2.4.5-.4-2.4-2.2-1 1-2.2-1-2.2 2.2-1 .4-2.4 2.4.5z"/></svg>
+      <span>Settings</span>
+    </button>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- ========== SHEETS ========== -->
+  <div class="scrim" id="scrim" onclick="closeSheetIfScrim(event)">
+
+    <div class="sheet" data-sheet="accountSheet" style="display:none">
+      <div class="grab"></div>
+      <h3>Account overview</h3>
+      <div class="panel" style="margin-bottom:14px">
+        <div class="sec-title">Connected Accounts</div>
+        <div class="chip-wrap" id="sheet-accounts"></div>
+      </div>
+      <div class="field-row">
+        <input class="field" id="sheet-upi-input" placeholder="Add account (name@bank)"
+          style="padding-right:74px" onkeydown="if(event.key==='Enter'){addUpiFromSheet()}">
+        <button class="inline-add" onclick="addUpiFromSheet()">Add</button>
+      </div>
+      <p class="err" id="err-sheet-upi">Enter a UPI ID like name@oksbi</p>
+      <button class="btn ghost" style="margin-top:16px" onclick="closeSheet()">Done</button>
+    </div>
+
+    <div class="sheet" data-sheet="periodSheet" style="display:none">
+      <div class="grab"></div>
+      <h3>Show spending by</h3>
+      <div class="gap8" id="period-options"></div>
+    </div>
+
+    <div class="sheet" data-sheet="budgetSheet" style="display:none">
+      <div class="grab"></div>
+      <h3>Budget</h3>
+      <div class="between" style="margin-bottom:16px">
+        <span style="font-size:14px">Select Category</span>
+        <button class="pill" onclick="cycleBudgetCat()">
+          <span id="budget-cat-name">Food</span>
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6"/></svg>
+        </button>
+      </div>
+      <div class="between" style="background:var(--panel2);border-radius:12px;padding:10px 14px;margin-bottom:10px">
+        <span style="font-size:13px">Daily Budget</span>
+        <input id="budget-daily" inputmode="decimal"
+          style="width:88px;text-align:right;border:1px solid var(--line);border-radius:9px;
+                 height:32px;padding:0 9px;font:inherit;font-size:13px;background:#fff"
+          oninput="budgetDailyChanged()">
+      </div>
+      <div class="between" style="background:var(--panel2);border-radius:12px;padding:10px 14px">
+        <span style="font-size:13px">Weekly Budget</span>
+        <input id="budget-weekly" inputmode="decimal"
+          style="width:88px;text-align:right;border:1px solid var(--line);border-radius:9px;
+                 height:32px;padding:0 9px;font:inherit;font-size:13px;background:#fff"
+          oninput="budgetWeeklyChanged()">
+      </div>
+      <p class="micro" style="margin-top:10px">Changing one updates the other (weekly = daily &times; 7).</p>
+      <button class="btn" style="margin-top:16px" onclick="saveBudget()">Save budget</button>
+    </div>
+
+    <div class="sheet" data-sheet="editCatsSheet" style="display:none">
+      <div class="grab"></div>
+      <h3>Edit categories</h3>
+      <div class="chip-wrap" id="sheet-chosen-cats" style="margin-bottom:14px"></div>
+      <div class="field-row">
+        <input class="field" id="sheet-cat-input" placeholder="Add a category"
+          style="padding-right:74px" onkeydown="if(event.key==='Enter'){addCatFromSheet()}">
+        <button class="inline-add" onclick="addCatFromSheet()">Add</button>
+      </div>
+      <p class="micro" style="margin-top:10px">
+        Removing a category moves its transactions to Other.
+      </p>
+      <button class="btn ghost" style="margin-top:16px" onclick="closeSheet()">Done</button>
+    </div>
+
+    <div class="sheet" data-sheet="quickCatSheet" style="display:none">
+      <div class="grab"></div>
+      <h3>Quick Category</h3>
+      <div class="chip-wrap" id="quick-cat-list"></div>
+      <button class="btn ghost" style="margin-top:18px" onclick="closeSheet()">Done</button>
+    </div>
+
+    <div class="sheet" data-sheet="trackingSheet" style="display:none">
+      <div class="grab"></div>
+      <h3>Tracking method</h3>
+      <div class="gap8">
+        <button class="field" style="justify-content:space-between;cursor:pointer"
+          onclick="setTracking('upi')">
+          <span>Connect UPI &mdash; auto-log spends</span>
+          <span id="track-tick-upi" style="font-size:13px"></span>
+        </button>
+        <button class="field" style="justify-content:space-between;cursor:pointer"
+          onclick="setTracking('manual')">
+          <span>Manual Tracking</span>
+          <span id="track-tick-manual" style="font-size:13px"></span>
+        </button>
+      </div>
+      <p class="micro" style="margin-top:12px">
+        &#128274; Either way, your transaction data stays on this device.
+      </p>
+    </div>
+
+    <!-- FRICTION SHEET: the pre-payment check -->
+    <div class="sheet" data-sheet="frictionSheet" style="display:none">
+      <div class="grab"></div>
+      <div style="font-size:21px;font-weight:700;line-height:1.25;margin-bottom:4px">
+        Balance after Payment
+      </div>
+      <div style="font-size:26px;font-weight:700;letter-spacing:-.4px;margin-bottom:18px"
+        id="fr-balance">&#8377;0</div>
+
+      <div style="font-size:18px;font-weight:700" id="fr-cat-title">Food (Weekly)</div>
+      <div class="friction-bar">
+        <i class="fb-spent" id="fr-spent" style="width:40%"></i>
+        <i class="fb-this" id="fr-this" style="width:12%"></i>
+        <i class="fb-left" id="fr-left" style="width:48%"></i>
+      </div>
+      <div class="friction-legend">
+        <span id="fr-spent-lbl">Total Spent : &#8377;0</span>
+        <span id="fr-budget-lbl">Total budget : &#8377;0</span>
+      </div>
+
+      <div class="panel-lite" style="margin-top:16px">
+        <div class="micro" style="margin-bottom:7px">Purchases Made this</div>
+        <div style="display:flex;gap:26px;font-size:14px">
+          <span id="fr-day">Day : 0</span>
+          <span id="fr-week">Week : 0</span>
+        </div>
+      </div>
+
+      <p class="hint" id="fr-note" style="padding:14px 2px 0"></p>
+
+      <button class="btn" style="margin-top:16px" onclick="confirmPayment()">Pay</button>
+      <button class="btn ghost" style="margin-top:9px" onclick="closeSheet()">Not now</button>
+    </div>
+
+    <div class="sheet" data-sheet="savingsSheet" style="display:none">
+      <div class="grab"></div>
+      <h3>Savings Goals</h3>
+      <p class="hint" style="padding-bottom:14px" id="ss-line"></p>
+      <div class="stack" id="ss-goals"></div>
+      <button class="btn ghost" style="margin-top:16px" onclick="closeSheet()">Maybe later</button>
+    </div>
+
+  </div><!-- /scrim -->
+</div><!-- /phone -->
+
+<script>
+var UPI_LOGO = "data:image/png;base64,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";
+/* =====================================================================
+   TRICKLE — lo-fi clickable mockup
+   Flow source: Figma "Lofi Budget App". UPI-only tracking (no SMS).
+   ===================================================================== */
+
+/* ---------- constants ---------- */
+var RUPEE = '₹';
+var DEFAULT_CATS = ['Food','Snacks/Beverages','Groceries','Buffer','Stationery','Transport','Necessities'];
+var RECOMMENDED = ['Travel','Entertainment','Rent','Subscriptions','Health','Laundry',
+                   'Mobile recharge','Gifts','Books','Fitness','Printouts','Chai'];
+var DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+var DAY_ORDER = [1,2,3,4,5,6,0]; /* Mon..Sun */
+var PERIODS = [
+  {key:'daily',   label:'Daily Spending',   sub:'today',      days:1},
+  {key:'weekly',  label:'Weekly Spending',  sub:'this week',  days:7},
+  {key:'monthly', label:'Monthly Spending', sub:'this month', days:30}
+];
+
+var MERCHANTS = [
+  {name:'RV Shop',          cat:'Snacks/Beverages', min:15,  max:45,   perWeek:7},
+  {name:'Campus Coffee',    cat:'Snacks/Beverages', min:20,  max:40,   perWeek:6},
+  {name:'JD Canteen',       cat:'Food',             min:60,  max:160,  perWeek:5},
+  {name:'Kameng Mess',      cat:'Food',             min:90,  max:240,  perWeek:3},
+  {name:'Zepto',            cat:'Groceries',        min:110, max:380,  perWeek:2},
+  {name:'BigBasket',        cat:'Groceries',        min:280, max:720,  perWeek:1},
+  {name:'Core 1 Stationery',cat:'Stationery',       min:30,  max:150,  perWeek:1.5},
+  {name:'Metro Card',       cat:'Transport',        min:20,  max:60,   perWeek:4},
+  {name:'Uber',             cat:'Transport',        min:90,  max:240,  perWeek:1.5},
+  {name:'Hostel Laundry',   cat:'Necessities',      min:60,  max:120,  perWeek:1},
+  {name:'Medical Store',    cat:'Necessities',      min:70,  max:260,  perWeek:0.6},
+  {name:'Coursera',         cat:'Necessities',      min:2500,max:2500, perWeek:0.25}
+];
+
+var CONTACTS = ['Nishad K','Yash Raina','Gautham S','Harsh P','Vaishak M','Amma',
+                'Hostel Warden','Rohit (cab share)','Priya D','Mess Secretary'];
+
+/* ---------- state ---------- */
+var ACCOUNTS = [];
+var CATS = [];
+var TXNS = [];
+var GOALS = [];
+var SUBS = [];
+var state = {};
+
+function freshState(){
+  return {
+    current:'splash',
+    tracking:null,            /* 'upi' | 'manual' */
+    pin:'',
+    balance:0,
+    balanceHidden:false,
+    period:'daily',
+    catFilter:'All',
+    budgetSheetCat:'Food',
+    selectedMerchant:null,
+    selectedTxn:null,
+    selectedTxnCat:null,
+    selectedCategory:null,
+    selectedGoal:null,
+    selectedSub:null,
+    scanCat:'Food',
+    manualCat:null,
+    payCat:'Food',
+    pending:null,             /* {to, amt, cat} */
+    alertThreshold:80,
+    perms:{'perm-notif':true,'perm-contacts':true,'perm-camera':true,
+           'alert-daily':true,'alert-repeat':true}
+  };
+}
+
+/* ---------- small helpers ---------- */
+function $(id){ return document.getElementById(id); }
+function money(n){
+  n = Math.round(Number(n)||0);
+  return RUPEE + n.toLocaleString('en-IN');
+}
+function rnd(min,max){ return Math.round(min + Math.random()*(max-min)); }
+function dayStart(d){ var x=new Date(d); x.setHours(0,0,0,0); return x; }
+function daysAgo(n){ var x=dayStart(new Date()); x.setDate(x.getDate()-n); return x; }
+function fmtDate(ts){
+  var d=new Date(ts), t=dayStart(new Date()).getTime(), dd=dayStart(d).getTime();
+  if(dd===t) return 'Today';
+  if(dd===daysAgo(1).getTime()) return 'Yesterday';
+  return d.getDate()+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+}
+function esc(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                  .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function catNames(){ return CATS.map(function(c){return c.name;}); }
+function findCat(name){
+  for(var i=0;i<CATS.length;i++){ if(CATS[i].name===name) return CATS[i]; }
+  return null;
+}
+function showErr(id,msg){ var e=$(id); if(!e) return; if(msg) e.textContent=msg; e.classList.add('show'); }
+function hideErr(id){ var e=$(id); if(e) e.classList.remove('show'); }
+function hideAllErrs(){
+  var list=document.querySelectorAll('.err');
+  for(var i=0;i<list.length;i++) list[i].classList.remove('show');
+}
+function toast(msg){
+  var t=$('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(window._tt);
+  window._tt=setTimeout(function(){ t.classList.remove('show'); },2200);
+}
+
+/* ---------- transaction queries ---------- */
+function txnsSince(days){
+  var cut = daysAgo(days-1).getTime();
+  return TXNS.filter(function(t){ return t.ts >= cut; });
+}
+function txnsBetween(fromDaysAgo, toDaysAgo){
+  var a = daysAgo(fromDaysAgo).getTime(), b = daysAgo(toDaysAgo).getTime();
+  return TXNS.filter(function(t){ return t.ts >= a && t.ts < b; });
+}
+function sum(list){ return list.reduce(function(a,t){ return a+t.amt; },0); }
+function byCat(list,name){ return list.filter(function(t){ return t.cat===name; }); }
+function byMerchant(list,name){ return list.filter(function(t){ return t.merchant===name; }); }
+function periodDef(){
+  for(var i=0;i<PERIODS.length;i++){ if(PERIODS[i].key===state.period) return PERIODS[i]; }
+  return PERIODS[0];
+}
+
+/* ---------- seeding ---------- */
+function seedCategories(){
+  CATS = DEFAULT_CATS.map(function(n){
+    var daily = n==='Food' ? 220 : n==='Groceries' ? 180 : n==='Necessities' ? 200
+              : n==='Transport' ? 100 : n==='Snacks/Beverages' ? 90
+              : n==='Stationery' ? 60 : 120;
+    return {name:n, daily:daily, weekly:daily*7};
+  });
+}
+function seedTransactions(){
+  TXNS = [];
+  var id=1;
+  for(var d=34; d>=0; d--){
+    var date = daysAgo(d);
+    for(var m=0;m<MERCHANTS.length;m++){
+      var mm = MERCHANTS[m];
+      var chance = mm.perWeek/7;
+      var times = Math.floor(chance) + (Math.random() < (chance % 1) ? 1 : 0);
+      for(var k=0;k<times;k++){
+        var ts = new Date(date);
+        ts.setHours(rnd(8,21), rnd(0,59), 0, 0);
+        TXNS.push({
+          id:id++, merchant:mm.name, cat:mm.cat,
+          amt:rnd(mm.min,mm.max), ts:ts.getTime(),
+          source: Math.random()<0.85 ? 'UPI' : 'Manual'
+        });
+      }
+    }
+  }
+  TXNS.sort(function(a,b){ return b.ts-a.ts; });
+  state.balance = rnd(8000,16000);
+}
+function seedGoals(){
+  GOALS = [
+    {id:1,name:'Motorcycle down payment',target:25000,saved:rnd(6000,11000),by:'March',hist:[]},
+    {id:2,name:'Trip to Goa',target:8000,saved:rnd(1500,4000),by:'December',hist:[]}
+  ];
+  GOALS.forEach(function(g){
+    g.hist=[{amt:Math.round(g.saved*0.6),ts:daysAgo(21).getTime()},
+            {amt:g.saved-Math.round(g.saved*0.6),ts:daysAgo(6).getTime()}];
+  });
+}
+function seedSubs(){
+  SUBS = [
+    {id:1,name:'Coursera',amt:2500,day:14,cat:'Necessities',
+     note:'Auto-debits every month. Easy to forget it is still running.'},
+    {id:2,name:'Spotify',amt:119,day:3,cat:'Entertainment',note:''},
+    {id:3,name:'Cloud storage',amt:130,day:22,cat:'Necessities',note:''}
+  ];
+}
+
+/* ---------- navigation ---------- */
+var TAB_FRAMES = ['home','categories','insight','savings','settings'];
+var STEP_OF = {method:1, upiSetup:1, onbCategories:2, pin:3, permissions:4};
+
+function go(name){
+  var frames = document.querySelectorAll('.frame');
+  for(var i=0;i<frames.length;i++) frames[i].classList.remove('active');
+  var f = document.querySelector('.frame[data-frame="'+name+'"]');
+  if(!f) return;
+  f.classList.add('active');
+  f.scrollTop = 0;
+  state.current = name;
+  closeSheet();
+  hideAllErrs();
+
+  var onTab = TAB_FRAMES.indexOf(name) !== -1;
+  document.body.classList.toggle('with-nav', onTab);
+  var tabs = document.querySelectorAll('.tab');
+  for(var j=0;j<tabs.length;j++){
+    tabs[j].classList.toggle('on', tabs[j].getAttribute('data-tab')===name);
+  }
+  renderDots(name);
+  renderAll();
+}
+
+function renderDots(name){
+  var step = STEP_OF[name];
+  var box = $('dots-'+name);
+  if(!box) return;
+  var html='';
+  for(var i=1;i<=4;i++) html += '<i class="'+(i===step?'on':'')+'"></i>';
+  box.innerHTML = html;
+}
+
+/* ---------- sheets ---------- */
+function openSheet(name){
+  var scrim = $('scrim');
+  var sheets = document.querySelectorAll('.sheet');
+  for(var i=0;i<sheets.length;i++){
+    sheets[i].style.display = (sheets[i].getAttribute('data-sheet')===name) ? 'block' : 'none';
+  }
+  scrim.classList.add('show');
+  if(name==='periodSheet') renderPeriodOptions();
+  if(name==='budgetSheet') openBudgetSheet();
+  if(name==='editCatsSheet') renderSheetCats();
+  if(name==='quickCatSheet') renderQuickCats();
+  if(name==='accountSheet') renderSheetAccounts();
+  if(name==='trackingSheet') renderTrackingSheet();
+  if(name==='savingsSheet') renderSavingsSheet();
+}
+function closeSheet(){
+  $('scrim').classList.remove('show');
+  var sheets = document.querySelectorAll('.sheet');
+  for(var i=0;i<sheets.length;i++) sheets[i].style.display='none';
+}
+function closeSheetIfScrim(e){ if(e.target && e.target.id==='scrim') closeSheet(); }
+
+/* =====================================================================
+   ONBOARDING
+   ===================================================================== */
+function chooseTracking(mode){
+  state.tracking = mode;
+  if(mode==='upi'){ go('upiSetup'); } else { go('onbCategories'); }
+}
+function backFromCategories(){ go(state.tracking==='upi' ? 'upiSetup' : 'method'); }
+
+function validUpi(v){ return /^[\w.\-]{2,}@[a-z]{2,}$/i.test(v); }
+
+function addUpi(){
+  var el=$('upi-input'), v=el.value.trim();
+  if(!validUpi(v)){ showErr('err-upi'); return; }
+  if(ACCOUNTS.indexOf(v)===-1) ACCOUNTS.push(v);
+  el.value=''; hideErr('err-upi'); renderAll();
+}
+function addUpiFromSheet(){
+  var el=$('sheet-upi-input'), v=el.value.trim();
+  if(!validUpi(v)){ showErr('err-sheet-upi'); return; }
+  if(ACCOUNTS.indexOf(v)===-1) ACCOUNTS.push(v);
+  el.value=''; hideErr('err-sheet-upi'); renderAll(); toast('Account added');
+}
+function removeAccount(v){
+  ACCOUNTS = ACCOUNTS.filter(function(a){ return a!==v; });
+  renderAll();
+}
+function finishUpi(){
+  if(!ACCOUNTS.length){ showErr('err-upi','Add at least one UPI ID to continue'); return; }
+  go('onbCategories');
+}
+function renderUpiList(){
+  var box=$('upi-list');
+  if(box){
+    box.innerHTML = ACCOUNTS.length
+      ? ACCOUNTS.map(function(a){
+          return '<button class="pill" onclick="removeAccount(\''+esc(a)+'\')">'
+               + esc(a) + '<span class="x">&times;</span></button>';
+        }).join('')
+      : '<span class="micro">No accounts yet &mdash; add one above.</span>';
+  }
+}
+function renderSheetAccounts(){
+  var box=$('sheet-accounts');
+  if(!box) return;
+  box.innerHTML = ACCOUNTS.length
+    ? ACCOUNTS.map(function(a){
+        return '<button class="pill" onclick="removeAccount(\''+esc(a)+'\')">'
+             + esc(a) + '<span class="x">&times;</span></button>';
+      }).join('')
+    : '<span class="micro">No accounts connected.</span>';
+}
+
+/* categories during onboarding */
+function addCat(name){
+  name = String(name||'').trim();
+  if(!name) return false;
+  if(findCat(name)) return false;
+  CATS.push({name:name, daily:80, weekly:560});
+  return true;
+}
+function removeCat(name){
+  CATS = CATS.filter(function(c){ return c.name!==name; });
+  TXNS.forEach(function(t){ if(t.cat===name) t.cat='Other'; });
+  if(!findCat('Other') && TXNS.some(function(t){ return t.cat==='Other'; })){
+    CATS.push({name:'Other',daily:60,weekly:420});
+  }
+  renderAll();
+}
+function addTypedCat(){
+  var el=$('cat-input');
+  if(addCat(el.value)){ el.value=''; hideErr('err-cat'); renderAll(); }
+  else { el.value=''; }
+}
+function addCatFromSheet(){
+  var el=$('sheet-cat-input');
+  if(addCat(el.value)){ el.value=''; renderAll(); toast('Category added'); }
+  else { el.value=''; }
+}
+function addRecommended(name){ if(addCat(name)) renderAll(); }
+function finishCategories(){
+  if(!CATS.length){ showErr('err-cat'); return; }
+  go('pin');
+}
+function renderChosenCats(){
+  var html = CATS.map(function(c){
+    return '<button class="pill" onclick="removeCat(\''+esc(c.name)+'\')">'
+         + esc(c.name) + '<span class="x">&times;</span></button>';
+  }).join('');
+  var a=$('chosen-cats'); if(a) a.innerHTML = html || '<span class="micro">None chosen yet.</span>';
+  var b=$('sheet-chosen-cats'); if(b) b.innerHTML = html || '<span class="micro">None yet.</span>';
+}
+function renderRecommended(){
+  var box=$('rec-list'); if(!box) return;
+  var q = ($('rec-search') ? $('rec-search').value : '').trim().toLowerCase();
+  var pool = RECOMMENDED.concat(DEFAULT_CATS).filter(function(n){
+    return !findCat(n) && (!q || n.toLowerCase().indexOf(q)!==-1);
+  });
+  box.innerHTML = pool.length
+    ? pool.map(function(n){
+        return '<button class="pill" onclick="addRecommended(\''+esc(n)+'\')">+ '+esc(n)+'</button>';
+      }).join('')
+    : '<span class="micro">Nothing left to add.</span>';
+}
+
+function submitPin(){
+  var a=$('pin1').value.trim(), b=$('pin2').value.trim();
+  if(!/^\d{4}$/.test(a) || a!==b){ showErr('err-pin'); return; }
+  state.pin=a; hideErr('err-pin'); go('permissions');
+}
+function changePin(){
+  var a=$('pc1').value.trim(), b=$('pc2').value.trim();
+  if(!/^\d{4}$/.test(a) || a!==b){ showErr('err-pc'); return; }
+  state.pin=a; $('pc1').value=''; $('pc2').value='';
+  hideErr('err-pc'); toast('PIN updated'); go('settings');
+}
+function togglePerm(id){
+  state.perms[id] = !state.perms[id];
+  renderPerms();
+}
+function mirrorPerm(id){ togglePerm(id); }
+function renderPerms(){
+  Object.keys(state.perms).forEach(function(id){
+    var el=$(id); if(el) el.classList.toggle('on', !!state.perms[id]);
+    var el2=$(id+'-2'); if(el2) el2.classList.toggle('on', !!state.perms[id]);
+  });
+}
+
+function enterApp(){
+  if(!TXNS.length) seedTransactions();
+  go('home');
+}
+
+function renderAllSet(){
+  var sub=$('allset-sub');
+  if(sub){
+    sub.textContent = state.tracking==='upi'
+      ? "We'll log your UPI spends automatically and show you where the money goes — starting today."
+      : "Add spends as you go and Trickle will show you where the money goes — starting today.";
+  }
+  var panel=$('allset-accounts-panel');
+  if(panel) panel.style.display = (state.tracking==='upi' && ACCOUNTS.length) ? 'block' : 'none';
+  var acc=$('allset-accounts');
+  if(acc) acc.innerHTML = ACCOUNTS.map(function(a){
+    return '<span class="pill" style="cursor:default">'+esc(a)+'</span>'; }).join('');
+  var cats=$('allset-cats');
+  if(cats) cats.innerHTML = CATS.map(function(c){
+    return '<span class="pill" style="cursor:default">'+esc(c.name)+'</span>'; }).join('');
+}
+
+/* =====================================================================
+   HOME
+   ===================================================================== */
+function toggleBalance(){
+  state.balanceHidden = !state.balanceHidden;
+  renderHome();
+}
+function deltaHtml(now, prev){
+  if(!prev) return '';
+  var pct = Math.round(((now-prev)/prev)*100);
+  if(pct===0) return '<span class="delta">level</span>';
+  var up = pct>0;
+  return '<span class="delta">'+(up?'&#9650;':'&#9660;')+' '+Math.abs(pct)+'%</span>';
+}
+function accumulationPatterns(){
+  var week = txnsSince(7), map = {};
+  week.forEach(function(t){
+    if(!map[t.merchant]) map[t.merchant]={merchant:t.merchant,cat:t.cat,count:0,total:0};
+    map[t.merchant].count++; map[t.merchant].total+=t.amt;
+  });
+  return Object.keys(map).map(function(k){ return map[k]; })
+    .filter(function(p){ return p.count>=2; })
+    .sort(function(a,b){ return b.total-a.total; });
+}
+function renderHome(){
+  var todayTot = sum(txnsSince(1));
+  var yestTot  = sum(txnsBetween(1,0));
+  var weekTot  = sum(txnsSince(7));
+  var prevWeek = sum(txnsBetween(13,6));
+
+  $('home-weekly').textContent = money(weekTot);
+  $('home-weekly-delta').innerHTML = deltaHtml(weekTot, prevWeek);
+  $('home-daily').textContent = money(todayTot);
+  $('home-daily-delta').innerHTML = deltaHtml(todayTot, yestTot);
+  $('home-balance').textContent = 'Balance : ' + (state.balanceHidden ? '•••••' : money(state.balance));
+  var slash=$('eye-slash'); if(slash) slash.style.display = state.balanceHidden ? 'block' : 'none';
+  $('home-account').textContent = 'Account : ' + (ACCOUNTS[0] || 'manual entry');
+
+  var upiMode = state.tracking!=='manual';
+  $('home-tiles').style.display = upiMode ? 'flex' : 'none';
+  $('home-manual').style.display = upiMode ? 'none' : 'block';
+  var tiles = $('home-tiles').children;
+  tiles[0].style.display = state.perms['perm-camera'] ? 'flex' : 'none';
+  tiles[1].style.display = state.perms['perm-contacts'] ? 'flex' : 'none';
+
+  var pats = accumulationPatterns().slice(0,3);
+  $('home-trends').innerHTML = pats.length ? pats.map(function(p){
+    return '<div class="trend-row"><span class="tr-name">'+esc(p.merchant)+' :</span>'
+         + '<span class="tr-count">'+p.count+'x this week</span>'
+         + '<span class="tr-amt">'+money(p.total)+'</span></div>';
+  }).join('') : '<p class="micro">Nothing repeating yet this week.</p>';
+
+  var recent = TXNS.slice(0,5);
+  $('home-txns').innerHTML = recent.length ? recent.map(function(t){
+    return '<div class="txn-row" style="cursor:inherit"><span class="t-merch">'+esc(t.merchant)+'</span>'
+         + '<span class="t-cat">'+esc(t.cat)+'</span>'
+         + '<span class="t-amt">'+money(t.amt)+'</span></div>';
+  }).join('') : '<p class="micro">No transactions yet.</p>';
+}
+
+/* accumulation screens */
+function renderAccumulation(){
+  var box=$('accum-list'); if(!box) return;
+  var pats = accumulationPatterns();
+  box.innerHTML = pats.length ? pats.map(function(p){
+    return '<button class="card-btn" onclick="openPattern(\''+esc(p.merchant)+'\')">'
+      + '<div class="between"><span style="font-size:15px;font-weight:700">'+esc(p.merchant)+'</span>'
+      + '<span style="font-size:15px;font-weight:700">'+money(p.total)+'</span></div>'
+      + '<div class="between" style="margin-top:5px">'
+      + '<span class="micro">'+esc(p.cat)+' &middot; '+p.count+' purchases this week</span>'
+      + '<span class="micro">avg '+money(p.total/p.count)+'</span></div>'
+      + '</button>';
+  }).join('') : '<p class="empty-note">No repeat purchases this week.</p>';
+}
+function openPattern(merchant){
+  state.selectedMerchant = merchant;
+  go('accumulationDetail');
+}
+function renderAccumulationDetail(){
+  if(!state.selectedMerchant) return;
+  var list = byMerchant(txnsSince(7), state.selectedMerchant);
+  var total = sum(list);
+  $('accd-title').textContent = state.selectedMerchant;
+  $('accd-total').textContent = money(total);
+  $('accd-count').textContent = list.length;
+  $('accd-avg').textContent = money(list.length ? total/list.length : 0);
+  $('accd-list').innerHTML = list.map(function(t){
+    return '<button class="txn-row" onclick="openTxn('+t.id+')">'
+      + '<span class="t-merch">'+fmtDate(t.ts)+'</span>'
+      + '<span class="t-cat">'+new Date(t.ts).getHours()+':00</span>'
+      + '<span class="t-amt">'+money(t.amt)+'</span></button>';
+  }).join('') || '<p class="empty-note">Nothing this week.</p>';
+}
+
+/* =====================================================================
+   TRANSACTIONS
+   ===================================================================== */
+function setTxnFilter(name){ state.catFilter=name; renderTxnList(); }
+function renderTxnList(){
+  var box=$('txn-list'); if(!box) return;
+  var filters=$('txn-filters');
+  if(filters){
+    var opts=['All'].concat(catNames());
+    filters.innerHTML = opts.map(function(n){
+      return '<button class="pill'+(state.catFilter===n?' on':'')
+           + '" onclick="setTxnFilter(\''+esc(n)+'\')">'+esc(n)+'</button>';
+    }).join('');
+  }
+  var q = ($('txn-search') ? $('txn-search').value : '').trim().toLowerCase();
+  var list = TXNS.filter(function(t){
+    if(state.catFilter!=='All' && t.cat!==state.catFilter) return false;
+    if(q && (t.merchant+' '+t.cat).toLowerCase().indexOf(q)===-1) return false;
+    return true;
+  }).slice(0,60);
+
+  if(!list.length){ box.innerHTML='<p class="empty-note">No transactions match.</p>'; return; }
+  var html='', lastDay='';
+  list.forEach(function(t){
+    var d = fmtDate(t.ts);
+    if(d!==lastDay){
+      html += '<div class="micro" style="padding:14px 2px 5px;border-bottom:1px solid var(--line)">'+d+'</div>';
+      lastDay=d;
+    }
+    html += '<button class="txn-row" onclick="openTxn('+t.id+')">'
+         + '<span class="t-merch">'+esc(t.merchant)+'</span>'
+         + '<span class="t-cat">'+esc(t.cat)+'</span>'
+         + '<span class="t-src">'+t.source+'</span>'
+         + '<span class="t-amt">'+money(t.amt)+'</span></button>';
+  });
+  box.innerHTML = html;
+}
+function openTxn(id){
+  var t = TXNS.filter(function(x){ return x.id===id; })[0];
+  if(!t) return;
+  state.selectedTxn = id;
+  state.selectedTxnCat = t.cat;
+  go('transactionDetail');
+}
+function pickTxnCat(name){ state.selectedTxnCat=name; renderTxnDetail(); }
+function renderTxnDetail(){
+  var t = TXNS.filter(function(x){ return x.id===state.selectedTxn; })[0];
+  if(!t) return;
+  $('td-amt').textContent = money(t.amt);
+  $('td-merch').textContent = t.merchant;
+  $('td-date').textContent = fmtDate(t.ts);
+  $('td-src').textContent = t.source==='UPI' ? 'UPI auto-log' : 'You, manually';
+  $('td-cats').innerHTML = catNames().map(function(n){
+    return '<button class="pill'+(state.selectedTxnCat===n?' on':'')
+         + '" onclick="pickTxnCat(\''+esc(n)+'\')">'+esc(n)+'</button>';
+  }).join('');
+}
+function saveTxnCategory(){
+  var t = TXNS.filter(function(x){ return x.id===state.selectedTxn; })[0];
+  if(t && state.selectedTxnCat){ t.cat = state.selectedTxnCat; }
+  toast('Category updated');
+  go('transactions');
+}
+
+/* manual entry */
+function pickManualCat(name){ state.manualCat=name; renderManualCats(); }
+function renderManualCats(){
+  var box=$('me-cats'); if(!box) return;
+  box.innerHTML = catNames().map(function(n){
+    return '<button class="pill'+(state.manualCat===n?' on':'')
+         + '" onclick="pickManualCat(\''+esc(n)+'\')">'+esc(n)+'</button>';
+  }).join('');
+}
+function submitManual(){
+  var amt = parseFloat($('me-amount').value);
+  var merch = $('me-merchant').value.trim() || 'Cash spend';
+  if(!(amt>0) || !state.manualCat){ showErr('err-me'); return; }
+  TXNS.unshift({id:(TXNS.length?Math.max.apply(null,TXNS.map(function(t){return t.id;}))+1:1),
+    merchant:merch, cat:state.manualCat, amt:Math.round(amt),
+    ts:Date.now(), source:'Manual'});
+  state.balance = Math.max(0, state.balance - Math.round(amt));
+  $('me-amount').value=''; $('me-merchant').value=''; state.manualCat=null;
+  hideErr('err-me');
+  toast('Added ' + money(amt));
+  go('home');
+}
+
+/* =====================================================================
+   PAYMENT FLOW  (Scan / Pay Anyone / Bank Transfer -> Amount -> Friction -> Confirm)
+   ===================================================================== */
+function renderQuickCats(){
+  var box=$('quick-cat-list'); if(!box) return;
+  box.innerHTML = catNames().map(function(n){
+    return '<button class="pill'+(state.scanCat===n?' on':'')
+         + '" onclick="setScanCat(\''+esc(n)+'\')">'+esc(n)+'</button>';
+  }).join('');
+}
+function setScanCat(n){
+  state.scanCat=n;
+  var el=$('scan-cat'); if(el) el.textContent=n;
+  renderQuickCats();
+  closeSheet();
+}
+function renderContacts(){
+  var box=$('contact-list'); if(!box) return;
+  var q = ($('contact-search') ? $('contact-search').value : '').trim().toLowerCase();
+  var list = CONTACTS.filter(function(c){ return !q || c.toLowerCase().indexOf(q)!==-1; });
+  box.innerHTML = list.length ? list.map(function(c){
+    return '<button class="row-link" onclick="startPayment(\'contact\',\''+esc(c)+'\')">'
+      + '<span class="avatar" style="width:32px;height:32px;cursor:inherit">'
+      + '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#111" stroke-width="1.7">'
+      + '<circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20c.8-3.8 3.8-5.6 7.2-5.6s6.4 1.8 7.2 5.6"/></svg></span>'
+      + '<span class="rl-main">'+esc(c)+'</span>'
+      + '<span class="rl-val">Pay</span></button>';
+  }).join('') : '<p class="empty-note">No contacts match.</p>';
+}
+function submitBank(){
+  var a=$('bank-acct').value.trim(), i=$('bank-ifsc').value.trim();
+  if(a.length<6 || i.length<4){ showErr('err-bank'); return; }
+  hideErr('err-bank');
+  startPayment('bank','A/c •••'+a.slice(-4));
+}
+function startPayment(source, who){
+  state.pending = {
+    to: who || (source==='scan' ? 'Scanned QR merchant' : 'Someone'),
+    cat: source==='scan' ? state.scanCat : 'Food',
+    amt: 0
+  };
+  state.payCat = state.pending.cat;
+  $('pay-to').textContent = state.pending.to;
+  $('pay-amount').value='';
+  go('payAmount');
+}
+function pickPayCat(n){ state.payCat=n; if(state.pending) state.pending.cat=n; renderPayCats(); }
+function renderPayCats(){
+  var box=$('pay-cats'); if(!box) return;
+  box.innerHTML = catNames().map(function(n){
+    return '<button class="pill'+(state.payCat===n?' on':'')
+         + '" onclick="pickPayCat(\''+esc(n)+'\')">'+esc(n)+'</button>';
+  }).join('');
+}
+function checkPayment(){
+  var amt = parseFloat($('pay-amount').value);
+  if(!(amt>0)){ showErr('err-pay'); return; }
+  hideErr('err-pay');
+  state.pending.amt = Math.round(amt);
+  renderFriction();
+  openSheet('frictionSheet');
+}
+function renderFriction(){
+  var p = state.pending; if(!p) return;
+  var cat = findCat(p.cat) || {name:p.cat, weekly:560, daily:80};
+  var spent = sum(byCat(txnsSince(7), p.cat));
+  var budget = cat.weekly || 560;
+  var after = state.balance - p.amt;
+
+  $('fr-balance').textContent = money(after);
+  $('fr-cat-title').textContent = cat.name + ' (Weekly)';
+
+  var total = Math.max(budget, spent + p.amt);
+  var wSpent = (spent/total)*100;
+  var wThis  = (p.amt/total)*100;
+  var wLeft  = Math.max(0, 100 - wSpent - wThis);
+  $('fr-spent').style.width = wSpent.toFixed(1)+'%';
+  $('fr-this').style.width  = wThis.toFixed(1)+'%';
+  $('fr-left').style.width  = wLeft.toFixed(1)+'%';
+
+  $('fr-spent-lbl').innerHTML = 'Total Spent : ' + money(spent + p.amt);
+  $('fr-budget-lbl').innerHTML = 'Total budget : ' + money(budget);
+  $('fr-day').textContent  = 'Day : '  + byCat(txnsSince(1), p.cat).length;
+  $('fr-week').textContent = 'Week : ' + byCat(txnsSince(7), p.cat).length;
+
+  var left = budget - spent - p.amt;
+  var note = $('fr-note');
+  if(left >= 0){
+    note.textContent = 'After this, ' + money(left) + ' left in ' + cat.name + ' for the rest of the week.';
+  } else {
+    note.textContent = 'This takes ' + cat.name + ' ' + money(-left)
+      + ' past your weekly budget. Still your call.';
+  }
+}
+function confirmPayment(){
+  var p = state.pending; if(!p) return;
+  TXNS.unshift({id:(TXNS.length?Math.max.apply(null,TXNS.map(function(t){return t.id;}))+1:1),
+    merchant:p.to, cat:p.cat, amt:p.amt, ts:Date.now(), source:'UPI'});
+  state.balance = Math.max(0, state.balance - p.amt);
+  closeSheet();
+  $('confirm-line').textContent = money(p.amt) + ' to ' + p.to;
+  var g = GOALS[0];
+  $('peek-sub').textContent = g
+    ? 'Round up to ' + g.name + '? ' + money(g.saved) + ' of ' + money(g.target) + ' saved'
+    : 'Start a savings goal';
+  go('payConfirm');
+}
+function renderSavingsSheet(){
+  var p = state.pending;
+  var spare = p ? Math.max(10, Math.ceil(p.amt/50)*50 - p.amt) : 50;
+  if(spare < 10) spare = 10;
+  var line=$('ss-line');
+  if(line) line.textContent = 'Round this payment up and move ' + money(spare) + ' into a goal.';
+  var box=$('ss-goals'); if(!box) return;
+  box.innerHTML = GOALS.length ? GOALS.map(function(g){
+    var pct = Math.min(100, (g.saved/g.target)*100);
+    return '<button class="goal-card" onclick="quickSave('+g.id+','+spare+')">'
+      + '<div class="between"><span style="font-weight:700">'+esc(g.name)+'</span>'
+      + '<span style="font-size:12px">+'+money(spare)+'</span></div>'
+      + '<div class="bar" style="margin-top:10px"><i style="width:'+pct.toFixed(1)+'%"></i></div>'
+      + '<div class="micro" style="margin-top:6px">'+money(g.saved)+' of '+money(g.target)+'</div>'
+      + '</button>';
+  }).join('') : '<p class="empty-note">No goals yet.</p>';
+}
+function quickSave(id, amt){
+  var g = GOALS.filter(function(x){ return x.id===id; })[0];
+  if(!g) return;
+  g.saved += amt;
+  g.hist.unshift({amt:amt, ts:Date.now()});
+  state.balance = Math.max(0, state.balance - amt);
+  closeSheet();
+  if(g.saved >= g.target){
+    state.selectedGoal = g.id;
+    $('gr-line').textContent = g.name + ' is fully funded at ' + money(g.target) + '.';
+    go('goalReached');
+  } else {
+    toast(money(amt) + ' moved to ' + g.name);
+    renderAll();
+  }
+}
+
+/* =====================================================================
+   CATEGORIES TAB
+   ===================================================================== */
+function renderPeriodOptions(){
+  var box=$('period-options'); if(!box) return;
+  box.innerHTML = PERIODS.map(function(p){
+    return '<button class="field" style="justify-content:space-between;cursor:pointer" '
+      + 'onclick="setPeriod(\''+p.key+'\')"><span>'+p.label+'</span><span style="font-size:13px">'
+      + (state.period===p.key ? '&#10003;' : '') + '</span></button>';
+  }).join('');
+}
+function setPeriod(k){ state.period=k; closeSheet(); renderAll(); }
+
+function catSpend(name, days){ return sum(byCat(txnsSince(days), name)); }
+function catBudget(cat, days){
+  if(days===1) return cat.daily;
+  if(days===7) return cat.weekly;
+  return Math.round(cat.daily*30);
+}
+function renderCategories(){
+  var pd = periodDef();
+  $('cat-period-label').textContent = pd.label;
+
+  var rows = CATS.map(function(c){
+    return {name:c.name, amt:catSpend(c.name, pd.days),
+            prev: sum(byCat(txnsBetween(pd.days*2-1, pd.days-1), c.name))};
+  }).sort(function(a,b){ return b.amt-a.amt; });
+
+  var total = rows.reduce(function(a,r){ return a+r.amt; },0);
+  drawDonut(rows, total);
+
+  $('cat-legend').innerHTML = rows.slice(0,8).map(function(r,i){
+    return '<span><i style="background:'+shade(i,rows.length)+'"></i>'+esc(r.name)+'</span>';
+  }).join('');
+
+  $('cat-rows').innerHTML = rows.map(function(r){
+    return '<button class="cat-row" onclick="openCategory(\''+esc(r.name)+'\')">'
+      + '<span class="cr-name">'+esc(r.name)+'</span>'
+      + '<span class="cr-amt">'+money(r.amt)+'</span>'
+      + '<span class="cr-delta">'+deltaHtml(r.amt, r.prev)+'</span>'
+      + '</button>';
+  }).join('');
+}
+function shade(i,n){
+  var start=0.16, end=0.82;
+  var t = n<=1 ? 0 : i/(n-1);
+  var v = Math.round(255*(start + t*(end-start)));
+  return 'rgb('+v+','+v+','+v+')';
+}
+function drawDonut(rows, total){
+  var svg=$('donut'); if(!svg) return;
+  var cx=125, cy=125, r=88, w=34;
+  if(!total){
+    svg.innerHTML = '<circle cx="125" cy="125" r="88" fill="none" stroke="#e4e4e4" stroke-width="34"/>'
+      + '<text x="125" y="130" text-anchor="middle" font-size="13" fill="#8e8e8e">No spend yet</text>';
+    return;
+  }
+  var html='', angle=-Math.PI/2;
+  rows.forEach(function(row,i){
+    if(!row.amt) return;
+    var slice = (row.amt/total)*Math.PI*2;
+    var a1=angle, a2=angle+slice;
+    var large = slice>Math.PI ? 1 : 0;
+    var x1=cx+r*Math.cos(a1), y1=cy+r*Math.sin(a1);
+    var x2=cx+r*Math.cos(a2), y2=cy+r*Math.sin(a2);
+    html += '<path d="M '+x1.toFixed(2)+' '+y1.toFixed(2)
+         +  ' A '+r+' '+r+' 0 '+large+' 1 '+x2.toFixed(2)+' '+y2.toFixed(2)+'" '
+         +  'fill="none" stroke="'+shade(i,rows.length)+'" stroke-width="'+w+'"/>';
+    angle=a2;
+  });
+  html += '<text x="125" y="119" text-anchor="middle" font-size="11" fill="#8e8e8e">'
+       +  periodDef().sub + '</text>'
+       +  '<text x="125" y="141" text-anchor="middle" font-size="19" font-weight="700" fill="#111">'
+       +  money(total) + '</text>';
+  svg.innerHTML = html;
+}
+function openCategory(name){ state.selectedCategory=name; go('categoryDetail'); }
+function renderCategoryDetail(){
+  var name = state.selectedCategory; if(!name) return;
+  var cat = findCat(name) || {name:name, daily:80, weekly:560};
+  var pd = periodDef();
+  var spent = catSpend(name, pd.days);
+  var budget = catBudget(cat, pd.days);
+  var pct = budget ? Math.min(100,(spent/budget)*100) : 0;
+
+  $('cd-title').textContent = name;
+  $('cd-spent').textContent = money(spent);
+  $('cd-period').textContent = pd.sub;
+  $('cd-fill').style.width = pct.toFixed(1)+'%';
+  $('cd-budget-line').textContent = 'Budget ' + money(budget) + ' ' + pd.sub;
+  $('cd-left-line').textContent = (budget-spent >= 0)
+    ? money(budget-spent) + ' left' : money(spent-budget) + ' over';
+
+  var list = byCat(txnsSince(pd.days), name).slice(0,25);
+  $('cd-txns').innerHTML = list.length ? list.map(function(t){
+    return '<button class="txn-row" onclick="openTxn('+t.id+')">'
+      + '<span class="t-merch">'+esc(t.merchant)+'</span>'
+      + '<span class="t-cat">'+fmtDate(t.ts)+'</span>'
+      + '<span class="t-amt">'+money(t.amt)+'</span></button>';
+  }).join('') : '<p class="empty-note">Nothing in this category yet.</p>';
+}
+function openBudgetFor(){
+  state.budgetSheetCat = state.selectedCategory || 'Food';
+  openSheet('budgetSheet');
+}
+function openBudgetSheet(){
+  if(!findCat(state.budgetSheetCat)) state.budgetSheetCat = CATS.length ? CATS[0].name : 'Food';
+  var c = findCat(state.budgetSheetCat);
+  $('budget-cat-name').textContent = state.budgetSheetCat;
+  if(c){ $('budget-daily').value = c.daily; $('budget-weekly').value = c.weekly; }
+}
+function cycleBudgetCat(){
+  var names = catNames();
+  if(!names.length) return;
+  var i = names.indexOf(state.budgetSheetCat);
+  state.budgetSheetCat = names[(i+1) % names.length];
+  openBudgetSheet();
+}
+function budgetDailyChanged(){
+  var d = parseFloat($('budget-daily').value);
+  if(d>=0) $('budget-weekly').value = Math.round(d*7);
+}
+function budgetWeeklyChanged(){
+  var w = parseFloat($('budget-weekly').value);
+  if(w>=0) $('budget-daily').value = Math.round(w/7);
+}
+function saveBudget(){
+  var c = findCat(state.budgetSheetCat);
+  var d = parseFloat($('budget-daily').value), w = parseFloat($('budget-weekly').value);
+  if(c && d>=0 && w>=0){ c.daily=Math.round(d); c.weekly=Math.round(w); }
+  closeSheet(); toast('Budget saved'); renderAll();
+}
+function renderSheetCats(){ renderChosenCats(); }
+
+/* =====================================================================
+   INSIGHTS
+   ===================================================================== */
+function weekdayTotals(){
+  var out = [0,0,0,0,0,0,0], counts=[0,0,0,0,0,0,0];
+  txnsSince(30).forEach(function(t){
+    var d = new Date(t.ts).getDay();
+    out[d]+=t.amt; counts[d]++;
+  });
+  return {totals:out, counts:counts};
+}
+function weekdayChart(){
+  var wd = weekdayTotals();
+  var vals = DAY_ORDER.map(function(d){ return wd.totals[d]; });
+  var max = Math.max.apply(null, vals) || 1;
+  var maxIdx = vals.indexOf(max);
+  var W=316, H=118, n=7, gap=10;
+  var bw = (W - gap*(n-1))/n;
+  var html = '<svg viewBox="0 0 '+W+' '+(H+22)+'" width="100%" height="'+(H+22)+'">';
+  vals.forEach(function(v,i){
+    var h = Math.max(3, (v/max)*H);
+    var x = i*(bw+gap), y = H-h;
+    html += '<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw.toFixed(1)
+         +  '" height="'+h.toFixed(1)+'" rx="4" fill="'+(i===maxIdx?'#333':'#b6b6b6')+'"/>';
+    html += '<text x="'+(x+bw/2).toFixed(1)+'" y="'+(H+15)+'" text-anchor="middle" '
+         +  'font-size="10" fill="'+(i===maxIdx?'#111':'#8e8e8e')+'">'
+         +  DAY_NAMES[DAY_ORDER[i]] + '</text>';
+  });
+  html += '</svg>';
+  return {html:html, max:max, maxDay:DAY_NAMES[DAY_ORDER[maxIdx]], vals:vals};
+}
+function biggestMover(){
+  var best=null;
+  CATS.forEach(function(c){
+    var now = sum(byCat(txnsSince(7), c.name));
+    var prev = sum(byCat(txnsBetween(13,6), c.name));
+    if(prev < 150 || now < 100) return;
+    var pct = Math.round(((now-prev)/prev)*100);
+    if(!best || Math.abs(pct) > Math.abs(best.pct)) best={name:c.name, pct:pct, now:now, prev:prev};
+  });
+  return best;
+}
+function renderInsight(){
+  var feed=$('insight-feed'); if(!feed) return;
+  var cards=[];
+
+  /* 1. budget pace — calendar week, Monday to today */
+  var dayIdx = ((new Date().getDay()) + 6) % 7 + 1; /* Mon=1..Sun=7 */
+  var calWeekSpent = sum(txnsSince(dayIdx));
+  var weekSpent = sum(txnsSince(7));
+  var weekBudget = CATS.reduce(function(a,c){ return a + c.weekly; },0);
+  var expected = weekBudget * (dayIdx/7);
+  var pacePct = weekBudget ? Math.min(100,(calWeekSpent/weekBudget)*100) : 0;
+  var paceWord = calWeekSpent <= expected ? 'On track' : 'Ahead of pace';
+  cards.push(
+    '<button class="icard" onclick="go(\'categories\')">'
+    + '<div class="ic-kicker">Budget pace</div>'
+    + '<div class="ic-head">'+paceWord+' &mdash; '+money(calWeekSpent)+' of '+money(weekBudget)
+    + ' since Monday</div>'
+    + '<div class="ic-body"><div class="bar"><i style="width:'+pacePct.toFixed(1)+'%"></i></div></div>'
+    + '<div class="ic-sub">Day '+dayIdx+' of 7. At a steady pace you would be around '
+    + money(expected)+' by now.</div></button>');
+
+  /* 2. day-of-week monthly spending */
+  var wc = weekdayChart();
+  cards.push(
+    '<button class="icard" onclick="go(\'transactions\')">'
+    + '<div class="ic-kicker">Day of the week &middot; last 30 days</div>'
+    + '<div class="ic-head">'+wc.maxDay+' is your heaviest day</div>'
+    + '<div class="ic-body">'+wc.html+'</div>'
+    + '<div class="ic-sub">Totals for each weekday across the month. '
+    + wc.maxDay+' adds up to '+money(wc.max)+'.</div></button>');
+
+  /* 3. category trend */
+  var mover = biggestMover();
+  if(mover){
+    cards.push(
+      '<button class="icard" onclick="openCategory(\''+esc(mover.name)+'\')">'
+      + '<div class="ic-kicker">Category trend</div>'
+      + '<div class="ic-head">'+esc(mover.name)+' is '
+      + (mover.pct>0 ? 'up '+mover.pct+'%' : 'down '+Math.abs(mover.pct)+'%')
+      + ' vs last week</div>'
+      + '<div class="ic-sub">'+money(mover.now)+' this week, against '+money(mover.prev)
+      + ' the week before.</div></button>');
+  }
+
+  /* 4. accumulation spotlight */
+  var pats = accumulationPatterns();
+  if(pats.length){
+    var p = pats[0];
+    cards.push(
+      '<button class="icard" onclick="openPattern(\''+esc(p.merchant)+'\')">'
+      + '<div class="ic-kicker">Small purchases</div>'
+      + '<div class="ic-head">'+esc(p.merchant)+': '+p.count+' visits = '+money(p.total)+'</div>'
+      + '<div class="ic-sub">Each one was about '+money(p.total/p.count)
+      + '. Small on its own, not small together.</div></button>');
+  }
+
+  /* 5. highest contributor */
+  var rows = CATS.map(function(c){ return {name:c.name, amt:sum(byCat(txnsSince(30), c.name))}; })
+                 .sort(function(a,b){ return b.amt-a.amt; });
+  if(rows.length && rows[0].amt){
+    var monthTotal = rows.reduce(function(a,r){ return a+r.amt; },0);
+    var share = Math.round((rows[0].amt/monthTotal)*100);
+    var others = monthTotal - rows[0].amt;
+    cards.push(
+      '<button class="icard" onclick="openCategory(\''+esc(rows[0].name)+'\')">'
+      + '<div class="ic-kicker">Biggest contributor</div>'
+      + '<div class="ic-head">'+esc(rows[0].name)+' takes '+share+'% of your month</div>'
+      + '<div class="ic-body"><div class="bar"><i style="width:'+share+'%"></i></div></div>'
+      + '<div class="ic-sub">'+money(rows[0].amt)+' on '+esc(rows[0].name)+', '+money(others)
+      + ' across everything else.</div></button>');
+  }
+
+  /* 6. subscriptions */
+  var subTotal = SUBS.reduce(function(a,s){ return a+s.amt; },0);
+  if(SUBS.length){
+    cards.push(
+      '<button class="icard" onclick="go(\'savings\')">'
+      + '<div class="ic-kicker">Recurring</div>'
+      + '<div class="ic-head">'+money(subTotal)+' a month leaves on autopay</div>'
+      + '<div class="ic-sub">'+SUBS.length+' subscriptions, '+money(subTotal*12)
+      + ' a year. Next up: '+esc(nextDueSub().name)+'.</div></button>');
+  }
+
+  /* 7. savings goal */
+  if(GOALS.length){
+    var g = GOALS[0];
+    var gp = Math.min(100,(g.saved/g.target)*100);
+    cards.push(
+      '<button class="icard" onclick="openGoal('+g.id+')">'
+      + '<div class="ic-kicker">Savings goal</div>'
+      + '<div class="ic-head">'+esc(g.name)+' is '+Math.round(gp)+'% funded</div>'
+      + '<div class="ic-body"><div class="bar"><i style="width:'+gp.toFixed(1)+'%"></i></div></div>'
+      + '<div class="ic-sub">'+money(g.saved)+' of '+money(g.target)+' saved'
+      + (g.by ? ', aiming for '+esc(g.by) : '')+'.</div></button>');
+  }
+
+  /* 8. week over week */
+  var prevWeek = sum(txnsBetween(13,6));
+  if(prevWeek){
+    var diff = weekSpent - prevWeek;
+    var dpct = Math.round((diff/prevWeek)*100);
+    cards.push(
+      '<button class="icard" onclick="go(\'transactions\')">'
+      + '<div class="ic-kicker">Week on week</div>'
+      + '<div class="ic-head">'
+      + (diff>=0 ? money(diff)+' more than last week' : money(-diff)+' less than last week')
+      + '</div>'
+      + '<div class="ic-sub">'+money(weekSpent)+' this week vs '+money(prevWeek)
+      + ' last week &mdash; a '+Math.abs(dpct)+'% '+(diff>=0?'rise':'drop')+'.</div></button>');
+  }
+
+  feed.innerHTML = cards.join('');
+}
+
+/* =====================================================================
+   SAVINGS TAB
+   ===================================================================== */
+function nextDueDate(day){
+  var now = new Date(), d = new Date(now.getFullYear(), now.getMonth(), day);
+  if(d < dayStart(now)) d = new Date(now.getFullYear(), now.getMonth()+1, day);
+  return d;
+}
+function daysUntil(d){
+  return Math.round((dayStart(d) - dayStart(new Date()))/86400000);
+}
+function nextDueSub(){
+  var sorted = SUBS.slice().sort(function(a,b){
+    return daysUntil(nextDueDate(a.day)) - daysUntil(nextDueDate(b.day));
+  });
+  return sorted[0] || {name:'—'};
+}
+function renderSavings(){
+  var box=$('goal-list');
+  if(box){
+    box.innerHTML = GOALS.length ? GOALS.map(function(g){
+      var pct = Math.min(100,(g.saved/g.target)*100);
+      return '<button class="goal-card" onclick="openGoal('+g.id+')">'
+        + '<div class="between"><span style="font-weight:700">'+esc(g.name)+'</span>'
+        + '<span style="font-size:12px;color:var(--ink2)">'+Math.round(pct)+'%</span></div>'
+        + '<div class="bar" style="margin-top:10px"><i style="width:'+pct.toFixed(1)+'%"></i></div>'
+        + '<div class="between" style="margin-top:7px">'
+        + '<span class="micro">'+money(g.saved)+' of '+money(g.target)+'</span>'
+        + '<span class="micro">'+(g.by ? 'by '+esc(g.by) : '')+'</span></div>'
+        + '</button>';
+    }).join('') : '<p class="empty-note">No goals yet. A goal makes saving feel like progress, not restriction.</p>';
+  }
+
+  var subTotal = SUBS.reduce(function(a,s){ return a+s.amt; },0);
+  var summ=$('sub-summary');
+  if(summ) summ.textContent = SUBS.length
+    ? money(subTotal) + ' a month on autopay — ' + money(subTotal*12) + ' a year.'
+    : 'Nothing recurring yet.';
+
+  var sl=$('sub-list');
+  if(sl){
+    var sorted = SUBS.slice().sort(function(a,b){
+      return daysUntil(nextDueDate(a.day)) - daysUntil(nextDueDate(b.day));
+    });
+    sl.innerHTML = sorted.length ? sorted.map(function(s){
+      var d = nextDueDate(s.day), n = daysUntil(d);
+      var due = n===0 ? 'Due today' : n===1 ? 'Due tomorrow' : 'Due in '+n+' days';
+      return '<button class="sub-row" onclick="openSub('+s.id+')">'
+        + '<span class="rl-main"><span>'+esc(s.name)+'</span>'
+        + '<span class="sr-due">'+due+' &middot; '+fmtDateShort(d)+'</span></span>'
+        + '<span class="rl-val">'+money(s.amt)+'</span></button>';
+    }).join('') : '<p class="empty-note">No subscriptions tracked.</p>';
+  }
+}
+function fmtDateShort(d){
+  return d.getDate()+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+}
+function submitGoal(){
+  var n=$('gc-name').value.trim(), t=parseFloat($('gc-target').value), by=$('gc-by').value.trim();
+  if(!n || !(t>0)){ showErr('err-gc'); return; }
+  var id = GOALS.length ? Math.max.apply(null,GOALS.map(function(g){return g.id;}))+1 : 1;
+  GOALS.push({id:id,name:n,target:Math.round(t),saved:0,by:by,hist:[]});
+  $('gc-name').value=''; $('gc-target').value=''; $('gc-by').value='';
+  hideErr('err-gc'); toast('Goal created'); go('savings');
+}
+function openGoal(id){ state.selectedGoal=id; go('goalDetail'); }
+function renderGoalDetail(){
+  var g = GOALS.filter(function(x){ return x.id===state.selectedGoal; })[0];
+  if(!g) return;
+  var pct = Math.min(100,(g.saved/g.target)*100);
+  $('gd-title').textContent = g.name;
+  $('gd-saved').textContent = money(g.saved);
+  $('gd-of').textContent = 'of ' + money(g.target) + ' target';
+  $('gd-fill').style.width = pct.toFixed(1)+'%';
+  $('gd-pct').textContent = Math.round(pct)+'% there';
+  $('gd-by').textContent = g.by ? 'by ' + g.by : '';
+  $('gd-hist').innerHTML = g.hist.length ? g.hist.map(function(h){
+    return '<div class="txn-row" style="cursor:default"><span class="t-merch">'+fmtDate(h.ts)+'</span>'
+      + '<span class="t-cat">added</span><span class="t-amt">'+money(h.amt)+'</span></div>';
+  }).join('') : '<p class="empty-note">Nothing added yet.</p>';
+}
+function contributeGoal(){
+  var g = GOALS.filter(function(x){ return x.id===state.selectedGoal; })[0];
+  var amt = parseFloat($('gd-add').value);
+  if(!g || !(amt>0)){ showErr('err-gd'); return; }
+  amt = Math.round(amt);
+  g.saved += amt;
+  g.hist.unshift({amt:amt, ts:Date.now()});
+  state.balance = Math.max(0, state.balance - amt);
+  $('gd-add').value=''; hideErr('err-gd');
+  if(g.saved >= g.target){
+    $('gr-line').textContent = g.name + ' is fully funded at ' + money(g.target) + '.';
+    go('goalReached');
+  } else {
+    toast(money(amt) + ' added');
+    renderAll();
+  }
+}
+function openSub(id){ state.selectedSub=id; go('subDetail'); }
+function renderSubDetail(){
+  var s = SUBS.filter(function(x){ return x.id===state.selectedSub; })[0];
+  if(!s) return;
+  var d = nextDueDate(s.day), n = daysUntil(d);
+  $('sd-title').textContent = s.name;
+  $('sd-amt').textContent = money(s.amt);
+  $('sd-cycle').textContent = 'Monthly, day ' + s.day;
+  $('sd-due').textContent = fmtDateShort(d) + ' (' + (n===0?'today':'in '+n+' days') + ')';
+  $('sd-cat').textContent = s.cat;
+  $('sd-year').textContent = money(s.amt*12);
+  $('sd-note').textContent = s.note ||
+    ('That is ' + money(s.amt*12) + ' a year. Worth a check that you still use it.');
+}
+function removeSub(){
+  SUBS = SUBS.filter(function(x){ return x.id!==state.selectedSub; });
+  toast('Removed'); go('savings');
+}
+function submitSub(){
+  var n=$('sa-name').value.trim(), a=parseFloat($('sa-amt').value), d=parseInt($('sa-day').value,10);
+  if(!n || !(a>0) || !(d>=1 && d<=28)){ showErr('err-sa'); return; }
+  var id = SUBS.length ? Math.max.apply(null,SUBS.map(function(s){return s.id;}))+1 : 1;
+  SUBS.push({id:id,name:n,amt:Math.round(a),day:d,cat:'Necessities',note:''});
+  $('sa-name').value=''; $('sa-amt').value=''; $('sa-day').value='';
+  hideErr('err-sa'); toast('Subscription added'); go('savings');
+}
+
+/* =====================================================================
+   SETTINGS
+   ===================================================================== */
+function renderTrackingSheet(){
+  var u=$('track-tick-upi'), m=$('track-tick-manual');
+  if(u) u.innerHTML = state.tracking!=='manual' ? '&#10003;' : '';
+  if(m) m.innerHTML = state.tracking==='manual' ? '&#10003;' : '';
+}
+function setTracking(mode){
+  state.tracking = mode;
+  closeSheet(); renderAll();
+  toast(mode==='upi' ? 'UPI auto-tracking on' : 'Manual entry only');
+}
+function setThreshold(p){ state.alertThreshold=p; renderAlerts(); }
+function renderAlerts(){
+  var box=$('alert-thresholds');
+  if(box){
+    box.innerHTML = [60,70,80,90,100].map(function(p){
+      return '<button class="pill'+(state.alertThreshold===p?' on':'')
+           + '" onclick="setThreshold('+p+')">'+p+'%</button>';
+    }).join('');
+  }
+  var prev=$('alert-preview');
+  if(prev){
+    var c = CATS[0] ? CATS[0].name : 'Food';
+    prev.textContent = 'You are at ' + state.alertThreshold + '% of your ' + c
+      + ' budget for the week. ' + (state.perms['alert-daily']
+        ? 'Recap tonight at 9pm.' : 'No daily recap.');
+  }
+}
+function renderSettings(){
+  var s=$('set-acct-sub');
+  if(s) s.textContent = (ACCOUNTS[0] || 'Manual entry') + ' · PIN ' + (state.pin ? 'set' : 'not set');
+  var a=$('set-acct-count'); if(a) a.textContent = ACCOUNTS.length;
+  var t=$('set-tracking'); if(t) t.textContent = state.tracking==='manual' ? 'Manual' : 'UPI';
+  var c=$('set-cat-count'); if(c) c.textContent = CATS.length;
+  var al=$('set-alert-val'); if(al) al.textContent = state.alertThreshold + '%';
+  var tx=$('set-txn-count'); if(tx) tx.textContent = TXNS.length;
+  var pv=$('set-perm-val');
+  if(pv){
+    var on = ['perm-notif','perm-contacts','perm-camera']
+      .filter(function(k){ return state.perms[k]; }).length;
+    pv.textContent = on + ' on';
+  }
+}
+
+/* =====================================================================
+   MASTER RENDER
+   ===================================================================== */
+function renderAll(){
+  renderUpiList();
+  renderSheetAccounts();
+  renderChosenCats();
+  renderRecommended();
+  renderPerms();
+  renderAllSet();
+  renderHome();
+  renderAccumulation();
+  renderAccumulationDetail();
+  renderTxnList();
+  renderTxnDetail();
+  renderManualCats();
+  renderContacts();
+  renderPayCats();
+  renderCategories();
+  renderCategoryDetail();
+  renderInsight();
+  renderSavings();
+  renderGoalDetail();
+  renderSubDetail();
+  renderAlerts();
+  renderSettings();
+}
+
+/* =====================================================================
+   BOOT / RESTART
+   ===================================================================== */
+function restartProto(){
+  state = freshState();
+  ACCOUNTS = ['sample@oksbi','sample2@oksbi'];
+  seedCategories();
+  seedTransactions();
+  seedGoals();
+  seedSubs();
+  ['upi-input','cat-input','rec-search','pin1','pin2','pc1','pc2','txn-search',
+   'me-amount','me-merchant','contact-search','bank-acct','bank-ifsc','pay-amount',
+   'gc-name','gc-target','gc-by','gd-add','sa-name','sa-amt','sa-day',
+   'sheet-upi-input','sheet-cat-input'].forEach(function(id){
+    var el=$(id); if(el) el.value='';
+  });
+  var logo=$('upi-logo-1'); if(logo) logo.src = UPI_LOGO;
+  document.body.classList.remove('with-nav');
+  go('splash');
+}
+
+restartProto();
+</script>

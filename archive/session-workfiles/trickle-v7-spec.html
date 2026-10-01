@@ -1,0 +1,125 @@
+<title>Trickle v7 Spec</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{color-scheme:dark;--base:#0B0B0C;--s:#141414;--s2:#1D1E20;--s3:#27282B;--t:#F4F4F2;--t2:#A9AAAD;--t3:#74757A;--lime:#C6F432;--amb:#c98500;--blu:#3987e5;--aq:#199e70;--crit:#d03b3b}
+body{background:var(--base);color:var(--t);font:15px/1.55 Manrope,system-ui,sans-serif;padding-inline:16px;padding-block:32px}
+main{max-width:980px;margin:0 auto;display:grid;gap:40px}
+h1{font-size:40px;font-weight:800;margin:0;letter-spacing:-.02em}h1 b{color:var(--lime)}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--t2);margin:0 0 14px}
+p{color:var(--t2);max-width:65ch;margin:6px 0 0}
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.sw div{background:var(--s);border-radius:14px;padding:10px;font:500 11px 'JetBrains Mono',monospace;color:var(--t2)}
+.sw i{display:block;height:40px;border-radius:9px;margin-bottom:8px}
+.tabs{display:flex;flex-wrap:wrap;gap:10px}
+.tab{background:var(--s);border-radius:16px;padding:14px;flex:1 1 170px}
+.tab b{display:block;font-size:17px}.tab small{color:var(--t2);font-size:13px}
+.tab.a b{color:var(--lime)}
+.wf{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.wf figure{margin:0}.wf figcaption{font-size:13px;color:var(--t2);margin-top:6px}
+svg text{font-family:Manrope,sans-serif}
+.flow{overflow-x:auto;background:var(--s);border-radius:18px;padding:12px}
+code{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--t2)}
+pre{background:var(--s);border-radius:14px;padding:14px;overflow-x:auto;font:12px/1.5 'JetBrains Mono',monospace;color:var(--t2)}
+</style>
+<main>
+<header><h1>Trickle <b>v7</b> spec</h1><p>Phase 3 design spec for a UPI student budgeting app: 57 frames, 44 widgets. The money model is To assign → Budget / Savings, and Owed to you sits outside the balance. No SMS tracking.</p></header>
+
+<section><h2>Palette</h2>
+<div class="sw">
+<div><i style="background:#0B0B0C;border:1px solid #333"></i>base #0B0B0C</div>
+<div><i style="background:#141414;border:1px solid #333"></i>surface #141414</div>
+<div><i style="background:#C6F432"></i>lime #C6F432 · actions</div>
+<div><i style="background:#c98500"></i>To assign #c98500</div>
+<div><i style="background:#3987e5"></i>Budget #3987e5</div>
+<div><i style="background:#199e70"></i>Savings #199e70</div>
+<div><i style="border:2px dashed #A9AAAD;background:none"></i>Owed · dashed only</div>
+</div>
+<h2 style="margin-top:18px">Category slots (validated, dark)</h2>
+<div class="sw">
+<div><i style="background:#3987e5"></i>Food</div><div><i style="background:#d95926"></i>Snacks</div><div><i style="background:#199e70"></i>Groceries</div><div><i style="background:#c98500"></i>Transport</div><div><i style="background:#d55181"></i>Necessities</div><div><i style="background:#9085e9"></i>Stationery</div><div><i style="background:#e66767"></i>Buffer</div>
+</div>
+<pre>7 slots  PASS lightness · chroma · CVD worst 8.4 (protan) · normal 19.3 · contrast ≥3:1
+pools    PASS all-pairs · CVD worst 8.4 · normal 19.8   (lime/blue/violet trio FAILED first)</pre>
+</section>
+
+<section><h2>Tab map</h2>
+<div class="tabs">
+<div class="tab"><b>Home</b><small>Safe-to-spend hero · "5 things need you" chip · Pay row · 6 pinned widgets · Subscriptions card</small></div>
+<div class="tab"><b>Money</b><small>Balance split · pool cards · Owed to you · income, payday, Sankey, transfers</small></div>
+<div class="tab a"><b>Actions ⑤</b><small>Add grid (Log spend · Add income · Move · Import soon) + To-do inbox</small></div>
+<div class="tab"><b>Savings</b><small>Goal hero · Auto/Manual sweep · goal tiles · waffle rate</small></div>
+<div class="tab"><b>Insights</b><small>Widget board · edit (PIN) · library</small></div>
+<div class="tab"><b>Drawer</b><small>From the avatar: period, categories, income, rules, accounts, splits, alerts, PIN</small></div>
+</div></section>
+
+<section><h2>Wireframes</h2><div class="wf">
+<figure><svg viewBox="0 0 220 400" width="100%"><rect width="220" height="400" rx="22" fill="#141414"/>
+<circle cx="24" cy="24" r="10" fill="#27282B"/><text x="40" y="28" fill="#A9AAAD" font-size="10">Hi Nishad</text>
+<rect x="12" y="44" width="196" height="92" rx="16" fill="#C6F432"/><text x="24" y="66" fill="#0B0B0C" font-size="9">SAFE TO SPEND TODAY</text><text x="24" y="96" fill="#0B0B0C" font-size="28" font-weight="800">₹318</text><text x="24" y="114" fill="#0B0B0C" font-size="9">₹4,140 left · 6 days</text><text x="24" y="128" fill="#8a1c1c" font-size="9">▲ Carried from Aug −₹240</text>
+<rect x="12" y="144" width="130" height="22" rx="11" fill="none" stroke="#C6F432"/><text x="22" y="159" fill="#C6F432" font-size="10">5 things need you ›</text>
+<g fill="#1D1E20"><rect x="12" y="174" width="60" height="40" rx="10"/><rect x="80" y="174" width="60" height="40" rx="10"/><rect x="148" y="174" width="60" height="40" rx="10"/></g>
+<g fill="#A9AAAD" font-size="8"><text x="22" y="198">Scan</text><text x="88" y="198">Contact</text><text x="160" y="198">Bank</text></g>
+<rect x="12" y="222" width="94" height="60" rx="12" fill="#1D1E20"/><text x="20" y="240" fill="#A9AAAD" font-size="8">TO ASSIGN</text><text x="20" y="262" fill="#F4F4F2" font-size="15" font-weight="800">₹1,820</text>
+<rect x="114" y="222" width="94" height="60" rx="12" fill="#1D1E20"/><circle cx="161" cy="252" r="18" fill="none" stroke="#C6F432" stroke-width="3" stroke-dasharray="2 3"/>
+<rect x="12" y="290" width="196" height="30" rx="10" fill="#d95926"/><text x="20" y="309" fill="#0B0B0C" font-size="10" font-weight="600">Snacks 112%</text>
+<rect x="12" y="326" width="150" height="30" rx="10" fill="#3987e5"/><text x="20" y="345" fill="#fff" font-size="10" font-weight="600">Food 78%</text>
+<rect x="12" y="362" width="196" height="30" rx="10" fill="#1D1E20"/><text x="20" y="381" fill="#A9AAAD" font-size="9">Subs · Spotify ₹119 due Sat</text></svg><figcaption>Home</figcaption></figure>
+
+<figure><svg viewBox="0 0 220 400" width="100%"><rect width="220" height="400" rx="22" fill="#141414"/>
+<text x="16" y="30" fill="#F4F4F2" font-size="13" font-weight="800">Money</text>
+<text x="16" y="58" fill="#A9AAAD" font-size="9">BALANCE</text><text x="16" y="84" fill="#F4F4F2" font-size="24" font-weight="800">₹9,860</text>
+<rect x="16" y="96" width="34" height="12" rx="3" fill="#c98500"/><rect x="52" y="96" width="80" height="12" rx="3" fill="#3987e5"/><rect x="134" y="96" width="70" height="12" rx="3" fill="#199e70"/>
+<g font-size="8" fill="#A9AAAD"><text x="16" y="120">To assign</text><text x="60" y="120">Budget ₹4,140</text><text x="140" y="120">Savings ₹3,900</text></g>
+<rect x="16" y="130" width="60" height="56" rx="12" fill="#c98500"/><rect x="80" y="130" width="60" height="56" rx="12" fill="#3987e5"/><rect x="144" y="130" width="60" height="56" rx="12" fill="#199e70"/>
+<g font-size="15" font-weight="800" fill="#0B0B0C"><text x="36" y="178">18%</text><text x="100" y="178">42%</text><text x="164" y="178">40%</text></g>
+<rect x="16" y="196" width="188" height="70" rx="12" fill="none" stroke="#A9AAAD" stroke-dasharray="4 3"/><text x="26" y="214" fill="#A9AAAD" font-size="9">OWED TO YOU · NOT IN BALANCE</text><text x="26" y="236" fill="#F4F4F2" font-size="16" font-weight="800">₹1,160</text><text x="26" y="254" fill="#A9AAAD" font-size="8">Arjun 400 · Meera 360 · Kabir 240 · Riya 160</text>
+<rect x="16" y="276" width="188" height="110" rx="12" fill="#1D1E20"/><text x="26" y="294" fill="#A9AAAD" font-size="9">MONEY FLOW</text>
+<path d="M30 310 C90 310 90 330 150 330 L150 350 C90 350 90 330 30 330Z" fill="#3987e5" opacity=".5"/><path d="M30 336 C90 336 90 360 150 360 L150 372 C90 372 90 350 30 350Z" fill="#199e70" opacity=".5"/></svg><figcaption>Money</figcaption></figure>
+
+<figure><svg viewBox="0 0 220 400" width="100%"><rect width="220" height="400" rx="22" fill="#141414"/>
+<text x="16" y="30" fill="#F4F4F2" font-size="13" font-weight="800">Actions</text>
+<g fill="#1D1E20"><rect x="16" y="44" width="90" height="46" rx="12"/><rect x="114" y="44" width="90" height="46" rx="12"/><rect x="16" y="96" width="90" height="46" rx="12"/><rect x="114" y="96" width="90" height="46" rx="12"/></g>
+<g fill="#C6F432" font-size="10" font-weight="600"><text x="26" y="72">Log spend</text><text x="124" y="72">Add income</text><text x="26" y="124">Move money</text></g><text x="124" y="124" fill="#74757A" font-size="10">Import · soon</text>
+<text x="16" y="166" fill="#A9AAAD" font-size="9">TO DO · 5</text>
+<g font-size="9"><rect x="16" y="174" width="188" height="36" rx="10" fill="#1D1E20"/><text x="26" y="196" fill="#F4F4F2">₹1,500 part-time waiting</text><rect x="150" y="182" width="46" height="20" rx="10" fill="#C6F432"/><text x="156" y="196" fill="#0B0B0C">Assign</text>
+<rect x="16" y="216" width="188" height="36" rx="10" fill="#1D1E20"/><text x="26" y="238" fill="#F4F4F2">Split ₹960 Pizza Hut</text><rect x="150" y="224" width="46" height="20" rx="10" fill="#C6F432"/><text x="158" y="238" fill="#0B0B0C">Equal</text>
+<rect x="16" y="258" width="188" height="36" rx="10" fill="#1D1E20"/><text x="26" y="280" fill="#F4F4F2">Snacks −₹240 → Oct</text><rect x="150" y="266" width="46" height="20" rx="10" fill="#C6F432"/><text x="157" y="280" fill="#0B0B0C">Cover</text>
+<rect x="16" y="300" width="188" height="36" rx="10" fill="#1D1E20"/><text x="26" y="322" fill="#F4F4F2">Spotify ₹119 due Sat</text><rect x="150" y="308" width="46" height="20" rx="10" fill="#C6F432"/><text x="160" y="322" fill="#0B0B0C">OK</text>
+<rect x="16" y="342" width="188" height="36" rx="10" fill="#1D1E20"/><text x="26" y="364" fill="#F4F4F2">₹85 PAYTM*QR7731</text><rect x="150" y="350" width="46" height="20" rx="10" fill="#C6F432"/><text x="154" y="364" fill="#0B0B0C">Snacks</text></g></svg><figcaption>Actions: every card resolves in one tap</figcaption></figure>
+
+<figure><svg viewBox="0 0 220 400" width="100%"><rect width="220" height="400" rx="22" fill="#141414"/>
+<text x="16" y="30" fill="#F4F4F2" font-size="13" font-weight="800">Insights</text><text x="170" y="30" fill="#C6F432" font-size="10">Edit</text>
+<rect x="16" y="44" width="188" height="120" rx="12" fill="#1D1E20"/>
+<g fill="#27282B"><rect x="24" y="52" width="84" height="50" rx="8"/><rect x="112" y="52" width="84" height="50" rx="8"/><rect x="24" y="106" width="84" height="50" rx="8"/><rect x="112" y="106" width="84" height="50" rx="8"/></g>
+<g fill="#F4F4F2" font-size="12" font-weight="800"><text x="32" y="80">−12%</text><text x="120" y="80">9 pm</text><text x="32" y="134">₹640</text><text x="120" y="134">19%</text></g>
+<rect x="16" y="172" width="90" height="90" rx="12" fill="#1D1E20"/><rect x="114" y="172" width="90" height="90" rx="12" fill="#1D1E20"/>
+<g fill="#3987e5"><rect x="24" y="190" width="40" height="30" rx="8"/></g><rect x="66" y="190" width="30" height="30" rx="8" fill="#d95926"/><rect x="24" y="224" width="30" height="28" rx="8" fill="#199e70"/><rect x="56" y="224" width="40" height="28" rx="8" fill="#9085e9"/>
+<circle cx="159" cy="217" r="28" fill="none" stroke="#27282B" stroke-width="8"/><circle cx="159" cy="217" r="28" fill="none" stroke="#3987e5" stroke-width="8" stroke-dasharray="60 116"/>
+<rect x="16" y="270" width="188" height="90" rx="12" fill="none" stroke="#C6F432" stroke-dasharray="4 3" opacity=".6"/><text x="26" y="300" fill="#74757A" font-size="9">Spend calendar</text><text x="26" y="318" fill="#74757A" font-size="8">Shows after 7 days · 3 so far</text>
+<path d="M190 52 l4 4 m-4 0 l4-4" stroke="#C6F432"/></svg><figcaption>Insights board: S/W/L grid, pin, ghost state</figcaption></figure>
+</div></section>
+
+<section><h2>Money model, including splits</h2><div class="flow">
+<svg viewBox="0 0 900 300" width="900" style="max-width:none">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#A9AAAD"/></marker></defs>
+<g font-size="13" font-weight="600">
+<rect x="10" y="40" width="130" height="50" rx="12" fill="#1D1E20"/><text x="24" y="70" fill="#F4F4F2">Income (UPI/manual)</text>
+<rect x="190" y="40" width="130" height="50" rx="12" fill="#c98500"/><text x="214" y="70" fill="#0B0B0C">To assign</text>
+<rect x="380" y="10" width="130" height="50" rx="12" fill="#3987e5"/><text x="412" y="40" fill="#0B0B0C">Budget</text>
+<rect x="380" y="100" width="130" height="50" rx="12" fill="#199e70"/><text x="408" y="130" fill="#0B0B0C">Savings</text>
+<rect x="580" y="10" width="140" height="50" rx="12" fill="#1D1E20"/><text x="596" y="40" fill="#F4F4F2">Spend (full amt)</text>
+<rect x="580" y="170" width="140" height="50" rx="12" fill="none" stroke="#A9AAAD" stroke-dasharray="5 4"/><text x="596" y="200" fill="#F4F4F2">Owed to you</text>
+<rect x="760" y="170" width="130" height="50" rx="12" fill="#1D1E20"/><text x="772" y="200" fill="#F4F4F2">Settling split</text>
+<rect x="190" y="200" width="150" height="50" rx="12" fill="#1D1E20" stroke="#d03b3b"/><text x="200" y="230" fill="#F4F4F2">Next period −carry</text>
+</g>
+<g stroke="#A9AAAD" fill="none" stroke-width="1.5" marker-end="url(#ar)">
+<path d="M140 65H188"/><path d="M320 60L378 38"/><path d="M320 72L378 122"/><path d="M510 35H578"/>
+<path d="M445 100V62" stroke-dasharray="3 3"/><path d="M650 60V168"/><path d="M720 195H758"/>
+<path d="M825 170C825 90 700 90 512 120" stroke="#199e70"/><path d="M790 170C790 50 600 20 512 30" stroke="#3987e5"/>
+<path d="M580 50C450 180 380 230 342 225" stroke="#d03b3b"/></g>
+<g font-size="11" fill="#A9AAAD"><text x="330" y="100">assign</text><text x="452" y="84">sweep / cover</text><text x="560" y="140">friends' shares</text><text x="730" y="130">returns to source</text><text x="420" y="200">let it go over</text></g>
+<text x="10" y="285" font-size="12" fill="#C6F432">Balance = To assign + Budget + Savings · Owed is never in it until settled</text>
+</svg></div></section>
+
+<section><h2>Open questions</h2><p>1. Should a split repayment that arrives after its period has closed go to that category in the current period, or to To assign? 2. Should Home have 6 pins or 4? 3. If a manual sweep is ignored, does the money stay in To assign indefinitely, or expire back to Budget? 4. Should "Remind" send a UPI collect request or just share a message? 5. Should widget edit ask for the PIN every time, or once per unlock?</p></section>
+</main>

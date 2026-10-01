@@ -1,0 +1,279 @@
+{
+ "nums": {
+  "home": {
+   "first": 0,
+   "all": 0,
+   "which": []
+  },
+  "money": {
+   "first": 2,
+   "all": 2,
+   "which": [
+    "₹6,939",
+    "₹100 tiles"
+   ]
+  },
+  "actions": {
+   "first": 0,
+   "all": 0,
+   "which": []
+  },
+  "insights": {
+   "first": 0,
+   "all": 3,
+   "which": [
+    "Each tile is ₹100 spent this month",
+    "Every tile is one spend under ₹100",
+    "Each lime tile is ₹500 you kept"
+   ]
+  }
+ },
+ "log": [
+  [
+   "tab home",
+   true,
+   6939,
+   0,
+   1861,
+   5078,
+   900
+  ],
+  [
+   "tab money",
+   true,
+   6939,
+   0,
+   1861,
+   5078,
+   900
+  ],
+  [
+   "tab actions",
+   true,
+   6939,
+   0,
+   1861,
+   5078,
+   900
+  ],
+  [
+   "tab insights",
+   true,
+   6939,
+   0,
+   1861,
+   5078,
+   900
+  ],
+  [
+   "cover options",
+   "next|cat:Food|goal:general"
+  ],
+  [
+   "pay overflow from jar",
+   true,
+   6339,
+   0,
+   1321,
+   5018,
+   900
+  ],
+  [
+   "split after pay",
+   true,
+   6339,
+   0,
+   1321,
+   5018,
+   1200
+  ],
+  [
+   "pay overflow next month",
+   true,
+   5739,
+   0,
+   721,
+   5018,
+   1200
+  ],
+  [
+   "log cash",
+   true,
+   5689,
+   0,
+   671,
+   5018,
+   1200
+  ],
+  [
+   "income split",
+   true,
+   7189,
+   0,
+   671,
+   6518,
+   1200
+  ],
+  [
+   "income undo",
+   true,
+   7189,
+   1500,
+   671,
+   5018,
+   1200
+  ],
+  [
+   "new money after undo",
+   1500
+  ],
+  [
+   "sort new money",
+   true,
+   7189,
+   0,
+   671,
+   6518,
+   1200
+  ],
+  [
+   "Food before/after repayment",
+   630,
+   930
+  ],
+  [
+   "settle",
+   true,
+   7489,
+   0,
+   971,
+   6518,
+   900
+  ],
+  [
+   "categorise",
+   true,
+   7489,
+   0,
+   971,
+   6518,
+   900
+  ],
+  [
+   "checkin",
+   true,
+   7489,
+   0,
+   971,
+   6518,
+   900
+  ],
+  [
+   "goal create",
+   true,
+   7489,
+   0,
+   971,
+   6518,
+   900
+  ],
+  [
+   "reached sheet",
+   true
+  ],
+  [
+   "goal reached+spend",
+   true,
+   7489,
+   0,
+   6771,
+   718,
+   900
+  ],
+  [
+   "move",
+   true,
+   7489,
+   0,
+   6771,
+   718,
+   900
+  ],
+  [
+   "home pins",
+   "goal,strip,tod"
+  ],
+  [
+   "fresh start",
+   true,
+   16489,
+   7371,
+   5400,
+   3718,
+   900
+  ],
+  [
+   "leftover item",
+   true
+  ],
+  [
+   "leftover saved",
+   true,
+   16489,
+   0,
+   5400,
+   11089,
+   900
+  ],
+  [
+   "glow fast",
+   "rgba(242,169,59,.6)"
+  ],
+  [
+   "tx list",
+   true,
+   16489,
+   0,
+   5400,
+   11089,
+   900
+  ],
+  [
+   "INV_LOG entries",
+   101,
+   "all ok",
+   true
+  ],
+  [
+   "onb upi",
+   "{\"t\":\"upi\",\"p\":\"week\",\"c\":\"Food,Travel,Fun,Essentials,Books\",\"b\":5500,\"g\":\"New phone\",\"src\":\"UPI,UPI,UPI,Manual,UPI\"}"
+  ],
+  [
+   "onb upi",
+   true,
+   7461,
+   0,
+   1361,
+   6100,
+   900
+  ],
+  [
+   "onb manual",
+   "{\"t\":\"manual\",\"p\":\"week\",\"c\":\"Food,Travel,Fun,Essentials,Books\",\"b\":5500,\"g\":\"New phone\",\"src\":\"Manual,Manual,Manual,Manual,Manual\"}"
+  ],
+  [
+   "onb manual",
+   true,
+   7461,
+   0,
+   1361,
+   6100,
+   900
+  ],
+  [
+   "reduced-motion glow anim",
+   "0.001s"
+  ]
+ ],
+ "errs": []
+}

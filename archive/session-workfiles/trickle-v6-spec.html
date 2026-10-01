@@ -1,0 +1,184 @@
+<title>Trickle v6 Design Spec</title>
+<style>
+:root{color-scheme:dark;--ink:#0d0d0e;--surface:#17181a;--s2:#212226;--s3:#2a2b30;--text:#f4f4f3;--text2:#a9aaad;--text3:#75767a;--border:rgba(255,255,255,.09);--accent:#EDE9DC;
+--c1:#3987e5;--c2:#d95926;--c3:#199e70;--c4:#c98500;--c5:#d55181;--c6:#9085e9;--c7:#e66767;--co:#6b6c70}
+body{background:var(--ink);color:var(--text);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:32px 64px;display:flex;flex-direction:column;gap:40px}
+h1{font-size:30px;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin:0 0 14px;font-weight:600}
+p{margin:0;color:var(--text2);max-width:68ch}
+.lede{display:flex;flex-direction:column;gap:8px}
+.tag{font-size:12px;color:var(--accent);border:1px solid rgba(237,233,220,.3);border-radius:999px;padding:2px 10px;align-self:flex-start}
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.sw div{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;font-size:12px}
+.sw i{display:block;height:36px;border-radius:8px}
+.sw b{font-weight:600}.sw code{color:var(--text3);font-size:11px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.row2{grid-template-columns:1fr}}
+.note{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--text2)}
+pre{margin:0;font:11.5px/1.5 ui-monospace,Menlo,monospace;color:var(--text2);white-space:pre-wrap}
+.tbl{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:13px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+th{color:var(--text3);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.06em;background:var(--surface)}
+td:first-child{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--accent);white-space:nowrap}
+tr.grp td{background:var(--s2);color:var(--text2);font-family:inherit;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.phones{display:grid;grid-template-columns:repeat(auto-fill,minmax(236px,1fr));gap:18px}
+figure{margin:0;display:flex;flex-direction:column;gap:8px}
+figcaption{font-size:12px;color:var(--text2)}figcaption b{color:var(--text)}
+svg.ph{width:100%;height:auto;max-width:280px;background:var(--surface);border:1px solid var(--border);border-radius:28px}
+svg text{font-family:system-ui,sans-serif}
+</style>
+<div class="wrap">
+<div class="lede"><span class="tag">Phase 3 · design spec</span><h1>Trickle v6 Design Spec</h1>
+<p>Which chart each screen gets, the validated palette, and wireframe sketches of four key screens. Tracking is UPI linkage or manual entry only; nothing reads SMS.</p></div>
+
+<section><h2>Palette: dark surface #17181a, fixed category order</h2>
+<div class="sw" id="sw"></div>
+<div class="row2" style="margin-top:10px">
+<div class="note"><b style="color:var(--text)">Accent is ivory now, not green.</b> v5's green accent clashed with two category greens, so the green category slot is gone. Pace state uses reserved status colors (good #0ca30c, warning #fab219, serious #ec835a, critical #d03b3b), always shown with an icon and a word.</div>
+<div class="note"><pre>validate_palette.js --mode dark --surface #17181a
+[PASS] Lightness band   all 7 inside L 0.48–0.67
+[PASS] Chroma floor     all 7 >= 0.1
+[PASS] CVD separation   worst #c98500↔#199e70 ΔE 8.4
+[PASS] Normal-vision    worst #d55181↔#c98500 ΔE 19.3
+[PASS] Contrast         all 7 >= 3:1
+→ ALL CHECKS PASS</pre></div></div>
+</section>
+
+<section><h2>Wireframe sketches</h2><div class="phones" id="phones"></div></section>
+
+<section><h2>Screen-by-screen: where each chart goes</h2>
+<div class="tbl"><table><thead><tr><th>Frame</th><th>Primary visual</th><th>Secondary</th><th>Driven by</th></tr></thead><tbody id="tb"></tbody></table></div>
+<p style="margin-top:10px;font-size:12px">No form is primary on more than two screens. Every chart mark reveals its exact value on tap; siblings dim to 35%.</p>
+</section>
+</div>
+<script>
+const C=['#3987e5','#d95926','#199e70','#c98500','#d55181','#9085e9','#e66767'];
+const N=['Food','Snacks','Groceries','Transport','Necessities','Stationery','Buffer'];
+document.getElementById('sw').innerHTML=C.map((c,i)=>`<div><i style="background:${c}"></i><b>s${i+1} · ${N[i]}</b><code>${c}</code></div>`).join('')+
+`<div><i style="background:#6b6c70"></i><b>Other</b><code>#6b6c70</code></div><div><i style="background:#EDE9DC"></i><b>Accent</b><code>#EDE9DC</code></div>`;
+
+const R=[
+['g','Onboarding (8 frames)'],
+['splash','Demo concentric radial arcs sweep in','Wordmark in ring center','Static sample shares'],
+['method','Two-lane flow diagram: UPI vs manual','Mini "what Home shows" per lane','Tracking choice'],
+['upiSetup','Linkage node diagram: phone → UPI IDs → Trickle','Bank initial badges','accounts[]'],
+['onbCategories','Live radial starter budget, one ring per chip','Ghost rings for suggestions','Chosen categories × default shares'],
+['onbAllocate (new)','Pie with callouts, one slider per slice','Gray "unassigned" slice','Allowance, category monthly budgets'],
+['pin','Visual PIN: two dot rows that align on match','—','Digits entered'],
+['permissions','Permission → feature diagram','Mini Home tiles light up','perms{}'],
+['allSet','Preview dashboard: rings + half-donut','Account mini-diagram','Allocation, allowance, accounts'],
+['g','Home'],
+['home','Half-donut "safe to spend today"','Stat triad with sparklines, streak dots, pictogram rows, Sankey from month spend','Month txns, budgets, date'],
+['accumulation','Ranked pictogram, one glyph per purchase','₹/yr at this pace','Repeat merchants, last 30 days'],
+['accumulationDetail','24h area strip + purchase dots','Annualised tally bar','Merchant txns by hour, 6 months'],
+['g','Transactions and payments'],
+['transactions','Day-strip columns of the filtered set','—','Filtered txns by day'],
+['transactionDetail','Merchant range strip with this txn marked','24h tick ring, category bullet','Merchant history'],
+['manualEntry','Live budget-impact bullet','Pace tick','Category spend + typed amount'],
+['frictionSheet','3-segment bullet with budget and pace ticks','Purchase-count dot row','Category spend day/week, pending amount'],
+['payAnyone / bankTransfer','Per-contact / per-account micro bars','—','Payee totals, txn.account'],
+['payConfirm','Balance before → after delta bar','Round-up peek ring','Balance, goal'],
+['g','Categories'],
+['categories · Share','Concentric radial arcs (Ref 1), common 270° scale, % labelled at each ring start','Ranked rows, one bullet each','Period spend by category'],
+['categories · Monthly','Pie + callouts over 6-month fill jars (Ref 2)','Overflow notches','Category × month spend, monthly budgets'],
+['categoryDetail','21-day area + budget dashline','Merchant treemap, stat triad','Daily category totals'],
+['budgetSheet','Live 100% allocation bar','—','All category budgets'],
+['g','Insights (4 groups, 11 cards)'],
+['Money shape','Pace bullet · dumbbell m-1→m · fixed/discretionary meter · 6-month columns','','Monthly totals, shares'],
+['Time','24h radial clock · 4 part-of-day radial gauges · heatmap + range strip','','ts → hour, daily totals'],
+['Habits','Ranked merchant bars (replaces bubbles) · histogram · radar (fixed)','','Merchant totals, amounts'],
+['Commitments','Subscription month calendar with due dots','','Next due dates, amounts'],
+['g','Savings and settings'],
+['savings','Icon-center goal rings','Icon-center subscription donut','Goals, subs normalised to monthly'],
+['goalCreate','Live stepped ₹/week bar','—','Target, target date'],
+['goalDetail','Cumulative step-line + projection + target marker','Round-up vs manual stacked area','Dated contributions'],
+['goalReached','Completed ring with contribution ticks','—','goal.hist'],
+['subDetail','12-cell charge pictogram','Price-history step line, share meter','Cycle, price history'],
+['settings','Account linkage node diagram','UPI vs manual 100% bar','Accounts, txn.source'],
+['alerts','Bullet preview with threshold tick','—','alertThreshold']];
+document.getElementById('tb').innerHTML=R.map(r=>r[0]==='g'?`<tr class="grp"><td colspan="4">${r[1]}</td></tr>`:`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('');
+
+/* helpers */
+const pt=(cx,cy,r,a)=>[cx+r*Math.cos((a-90)*Math.PI/180),cy+r*Math.sin((a-90)*Math.PI/180)];
+function arc(cx,cy,r,a0,a1){const[x0,y0]=pt(cx,cy,r,a0),[x1,y1]=pt(cx,cy,r,a1);return`M${x0.toFixed(1)} ${y0.toFixed(1)}A${r} ${r} 0 ${a1-a0>180?1:0} 1 ${x1.toFixed(1)} ${y1.toFixed(1)}`}
+function rings(cx,cy,shares,opt={}){let s='',r=opt.r0||78,w=opt.w||7,g=opt.g||3;
+ shares.forEach((v,i)=>{const col=opt.ghost&&i>=opt.ghost?'rgba(237,233,220,.18)':C[opt.idx?opt.idx[i]:i];
+  s+=`<path d="${arc(cx,cy,r,0,270)}" stroke="#212226" stroke-width="${w}" fill="none" stroke-linecap="round"/>`;
+  s+=`<path d="${arc(cx,cy,r,0,v*2.7)}" stroke="${col}" stroke-width="${w}" fill="none" stroke-linecap="round"/>`;
+  s+=`<text x="${cx-6}" y="${(cy-r+3).toFixed(1)}" font-size="7" fill="#f4f4f3" text-anchor="end">${v}%</text>`;
+  r-=w+g;});return s;}
+const T=(x,y,t,o='')=>`<text x="${x}" y="${y}" ${o||'font-size="9" fill="#a9aaad"'}>${t}</text>`;
+const H=(t,sub)=>T(20,44,t,'font-size="15" font-weight="650" fill="#f4f4f3"')+(sub?T(20,58,sub,'font-size="8.5" fill="#75767a"'):'');
+const card=(y,h)=>`<rect x="12" y="${y}" width="216" height="${h}" rx="12" fill="#0d0d0e" stroke="rgba(255,255,255,.09)"/>`;
+const tab=()=>`<rect x="12" y="440" width="216" height="34" rx="17" fill="#212226"/>`+['Home','Cats','Insights','Save','Set'].map((t,i)=>T(28+i*42,461,t,'font-size="8" fill="'+(i==0?'#EDE9DC':'#75767a')+'"')).join('');
+const phone=(inner,cap,desc)=>`<figure><svg class="ph" viewBox="0 0 240 490" role="img" aria-label="${cap} wireframe">${inner}</svg><figcaption><b>${cap}</b> · ${desc}</figcaption></figure>`;
+
+/* Home */
+let h=H('Home','UPI · 2 accounts linked');
+h+=card(68,112)+T(24,84,'SAFE TO SPEND TODAY','font-size="7.5" font-weight="600" fill="#75767a" letter-spacing=".6"');
+h+=`<path d="M60 160 A60 60 0 0 1 180 160" stroke="#212226" stroke-width="12" fill="none" stroke-linecap="round"/><path d="${(()=>{const a=Math.PI*.58;return`M60 160 A60 60 0 0 1 ${(120-60*Math.cos(a)).toFixed(1)} ${(160-60*Math.sin(a)).toFixed(1)}`})()}" stroke="#EDE9DC" stroke-width="12" fill="none" stroke-linecap="round"/>`;
+h+=T(120,152,'₹168 left','font-size="15" font-weight="700" fill="#f4f4f3" text-anchor="middle"')+T(120,170,'✓ On track · ₹232 of ₹400','font-size="7.5" fill="#0ca30c" text-anchor="middle"');
+h+=[['Today','₹232'],['Week','₹1,640'],['Month','₹5,910']].map((s,i)=>{const x=12+i*74;return`<rect x="${x}" y="188" width="68" height="48" rx="10" fill="#212226"/>`+T(x+8,201,s[0],'font-size="7" fill="#75767a"')+T(x+8,216,s[1],'font-size="11" font-weight="650" fill="#f4f4f3"')+`<polyline points="${[0,1,2,3,4,5,6].map(k=>`${x+8+k*8},${230-[3,6,2,7,4,8,5][(k+i)%7]}`).join(' ')}" fill="none" stroke="#a9aaad" stroke-width="1"/>`}).join('');
+h+=card(244,62)+T(24,259,'SMALL PURCHASES ADDING UP','font-size="7.5" font-weight="600" fill="#75767a"');
+[['Campus Coffee',6,1],['RV Shop',5,1],['Metro',4,3]].forEach((m,j)=>{h+=T(24,274+j*12,m[0],'font-size="7.5" fill="#a9aaad"');for(let k=0;k<m[1];k++)h+=`<rect x="${90+k*10}" y="${267+j*12}" width="7" height="7" rx="2" fill="${C[m[2]]}"/>`;h+=T(210,274+j*12,['₹180','₹140','₹120'][j],'font-size="7.5" fill="#f4f4f3" text-anchor="end"')});
+h+=card(314,118)+T(24,329,'WHERE THIS MONTH WENT','font-size="7.5" font-weight="600" fill="#75767a"');
+h+=`<rect x="24" y="340" width="8" height="84" rx="2" fill="#a9aaad"/>`+T(36,386,'₹5,910','font-size="7" fill="#f4f4f3"');
+let yy=340;[28,18,16,12,10,16].forEach((v,i)=>{const hh=v*.84;const col=i<5?C[i]:'#6b6c70';h+=`<path d="M32 ${340+[0,28,18+28,62,74,84].slice(0,i).reduce((a,b)=>a,0)} " fill="none"/>`;h+=`<path d="M70 ${yy+hh/2} C110 ${yy+hh/2},110 ${yy+hh/2},140 ${yy+hh/2}" stroke="${col}" stroke-opacity=".5" stroke-width="${Math.max(2,hh-2)}" fill="none"/><rect x="140" y="${yy}" width="5" height="${hh-2}" fill="${col}"/>`+T(150,yy+hh/2+3,(i<5?N[i].slice(0,5):'Other')+' '+v+'%','font-size="7" fill="#a9aaad"');yy+=hh});
+
+h+=tab();
+
+/* Categories */
+let c=H('Categories','September · ₹5,910 spent');
+c+=`<rect x="20" y="66" width="200" height="22" rx="11" fill="#212226"/><rect x="22" y="68" width="98" height="18" rx="9" fill="#EDE9DC"/>`+T(71,80,'Share','font-size="8.5" fill="#141414" text-anchor="middle" font-weight="600"')+T(170,80,'Monthly','font-size="8.5" fill="#a9aaad" text-anchor="middle"');
+c+=rings(120,190,[28,18,16,12,10,8],{r0:84,w:8,g:3.5});
+c+=T(120,188,'₹5,910','font-size="13" font-weight="700" fill="#f4f4f3" text-anchor="middle"')+T(120,200,'this month','font-size="7.5" fill="#75767a" text-anchor="middle"');
+c+=T(24,108,'0°–270° = 0–100%','font-size="6.5" fill="#75767a"');
+[['Food','₹1,655',.72,0],['Snacks','₹1,064',.95,1],['Groceries','₹946',.55,2],['Transport','₹709',.6,3],['Necessities','₹591',.4,4]].forEach((r,i)=>{const y=292+i*28;c+=`<circle cx="26" cy="${y}" r="3.5" fill="${C[r[3]]}"/>`+T(34,y+3,r[0],'font-size="8.5" fill="#f4f4f3"')+T(214,y+3,r[1],'font-size="8.5" fill="#f4f4f3" text-anchor="end"')+`<rect x="34" y="${y+8}" width="180" height="4" rx="2" fill="#212226"/><rect x="34" y="${y+8}" width="${180*r[2]}" height="4" rx="2" fill="${C[r[3]]}"/><rect x="${34+180*.8}" y="${y+6}" width="1.5" height="8" fill="#f4f4f3"/>`+(r[2]>.9?T(120,y+3,'◐ near limit','font-size="7" fill="#fab219"'):'')});
+c+=tab();
+
+/* Monthly view */
+let m=H('Categories · Monthly','Apr–Sep · fill = spend ÷ budget');
+let a0=0;const sh=[28,18,16,12,10,16];const cx=120,cy=130,pr=42;
+sh.forEach((v,i)=>{const a1=a0+v*3.6;const[x0,y0]=pt(cx,cy,pr,a0),[x1,y1]=pt(cx,cy,pr,a1);m+=`<path d="M${cx} ${cy}L${x0} ${y0}A${pr} ${pr} 0 ${a1-a0>180?1:0} 1 ${x1} ${y1}Z" fill="${i<5?C[i]:'#6b6c70'}" stroke="#17181a" stroke-width="2"/>`;
+ const mid=(a0+a1)/2;const[ex,ey]=pt(cx,cy,pr+4,mid),[ox,oy]=pt(cx,cy,pr+16,mid);const right=ox>cx;const tx=right?ox+14:ox-14;
+ m+=`<polyline points="${ex},${ey} ${ox},${oy} ${tx},${oy}" fill="none" stroke="#75767a" stroke-width=".8"/>`+T(right?tx+2:tx-2,oy+3,(i<5?N[i].slice(0,5):'Other')+' '+v+'%','font-size="7" fill="#f4f4f3" text-anchor="'+(right?'start':'end')+'"');a0=a1});
+const fills=[[.7,.8,.6,.75,.9,.82],[.9,1,.7,.85,1.1,.95],[.5,.6,.7,.8,.9,.7],[.6,.4,.9,.5,.55,.6],[.3,.5,.4,.6,.5,.4],[.4,1.2,.3,.3,.4,.5]];
+fills.forEach((f,j)=>{const x=26+j*33;m+=T(x+12,212,[28,18,16,12,10,8][j]+'%','font-size="7.5" fill="#f4f4f3" text-anchor="middle"');
+ f.forEach((v,k)=>{const y=392-k*29;m+=`<rect x="${x}" y="${y-26}" width="24" height="26" rx="4" fill="#212226"/><rect x="${x}" y="${y-26*Math.min(v,1)}" width="24" height="${26*Math.min(v,1)}" rx="4" fill="${C[j]}" fill-opacity="${k==5?1:.55}"/>`+(v>1?`<rect x="${x+4}" y="${y-29}" width="16" height="2" fill="#d03b3b"/>`:'')});
+ m+=T(x+12,406,N[j].slice(0,5),'font-size="6.5" fill="#75767a" text-anchor="middle"')});
+['Sep','Apr'].forEach((t,i)=>m+=T(224,[226,392][i]-10,t,'font-size="6" fill="#75767a" text-anchor="end"'));
+m+=T(20,424,'Tap a cell: "Jul · Food ₹5,420 of ₹6,600 (82%)"','font-size="7" fill="#a9aaad"')+tab();
+
+/* Onboarding categories */
+let o=`<circle cx="30" cy="30" r="10" fill="none" stroke="#212226" stroke-width="3"/><path d="${arc(30,30,10,0,108)}" stroke="#EDE9DC" stroke-width="3" fill="none" stroke-linecap="round"/>`+T(30,33,'2','font-size="9" fill="#f4f4f3" text-anchor="middle" font-weight="700"');
+o+=T(48,34,'Pick your categories','font-size="13" font-weight="650" fill="#f4f4f3"')+T(20,56,'Each one adds a ring to your starter budget','font-size="8" fill="#75767a"');
+o+=rings(120,160,[28,16,14,12,12,8],{r0:80,w:8,g:3.5,ghost:4,idx:[0,2,4,3,1,5]});
+o+=T(120,158,'4 picked','font-size="12" font-weight="700" fill="#f4f4f3" text-anchor="middle"')+T(120,170,'2 suggested','font-size="7.5" fill="#75767a" text-anchor="middle"');
+const chips=[['Food',1,0],['Groceries',1,2],['Necessities',1,4],['Transport',1,3],['Snacks',0,1],['Stationery',0,5],['Chai',0,-1],['Rent',0,-1],['Laundry',0,-1]];
+let cxp=20,cyp=272;chips.forEach(ch=>{const w=ch[0].length*5+24;if(cxp+w>222){cxp=20;cyp+=26}o+=`<rect x="${cxp}" y="${cyp}" width="${w}" height="20" rx="10" fill="${ch[1]?'#EDE9DC':'#212226'}" stroke="rgba(255,255,255,.14)"/>`+(ch[2]>=0?`<circle cx="${cxp+9}" cy="${cyp+10}" r="3" fill="${C[ch[2]]}"/>`:'')+T(cxp+16,cyp+13,ch[0],'font-size="8" fill="'+(ch[1]?'#141414':'#a9aaad')+'"');cxp+=w+6});
+o+=`<rect x="20" y="378" width="200" height="28" rx="12" fill="#212226" stroke="rgba(255,255,255,.09)"/>`+T(32,395,'Search or add a category','font-size="8" fill="#75767a"');
+o+=`<rect x="20" y="430" width="200" height="34" rx="17" fill="#EDE9DC"/>`+T(120,451,'Continue','font-size="10" font-weight="650" fill="#141414" text-anchor="middle"');
+
+/* Insights */
+let n=H('Insights','Time · when you spend');
+n+=card(68,190)+T(24,84,'WHEN IN THE DAY','font-size="7.5" font-weight="600" fill="#75767a"')+T(24,98,'Evenings (6–10 pm) carry 38% of spend','font-size="9" font-weight="600" fill="#f4f4f3"');
+const hv=[1,0,0,0,0,0,0,1,4,5,3,2,6,7,4,2,3,4,6,8,9,7,5,3];const ramp=v=>v>6?'#86b6ef':v>3?'#3987e5':'#184f95';
+hv.forEach((v,i)=>{const a0=i*15+1.5,a1=i*15+13.5;const r1=36,r2=36+v*5;const[x0,y0]=pt(120,178,r1,a0),[x1,y1]=pt(120,178,r2,a0),[x2,y2]=pt(120,178,r2,a1),[x3,y3]=pt(120,178,r1,a1);
+ if(v)n+=`<path d="M${x0} ${y0}L${x1} ${y1}A${r2} ${r2} 0 0 1 ${x2} ${y2}L${x3} ${y3}A${r1} ${r1} 0 0 0 ${x0} ${y0}Z" fill="${ramp(v)}"/>`});
+n+=`<circle cx="120" cy="178" r="34" fill="none" stroke="#2a2a28"/>`;[['12a',0],['6a',90],['12p',180],['6p',270]].forEach(l=>{const[x,y]=pt(120,178,26,l[1]);n+=T(x,y+3,l[0],'font-size="6.5" fill="#75767a" text-anchor="middle"')});
+n+=card(266,96)+T(24,282,'PART OF DAY','font-size="7.5" font-weight="600" fill="#75767a"');
+[['Morning',22],['Midday',24],['Evening',38],['Night',16]].forEach((g,i)=>{const x=40+i*52;n+=`<path d="${arc(x,318,16,0,360-0.01)}" stroke="#212226" stroke-width="5" fill="none"/><path d="${arc(x,318,16,0,g[1]*3.6)}" stroke="#3987e5" stroke-width="5" fill="none" stroke-linecap="round"/>`+T(x,321,g[1]+'%','font-size="7.5" fill="#f4f4f3" text-anchor="middle" font-weight="600"')+T(x,348,g[0],'font-size="7" fill="#a9aaad" text-anchor="middle"')});
+n+=card(370,62)+T(24,386,'TYPICAL DAY','font-size="7.5" font-weight="600" fill="#75767a"');
+for(let w=0;w<3;w++)for(let d=0;d<7;d++)n+=`<rect x="${24+d*14}" y="${392+w*12}" width="11" height="9" rx="2" fill="${['#2a2b30','#184f95','#3987e5','#86b6ef'][(w*3+d*5)%4]}"/>`;
+n+=`<line x1="130" y1="410" x2="214" y2="410" stroke="#2a2b30" stroke-width="3" stroke-linecap="round"/><line x1="150" y1="410" x2="190" y2="410" stroke="#75767a" stroke-width="3"/><circle cx="198" cy="410" r="4" fill="#EDE9DC" stroke="#17181a" stroke-width="2"/>`+T(130,424,'min · median · max · today','font-size="6" fill="#75767a"');
+n+=tab();
+
+document.getElementById('phones').innerHTML=
+ phone(h,'Home','half-donut safe-to-spend, stat triad, pictogram accumulation, Sankey from month spend')+
+ phone(c,'Categories · Share','Ref 1 radial arcs on a common 270° scale, % at each ring start; one bullet per row')+
+ phone(m,'Categories · Monthly','Ref 2 pie with callouts over 6-month fill jars')+
+ phone(n,'Insights · Time','24h radial clock, part-of-day gauges, merged typical-day card')+
+ phone(o,'Onboarding · categories','each picked chip grows a ring; suggestions show as ghost rings');
+</script>

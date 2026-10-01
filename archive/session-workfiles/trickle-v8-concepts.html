@@ -1,0 +1,326 @@
+<title>Trickle v8 Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: page header + direction switch, then three 412px phone prototypes that wrap, then pros/cons. Single dark look, matching the v7 app. */
+:root{
+  --stage:#050505; --ink:#0B0B0C; --surface:#141414; --surface2:#1D1E20; --surface3:#27282B;
+  --border:#232325; --text:#F4F4F2; --text2:#A9AAAD; --text3:#74757A;
+  --accent:#C6F432; --on-accent:#141414;
+  --calm:#4FD18B; --warm:#F2A93B;
+  --font:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--stage);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.45;padding-inline:16px;padding-block:28px 60px}
+.wrap{max-width:1340px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1{font-size:28px;font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.lede{color:var(--text2);max-width:70ch;margin:6px 0 0}
+.switch{display:flex;flex-wrap:wrap;gap:8px}
+.switch button{flex:1 1 200px;text-align:left;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:14px;padding:12px 14px;cursor:pointer;font:inherit}
+.switch button b{display:block;font-size:15px}
+.switch button span{color:var(--text3);font-size:12.5px}
+.switch button[aria-pressed="true"]{border-color:var(--accent);background:var(--surface2)}
+.switch button:focus-visible,.phone button:focus-visible,.ctl button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.dirhead{display:flex;flex-direction:column;gap:4px}
+.dirhead h2{margin:0;font-size:20px;font-weight:700}
+.dirhead p{margin:0;color:var(--text2);max-width:80ch}
+.row{display:flex;flex-wrap:wrap;gap:24px;justify-content:center}
+.col{display:flex;flex-direction:column;gap:10px;width:412px;max-width:100%}
+.coltitle{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);font-weight:600}
+.ctl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:34px}
+.ctl button{background:var(--surface);border:1px solid var(--border);color:var(--text2);border-radius:99px;padding:6px 12px;font:inherit;font-size:12.5px;cursor:pointer}
+.ctl button[aria-pressed="true"]{color:var(--text);border-color:var(--text3);background:var(--surface3)}
+.phone{position:relative;width:412px;max-width:100%;height:860px;border-radius:38px;background:var(--ink);border:1px solid #2a2a2c;overflow:hidden;display:flex;flex-direction:column;isolation:isolate}
+.scr{flex:1;overflow-y:auto;overflow-x:hidden;padding:22px 20px 20px;display:flex;flex-direction:column;gap:18px;position:relative;z-index:1;scrollbar-width:none}
+.status{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);font-weight:600;padding:0 4px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);background:rgba(11,11,12,.92);position:relative;z-index:2;padding:8px 0 14px}
+.tabs div{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--text3)}
+.tabs div.on{color:var(--text)}
+.tabs svg{width:22px;height:22px}
+.hello{font-size:13px;color:var(--text2)}
+.pace{font-size:22px;font-weight:700;letter-spacing:-.01em;line-height:1.2;margin-top:2px;text-wrap:balance}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:56px;border-radius:18px;border:0;background:var(--accent);color:var(--on-accent);font:inherit;font-size:16px;font-weight:700;cursor:pointer}
+.btn.sec{background:var(--surface2);color:var(--text);font-weight:600;min-height:48px;font-size:14px}
+.btn.warm{background:var(--warm)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{background:rgba(29,30,32,.78);border:1px solid var(--border);border-radius:20px;padding:14px;backdrop-filter:blur(6px)}
+.lbl{font-size:12px;color:var(--text3);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.big{font-size:30px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.muted{color:var(--text2)}
+.tx{display:flex;align-items:center;gap:12px;padding:10px 4px;border-bottom:1px solid var(--border);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;color:inherit;font:inherit;width:100%;text-align:left}
+.tx:last-child{border-bottom:0}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.tx .m{flex:1}
+.tx .m small{display:block;color:var(--text3);font-size:12px}
+.tx .amt{color:var(--text3);font-size:12px;font-variant-numeric:tabular-nums}
+.tx.rev .amt{color:var(--text);font-size:14px;font-weight:600}
+.pinv{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.pinv svg{display:block}
+.cap{font-size:12.5px;color:var(--text2)}
+/* glows */
+.glow{position:absolute;inset:0;z-index:0;pointer-events:none}
+.glow .l{position:absolute;inset:0;transition:opacity 1.6s ease}
+.gA .ok{background:radial-gradient(140% 55% at 50% 108%,rgba(79,209,139,.6),rgba(79,209,139,.14) 60%,transparent 75%)}
+.gA .fast{background:radial-gradient(140% 55% at 50% 108%,rgba(242,169,59,.62),rgba(242,169,59,.15) 60%,transparent 75%)}
+.gA .wave{position:absolute;left:-10%;right:-10%;height:120px;bottom:30%;border-radius:45%;background:var(--g);opacity:.10;filter:blur(30px);animation:drift 9s ease-in-out infinite alternate;transition:background-color 1.6s}
+@keyframes drift{to{transform:translateX(8%) translateY(-14px)}}
+.gB{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:64px;gap:8px;padding:8px;height:52%;filter:blur(20px);-webkit-mask-image:linear-gradient(#000 20%,transparent);mask-image:linear-gradient(#000 20%,transparent)}
+.gB i{border-radius:10px;background-color:var(--g);transition:background-color 1.6s ease,opacity 1.6s}
+.gC .orb{position:absolute;width:420px;height:420px;left:50%;top:-150px;margin-left:-210px;border-radius:50%;filter:blur(40px);animation:breathe 7s ease-in-out infinite;transition:opacity 1.6s}
+.gC .ok{background:radial-gradient(circle,rgba(79,209,139,.55),rgba(79,209,139,.12) 55%,transparent 70%)}
+.gC .fast{background:radial-gradient(circle,rgba(242,169,59,.58),rgba(242,169,59,.12) 55%,transparent 70%)}
+@keyframes breathe{50%{transform:scale(1.08)}}
+/* pay */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:99px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font:inherit;font-weight:600;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--text);background:var(--surface3)}
+.stage{min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border-radius:24px;background:rgba(20,20,20,.7);border:1px solid var(--border);padding:16px;position:relative}
+.stage .hint{color:var(--text3);font-size:13px}
+.verdict{font-size:18px;font-weight:700;text-align:center;text-wrap:balance}
+.chunk,.ov,.tile,.arcchunk{transition:transform .9s cubic-bezier(.5,0,.3,1),opacity .9s;transform-box:fill-box;transform-origin:center}
+.go .chunk{transform:translate(38px,-110px) rotate(24deg) scale(.5);opacity:0}
+.ov{opacity:0}
+.show .ov{opacity:1}
+.tile{transform-origin:center}
+.go .tile.ch{transform:translateY(-40px) scale(0);opacity:0}
+.go .arcchunk{opacity:0}
+.done{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;padding-top:30px;animation:fadein .5s}
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}}
+/* money accordion */
+.acc{display:flex;flex-direction:column;gap:10px}
+.acs{background:rgba(29,30,32,.8);border:1px solid var(--border);border-radius:22px;overflow:hidden;transition:border-color .3s}
+.acs.open{border-color:#3a3b3f}
+.sech{display:flex;align-items:center;gap:12px;width:100%;min-height:68px;padding:12px 16px;background:none;border:0;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.sech .t{flex:1}
+.sech .t b{display:block;font-size:16px}
+.sech .t small{color:var(--text3);font-size:12.5px}
+.chev{transition:transform .45s cubic-bezier(.3,.7,.2,1);color:var(--text3)}
+.acs.open .chev{transform:rotate(180deg)}
+.body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s cubic-bezier(.3,.7,.2,1)}
+.acs.open .body{grid-template-rows:1fr}
+.body>div{overflow:hidden}
+.inner{padding:0 16px 18px;display:flex;flex-direction:column;gap:14px;opacity:0;transform:translateY(-8px);transition:opacity .35s,transform .45s}
+.acs.open .inner{opacity:1;transform:none;transition-delay:.12s}
+.split{display:flex;align-items:flex-end;justify-content:space-around;gap:8px;min-height:200px;position:relative}
+.split .lab{font-size:12px;color:var(--text2);text-align:center;margin-top:6px}
+.lq{transition:transform 1.4s cubic-bezier(.4,0,.2,1);transform-box:fill-box;transform-origin:bottom}
+.confirm{background:var(--surface3);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px;animation:fadein .5s}
+.confirm .r{display:flex;gap:8px}
+.confirm .r .btn{min-height:44px;font-size:14px}
+.undo{background:none;border:0;color:var(--text2);font:inherit;text-decoration:underline;cursor:pointer;padding:0 8px;min-height:44px}
+.tgrid{display:grid;gap:4px}
+.tgrid i{display:block;aspect-ratio:1;border-radius:4px;transition:transform .5s cubic-bezier(.3,1.4,.5,1),background-color .5s,opacity .5s}
+.orbs{position:relative;width:100%;height:210px}
+.orbs .o{position:absolute;top:50%;left:50%;border-radius:50%;transition:transform 1.3s cubic-bezier(.4,0,.2,1),opacity 1s;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--on-accent)}
+.minis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;font-size:11.5px;color:var(--text2)}
+.minis svg,.minis .tgrid{margin:0 auto 4px}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.notes div{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px 18px;min-width:0}
+.notes h3{margin:0 0 8px;font-size:14px}
+.notes ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;color:var(--text2)}
+.notes b{color:var(--text)}
+@media (max-width:760px){.notes{grid-template-columns:1fr}}
+@media (max-width:440px){.phone{height:780px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01s!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Trickle v8 — Concepts</h1>
+    <p class="lede">Three directions for the same app and the same numbers. Each one shows Home, the pay moment and the Money tab as working prototypes. Use the small controls above each phone to switch states. Pick one direction, or name parts to combine.</p>
+  </header>
+  <div class="switch" role="group" aria-label="Direction">
+    <button data-d="A"><b>A · Jars</b><span>Money as liquid. Payments pour out.</span></button>
+    <button data-d="B"><b>B · Tiles</b><span>Money as blocks. Payments pop out.</span></button>
+    <button data-d="C"><b>C · Orbs</b><span>Money as rings of light. Payments cut an arc.</span></button>
+  </div>
+  <section class="dirhead"><h2 id="dh"></h2><p id="dp"></p></section>
+  <div class="row">
+    <div class="col"><div class="coltitle">1 · Home</div><div class="ctl" id="c1"></div><div class="phone" id="p1"></div></div>
+    <div class="col"><div class="coltitle">2 · Pay moment</div><div class="ctl" id="c2"></div><div class="phone" id="p2"></div></div>
+    <div class="col"><div class="coltitle">3 · Money tab</div><div class="ctl" id="c3"></div><div class="phone" id="p3"></div></div>
+  </div>
+  <section class="notes" id="notes"></section>
+</div>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const rs=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+const CATS=[{id:'food',n:'Food',c:'#E8743B',b:2400,l:1100},{id:'travel',n:'Travel',c:'#3F8CE6',b:900,l:520},{id:'fun',n:'Fun',c:'#D55181',b:800,l:350},{id:'ess',n:'Essentials',c:'#9085E9',b:1400,l:780}];
+const CAT=id=>CATS.find(c=>c.id===id);
+const PAYS={small:{m:'Chai Point',a:180},big:{m:'Movie night',a:600}};
+const RECENT=[['Chai Point','food',60,'Today, 4:10 pm'],['Metro recharge','travel',200,'Today, 9:02 am'],['Stationery','ess',145,'Yesterday'],['Zomato','food',240,'Monday']];
+const GOAL={n:'Goa trip',target:8000};
+const INCOME=9000,BUDGET=6000;
+const S={d:'A',pace:'ok',pay:'small',cat:null,paid:false,open:'income',inc:0,saved:4200};
+const GC={ok:'#4FD18B',fast:'#F2A93B'};
+const LIME='#C6F432';
+
+/* ---------- direction A: jars ---------- */
+function jar(frac,col,w=120,h=150,{chunk=0,over=0,label=''}={}){
+  const x=8,y=14,W=w-16,H=h-22,ih=H-10;
+  const lvl=Math.max(0,frac-chunk);
+  const ly=y+5+ih*(1-lvl), cy=y+5+ih*(1-frac);
+  let s=`<svg width="${w}" height="${h+(over?60:0)}" viewBox="0 ${over?-60:0} ${w} ${h+(over?60:0)}" aria-hidden="true">
+  <defs><clipPath id="cj${w}${h}${Math.round(frac*100)}"><rect x="${x+5}" y="${y+5}" width="${W-10}" height="${ih}" rx="${Math.min(18,W/5)}"/></clipPath></defs>
+  <rect x="${x}" y="${y}" width="${W}" height="${H}" rx="${Math.min(22,W/4)}" fill="#141414" stroke="#3a3b3f" stroke-width="2"/>
+  <rect x="${x+W*0.25}" y="${y-8}" width="${W*0.5}" height="10" rx="4" fill="#2a2b2e"/>
+  <g clip-path="url(#cj${w}${h}${Math.round(frac*100)})">
+    <rect x="${x}" y="${ly}" width="${W}" height="${h}" fill="${col}" opacity=".9"/>
+    <ellipse cx="${x+W/2}" cy="${ly}" rx="${W/2}" ry="4" fill="#fff" opacity=".18"/>
+  </g>`;
+  if(chunk>0) s+=`<rect class="chunk" x="${x+5}" y="${cy}" width="${W-10}" height="${ih*chunk}" rx="6" fill="${col}" stroke="#fff" stroke-opacity=".6" stroke-width="1.5"/>`;
+  if(over>0){const oh=Math.min(56,ih*over);s+=`<rect class="ov" x="${x+5}" y="${y-10-oh}" width="${W-10}" height="${oh}" rx="8" fill="none" stroke="${GC.fast}" stroke-width="2" stroke-dasharray="5 4"/><rect class="ov" x="${x+9}" y="${y-6-oh}" width="${W-18}" height="${oh-8}" rx="6" fill="${GC.fast}" opacity=".3"/>`;}
+  if(label) s+=`<text x="${w/2}" y="${y+H/2+6}" text-anchor="middle" font-size="18" font-weight="800" fill="#141414">${label}</text>`;
+  return s+'</svg>';
+}
+/* ---------- direction B: tiles ---------- */
+function tiles(n,cols,filled,col,{chunk=0,size=14,gap=4,empty='#2a2b2e',outline=false}={}){
+  let h=`<div class="tgrid" style="grid-template-columns:repeat(${cols},${size}px);gap:${gap}px">`;
+  for(let i=0;i<n;i++){
+    const on=i<filled, ch=on&&i>=filled-chunk;
+    const st=on?`background:${col}`:(outline?`background:transparent;box-shadow:inset 0 0 0 1.5px ${empty}`:`background:${empty}`);
+    h+=`<i class="tile${ch?' ch':''}" style="${st};${ch?`transition-delay:${(filled-i)*60}ms;box-shadow:0 0 0 2px #fff inset`:''}"></i>`;
+  }
+  return h+'</div>';
+}
+/* ---------- direction C: rings ---------- */
+function arcPath(cx,cy,r,a0,a1){const p=a=>[cx+r*Math.sin(a*2*Math.PI),cy-r*Math.cos(a*2*Math.PI)];const [x0,y0]=p(a0),[x1,y1]=p(Math.max(a0+0.0001,a1));return `M${x0.toFixed(2)} ${y0.toFixed(2)} A${r} ${r} 0 ${a1-a0>.5?1:0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;}
+function ring(frac,col,sz=170,{chunk=0,over=0,sw=16,label='',track='#27282b'}={}){
+  const c=sz/2,r=c-sw-(over?14:2);
+  let s=`<svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}" aria-hidden="true"><circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="${track}" stroke-width="${sw}"/>`;
+  const keep=Math.max(0,frac-chunk);
+  if(keep>0.002) s+=`<path d="${arcPath(c,c,r,0,keep)}" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linecap="round"/>`;
+  if(chunk>0){const mid=(keep+frac)/2*2*Math.PI;const dx=Math.sin(mid)*26,dy=-Math.cos(mid)*26;
+    s+=`<g class="arcchunk" style="transition:transform .9s cubic-bezier(.5,0,.3,1),opacity .9s .2s" data-dx="${dx}" data-dy="${dy}"><path d="${arcPath(c,c,r,keep+0.006,frac)}" fill="none" stroke="#fff" stroke-width="${sw+4}" stroke-linecap="round" opacity=".9"/><path d="${arcPath(c,c,r,keep+0.006,frac)}" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linecap="round"/></g>`;}
+  if(over>0) s+=`<path class="ov" d="${arcPath(c,c,r+sw/2+10,0,Math.min(.95,over))}" fill="none" stroke="${GC.fast}" stroke-width="6" stroke-linecap="round" stroke-dasharray="2 7"/>`;
+  if(label) s+=`<text x="${c}" y="${c+8}" text-anchor="middle" font-size="${sz/6.5}" font-weight="800" fill="#F4F4F2">${label}</text>`;
+  return s+'</svg>';
+}
+
+const DIR={
+ A:{h:'A · Jars — money as liquid',p:'Everything is a jar you can see into. Home glows from the bottom like a lit pool. When you pay, the payment is a slab of liquid that pours out of the category jar. Income fills the budget jar to its line and the overflow runs into savings.',
+  glow:()=>`<div class="glow gA" style="--g:${GC[S.pace]}"><div class="l ok" style="opacity:${S.pace==='ok'?1:0}"></div><div class="l fast" style="opacity:${S.pace==='fast'?1:0}"></div><div class="wave" style="background-color:${GC[S.pace]}"></div></div>`,
+  pinned:()=>`<div class="card pinv">${jar(S.saved/GOAL.target,LIME,110,140,{label:Math.round(S.saved/GOAL.target*100)+'%'})}<div class="cap">Goa trip</div></div>
+   <div class="card pinv">${jar(.52,GC[S.pace],110,140)}<div class="cap">This month, ${S.pace==='ok'?'right on pace':'a little ahead'}</div></div>`,
+  cat:(c,amt)=>{const cover=Math.min(amt,c.l),over=Math.max(0,amt-c.l);return jar(c.l/c.b,c.c,170,220,{chunk:cover/c.b,over:over/c.b});},
+  mini:c=>jar(c.l/c.b,c.c,62,80),
+  goal:f=>jar(f,LIME,150,190,{label:Math.round(f*100)+'%'}),
+  split:()=>`<div class="split" id="sp">
+     <div>${jar(1,'#EDE9DC',96,130).replace('<rect x="8" y="','<rect class="lq src" x="8" y="')}<div class="lab">Allowance</div></div>
+     <div>${jar(1,'#B8B4A8',96,130).replace('opacity=".9"','class="lq" style="transform:scaleY(.35)" opacity=".9"')}<div class="lab">Budget</div></div>
+     <div>${jar(1,LIME,96,130).replace('opacity=".9"','class="lq" style="transform:scaleY(.42)" opacity=".9"')}<div class="lab">Savings</div></div></div>`,
+  runSplit:el=>{const lq=el.querySelectorAll('.lq');const src=el.querySelector('svg');src.style.transition='opacity 1.4s';
+     requestAnimationFrame(()=>{src.style.opacity='.25';lq[1].style.transform='scaleY(1)';setTimeout(()=>lq[2].style.transform='scaleY(.8)',700);});},
+  notes:{pro:['<b>Mental accounting (Thaler):</b> jars are the most literal "labelled pot" metaphor; nobody needs the legend explained.','<b>Pain of paying (Prelec &amp; Loewenstein):</b> liquid pouring out reads as loss without any figure, closest to handing over cash.','<b>Calm technology:</b> the bottom-up pool glow sits in the periphery and does not compete with the Pay button.'],
+         con:['Liquid levels are hard to judge precisely; small payments (₹60 chai) barely move the surface.','Four category jars plus two pinned jars can start to feel like a shelf of containers again, the v7 "too much" problem.','The overflow state (liquid above the rim) needs the dashed shape to read; it is the least intuitive of the three.']}},
+ B:{h:'B · Tiles — money as blocks',p:'Each budget is a grid of equal tiles, like a waffle chart. Home glows through a soft, blurred grid at the top. When you pay, the tiles this payment uses light up and pop out one by one. Income arrives as a row of tiles that sort themselves into Budget and Savings.',
+  glow:()=>{let t='';const a=[.9,.5,.75,.35,.8,.55,.4,.85,.6,.95,.45,.7,.3,.65,.5,.8,.4,.6,.2,.4,.3,.5,.25,.35];a.forEach(o=>t+=`<i style="opacity:${o}"></i>`);return `<div class="glow gB" style="--g:${S.pace==='ok'?'rgba(79,209,139,.55)':'rgba(242,169,59,.6)'}">${t}</div>`;},
+  pinned:()=>{const f=Math.round(S.saved/GOAL.target*100);return `<div class="card pinv">${tiles(100,10,f,LIME,{size:10,gap:3})}<div class="cap">Goa trip · ${f}%</div></div>
+   <div class="card pinv">${tiles(30,6,18,GC[S.pace],{size:18,gap:4,outline:true,empty:'#3a3b3f'})}<div class="cap">Day 18 of 30, ${S.pace==='ok'?'right on pace':'a little ahead'}</div></div>`;},
+  cat:(c,amt)=>{const u=c.b/24,fl=Math.round(c.l/u),ch=Math.min(fl,Math.ceil(Math.min(amt,c.l)/u)),ov=Math.ceil(Math.max(0,amt-c.l)/u);
+    return `<div>${tiles(24,6,fl,c.c,{chunk:ch,size:34,gap:6,outline:true,empty:'#34353a'})}</div>${ov?`<div class="ov" style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;max-width:240px">${('<i style="width:22px;height:22px;border-radius:5px;border:2px dashed '+GC.fast+';background:rgba(242,169,59,.25)"></i>').repeat(ov)}</div>`:''}`;},
+  mini:c=>tiles(12,4,Math.round(c.l/c.b*12),c.c,{size:12,gap:3,outline:true,empty:'#3a3b3f'}),
+  goal:f=>tiles(100,10,Math.round(f*100),LIME,{size:18,gap:4}),
+  split:()=>`<div id="sp" style="display:flex;flex-direction:column;gap:14px;align-items:center">
+     <div style="text-align:center"><div class="tgrid" style="grid-template-columns:repeat(9,18px)">${'<i class="in" style="background:#EDE9DC"></i>'.repeat(18)}</div><div class="lab" style="font-size:12px;color:var(--text2);margin-top:6px">Allowance</div></div>
+     <div style="display:flex;gap:26px;align-items:flex-start">
+       <div style="text-align:center"><div class="tgrid" style="grid-template-columns:repeat(6,18px)">${'<i class="bd" style="background:transparent;box-shadow:inset 0 0 0 1.5px #3a3b3f"></i>'.repeat(12)}</div><div style="font-size:12px;color:var(--text2);margin-top:6px">Budget</div></div>
+       <div style="text-align:center"><div class="tgrid" style="grid-template-columns:repeat(3,18px)">${'<i class="sv" style="background:transparent;box-shadow:inset 0 0 0 1.5px #3a3b3f"></i>'.repeat(6)}</div><div style="font-size:12px;color:var(--text2);margin-top:6px">Savings</div></div>
+     </div></div>`,
+  runSplit:el=>{const ins=[...el.querySelectorAll('.in')],bd=[...el.querySelectorAll('.bd')],sv=[...el.querySelectorAll('.sv')];
+    ins.forEach((t,i)=>setTimeout(()=>{t.style.transform='scale(0)';t.style.opacity='0';const tgt=i<12?bd[i]:sv[i-12];tgt.style.background=i<12?'#B8B4A8':LIME;tgt.style.boxShadow='none';tgt.style.transform='scale(1.25)';setTimeout(()=>tgt.style.transform='scale(1)',250);},i*90));},
+  notes:{pro:['<b>Cognitive load (Sweller; NN/g):</b> tiles are countable without numbers, so "how much of Food is this" is exact at a glance.','<b>Endowed progress (Nunes &amp; Drèze):</b> the Goa waffle is literally a stamp card, already half filled; each auto-save adds visible tiles.','<b>Pain of paying:</b> tiles popping out one by one make a bigger payment feel bigger in time, not only in size.'],
+         con:['Grids read as more "data-like" than A or C, a step back toward the dashboard feel reviews complained about.','Tile unit changes per category (₹100 in Food, ₹33 in Fun), which is invisible but can confuse anyone who counts.','The blurred-grid glow is the most decorative of the three and the weakest at showing pace from across the room.']}},
+ C:{h:'C · Orbs — money as rings of light',p:'Home is lit by one soft orb that breathes at the top of the screen. Each budget is a ring. When you pay, the arc this payment takes lifts off the ring and fades. Income is an orb that splits into two: Budget and Savings.',
+  glow:()=>`<div class="glow gC"><div class="orb ok" style="opacity:${S.pace==='ok'?1:0}"></div><div class="orb fast" style="opacity:${S.pace==='fast'?1:0}"></div></div>`,
+  pinned:()=>`<div class="card pinv">${ring(S.saved/GOAL.target,LIME,120,{sw:12,label:Math.round(S.saved/GOAL.target*100)+'%'})}<div class="cap">Goa trip</div></div>
+   <div class="card pinv"><svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="46" fill="none" stroke="#27282b" stroke-width="10"/><path d="${arcPath(60,60,46,0,.6)}" fill="none" stroke="#5a5b60" stroke-width="10" stroke-linecap="round"/><circle cx="60" cy="60" r="30" fill="none" stroke="#27282b" stroke-width="10"/><path d="${arcPath(60,60,30,0,S.pace==='ok'?.56:.72)}" fill="none" stroke="${GC[S.pace]}" stroke-width="10" stroke-linecap="round"/></svg><div class="cap">Month time vs spend, ${S.pace==='ok'?'in step':'spend a little ahead'}</div></div>`,
+  cat:(c,amt)=>{const cover=Math.min(amt,c.l),over=Math.max(0,amt-c.l);return ring(c.l/c.b,c.c,220,{chunk:cover/c.b,over:over/c.b,sw:20});},
+  mini:c=>ring(c.l/c.b,c.c,64,{sw:7}),
+  goal:f=>ring(f,LIME,190,{sw:18,label:Math.round(f*100)+'%'}),
+  split:()=>`<div class="orbs" id="sp"><div class="o" style="width:150px;height:150px;margin:-75px 0 0 -75px;background:radial-gradient(circle at 35% 35%,#fff,#EDE9DC 45%,#8f8b80);transform:none" data-k="src">Allowance</div>
+    <div class="o" style="width:132px;height:132px;margin:-66px 0 0 -66px;background:radial-gradient(circle at 35% 35%,#eee,#B8B4A8 50%,#6f6c64);opacity:0;transform:scale(.4)" data-k="b">Budget</div>
+    <div class="o" style="width:94px;height:94px;margin:-47px 0 0 -47px;background:radial-gradient(circle at 35% 35%,#f4ffd0,${LIME} 50%,#6e8a17);opacity:0;transform:scale(.4)" data-k="s">Savings</div></div>`,
+  runSplit:el=>{const [s,b,v]=el.querySelectorAll('.o');s.style.transform='scale(.3)';s.style.opacity='0';b.style.opacity=1;v.style.opacity=1;b.style.transform='translateX(-70px)';v.style.transform='translateX(95px) translateY(10px)';},
+  notes:{pro:['<b>Calm technology (Weiser &amp; Brown; Ambient Orb):</b> one breathing orb is the purest ambient display, readable in half a second.','<b>Colour and emotion (Elliot; Mehta &amp; Zhu):</b> the glow carries all the pace signal, so the rest of Home can stay neutral and red-free.','<b>Goal-gradient (Kivetz et al.):</b> a ring closing toward the top is the most familiar "almost there" shape (Apple rings).'],
+         con:['Rings are the least literal for money; new users may need one line of onboarding copy.','Arc lengths are hard to compare across categories of different sizes.','Closely echoes fitness-ring apps, which risks implying a daily "close your rings" game the user explicitly does not want.']}}
+};
+
+const ICON={home:'<path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-5h-6v5H5a1 1 0 0 1-1-1z"/>',money:'<circle cx="12" cy="12" r="8"/><path d="M12 7v10M9 9.5h4.5a2 2 0 0 1 0 4H10a2 2 0 0 0 0 4H15"/>',act:'<path d="M12 5v14M5 12h14"/>',ins:'<path d="M5 19V11M12 19V5M19 19v-6"/>'};
+const tabs=on=>`<nav class="tabs">${[['home','Home'],['money','Money'],['act','Actions'],['ins','Insights']].map(([k,n])=>`<div class="${k===on?'on':''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[k]}</svg>${n}</div>`).join('')}</nav>`;
+const status='<div class="status"><span>9:41</span><span>Trickle</span></div>';
+const ctl=(opts,cur,fn)=>opts.map(([v,t])=>`<button aria-pressed="${v===cur}" data-v="${v}" data-f="${fn}">${t}</button>`).join('');
+
+function home(){
+  const d=DIR[S.d];
+  $('#c1').innerHTML=ctl([['ok','On track'],['fast','A bit fast']],S.pace,'pace');
+  $('#p1').innerHTML=`${d.glow()}<div class="scr">${status}
+   <div><div class="hello">Tuesday evening</div><div class="pace">${S.pace==='ok'?'You’re on pace this month.':'Spending’s a little quick. You’re fine.'}</div></div>
+   <div style="display:flex;flex-direction:column;gap:8px"><button class="btn">Pay with UPI</button><button class="btn sec">Log cash spend</button></div>
+   <div class="card" style="padding:6px 12px"><div class="lbl" style="padding:8px 4px 2px">Recent · tap to see amount</div>
+     ${RECENT.slice(0,3).map(([m,c,a,t])=>`<button class="tx" data-a="${rs(a)}"><span class="dot" style="background:${CAT(c).c}"></span><span class="m">${m}<small>${t}</small></span><span class="amt">•••</span></button>`).join('')}</div>
+   <div><div class="lbl" style="margin-bottom:8px">Pinned</div><div class="duo">${d.pinned()}</div></div>
+  </div>${tabs('home')}`;
+  $('#p1').querySelectorAll('.tx').forEach(b=>b.onclick=()=>{b.classList.toggle('rev');b.querySelector('.amt').textContent=b.classList.contains('rev')?b.dataset.a:'•••';});
+}
+function pay(){
+  const d=DIR[S.d],p=PAYS[S.pay];
+  $('#c2').innerHTML=ctl([['small','₹180 chai'],['big','₹600 movie night']],S.pay,'pay')+'<button data-f="payreset">Reset</button>';
+  const ph=$('#p2');
+  if(S.paid){const f=Math.round(S.saved/GOAL.target*100);
+    ph.innerHTML=`<div class="scr">${status}<div class="done"><div class="lbl">Paid ${p.m}</div>${d.goal(S.saved/GOAL.target)}<div class="pace">Goa is still ${f}% full.</div><div class="muted">Savings didn’t move. Nice.</div><button class="btn sec" data-f="payreset" style="margin-top:20px">Back to Home</button></div></div>${tabs('home')}`;return;}
+  const c=S.cat&&CAT(S.cat),over=c&&p.a>c.l;
+  ph.innerHTML=`<div class="scr">${status}
+   <div><div class="lbl">Paying ${p.m}</div><div class="big">${rs(p.a)}</div></div>
+   <div><div class="muted" style="margin-bottom:8px">What’s this for?</div><div class="chips">${CATS.map(k=>`<button class="chip" aria-pressed="${S.cat===k.id}" data-cat="${k.id}"><span class="dot" style="background:${k.c}"></span>${k.n}</button>`).join('')}</div></div>
+   <div class="stage" id="stg">${c?d.cat(c,p.a):'<div class="hint">Pick one. You’ll see what it takes out.</div>'}</div>
+   ${c?`<div class="verdict">${over?`${c.n} covers ${rs(c.l)} of this.`:`${c.n} can cover this.`}</div>
+   ${over?`<button class="btn warm" data-f="paid">Take the rest from next week</button>`:`<button class="btn" data-f="paid">Pay with UPI</button>`}`:''}
+  </div>${tabs('home')}`;
+  ph.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{S.cat=b.dataset.cat;pay();});
+  if(c){const st=$('#stg');setTimeout(()=>{st.classList.add('go');st.querySelectorAll('.arcchunk').forEach(g=>g.style.transform=`translate(${g.dataset.dx}px,${g.dataset.dy}px)`);},450);if(over)setTimeout(()=>st.classList.add('show'),1300);}
+}
+function money(){
+  const d=DIR[S.d];
+  $('#c3').innerHTML='<button data-f="monreset">Reset allowance demo</button>';
+  const f=S.saved/GOAL.target;
+  const sec=(k,t,sub,ic,body)=>`<div class="acs${S.open===k?' open':''}"><button class="sech" data-sec="${k}" aria-expanded="${S.open===k}"><span class="dot" style="width:12px;height:12px;background:${ic}"></span><span class="t"><b>${t}</b><small>${sub}</small></span><svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="body"><div><div class="inner">${body}</div></div></div></div>`;
+  const incBody=`<div><div class="lbl">Balance</div><div class="big">${rs(S.inc?10240+INCOME:10240)}</div></div>
+    <div id="spw">${d.split()}</div>
+    ${S.inc===0?`<button class="btn sec" data-f="income">Simulate: allowance arrives</button>`:''}
+    ${S.inc===1?`<div class="confirm"><div><b>Allowance is in.</b><div class="muted">Budget is full again. The rest went to Goa.</div></div><div class="r"><button class="btn" data-f="gotit">Got it</button><button class="undo" data-f="monreset">Undo</button></div></div>`:''}
+    ${S.inc===2?`<div class="muted">Sorted. Rule: budget stays fixed, everything above it goes to savings.</div>`:''}`;
+  const budBody=`<div><div class="lbl">Each month</div><div class="big">${rs(BUDGET)}</div></div><div class="minis">${CATS.map(c=>`<div>${d.mini(c)}${c.n}</div>`).join('')}</div><div class="muted">Fixed. Anything above it saves itself.</div>`;
+  const savBody=`<div style="display:flex;justify-content:center">${d.goal(f)}</div><div><div class="lbl">Saved for Goa</div><div class="big">${rs(S.saved)}</div></div>`;
+  $('#p3').innerHTML=`<div class="scr">${status}<div><div class="hello">Money</div><div class="pace">Where it comes from and where it goes.</div></div>
+   <div class="acc">${sec('income','Income','Next allowance in 12 days','#EDE9DC',incBody)}${sec('budget','Budget','Steady and on pace','#B8B4A8',budBody)}${sec('savings','Savings',`Goa is ${Math.round(f*100)}% there`,LIME,savBody)}</div>
+  </div>${tabs('money')}`;
+  $('#p3').querySelectorAll('.sech').forEach(b=>b.onclick=()=>{S.open=S.open===b.dataset.sec?null:b.dataset.sec;$('#p3').querySelectorAll(".acs").forEach(s=>{const on=s.querySelector('.sech').dataset.sec===S.open;s.classList.toggle('open',on);s.querySelector('.sech').setAttribute('aria-expanded',on);});});
+  if(S.inc>=1){const el=$('#sp');if(S.inc===1&&!S._ran){S._ran=1;setTimeout(()=>d.runSplit(el),200);}else{el.querySelectorAll('*').forEach(x=>x.style.transition='none');d.runSplit(el);}}
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(!b)return;const f=b.dataset.f;
+  if(f==='pace'){S.pace=b.dataset.v;const g=$('#p1 .glow');const tmp=document.createElement('div');tmp.innerHTML=DIR[S.d].glow();
+    // update layers in place so the colour change transitions
+    if(S.d==='B'){g.style.setProperty('--g',tmp.firstChild.style.getPropertyValue('--g'));}else{g.querySelectorAll('.l,.orb').forEach(l=>l.style.opacity=l.classList.contains(S.pace)?1:0);const w=g.querySelector('.wave');if(w)w.style.backgroundColor=GC[S.pace];}
+    $('#c1').innerHTML=ctl([['ok','On track'],['fast','A bit fast']],S.pace,'pace');
+    $('#p1 .pace').textContent=S.pace==='ok'?'You’re on pace this month.':'Spending’s a little quick. You’re fine.';
+    $('#p1 .duo').innerHTML=DIR[S.d].pinned();}
+  if(f==='pay'){S.pay=b.dataset.v;S.cat=S.pay==='big'?'fun':null;S.paid=false;pay();}
+  if(f==='payreset'){S.cat=null;S.paid=false;pay();}
+  if(f==='paid'){S.paid=true;pay();}
+  if(f==='income'){S.inc=1;S._ran=0;S.saved=7200;money();}
+  if(f==='gotit'){S.inc=2;money();}
+  if(f==='monreset'){S.inc=0;S.saved=4200;money();}
+});
+function renderAll(){const d=DIR[S.d];
+  document.querySelectorAll('.switch button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.d===S.d));
+  $('#dh').textContent=d.h;$('#dp').textContent=d.p;
+  S.cat=null;S.paid=false;S.inc=0;S.saved=4200;S.open='income';
+  home();pay();money();
+  $('#notes').innerHTML=`<div><h3>Pros</h3><ul>${d.notes.pro.map(x=>`<li>${x}</li>`).join('')}</ul></div><div><h3>Cons</h3><ul>${d.notes.con.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;}
+document.querySelectorAll('.switch button').forEach(b=>b.onclick=()=>{S.d=b.dataset.d;renderAll();try{localStorage.setItem('t8d',S.d)}catch(e){}});
+try{const v=localStorage.getItem('t8d');if(DIR[v])S.d=v;}catch(e){}
+renderAll();
+</script>

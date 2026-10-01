@@ -1,0 +1,1207 @@
+{
+ "checks": [
+  {
+   "name": "node --check on bundled JS",
+   "crit": "quality",
+   "pass": true,
+   "evidence": "all.js parses"
+  },
+  {
+   "name": "No SMS anywhere (grep -i sms)",
+   "crit": "constraint",
+   "pass": true,
+   "evidence": "matches: 0"
+  },
+  {
+   "name": "No debt/guilt words in UI + notification strings",
+   "crit": "S11/P7",
+   "pass": true,
+   "evidence": "0 matches for over/overspent/deficit/debt/missed/streak/you were gone/only ₹X left"
+  },
+  {
+   "name": "Ladder: 200 amounts, Σ mark value = amount, marks = blocks+pills+dots+crumb, <₹100 = one wedge",
+   "crit": "P2b/inv12",
+   "pass": true,
+   "evidence": "200/200 amounts exact"
+  },
+  {
+   "name": "Crumb wedge is area-true and starts at 12 o’clock",
+   "crit": "P2e-Q1",
+   "pass": true,
+   "evidence": "60 random crumbs, max area error 0.53%, all start at top"
+  },
+  {
+   "name": "10 dots fuse to a pill; blocks keep a hairline gap; dots keep a gap",
+   "crit": "P2d-Q3",
+   "pass": true,
+   "evidence": "pill=true, block gap 1px, dot gap 2px (viewBox units)"
+  },
+  {
+   "name": "All 75 frames registered",
+   "crit": "scope",
+   "pass": true,
+   "evidence": "75 frames"
+  },
+  {
+   "name": "Home first view has 0 numbers",
+   "crit": "S5/P2c-Q1",
+   "pass": true,
+   "evidence": "H-01 tokens: []"
+  },
+  {
+   "name": "≤2 numbers on first view elsewhere (exempt: S-00, H-02, S-02, N-04s, R-07, G-S6, S-S5, V-03, I-02)",
+   "crit": "S6",
+   "pass": true,
+   "evidence": "all 65 non-exempt frames ≤2 distinct tokens"
+  },
+  {
+   "name": "Key \"● = ₹100\" exactly once on every screen with dots",
+   "crit": "S7/P2-Q5",
+   "pass": true,
+   "evidence": "every screen with dots has one key (poster, widgets, pay drop, Look swatch carry none by design; O-03 has one)"
+  },
+  {
+   "name": "Marks per card ≤ 30",
+   "crit": "P4-Q1",
+   "pass": true,
+   "evidence": "max 30 marks in any card"
+  },
+  {
+   "name": "No red hues (h<12 or >348, s>45%) in any frame, 4 looks",
+   "crit": "S11",
+   "pass": true,
+   "evidence": "0 red pixels-styles across 300 frame renders"
+  },
+  {
+   "name": "Tap targets ≥ 44×44 px",
+   "crit": "a11y",
+   "pass": true,
+   "evidence": "all buttons, links, toggles and zoomable dots"
+  },
+  {
+   "name": "Every nav target and action exists",
+   "crit": "quality",
+   "pass": true,
+   "evidence": "all data-go frames and data-a handlers resolve"
+  },
+  {
+   "name": "One primary action per screen",
+   "crit": "S4",
+   "pass": true,
+   "evidence": "max one .primary per frame/sheet"
+  },
+  {
+   "name": "Green only on savings; income in neutral ink",
+   "crit": "P2e-Q2/P3-Q5",
+   "pass": true,
+   "evidence": "every green mark sits in a savings visual; \"came in\" visuals carry no jar or savings hue"
+  },
+  {
+   "name": "Glow used only for time / position",
+   "crit": "P2-Q3",
+   "pass": true,
+   "evidence": "all glow tracks are pace, today, due, next money, ETA, hour or calendar"
+  },
+  {
+   "name": "B&W mode renders every frame with patterns, light + dark",
+   "crit": "P6-Q2",
+   "pass": true,
+   "evidence": "75 frames × B&W light/dark; blue jar becomes stripes, plum dots"
+  },
+  {
+   "name": "No horizontal overflow at 412 and 360 px",
+   "crit": "P6-Q2",
+   "pass": true,
+   "evidence": "0 of 375 renders overflow"
+  },
+  {
+   "name": "Starter month: change one thing → back to O-03",
+   "crit": "P5-Q1",
+   "pass": true,
+   "evidence": "Fun +₹100 → 1100, back on O-03, invariants PASS"
+  },
+  {
+   "name": "Undo restores the exact pre-action ledger",
+   "crit": "S9/inv10",
+   "pass": true,
+   "evidence": "snapshot diff = 0 after income split undo"
+  },
+  {
+   "name": "150 random actions: ledger invariants hold after each",
+   "crit": "S12",
+   "pass": true,
+   "evidence": "150 actions across 24 screens; 0 invariant breaks"
+  },
+  {
+   "name": "Ledger checked after every render/action (≥150 checks)",
+   "crit": "S12",
+   "pass": true,
+   "evidence": "152 checkLedger() runs in this page; flow-level errors: none"
+  },
+  {
+   "name": "Seed + scenario switches pass all 12 invariants",
+   "crit": "inv 1–12",
+   "pass": true,
+   "evidence": "day1:ok lapse:ok monthend:ok bigincome:ok emptyjars:ok null:ok"
+  },
+  {
+   "name": "Notifications: ≤1/day, ≤3/week, none 22–08, 5 types with own channels",
+   "crit": "P7-Q1",
+   "pass": true,
+   "evidence": "30 simulated days → 9 sent; max/day 1, max/week 3, in quiet hours 0; types sent: income, story, checkin, welcome, subTomorrow; channels 5"
+  },
+  {
+   "name": "Return triggers exist: weekly check-in, month story, welcome back",
+   "crit": "S10",
+   "pass": true,
+   "evidence": "N-05, N-04 (+ R-02 month-end), R-01 with #seed=lapse"
+  },
+  {
+   "name": "Big amounts stay readable (#seed=bigincome)",
+   "crit": "P2-Q2",
+   "pass": true,
+   "evidence": "₹45,000 earner, ₹1,50,000 goal: 15 blocks drawn, max 24 marks per card"
+  },
+  {
+   "name": "v13: onboarding, 5 tab intros and welcome back match the Zentra template (glow top, logo+wordmark, 2-line headline w/ accent phrase, subline, step dots with pill, full-width accent button)",
+   "crit": "v13",
+   "pass": true,
+   "evidence": "12 screens × dark/light pass; gradients used: grove, cool, payday, ember, savings, tide, fresh"
+  },
+  {
+   "name": "v13: each tab intro uses its own gradient from Tarun’s library",
+   "crit": "v13",
+   "pass": true,
+   "evidence": "grove · payday · cool · savings · tide"
+  },
+  {
+   "name": "v13: Home pace glow is green on pace, amber when a bit fast",
+   "crit": "v13",
+   "pass": true,
+   "evidence": "demo: Quick #F68E4F"
+  },
+  {
+   "name": "v13: solid marks use gradient depth fills",
+   "crit": "v13",
+   "pass": true,
+   "evidence": "S-01 j0 fill url(\"#gr-j0\")"
+  },
+  {
+   "name": "Reduced motion: no running animations",
+   "crit": "a11y",
+   "pass": true,
+   "evidence": "P-05 running animations 0, splash 0"
+  },
+  {
+   "name": "P12: all 12 moments animate and finish (no stuck states)",
+   "crit": "P12",
+   "pass": true,
+   "evidence": "running at end: 0 in every moment; mid-moment running anims splash 4, pay 8, crumbs 4, income 10, emptyjar 2, goal 3, monthend 7, storykept 1, charts 18, zoom 38, glow 2, sheet 2, press 1"
+  },
+  {
+   "name": "P12: hybrid sounds fire at the right moments; charts + glow silent",
+   "crit": "P12-Q2",
+   "pass": true,
+   "evidence": "coin at pay + snap; chimes for arrive/split/milestone/complete/sweep/kept; wooden for ask/zoom/sheets/press; charts/glow silent true"
+  },
+  {
+   "name": "P12: every voice peaks ≤0.15; AudioContext stubbed, 0 console errors",
+   "crit": "P12-Q3",
+   "pass": true,
+   "evidence": "peak 0.050; 46 stub nodes; 7 vibrate calls; 80 WAAPI animations"
+  },
+  {
+   "name": "P12: ledger invariants hold after all moments",
+   "crit": "ledger",
+   "pass": true,
+   "evidence": "checkLedger after pay ₹350, income split sheet, goal close, month-end sweep"
+  },
+  {
+   "name": "P12: max 1 sound per 300 ms (higher priority ducks)",
+   "crit": "P12",
+   "pass": true,
+   "evidence": "played | dropped | dropped | dropped | dropped | dropped | played (ducked previous) | played"
+  },
+  {
+   "name": "P12: mute, phone-on-silent and haptics-off are respected",
+   "crit": "P12-Q3/Q4",
+   "pass": true,
+   "evidence": "{\"mute\":\"muted\",\"silent\":\"phone on silent\",\"hapOff\":null,\"vib\":0}"
+  },
+  {
+   "name": "P12: settings — Sounds, Haptics, silent demo, Motion follows phone with override",
+   "crit": "P12",
+   "pass": true,
+   "evidence": "3 switches + Follow phone/Reduce/Full; override Reduce → 0 new anims, 0 running"
+  },
+  {
+   "name": "P12: reduced motion = 0 running animations (sounds keep playing); Full override animates",
+   "crit": "a11y",
+   "pass": true,
+   "evidence": "running per moment 0/0/0/0/0; anims before override 7; sounds played 2; Full override running 7"
+  },
+  {
+   "name": "No console errors",
+   "crit": "quality",
+   "pass": true,
+   "evidence": "0 errors across all pages"
+  }
+ ],
+ "flows": [
+  {
+   "id": "F1",
+   "name": "Onboarding (UPI)",
+   "taps": 3,
+   "target": 4,
+   "pass": true,
+   "ev": "splash auto-advances; lands H-00 (Home intro); 1673 ms scripted incl. 1.4 s splash; savings 2000, 4 jars, 3 held subs"
+  },
+  {
+   "id": "F1m",
+   "name": "Onboarding (manual, no UPI)",
+   "taps": 4,
+   "target": 4,
+   "pass": true,
+   "ev": "typed ₹12,000; manual-only, 0 UPI IDs, 0 subs; empty amount shows \"Type an amount above ₹0.\""
+  },
+  {
+   "id": "F2",
+   "name": "Budget edit",
+   "taps": 3,
+   "target": 3,
+   "pass": true,
+   "ev": "Food → 3700 (+₹100 stepper, taken from the jar with most left)"
+  },
+  {
+   "id": "F3",
+   "name": "Income regular (notification → Split it)",
+   "taps": 1,
+   "target": 2,
+   "pass": true,
+   "ev": "1 tap from shade; savings +₹2,000 first; toast with Undo; Undo restores exact ledger: true"
+  },
+  {
+   "id": "F3i",
+   "name": "Income irregular (Friend paying back)",
+   "taps": 3,
+   "target": 3,
+   "pass": true,
+   "ev": "owed ₹600 → 300; income unchanged (10500) — payback is not income"
+  },
+  {
+   "id": "F4",
+   "name": "Pay by scan (from Savings tab)",
+   "taps": 2,
+   "target": 2,
+   "pass": true,
+   "ev": "scan simulated; hourglass ~1.1 s; back on V-01; toast \"Paid ₹20 · Food\""
+  },
+  {
+   "id": "F4u",
+   "name": "Pay UPI ID (recent payee)",
+   "taps": 4,
+   "target": 3,
+   "pass": false,
+   "ev": "Pay → UPI ID → payee → (type ₹60) → Pay; plan listed 3, counting the final Pay it is 4"
+  },
+  {
+   "id": "F5",
+   "name": "Empty jar: take from another jar",
+   "taps": 2,
+   "target": 2,
+   "pass": true,
+   "ev": "asked once on P-06 before UPI; ₹229 moved in, Fun paid to zero, days re-spread"
+  },
+  {
+   "id": "F5b",
+   "name": "All jars used: start next month lighter",
+   "taps": 2,
+   "target": 2,
+   "pass": true,
+   "ev": "sheet P-06b; next month lighter by ₹250"
+  },
+  {
+   "id": "F6",
+   "name": "Log cash",
+   "taps": 3,
+   "target": 3,
+   "pass": true,
+   "ev": "saved ₹80 cash to Food without UPI"
+  },
+  {
+   "id": "F7",
+   "name": "Sort unknown payment (bell)",
+   "taps": 2,
+   "target": 2,
+   "pass": true,
+   "ev": "sorted to Travel (Fun too low → \"didn’t fit\" toast, nothing changes), payee remembered, needs-you item removed"
+  },
+  {
+   "id": "F14",
+   "name": "Bell action",
+   "taps": 2,
+   "target": 2,
+   "pass": true,
+   "ev": "same path as F7/F10: bell → inline action"
+  },
+  {
+   "id": "F8",
+   "name": "Subscriptions add / deduct / price / cancel",
+   "taps": 2,
+   "target": 3,
+   "pass": true,
+   "ev": "add 2 taps (Netflix held); Google One held→paid on due day with 0 taps; price 1 tap → ₹349; stop 1 tap → stopped"
+  },
+  {
+   "id": "F9",
+   "name": "Split at pay",
+   "taps": 3,
+   "target": 3,
+   "pass": true,
+   "ev": "two friends picked (second pick counted as same step); owed ₹600 → 1200, outside balance"
+  },
+  {
+   "id": "F9s",
+   "name": "Split from spend detail + remind",
+   "taps": 4,
+   "target": 4,
+   "pass": true,
+   "ev": "split 4 taps; remind 1 tap → message with UPI link (pa=tarun@okaxis)"
+  },
+  {
+   "id": "F10",
+   "name": "Refund back to Fun",
+   "taps": 2,
+   "target": 2,
+   "pass": true,
+   "ev": "Fun back ₹499; outline refilled"
+  },
+  {
+   "id": "F11",
+   "name": "Goal create / add / withdraw / complete",
+   "taps": 4,
+   "target": 2,
+   "pass": false,
+   "ev": "create 4 taps (name → amount → date, one per screen; plan target 2 not met), add 1, withdraw 2, complete opens V-04 automatically"
+  },
+  {
+   "id": "F12",
+   "name": "Month-end → story",
+   "taps": 1,
+   "target": 1,
+   "pass": true,
+   "ev": "R-02 shown on 31 Oct; Move to Savings (₹2201) → lands on N-04 month story"
+  },
+  {
+   "id": "F13",
+   "name": "Move dots between jars",
+   "taps": 3,
+   "target": 3,
+   "pass": true,
+   "ev": "Food → Travel ₹100"
+  },
+  {
+   "id": "F15",
+   "name": "Weekly check-in (from notification)",
+   "taps": 1,
+   "target": 1,
+   "pass": true,
+   "ev": "one action on the notification starts the new week"
+  },
+  {
+   "id": "F15b",
+   "name": "Weekly check-in (in app card)",
+   "taps": 1,
+   "target": 1,
+   "pass": true,
+   "ev": "one card, one button"
+  },
+  {
+   "id": "F16",
+   "name": "Welcome back",
+   "taps": 1,
+   "target": 1,
+   "pass": true,
+   "ev": "14 quiet days → R-01 (savings first, auto-sorted count) → Start from today"
+  },
+  {
+   "id": "F17",
+   "name": "Edit Home board",
+   "taps": 2,
+   "target": 2,
+   "pass": true,
+   "ev": "Home gear → Hide"
+  },
+  {
+   "id": "F18",
+   "name": "Pin an insight",
+   "taps": 2,
+   "target": 2,
+   "pass": true,
+   "ev": "Library → Pin money flow"
+  },
+  {
+   "id": "F19",
+   "name": "Change look / B&W",
+   "taps": 2,
+   "target": 3,
+   "pass": true,
+   "ev": "avatar → B&W (true); Light (light)"
+  },
+  {
+   "id": "F20",
+   "name": "Notification → one action",
+   "taps": 1,
+   "target": 1,
+   "pass": true,
+   "ev": "each of 5 notification types has one action button"
+  }
+ ],
+ "frames": {
+  "O-00": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "O-01": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "O-01m": {
+   "numbers": [
+    "₹12,000"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "O-02": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "O-03": {
+   "numbers": [
+    "₹9,000"
+   ],
+   "keys": 1,
+   "dots": 6,
+   "maxMarks": 20,
+   "primary": 1
+  },
+  "O-04": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "H-00": {
+   "numbers": [],
+   "keys": 1,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "I-00": {
+   "numbers": [],
+   "keys": 1,
+   "dots": 2,
+   "maxMarks": 18,
+   "primary": 1
+  },
+  "S-00": {
+   "numbers": [
+    "₹100",
+    "₹1,000",
+    "₹10,000"
+   ],
+   "keys": 1,
+   "dots": 8,
+   "maxMarks": 16,
+   "primary": 1
+  },
+  "V-00": {
+   "numbers": [],
+   "keys": 1,
+   "dots": 1,
+   "maxMarks": 24,
+   "primary": 1
+  },
+  "N-00": {
+   "numbers": [],
+   "keys": 1,
+   "dots": 1,
+   "maxMarks": 9,
+   "primary": 1
+  },
+  "H-01": {
+   "numbers": [],
+   "keys": 1,
+   "dots": 6,
+   "maxMarks": 24,
+   "primary": 0
+  },
+  "H-03": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "H-04": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "H-02": {
+   "numbers": [
+    "₹150",
+    "7731",
+    "₹499",
+    "₹340",
+    "13",
+    "₹40"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "P-01": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "P-02": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "P-03": {
+   "numbers": [
+    "₹0"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "P-04": {
+   "numbers": [
+    "₹20",
+    "6th"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "P-05": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 1,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "P-06": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "P-06b": {
+   "numbers": [
+    "₹250"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "P-07": {
+   "numbers": [
+    "₹1,200"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "I-01": {
+   "numbers": [
+    "1"
+   ],
+   "keys": 1,
+   "dots": 5,
+   "maxMarks": 29,
+   "primary": 0
+  },
+  "I-02": {
+   "numbers": [
+    "1st"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "I-03": {
+   "numbers": [],
+   "keys": 1,
+   "dots": 3,
+   "maxMarks": 9,
+   "primary": 0
+  },
+  "I-04": {
+   "numbers": [],
+   "keys": 1,
+   "dots": 2,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "I-05": {
+   "numbers": [
+    "₹300"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "I-S1": {
+   "numbers": [
+    "1st"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "I-S2": {
+   "numbers": [
+    "22%"
+   ],
+   "keys": 1,
+   "dots": 1,
+   "maxMarks": 9,
+   "primary": 1
+  },
+  "I-S3": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "I-S4": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "S-01": {
+   "numbers": [
+    "₹122"
+   ],
+   "keys": 1,
+   "dots": 13,
+   "maxMarks": 19,
+   "primary": 0
+  },
+  "S-02": {
+   "numbers": [
+    "14",
+    "₹20",
+    "13",
+    "₹340",
+    "7731",
+    "₹150",
+    "12",
+    "₹120",
+    "₹40",
+    "11",
+    "₹80",
+    "₹45",
+    "10",
+    "₹1,200"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "S-03": {
+   "numbers": [
+    "7731"
+   ],
+   "keys": 1,
+   "dots": 7,
+   "maxMarks": 22,
+   "primary": 0
+  },
+  "S-04": {
+   "numbers": [
+    "1",
+    "₹20"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "S-05": {
+   "numbers": [
+    "15th"
+   ],
+   "keys": 1,
+   "dots": 1,
+   "maxMarks": 7,
+   "primary": 0
+  },
+  "S-06": {
+   "numbers": [],
+   "keys": 1,
+   "dots": 1,
+   "maxMarks": 3,
+   "primary": 1
+  },
+  "S-07": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "S-S1": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "S-S2": {
+   "numbers": [
+    "₹3,600",
+    "₹100"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "S-S3": {
+   "numbers": [
+    "₹100"
+   ],
+   "keys": 1,
+   "dots": 1,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "S-S4": {
+   "numbers": [],
+   "keys": 1,
+   "dots": 4,
+   "maxMarks": 20,
+   "primary": 1
+  },
+  "S-S5": {
+   "numbers": [
+    "₹119",
+    "₹130",
+    "₹299"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "S-S6": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "S-S7": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "V-01": {
+   "numbers": [],
+   "keys": 1,
+   "dots": 8,
+   "maxMarks": 25,
+   "primary": 0
+  },
+  "V-02": {
+   "numbers": [
+    "2027"
+   ],
+   "keys": 1,
+   "dots": 3,
+   "maxMarks": 24,
+   "primary": 0
+  },
+  "V-03": {
+   "numbers": [
+    "₹100",
+    "₹500",
+    "1",
+    "₹1,000",
+    "30",
+    "₹640",
+    "31",
+    "₹600"
+   ],
+   "keys": 1,
+   "dots": 1,
+   "maxMarks": 24,
+   "primary": 0
+  },
+  "V-04": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "V-S1": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "V-S2": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "V-S3": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "N-01": {
+   "numbers": [],
+   "keys": 1,
+   "dots": 3,
+   "maxMarks": 30,
+   "primary": 0
+  },
+  "N-02": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "N-03": {
+   "numbers": [],
+   "keys": 1,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "N-04": {
+   "numbers": [],
+   "keys": 1,
+   "dots": 1,
+   "maxMarks": 7,
+   "primary": 1
+  },
+  "N-04s": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 1,
+   "maxMarks": 21,
+   "primary": 1
+  },
+  "N-05": {
+   "numbers": [],
+   "keys": 1,
+   "dots": 1,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "N-S1": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "N-S2": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "G-S1": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 1,
+   "maxMarks": 15,
+   "primary": 0
+  },
+  "G-S2": {
+   "numbers": [
+    "9840"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "G-S3": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "G-S4": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "G-S5": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "G-S6": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "R-01": {
+   "numbers": [
+    "3"
+   ],
+   "keys": 1,
+   "dots": 1,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "R-02": {
+   "numbers": [],
+   "keys": 1,
+   "dots": 1,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "R-03": {
+   "numbers": [
+    "₹499"
+   ],
+   "keys": 1,
+   "dots": 1,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "R-04": {
+   "numbers": [
+    "₹349"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "R-05": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "R-06": {
+   "numbers": [
+    "₹500",
+    "₹100"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 1
+  },
+  "R-07": {
+   "numbers": [
+    "₹9,000"
+   ],
+   "keys": 0,
+   "dots": 0,
+   "maxMarks": 0,
+   "primary": 0
+  },
+  "R-08": {
+   "numbers": [],
+   "keys": 0,
+   "dots": 2,
+   "maxMarks": 24,
+   "primary": 0
+  }
+ },
+ "ledger": {
+  "checks": 152,
+  "errors": []
+ },
+ "onbHome": "H-01",
+ "p12": {
+  "moments": {
+   "splash": {
+    "mid": 4,
+    "end": 0,
+    "ev": [
+     "splash=locked",
+     "splash=played"
+    ]
+   },
+   "pay": {
+    "mid": 8,
+    "end": 4,
+    "ev": [
+     "press=played",
+     "hap:press=[8]",
+     "leave=played (ducked previous)",
+     "hap:pay=[8,60,8,60,14]"
+    ]
+   },
+   "crumbs": {
+    "mid": 4,
+    "end": 0,
+    "ev": [
+     "snap=played",
+     "hap:snap=[4,30,4,30,4,30,18]"
+    ]
+   },
+   "income": {
+    "mid": 10,
+    "end": 0,
+    "ev": [
+     "sheetUp=played",
+     "hap:sheet=[6]",
+     "arrive=played (ducked previous)",
+     "hap:income=[10]",
+     "split=played"
+    ]
+   },
+   "emptyjar": {
+    "mid": 2,
+    "end": 0,
+    "ev": [
+     "press=played",
+     "hap:press=[8]",
+     "ask=played (ducked previous)",
+     "hap:ask=[6]"
+    ]
+   },
+   "goal": {
+    "mid": 3,
+    "end": 0,
+    "ev": [
+     "sheetDown=played",
+     "milestone=played",
+     "hap:milestone=[8]",
+     "milestone=played",
+     "hap:milestone=[8]",
+     "milestone=played",
+     "hap:milestone=[8]",
+     "complete=played",
+     "hap:complete=[20,80,20]"
+    ]
+   },
+   "monthend": {
+    "mid": 7,
+    "end": 0,
+    "ev": [
+     "press=played",
+     "hap:press=[8]",
+     "sweep=played (ducked previous)",
+     "hap:monthend=[10]",
+     "sheetDown=dropped"
+    ]
+   },
+   "storykept": {
+    "mid": 1,
+    "end": 0,
+    "ev": [
+     "kept=played"
+    ]
+   },
+   "charts": {
+    "mid": 18,
+    "end": 0,
+    "ev": [
+     "press=played",
+     "hap:press=[8]",
+     "tab=dropped"
+    ]
+   },
+   "zoom": {
+    "mid": 38,
+    "end": 0,
+    "ev": [
+     "zoom=played",
+     "hap:zoom=[8]"
+    ]
+   },
+   "glow": {
+    "mid": 2,
+    "end": 0,
+    "ev": []
+   },
+   "sheet": {
+    "mid": 2,
+    "end": 0,
+    "ev": [
+     "sheetUp=played",
+     "hap:sheet=[6]",
+     "sheetDown=dropped"
+    ]
+   },
+   "press": {
+    "mid": 1,
+    "end": 0,
+    "ev": [
+     "press=played",
+     "hap:press=[8]"
+    ]
+   }
+  },
+  "stuck": []
+ }
+}

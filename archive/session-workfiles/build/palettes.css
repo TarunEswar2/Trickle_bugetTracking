@@ -1,0 +1,10 @@
+/* Per-exploration dark palettes (light mode uses shared vars above) */
+@media (prefers-color-scheme: dark){
+  .mockup[data-mockup="d"]{--bg:#12160f;--panel:#1d2417;--panel2:#232b1c;--panel3:#2a3321;--ink:#eef3e6;--ink2:#a9b89c;--line:#2c3624;--dark:#3a5a1f;--accent:#7bc142;--good:#7bc142;--bad:#e08a5a}
+  .mockup[data-mockup="e"]{--bg:#0e1420;--panel:#182236;--panel2:#1d2a42;--panel3:#22314c;--ink:#eaf1ff;--ink2:#93a7c9;--line:#243350;--dark:#2451c9;--accent:#5b8dfa;--good:#3fd0a8;--bad:#ff6f7d}
+  .mockup[data-mockup="f"]{--bg:#0a0a0c;--panel:#17181c;--panel2:#1e1f24;--panel3:#25262c;--ink:#f4f4f6;--ink2:#9d9da8;--line:#2a2b32;--dark:#e8b93a;--accent:#e8b93a;--good:#4fd18b;--bad:#ff6259}
+  .mockup[data-mockup="g"]{--bg:#160d18;--panel:#241726;--panel2:#2b1c2e;--panel3:#332338;--ink:#f5ecf6;--ink2:#b49bb8;--line:#372a3b;--dark:#a4479a;--accent:#c661c0;--good:#5fd6a8;--bad:#ff7590}
+  .mockup[data-mockup="h"]{--bg:#0a1414;--panel:#122423;--panel2:#162b2a;--panel3:#1b3332;--ink:#e6fbf8;--ink2:#8fb8b4;--line:#1e3736;--dark:#0f8f86;--accent:#26c9b8;--good:#26c9b8;--bad:#ff8a65}
+  .mockup[data-mockup="i"]{--bg:#160f0a;--panel:#261a10;--panel2:#2e2014;--panel3:#372718;--ink:#fbf1e6;--ink2:#c2a58a;--line:#3c2b1b;--dark:#c9701f;--accent:#f0973f;--good:#4fbf7c;--bad:#e0555a}
+}
+.mockup[data-theme="dark"]{color-scheme:dark}

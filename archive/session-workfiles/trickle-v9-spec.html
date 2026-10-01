@@ -1,0 +1,202 @@
+<title>Trickle v9 — Spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,500&display=swap">
+<style>
+/* Layout: single dark column of spec sections; widget pairs render colour | B&W side by side, stacking on phones */
+:root{color-scheme:dark;
+ --bg:#0B0B0C;--surface:#17181A;--surface2:#1F2023;--line:#2A2B2E;--text:#F4F2EA;--text2:#A9A79E;--text3:#6F6D66;
+ --save:#C6F432;--calm:#4FD18B;--warm:#F2A93B;
+ --food:#DC6A30;--travel:#3F8CE6;--fun:#D55181;--ess:#9085E9;
+ --display:"Fraunces",Georgia,serif;--sans:"DM Sans",system-ui,sans-serif}
+body{background:var(--bg);color:var(--text);font:15px/1.5 var(--sans);margin:0}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:32px 64px;display:flex;flex-direction:column;gap:40px}
+h1{font:500 clamp(30px,6vw,46px)/1.1 var(--display);margin:0;text-wrap:balance}
+h2{font:500 24px/1.2 var(--display);margin:0 0 6px}
+p{margin:0;max-width:65ch;color:var(--text2)}
+.lbl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);font-weight:700}
+section{display:flex;flex-direction:column;gap:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.bw .card{background:#111;border-color:#2B2B2B}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:620px){.pair{grid-template-columns:1fr}}
+.pane{border-radius:24px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.pane.c{background:var(--surface);border:1px solid var(--line)}
+.pane.bw{background:#000;border:1px solid #2B2B2B;color:#F5F5F5}
+.whd{display:flex;justify-content:space-between;align-items:center;font-weight:500}
+.gear{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--text3);font-size:13px}
+.cap{font-size:13px;color:var(--text2)}.bw .cap{color:#A3A3A3}
+.tkey{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums}
+.tkey i{width:10px;height:10px;border-radius:3px;background:var(--text3);display:inline-block}
+.tg{display:flex;flex-wrap:wrap;gap:3px}
+.t{width:13px;height:13px;border-radius:3.5px;background:var(--c);position:relative;overflow:hidden}
+.t.e{background:none;outline:1px solid var(--line);outline-offset:-1px}
+.t.p{background:none;outline:1px solid var(--c);outline-offset:-1px}
+.t.p::after{content:"";position:absolute;left:0;right:0;bottom:0;height:var(--f);background:var(--c)}
+.bw .t.h45{background-image:repeating-linear-gradient(45deg,#000 0 1.5px,transparent 1.5px 4px)}
+.bw .t.h135{background-image:repeating-linear-gradient(135deg,#000 0 1.5px,transparent 1.5px 4px)}
+.bw .t.dot{background-image:radial-gradient(#000 1px,transparent 1.4px);background-size:4px 4px}
+.glow{box-shadow:0 0 7px var(--c)}
+.big{font:500 34px/1 var(--sans);letter-spacing:-.02em}
+.big small{font-size:14px;color:var(--text3);margin-left:4px}
+.rowl{display:grid;grid-template-columns:78px 1fr;gap:8px;align-items:center;font-size:12px;color:var(--text2)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+td,th{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;font-variant-numeric:tabular-nums}
+th{color:var(--text3);font-weight:500}
+.scroll{overflow-x:auto}
+button{font:inherit;color:inherit}
+.snd{background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:10px 16px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.snd:hover{border-color:var(--save)}.snd:focus-visible{outline:2px solid var(--save);outline-offset:2px}
+.snd b{font-weight:500}.snd span{color:var(--text3);font-size:12px}
+.sounds{display:flex;flex-wrap:wrap;gap:8px}
+.tl{position:relative;display:flex;flex-direction:column;gap:8px}
+.tlr{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center;font-size:13px}
+.track{height:14px;position:relative;background:var(--surface2);border-radius:7px}
+.seg{position:absolute;top:2px;bottom:2px;border-radius:5px;background:var(--text2)}
+.seg.s{background:var(--save)}
+.axis{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-left:160px}
+@media (max-width:520px){.tlr{grid-template-columns:1fr}.axis{margin-left:0}}
+svg text{font-family:var(--sans)}
+.play{align-self:flex-start;background:var(--save);color:#0B0B0C;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+.anim .t{animation:pop .22s cubic-bezier(.34,1.56,.64,1) both}
+</style>
+
+<div class="wrap">
+<header style="display:flex;flex-direction:column;gap:10px">
+ <span class="lbl">Trickle · v9 · Phase 2</span>
+ <h1>Every tile says what it’s worth</h1>
+ <p>v9 keeps v8’s tiles, glow and calm Home. It adds labelled tile units, a Sankey, range and small-buy charts, soft sounds and an optional black &amp; white look. Sample data: seeded student, September 2026.</p>
+</header>
+
+<section>
+ <span class="lbl">1 · Tile unit rule</span>
+ <h2>Pick the smallest round unit that fits the cap</h2>
+ <p>Units ladder ₹10 · 50 · 100 · 250 · 500 · 1,000 · 2,500. Cap: 30 tiles on a small card, 50 on a wide card, 30 per budget category. One unit per card. A remainder of 10% or more becomes one partly filled tile, in quarter steps.</p>
+ <div class="grid" id="units"></div>
+</section>
+
+<section>
+ <span class="lbl">2 · Widgets, colour and black &amp; white</span>
+ <h2>Eight key widgets</h2>
+ <p>Left: colour (default). Right: B&amp;W option, where categories use brightness steps plus a pattern (solid, 45° hatch, dots, 135° hatch) and a label. Savings stays the brightest thing on the screen.</p>
+ <div class="grid" id="widgets" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))"></div>
+</section>
+
+<section>
+ <span class="lbl">3 · Sankey</span>
+ <h2>Where September’s money went</h2>
+ <p>Sources, then pots, then categories and goals. Nodes are stacks of tiles at the card’s unit (₹500). Bands draw left to right, savings last, then the savings chime plays.</p>
+ <div class="card"><div class="scroll"><svg id="sk" viewBox="0 0 740 330" width="100%" style="min-width:560px" role="img" aria-label="Sankey: Allowance 9,000 and café shift 1,500 flow to Budget 6,000 and Savings 4,500"></svg></div>
+ <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><span class="tkey"><i></i>1 tile = ₹500 · band width to scale</span><button class="play" id="skplay">Play the flow</button></div></div>
+</section>
+
+<section>
+ <span class="lbl">4 · Motion timeline</span>
+ <h2>Paying ₹85 for chai, start to finish</h2>
+ <p>Every sequence stays under 1.2 s. With reduced motion, tiles fade and the final state shows at once; sounds still play.</p>
+ <div class="card"><div class="tl" id="tl"></div><div class="axis"><span>0 ms</span><span>300</span><span>600</span><span>900</span><span>1200</span></div></div>
+</section>
+
+<section>
+ <span class="lbl">5 · Sounds</span>
+ <h2>Soft chimes, made in the browser</h2>
+ <p>Web Audio only, no files. Peak volume 0.15 or lower. On by default, with a mute switch in the drawer. Sound starts after the first tap.</p>
+ <div class="sounds" id="snd"></div>
+ <div class="card scroll"><table><thead><tr><th>Event</th><th>Recipe</th><th>Peak</th></tr></thead><tbody id="sndt"></tbody></table></div>
+</section>
+</div>
+
+<script>
+var CAT={Food:'var(--food)',Travel:'var(--travel)',Fun:'var(--fun)',Essentials:'var(--ess)'};
+var BW={Food:['#F2F2F2',''],Travel:['#BDBDBD','h45'],Fun:['#8A8A8A','dot'],Essentials:['#6B6B6B','h135']};
+var U=[10,50,100,250,500,1000,2500];
+function unitFor(vals,cap){for(var i=0;i<U.length;i++){var n=vals.reduce(function(a,v){return a+Math.ceil(v/U[i]);},0);if(n<=cap)return U[i];}return 2500;}
+function tl(v,u,c,cls,glow){var f=Math.floor(v/u),r=(v%u)/u,s='';for(var i=0;i<f;i++)s+='<span class="t '+(cls||'')+(glow?' glow':'')+'" style="--c:'+c+'"></span>';
+ if(r>=.1)s+='<span class="t p" style="--c:'+c+';--f:'+Math.max(25,Math.round(r*4)*25)+'%"></span>';return s;}
+function key(u,t){return '<span class="tkey"><i></i>'+(t||'1 tile = ₹'+u.toLocaleString('en-IN'))+'</span>';}
+function fmt(n){return '₹'+n.toLocaleString('en-IN');}
+
+// 1 units
+var ex=[['Where it went (wide)',[2210,780,640,1190],50],['Budget › Food',[2400],30],['Pay ₹85 chai, Food has ₹190 left',[190],30],['Small buys this week',[640],30]];
+document.getElementById('units').innerHTML=ex.map(function(e){var u=unitFor(e[1],e[2]),n=e[1].reduce(function(a,v){return a+Math.ceil(v/u);},0);
+ return '<div class="card"><div class="whd">'+e[0]+'</div><div class="cap">'+e[1].map(fmt).join(' · ')+' → cap '+e[2]+'</div><div class="tg">'+e[1].map(function(v,i){return tl(v,u,['var(--food)','var(--travel)','var(--fun)','var(--ess)'][i]);}).join('')+'</div><div style="display:flex;justify-content:space-between">'+key(u)+'<span class="tkey">'+n+' tiles</span></div></div>';}).join('');
+
+// 2 widgets
+function W(title,q,fn){return '<div class="card"><div><div class="whd" style="font-size:16px">'+title+'</div><div class="cap">'+q+'</div></div><div class="pair"><div class="pane c">'+fn(false)+'</div><div class="pane bw bwp">'+fn(true)+'</div></div></div>';}
+function hd(t){return '<div class="whd"><span>'+t+'</span><span class="gear" aria-hidden="true">⚙</span></div>';}
+function cc(c,bw){return bw?BW[c][0]:CAT[c];}function cp(c,bw){return bw?BW[c][1]:'';}
+var SAVE=function(bw){return bw?'#FFFFFF':'var(--save)';};
+var ws=[
+ W('Goal jar','How close is Goa?',function(bw){return hd('Goa trip')+'<div class="tg" style="width:160px">'+tl(53,1,SAVE(bw),'',true)+'<span></span>'+Array(48).join('<span class="t e"></span>')+'</div><div class="cap">Over half full</div>'+key(0,'1 tile = 1% · ₹80');}),
+ W('This month','Which days were heavy? (ref-style dot matrix)',function(bw){var s='<div style="display:grid;grid-template-columns:repeat(7,12px);gap:7px">';var d=[1,3,0,2,1,4,3,1,0,2,1,1,3,4,2,0,1,2,1,3,2,0,0,0,0,0,0,0,0,0];
+  for(var i=0;i<30;i++){var fut=i>20,b=d[i],c=bw?'#fff':'var(--calm)';s+='<span style="width:8px;height:8px;border-radius:50%;margin:2px;background:'+(fut?'var(--line)':c)+';opacity:'+(fut?1:[.25,.45,.65,.85,1][b])+(b>=3&&!fut?';box-shadow:0 0 8px '+c:'')+(i===20?';outline:1.5px solid '+c+';outline-offset:2px':'')+'"></span>';}
+  return hd('September')+s+'</div><div class="cap">Day 21 of 30 · on pace</div>'+key(0,'brighter dot = bigger day');}),
+ W('Where it went','What did I spend on?',function(bw){var v={Food:2210,Travel:780,Fun:640,Essentials:1190},u=unitFor([2210,780,640,1190],50);
+  return hd('Where it went')+Object.keys(v).map(function(c){return '<div class="rowl"><span>'+c+'</span><div class="tg">'+tl(v[c],u,cc(c,bw),cp(c,bw))+'</div></div>';}).join('')+key(u);}),
+ W('Spend range','How steady is my daily spending? (min–max per week, dot per day)',function(bw){var wk=[[40,90,120,300,60,210,150],[20,80,95,140,160,70,420],[55,60,130,110,90,180,240],[30,85,100,75,120,260,90]],H=110,M=450;
+  var s='<svg viewBox="0 0 200 130" width="100%" style="max-width:260px">';[100,200,300,400].forEach(function(g){var y=H-g/M*H+8;s+='<line x1="24" x2="196" y1="'+y+'" y2="'+y+'" stroke="var(--line)" stroke-width="1"/><text x="0" y="'+(y+3)+'" font-size="8" fill="var(--text3)">'+g+'</text>';});
+  wk.forEach(function(w,i){var x=48+i*42,mn=Math.min.apply(0,w),mx=Math.max.apply(0,w),c=bw?'#fff':'var(--travel)',md=w.slice().sort(function(a,b){return a-b;})[3];s+='<line x1="'+x+'" x2="'+x+'" y1="'+(H-mx/M*H+8)+'" y2="'+(H-mn/M*H+8)+'" stroke="'+(bw?'#555':'var(--text3)')+'" stroke-width="2" stroke-linecap="round"/>';
+   w.forEach(function(v){s+='<circle cx="'+x+'" cy="'+(H-v/M*H+8)+'" r="3.5" fill="'+c+'" stroke="'+(bw?'#000':'#17181A')+'" stroke-width="1.5" opacity="'+(i===3?1:.6)+'"/>';});s+='<line x1="'+(x-7)+'" x2="'+(x+7)+'" y1="'+(H-md/M*H+8)+'" y2="'+(H-md/M*H+8)+'" stroke="'+(bw?'#fff':'var(--text)')+'" stroke-width="2"/>';});
+  return hd('Spend range')+s+'</svg><div class="cap">Steadier than last week</div>'+key(0,'gridline = ₹100 · notch = middle day');}),
+ W('Small buys, added up','How much did the little stuff cost? (≤ ₹150)',function(bw){var v={Food:410,Travel:140,Fun:90};
+  return hd('Small buys')+'<div class="big">'+fmt(640)+'<small>this week</small></div><div class="tg" style="max-width:200px">'+Object.keys(v).map(function(c){return tl(v[c],50,cc(c,bw),cp(c,bw));}).join('')+'</div><div class="cap">11 buys added up</div>'+key(50);}),
+ W('Small buys, repeats','Which places do I keep going back to?',function(bw){var r=[['Chai Tapri',14,'Food'],['JD Canteen',9,'Food'],['Metro',8,'Travel'],['Xerox',5,'Essentials']];
+  return hd('Repeats')+r.map(function(x){return '<div class="rowl"><span>'+x[0]+'</span><div class="tg">'+tl(x[1],1,cc(x[2],bw),cp(x[2],bw))+'</div></div>';}).join('')+key(0,'1 tile = 1 visit');}),
+ W('Savings growing','Is my saving piling up?',function(bw){var m=[['Jul',2300],['Aug',1800],['Sep',2900]];
+  return hd('Saved')+'<div style="display:flex;gap:18px;align-items:flex-end">'+m.map(function(x,i){return '<div style="text-align:center"><div class="tg" style="width:50px;flex-direction:row-reverse;flex-wrap:wrap-reverse">'+tl(x[1],250,SAVE(bw),'',i===2)+'</div><div class="cap">'+x[0]+'</div></div>';}).join('')+'</div>'+key(250);}),
+ W('When you spend','Which hours? (24-dot clock)',function(bw){var h=[0,0,0,0,0,0,0,1,2,2,1,1,3,2,1,1,2,3,4,4,3,2,1,0],s='<svg viewBox="0 0 120 120" width="120">',c=bw?'#fff':'var(--fun)';
+  h.forEach(function(v,i){var a=i/24*Math.PI*2-Math.PI/2;s+='<circle cx="'+(60+46*Math.cos(a))+'" cy="'+(60+46*Math.sin(a))+'" r="'+(3+v)+'" fill="'+(v?c:'var(--line)')+'" opacity="'+(v?.35+v*.16:1)+'"/>';});
+  return hd('When')+s+'<text x="60" y="58" text-anchor="middle" font-size="11" fill="'+(bw?'#F5F5F5':'#F4F2EA')+'">Evenings</text><text x="60" y="72" text-anchor="middle" font-size="8" fill="#6F6D66">6–9 pm</text></svg>'+key(0,'1 dot = 1 hour · bigger = more ₹');})
+];
+document.getElementById('widgets').innerHTML=ws.join('');
+
+// 3 Sankey
+var sk=document.getElementById('sk');
+function sankey(){var U2=500,px=0.024,cols=[40,330,620],gap=10,out='',nodes={};
+ function place(list,x){var y=x===330?40:20;list.forEach(function(n){var h=n[1]*px;nodes[n[0]]={x:x,y:y,h:h,v:n[1],c:n[2],o:0,i:0};y+=h+gap;});}
+ place([['Allowance',9000,'#EDE9DC'],['Café shift',1500,'#EDE9DC']],cols[0]);
+ place([['Budget',6000,'#B8B4A8'],['Savings',4500,'var(--save)']],cols[1]);
+ place([['Food',2210,'var(--food)'],['Travel',780,'var(--travel)'],['Fun',640,'var(--fun)'],['Essentials',1190,'var(--ess)'],['Left in budget',1180,'var(--text3)'],['Goa trip',3500,'var(--save)'],['Rainy-day jar',1000,'var(--save)']],cols[2]);
+ var L=[['Allowance','Budget',6000],['Allowance','Savings',3000],['Café shift','Savings',1500],['Budget','Food',2210],['Budget','Travel',780],['Budget','Fun',640],['Budget','Essentials',1190],['Budget','Left in budget',1180],['Savings','Goa trip',3500],['Savings','Rainy-day jar',1000]];
+ L.forEach(function(l,k){var a=nodes[l[0]],b=nodes[l[1]],h=l[2]*px,y0=a.y+a.o+h/2,y1=b.y+b.i+h/2;a.o+=h;b.i+=h;var x0=a.x+14,x1=b.x,mx=(x0+x1)/2;
+  out+='<path class="band" data-s="'+(b.c.indexOf('save')>0?1:0)+'" d="M'+x0+' '+y0+' C'+mx+' '+y0+' '+mx+' '+y1+' '+x1+' '+y1+'" fill="none" stroke="'+b.c+'" stroke-opacity="'+(l[1]==='Left in budget'?.25:.4)+'" stroke-width="'+(h-1)+'"'+(l[1]==='Left in budget'?' stroke-dasharray="4 3"':'')+'/>';});
+ Object.keys(nodes).forEach(function(k){var n=nodes[k],t=Math.round(n.v/U2),th=n.h/Math.max(t,1);
+  for(var i=0;i<t;i++)out+='<rect class="nd" x="'+n.x+'" y="'+(n.y+i*th+.5)+'" width="14" height="'+Math.max(th-1.5,1)+'" rx="2" fill="'+n.c+'"/>';
+  var mid=n.x===cols[1],lx=n.x+20,ly=mid?n.y-6:n.y+n.h/2+4;if(mid)lx=n.x;
+  out+='<text x="'+lx+'" y="'+ly+'" font-size="12" fill="#F4F2EA">'+k+'</text>';});
+ sk.innerHTML=out;}
+sankey();
+function playFlow(){var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;if(rm){snd.save();return;}
+ var b=sk.querySelectorAll('.band');b.forEach(function(p){var len=p.getTotalLength();p.style.transition='none';p.style.strokeDasharray=len;p.style.strokeDashoffset=len;});
+ sk.querySelectorAll('.nd').forEach(function(r,i){r.style.opacity=0;setTimeout(function(){r.style.transition='opacity .2s';r.style.opacity=1;},i*12);});
+ snd.flow();
+ setTimeout(function(){b.forEach(function(p,i){var d=p.dataset.s==='1'?350:0;setTimeout(function(){p.style.transition='stroke-dashoffset .7s cubic-bezier(.2,.8,.2,1)';p.style.strokeDashoffset=0;},d);});},250);
+ setTimeout(function(){b.forEach(function(p){if(p.getAttribute('stroke-dasharray')==='4 3')p.style.strokeDasharray='4 3';else p.style.strokeDasharray='none';});snd.save();},1350);}
+document.getElementById('skplay').onclick=playFlow;
+
+// 4 timeline
+var T=[['Tap Pay',0,70,0],['Food tiles appear (pop)',60,420,0],['This payment rings',480,120,0],['Payment tiles fly out',600,300,0],['Line: “Food can cover this”',700,200,0],['UPI hand-off',900,120,0],['Savings moment + chime',960,240,1]];
+document.getElementById('tl').innerHTML=T.map(function(t){return '<div class="tlr"><span>'+t[0]+'</span><div class="track"><span class="seg'+(t[3]?' s':'')+'" style="left:'+(t[1]/12)+'%;width:'+(t[2]/12)+'%"></span></div></div>';}).join('');
+
+// 5 sounds
+var ctx=null,master;function AC(){if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();var lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2400;var cmp=ctx.createDynamicsCompressor();master=ctx.createGain();master.connect(lp);lp.connect(cmp);cmp.connect(ctx.destination);}if(ctx.state==='suspended')ctx.resume();return ctx;}
+function tone(f,t,peak,d,type,a){var c=AC(),o=c.createOscillator(),g=c.createGain();o.type=type||'sine';o.frequency.value=f;var t0=c.currentTime+t;g.gain.setValueAtTime(.0001,t0);g.gain.linearRampToValueAtTime(Math.min(peak,.15),t0+(a||.005));g.gain.exponentialRampToValueAtTime(.0001,t0+(a||.005)+d);o.connect(g);g.connect(master);o.start(t0);o.stop(t0+d+.05);}
+var snd={
+ tap:function(){tone(880,0,.05,.06);},
+ tile:function(){[523,587,659,784,880,1047].forEach(function(f,i){tone(f,i*.05,.04,.09,'triangle',.003);});},
+ pour:function(){[660,784,988].forEach(function(f,i){tone(f,i*.04,.05,.08);});},
+ pay:function(){tone(784,0,.08,.18);tone(523,.09,.08,.18);},
+ save:function(){[523,659,784,1047].forEach(function(f,i){tone(f,i*.07,i===3?.12:.1,.6);tone(f*2,i*.07,.03,.4,'triangle');});},
+ income:function(){tone(262,0,.1,.5,'sine',.02);tone(392,0,.08,.5,'sine',.02);tone(1319,.18,.05,.35);},
+ flow:function(){var c=AC(),n=c.sampleRate*.8,b=c.createBuffer(1,n,c.sampleRate),d=b.getChannelData(0);for(var i=0;i<n;i++)d[i]=Math.random()*2-1;var s=c.createBufferSource();s.buffer=b;var bp=c.createBiquadFilter();bp.type='bandpass';bp.Q.value=1.2;bp.frequency.setValueAtTime(600,c.currentTime);bp.frequency.exponentialRampToValueAtTime(2400,c.currentTime+.7);var g=c.createGain();g.gain.setValueAtTime(.0001,c.currentTime);g.gain.linearRampToValueAtTime(.03,c.currentTime+.1);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+.75);s.connect(bp);bp.connect(g);g.connect(master);s.start();},
+ goal:function(){snd.save();[1047,1319,1568,2093].forEach(function(f,i){tone(f,.45+i*.08,.08,.7);});},
+ soft:function(){tone(330,0,.05,.25,'sine',.01);},
+ toggle:function(){tone(1200,0,.03,.04);}
+};
+var SD=[['tap','Button tap','sine 880 Hz, 60 ms decay','0.05'],['tile','Tile pop','triangle, pentatonic walk C5→C6, 50 ms apart','0.04'],['pour','Tiles land','sine 660 / 784 / 988, 40 ms apart','0.05'],['pay','Payment sent','sine 784 → 523','0.08'],['save','Savings chime','C5 E5 G5 C6 arpeggio + octave sparkle, 600 ms tail','0.12'],['income','Income arrives','C4 + G4 chord, E6 sparkle','0.10'],['flow','Sankey draw','noise through band-pass sweeping 600 → 2,400 Hz','0.03'],['goal','Goal reached','savings chime + upper arpeggio','0.12'],['soft','A bit fast','low sine 330 Hz, never a buzzer','0.05'],['toggle','Switch','sine 1,200 Hz click','0.03']];
+document.getElementById('snd').innerHTML=SD.map(function(s){return '<button class="snd" data-s="'+s[0]+'">▶ <b>'+s[1]+'</b><span>'+s[0]+'</span></button>';}).join('');
+document.getElementById('sndt').innerHTML=SD.map(function(s){return '<tr><td>'+s[1]+'</td><td>'+s[2]+'</td><td>'+s[3]+'</td></tr>';}).join('');
+document.getElementById('snd').addEventListener('click',function(e){var b=e.target.closest('.snd');if(b)snd[b.dataset.s]();});
+</script>

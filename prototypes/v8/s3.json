@@ -1,0 +1,8 @@
+[["pay_tiles","#demo",["[data-a=pay][data-x=upi]","[data-a=payee][data-x='0']","[data-a=quick][data-x='600']","[data-a=pstep][data-x=cat]","[data-a=pcat][data-x=Food]"]],
+["pay_over","#demo",["[data-a=pay][data-x=upi]","[data-a=payee][data-x='1']","[data-a=quick][data-x='600']","[data-a=pstep][data-x=cat]","[data-a=pcat][data-x=Fun]"]],
+["log_amt","#demo",["[data-a=pay][data-x=log]"]],
+["log_done","#demo",["[data-a=pay][data-x=log]","[data-a=quick][data-x='50']","[data-a=pstep][data-x=cat]","[data-a=pcat][data-x=Food]","[data-a=pdone]"]],
+["income","#demo",["js:A.cafe()"]],
+["income_undo","#demo",["js:A.cafe()","[data-a=incundo]"]],
+["settle1","#demo",["[data-a=tab][data-x=actions]","[data-item=split] [data-a=settle]"]],
+["settle2","#demo",["[data-a=tab][data-x=actions]","[data-item=split] [data-a=settle]","[data-a=settleone]"]]]

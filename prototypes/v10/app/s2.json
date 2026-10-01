@@ -1,0 +1,11 @@
+[["story2","#demo",["js:A.story()","[data-a=stnext]","[data-a=stnext]"]],
+["story1","#demo",["js:A.story()","[data-a=stnext]"]],
+["story4","#demo",["js:A.story()","[data-a=stnext]","[data-a=stnext]","[data-a=stnext]","[data-a=stnext]"]],
+["checkin","#demo",["js:A.checkin()","[data-a=cinext]","[data-a=cinext]","[data-a=cinext]"]],
+["goal","#demo",["js:A.goal('goa')"]],
+["inc","#demo",["js:A.cafe()"]],
+["bwmoney","#demo",["js:A.look('bw')","[data-a=tab][data-x=money]"]],
+["over","#demo",["[data-a=pay][data-x=upi]","[data-a=payee][data-x='1']","[data-a=quick][data-x='600']","[data-a=pstep][data-x=cat]","[data-a=pcat][data-x=Fun]"]],
+["drawer","#demo",["[data-a=drawer][data-x='1']"]],
+["actions","#demo",["[data-a=tab][data-x=actions]"]],
+["wset","#demo",["[data-a=tab][data-x=insights]","[data-w=where] [data-a=wset]"]]]

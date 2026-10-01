@@ -1,0 +1,400 @@
+<style>
+:root{color-scheme:dark;
+  --bg:#111111; --panel:#1a1a1a;
+  --ink:#f2f2f0; --ink2:#a9a9a5; --ink3:#717170;
+  --line:#2c2c2b;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--ink);font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:28px 16px 60px;gap:22px}
+
+/* ---- top switcher ---- */
+.switcher{position:sticky;top:0;z-index:50;width:100%;max-width:1400px;
+  display:flex;justify-content:center;gap:8px;padding:10px;background:rgba(17,17,17,.9);
+  backdrop-filter:blur(8px);border-radius:16px;flex-wrap:wrap}
+.switch-btn{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink2);padding:9px 18px;border-radius:20px;cursor:pointer;transition:.15s}
+.switch-btn.on{background:var(--ink);color:#111;border-color:var(--ink);font-weight:600}
+.switch-btn:hover:not(.on){color:var(--ink)}
+
+.intro{max-width:760px;text-align:center;color:var(--ink2);font-size:13.5px;line-height:1.6;padding:0 10px}
+.intro b{color:var(--ink)}
+
+.explo{display:none;width:100%;max-width:1400px;flex-direction:column;align-items:center;gap:18px}
+.explo.on{display:flex}
+.explo-head{max-width:820px;text-align:center;padding:4px 10px 6px}
+.explo-head h2{font-size:22px;font-weight:700;letter-spacing:-.3px;margin-bottom:8px}
+.explo-head p{font-size:13.5px;color:var(--ink2);line-height:1.6}
+.screens{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;width:100%}
+.phone{width:300px;height:650px;border-radius:34px;overflow:hidden;flex:none;
+  border:1px solid var(--line);position:relative;display:flex;flex-direction:column}
+.phone .label{position:absolute;top:-26px;left:2px;font-size:11px;color:var(--ink3);letter-spacing:.3px}
+.pscroll{flex:1;overflow-y:auto;position:relative}
+.pscroll::-webkit-scrollbar{width:0}
+.sb{display:flex;justify-content:space-between;padding:14px 18px 4px;font-size:10.5px;flex:none}
+
+/* generic helpers reused across explorations */
+.tag{font-size:9.5px;letter-spacing:.6px;text-transform:uppercase}
+</style>
+
+<div class="switcher" id="switcher">
+  <button class="switch-btn on" data-x="a">A — Calm / Minimal</button>
+  <button class="switch-btn" data-x="b">B — Narrative</button>
+  <button class="switch-btn" data-x="c">C — Bold Editorial</button>
+</div>
+
+<p class="intro">Three dark-mode design explorations from the same lo-fi flow, each answering the "too much text and numbers" feedback differently — <b>A</b> removes and hides, <b>B</b> rewrites numbers as sentences, <b>C</b> keeps the numbers but makes one dominant per screen. Each gives Savings its own distinct visual language, separate from spending.</p>
+
+<!-- ============================================================
+     EXPLORATION A — CALM / MINIMAL
+     ============================================================ -->
+<section class="explo on" id="explo-a">
+  <style>
+    #explo-a{
+      --a-bg:#0e0f0e; --a-panel:#171816; --a-panel2:#1e201d;
+      --a-ink:#f4f4f1; --a-ink2:#8f9089; --a-ink3:#5c5d58;
+      --a-line:#2a2b28; --a-accent:#a8e6a1; --a-accent-dim:#3a4a37;
+    }
+    #explo-a .phone{background:var(--a-bg);color:var(--a-ink);
+      font-family:"Georgia","Iowan Old Style",serif}
+    #explo-a .sb{color:var(--a-ink3);font-family:Inter,sans-serif}
+    #explo-a .pad{padding:0 26px}
+    #explo-a .hero-num{font-size:56px;font-weight:400;letter-spacing:-1px;line-height:1}
+    #explo-a .hero-lbl{font-family:Inter,sans-serif;font-size:11px;color:var(--a-ink3);
+      letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px}
+    #explo-a .hero-sub{font-family:Inter,sans-serif;font-size:12.5px;color:var(--a-ink2);margin-top:10px}
+    #explo-a .ring-wrap{display:flex;justify-content:center;padding:22px 0 10px}
+    #explo-a .divider{height:1px;background:var(--a-line);margin:22px 0}
+    #explo-a .quiet-row{display:flex;justify-content:space-between;align-items:baseline;
+      font-family:Inter,sans-serif;font-size:13px;color:var(--a-ink2);padding:7px 0}
+    #explo-a .quiet-row b{color:var(--a-ink);font-weight:500}
+    #explo-a .tabs-min{display:flex;justify-content:center;gap:26px;padding:18px 0 6px;
+      font-family:Inter,sans-serif;font-size:10.5px;color:var(--a-ink3)}
+    #explo-a .tabs-min .on2{color:var(--a-accent)}
+    #explo-a .jar{width:120px;height:150px;margin:0 auto;position:relative}
+    #explo-a .savings-line{font-family:Inter,sans-serif;font-size:12px;color:var(--a-ink2);
+      text-align:center;margin-top:14px;line-height:1.6}
+    #explo-a .goal-name{font-size:22px;font-family:Georgia,serif;text-align:center;margin-top:4px}
+    #explo-a .more-link{font-family:Inter,sans-serif;font-size:11.5px;color:var(--a-ink3);
+      text-align:center;padding-top:20px;text-decoration:underline;text-underline-offset:3px}
+  </style>
+  <div class="explo-head">
+    <h2>A — Calm / Minimal</h2>
+    <p>One number does the talking per screen; a full data viz becomes a single ring. Categories and Insight collapse into Home's scroll, so there are fewer places to check. Savings is a filling jar — a shape nothing else on the app uses — set apart from every spending screen. Serif display type for the one number that matters, sans for everything supporting it.</p>
+  </div>
+  <div class="screens">
+
+    <!-- HOME -->
+    <div class="phone"><span class="label">Home</span><div class="pscroll">
+      <div class="sb"><span>9:41</span><span>UPI &#9679;&#9679;&#9679; 86%</span></div>
+      <div class="pad" style="padding-top:18px">
+        <div class="hero-lbl">Remaining this week</div>
+        <div class="hero-num">&#8377;1,610</div>
+        <div class="hero-sub">of &#8377;6,790 &middot; steady pace</div>
+      </div>
+      <div class="divider"></div>
+      <div class="pad">
+        <div class="hero-lbl">Worth a glance</div>
+        <div class="quiet-row"><span>Coffee, 14th visit this week</span><b>&#8377;280</b></div>
+        <div class="quiet-row"><span>Canteen is your top spend</span><b>&#8377;1,255</b></div>
+      </div>
+      <div class="divider"></div>
+      <div class="pad" style="text-align:center">
+        <div class="hero-lbl" style="text-align:center">Balance</div>
+        <div class="hero-num" style="font-size:34px">&#8377;15,546</div>
+      </div>
+      <div class="pad more-link">See all transactions</div>
+      <div class="tabs-min"><span class="on2">Home</span><span>Savings</span><span>Settings</span></div>
+    </div></div>
+
+    <!-- SAVINGS -->
+    <div class="phone"><span class="label">Savings</span><div class="pscroll">
+      <div class="sb"><span>9:41</span><span>UPI &#9679;&#9679;&#9679; 86%</span></div>
+      <div class="pad" style="padding-top:30px;text-align:center">
+        <div class="hero-lbl" style="text-align:center">Saving for</div>
+        <div class="goal-name">Motorcycle</div>
+        <svg class="jar" viewBox="0 0 120 150">
+          <path d="M28 20 h64 v10 a8 8 0 0 1 -4 7 v6 h-56 v-6 a8 8 0 0 1 -4 -7 z" fill="none" stroke="#5c5d58" stroke-width="1.5"/>
+          <path d="M32 43 h56 v88 a10 10 0 0 1 -10 10 h-36 a10 10 0 0 1 -10 -10 z" fill="none" stroke="#5c5d58" stroke-width="1.5"/>
+          <clipPath id="jarclip"><path d="M32 43 h56 v88 a10 10 0 0 1 -10 10 h-36 a10 10 0 0 1 -10 -10 z"/></clipPath>
+          <rect x="32" y="88" width="56" height="53" fill="#a8e6a1" opacity="0.85" clip-path="url(#jarclip)"/>
+          <path d="M32 88 q14 -6 28 0 t28 0" stroke="#0e0f0e" stroke-width="2" fill="none" clip-path="url(#jarclip)" opacity="0.3"/>
+        </svg>
+        <div class="savings-line"><b style="color:#f4f4f1;font-size:15px;font-family:Georgia,serif">&#8377;10,514</b> of &#8377;25,000<br>42% there &middot; by March</div>
+      </div>
+      <div class="divider"></div>
+      <div class="pad" style="text-align:center">
+        <div class="hero-lbl" style="text-align:center">Second jar</div>
+        <div class="goal-name" style="font-size:17px">Trip to Goa</div>
+        <div class="savings-line">&#8377;2,625 of &#8377;8,000 &middot; 33%</div>
+      </div>
+      <div class="pad more-link">Subscriptions &middot; &#8377;2,749/mo</div>
+      <div class="tabs-min"><span>Home</span><span class="on2">Savings</span><span>Settings</span></div>
+    </div></div>
+
+    <!-- INSIGHT (folded into home scroll conceptually, shown as its own quiet screen) -->
+    <div class="phone"><span class="label">Insight (one screen, one idea at a time)</span><div class="pscroll">
+      <div class="sb"><span>9:41</span><span>UPI &#9679;&#9679;&#9679; 86%</span></div>
+      <div class="pad" style="padding-top:24px">
+        <div class="hero-lbl">This week's one thing</div>
+        <div style="font-size:26px;line-height:1.35;font-family:Georgia,serif">Monday is when you spend the most.</div>
+      </div>
+      <div class="ring-wrap">
+        <svg width="190" height="190" viewBox="0 0 190 190">
+          <circle cx="95" cy="95" r="78" fill="none" stroke="#2a2b28" stroke-width="14"/>
+          <circle cx="95" cy="95" r="78" fill="none" stroke="#a8e6a1" stroke-width="14"
+            stroke-dasharray="335 490" stroke-linecap="round" transform="rotate(-90 95 95)"/>
+          <text x="95" y="90" text-anchor="middle" fill="#f4f4f1" font-size="30" font-family="Georgia,serif">68%</text>
+          <text x="95" y="112" text-anchor="middle" fill="#8f9089" font-size="10.5" font-family="Inter,sans-serif">of week's spend</text>
+        </svg>
+      </div>
+      <div class="pad" style="text-align:center">
+        <div class="hero-sub">Falls by Wednesday most weeks. Nothing to act on &mdash; just a pattern.</div>
+      </div>
+      <div class="pad more-link">See the next insight &rarr;</div>
+      <div class="tabs-min"><span>Home</span><span>Savings</span><span class="on2">Settings</span></div>
+    </div></div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     EXPLORATION B — NARRATIVE / CONVERSATIONAL
+     ============================================================ -->
+<section class="explo" id="explo-b">
+  <style>
+    #explo-b{
+      --b-bg:#161320; --b-panel:#1f1b2e; --b-panel2:#272038;
+      --b-ink:#f1eef8; --b-ink2:#a79fc4; --b-ink3:#6f6790;
+      --b-line:#332c48; --b-accent:#c9a8ff; --b-accent2:#ffb997;
+    }
+    #explo-b .phone{background:var(--b-bg);color:var(--b-ink);font-family:Inter,sans-serif}
+    #explo-b .sb{color:var(--b-ink3)}
+    #explo-b .pad{padding:0 22px}
+    #explo-b .greet{font-size:20px;font-weight:600;line-height:1.4;padding-top:6px}
+    #explo-b .greet b{color:var(--b-accent)}
+    #explo-b .card{background:var(--b-panel);border-radius:20px;padding:18px 20px;margin-top:14px}
+    #explo-b .card p{font-size:14.5px;line-height:1.55;color:var(--b-ink)}
+    #explo-b .card p b{color:var(--b-accent2)}
+    #explo-b .spark{margin-top:10px}
+    #explo-b .chip{display:inline-block;font-size:10.5px;color:var(--b-ink3);
+      background:var(--b-panel2);border-radius:10px;padding:3px 9px;margin-top:8px}
+    #explo-b .swipe-row{display:flex;gap:8px;padding:16px 22px 4px;overflow-x:auto}
+    #explo-b .swipe-dot{width:6px;height:6px;border-radius:50%;background:var(--b-line)}
+    #explo-b .swipe-dot.on3{background:var(--b-accent)}
+    #explo-b .dots-row{display:flex;gap:6px;justify-content:center;padding:14px 0}
+    #explo-b .storytrack{position:relative;height:220px;margin:20px 22px 0}
+    #explo-b .storytrack .line{position:absolute;left:14px;top:10px;bottom:10px;width:2px;background:var(--b-line)}
+    #explo-b .story-pt{position:relative;padding-left:38px;padding-bottom:26px}
+    #explo-b .story-pt .dot{position:absolute;left:8px;top:2px;width:14px;height:14px;border-radius:50%;
+      background:var(--b-accent);border:3px solid var(--b-bg)}
+    #explo-b .story-pt.dim .dot{background:var(--b-line)}
+    #explo-b .story-pt p{font-size:13px;color:var(--b-ink2);line-height:1.5}
+    #explo-b .story-pt b{color:var(--b-ink);font-weight:600}
+    #explo-b .navbar-b{display:flex;justify-content:space-around;padding:16px 10px;
+      background:var(--b-panel);margin:20px 12px 12px;border-radius:20px}
+    #explo-b .navbar-b span{font-size:10px;color:var(--b-ink3)}
+    #explo-b .navbar-b span.on4{color:var(--b-accent)}
+  </style>
+  <div class="explo-head">
+    <h2>B — Narrative / Conversational</h2>
+    <p>Numbers stay, but they're folded into plain sentences with an inline sparkline instead of being listed as stats. Screens read like a short update, not a spreadsheet. Savings becomes a story you scroll down through — a timeline of contributions toward a goal — instead of a percentage bar. Navigation is swipeable cards rather than a grid.</p>
+  </div>
+  <div class="screens">
+
+    <!-- HOME -->
+    <div class="phone"><span class="label">Home</span><div class="pscroll">
+      <div class="sb"><span>9:41</span><span>UPI &#9679;&#9679;&#9679; 86%</span></div>
+      <div class="pad">
+        <div class="greet">Good afternoon. You've got <b>&#8377;1,610</b> left to spend this week.</div>
+        <div class="card">
+          <p>You spent <b>&#8377;192</b> today &mdash; mostly at <b>JD Canteen</b>. That's a normal Tuesday for you.</p>
+          <svg class="spark" width="100%" height="34" viewBox="0 0 260 34" preserveAspectRatio="none">
+            <polyline points="0,26 40,20 80,24 120,10 160,16 200,6 240,14" fill="none" stroke="#c9a8ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="chip">last 7 days</div>
+        </div>
+        <div class="card">
+          <p><b>Coffee</b> is quietly your biggest habit &mdash; 14 stops this week for <b>&#8377;280</b> total. Nobody buy tracks like that on purpose.</p>
+        </div>
+      </div>
+      <div class="swipe-row">
+        <div class="swipe-dot on3"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
+      </div>
+      <div class="navbar-b">
+        <span class="on4">Home</span><span>Savings</span><span>Insight</span><span>Settings</span>
+      </div>
+    </div></div>
+
+    <!-- SAVINGS -->
+    <div class="phone"><span class="label">Savings</span><div class="pscroll">
+      <div class="sb"><span>9:41</span><span>UPI &#9679;&#9679;&#9679; 86%</span></div>
+      <div class="pad">
+        <div class="greet">Your <b>Motorcycle</b> fund is <b>42%</b> of the way there.</div>
+      </div>
+      <div class="storytrack">
+        <div class="line"></div>
+        <div class="story-pt"><span class="dot"></span><p><b>&#8377;50 added today</b><br>rounded up from a coffee payment</p></div>
+        <div class="story-pt"><span class="dot"></span><p><b>&#8377;4,206 added, 6 days ago</b><br>a manual top-up</p></div>
+        <div class="story-pt"><span class="dot"></span><p><b>&#8377;6,308 added, 21 days ago</b><br>where this fund began</p></div>
+        <div class="story-pt dim"><span class="dot"></span><p>Goal: <b>&#8377;25,000</b> by March</p></div>
+      </div>
+      <div class="pad">
+        <div class="card">
+          <p>You're also saving for a <b>Trip to Goa</b> &mdash; <b>&#8377;2,625</b> of &#8377;8,000, about a third there.</p>
+        </div>
+      </div>
+      <div class="navbar-b">
+        <span>Home</span><span class="on4">Savings</span><span>Insight</span><span>Settings</span>
+      </div>
+    </div></div>
+
+    <!-- INSIGHT -->
+    <div class="phone"><span class="label">Insight</span><div class="pscroll">
+      <div class="sb"><span>9:41</span><span>UPI &#9679;&#9679;&#9679; 86%</span></div>
+      <div class="pad">
+        <div class="greet">A few things worth knowing.</div>
+        <div class="card">
+          <p><b>Mondays</b> are when you spend the most &mdash; usually settling weekend plans. It eases off by Wednesday.</p>
+          <svg class="spark" width="100%" height="40" viewBox="0 0 260 40" preserveAspectRatio="none">
+            <rect x="0" y="4" width="28" height="36" rx="3" fill="#c9a8ff"/>
+            <rect x="36" y="16" width="28" height="24" rx="3" fill="#332c48"/>
+            <rect x="72" y="22" width="28" height="18" rx="3" fill="#332c48"/>
+            <rect x="108" y="14" width="28" height="26" rx="3" fill="#332c48"/>
+            <rect x="144" y="26" width="28" height="14" rx="3" fill="#332c48"/>
+            <rect x="180" y="10" width="28" height="30" rx="3" fill="#332c48"/>
+            <rect x="216" y="13" width="28" height="27" rx="3" fill="#332c48"/>
+          </svg>
+        </div>
+        <div class="card">
+          <p><b>Food</b> crept up 42% this week versus last &mdash; mostly extra canteen runs, not one big purchase.</p>
+        </div>
+        <div class="card">
+          <p>Your subscriptions quietly cost <b>&#8377;2,749</b> a month. That's <b>&#8377;32,988</b> a year &mdash; worth a look.</p>
+        </div>
+      </div>
+      <div class="navbar-b">
+        <span>Home</span><span>Savings</span><span class="on4">Insight</span><span>Settings</span>
+      </div>
+    </div></div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     EXPLORATION C — BOLD EDITORIAL DATA-FIRST
+     ============================================================ -->
+<section class="explo" id="explo-c">
+  <style>
+    #explo-c{
+      --c-bg:#0a0a0a; --c-panel:#161616; --c-panel2:#1e1e1e;
+      --c-ink:#ffffff; --c-ink2:#8a8a8a; --c-ink3:#555555;
+      --c-line:#292929; --c-accent:#ff7a45; --c-save:#ffd23f;
+    }
+    #explo-c .phone{background:var(--c-bg);color:var(--c-ink);font-family:Inter,sans-serif}
+    #explo-c .sb{color:var(--c-ink3)}
+    #explo-c .pad{padding:0 22px}
+    #explo-c .mega{font-size:64px;font-weight:800;letter-spacing:-2.5px;line-height:.95;margin-top:4px}
+    #explo-c .mega-lbl{font-size:11px;color:var(--c-ink3);text-transform:uppercase;letter-spacing:1px;margin-top:14px}
+    #explo-c .mega-sub{font-size:13px;color:var(--c-ink2);margin-top:4px}
+    #explo-c .arc-wrap{display:flex;justify-content:center;padding:16px 0}
+    #explo-c .catbar-row{display:flex;align-items:center;gap:10px;padding:9px 0}
+    #explo-c .catbar-row .sw{width:10px;height:10px;border-radius:2px;flex:none}
+    #explo-c .catbar-row .nm{flex:1;font-size:12.5px;color:var(--c-ink2)}
+    #explo-c .catbar-row .amt{font-size:13px;font-weight:700}
+    #explo-c .div-c{height:1px;background:var(--c-line);margin:16px 0}
+    #explo-c .navbar-c{display:flex;justify-content:space-around;padding:18px 0;
+      border-top:1px solid var(--c-line);margin-top:auto}
+    #explo-c .navbar-c span{font-size:10px;color:var(--c-ink3);font-weight:600;letter-spacing:.3px}
+    #explo-c .navbar-c span.on5{color:var(--c-accent)}
+    #explo-c .savebadge{display:inline-block;background:var(--c-save);color:#0a0a0a;
+      font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+      padding:4px 10px;border-radius:6px;margin-top:6px}
+    #explo-c .milestone{display:flex;align-items:center;gap:12px;padding:12px 0}
+    #explo-c .milestone .mnum{width:30px;height:30px;border-radius:50%;flex:none;
+      display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+    #explo-c .milestone .mnum.done{background:var(--c-save);color:#0a0a0a}
+    #explo-c .milestone .mnum.todo{background:var(--c-panel2);color:var(--c-ink3);border:1px solid var(--c-line)}
+    #explo-c .milestone .mtxt{font-size:13px;color:var(--c-ink2)}
+    #explo-c .milestone .mtxt b{color:var(--c-ink);font-weight:700}
+  </style>
+  <div class="explo-head">
+    <h2>C — Bold Editorial, Data-First</h2>
+    <p>Doesn't hide numbers &mdash; makes one number per screen genuinely huge, everything else shrinks to make room. One dominant chart per screen instead of several small ones. Savings gets its own accent color (yellow) that appears nowhere else in the app, plus a milestone ladder instead of a plain bar, so reaching a goal feels like leveling up.</p>
+  </div>
+  <div class="screens">
+
+    <!-- HOME -->
+    <div class="phone" style="display:flex"><span class="label">Home</span><div class="pscroll" style="display:flex;flex-direction:column">
+      <div class="sb"><span>9:41</span><span>UPI &#9679;&#9679;&#9679; 86%</span></div>
+      <div class="pad" style="padding-top:10px;flex:1">
+        <div class="mega-lbl">Left this week</div>
+        <div class="mega">&#8377;1,610</div>
+        <div class="mega-sub">&#8377;5,180 spent of &#8377;6,790 &middot; <span style="color:var(--c-accent);font-weight:700">76%</span></div>
+        <div class="div-c"></div>
+        <div class="mega-lbl" style="margin-top:0">By category</div>
+        <div class="catbar-row"><span class="sw" style="background:#ff7a45"></span><span class="nm">Food</span><span class="amt">&#8377;2,140</span></div>
+        <div class="catbar-row"><span class="sw" style="background:#4a9fff"></span><span class="nm">Groceries</span><span class="amt">&#8377;1,255</span></div>
+        <div class="catbar-row"><span class="sw" style="background:#8a8a8a"></span><span class="nm">Transport</span><span class="amt">&#8377;412</span></div>
+        <div class="catbar-row"><span class="sw" style="background:#3a3a3a"></span><span class="nm">Other</span><span class="amt">&#8377;1,373</span></div>
+      </div>
+      <div class="navbar-c">
+        <span>Savings</span><span>Categories</span><span class="on5">Home</span><span>Insight</span><span>Settings</span>
+      </div>
+    </div></div>
+
+    <!-- SAVINGS -->
+    <div class="phone" style="display:flex"><span class="label">Savings</span><div class="pscroll" style="display:flex;flex-direction:column">
+      <div class="sb"><span>9:41</span><span>UPI &#9679;&#9679;&#9679; 86%</span></div>
+      <div class="pad" style="padding-top:10px;flex:1">
+        <div class="mega-lbl" style="color:var(--c-save)">Motorcycle fund</div>
+        <div class="mega" style="color:var(--c-save)">42<span style="font-size:32px">%</span></div>
+        <div class="savebadge">&#8377;10,514 of &#8377;25,000</div>
+        <div class="div-c"></div>
+        <div class="mega-lbl" style="margin-top:0">Milestones</div>
+        <div class="milestone"><div class="mnum done">1</div><div class="mtxt"><b>&#8377;6,250</b> &middot; quarter way &mdash; hit 34 days ago</div></div>
+        <div class="milestone"><div class="mnum done">2</div><div class="mtxt"><b>&#8377;10,514</b> &middot; you are here</div></div>
+        <div class="milestone"><div class="mnum todo">3</div><div class="mtxt">&#8377;18,750 &middot; three-quarters</div></div>
+        <div class="milestone"><div class="mnum todo">4</div><div class="mtxt">&#8377;25,000 &middot; fund complete, by March</div></div>
+      </div>
+      <div class="navbar-c">
+        <span class="on5">Savings</span><span>Categories</span><span>Home</span><span>Insight</span><span>Settings</span>
+      </div>
+    </div></div>
+
+    <!-- INSIGHT -->
+    <div class="phone" style="display:flex"><span class="label">Insight</span><div class="pscroll" style="display:flex;flex-direction:column">
+      <div class="sb"><span>9:41</span><span>UPI &#9679;&#9679;&#9679; 86%</span></div>
+      <div class="pad" style="padding-top:10px;flex:1">
+        <div class="mega-lbl">Heaviest day</div>
+        <div class="mega" style="font-size:52px">Mon</div>
+        <div class="mega-sub">&#8377;4,649 across the month &middot; 31% of all spend</div>
+        <div class="arc-wrap">
+          <svg width="220" height="130" viewBox="0 0 220 130">
+            <path d="M20 110 A 90 90 0 0 1 200 110" fill="none" stroke="#1e1e1e" stroke-width="16"/>
+            <path d="M20 110 A 90 90 0 0 1 154 32" fill="none" stroke="#ff7a45" stroke-width="16" stroke-linecap="round"/>
+            <text x="110" y="95" text-anchor="middle" fill="#fff" font-size="26" font-weight="800">68%</text>
+            <text x="110" y="115" text-anchor="middle" fill="#8a8a8a" font-size="10">of week by Monday</text>
+          </svg>
+        </div>
+        <div class="div-c"></div>
+        <div class="mega-lbl" style="margin-top:0">Biggest mover</div>
+        <div class="catbar-row"><span class="sw" style="background:#ff7a45"></span><span class="nm">Food, up 42% vs last week</span><span class="amt">&#8377;2,140</span></div>
+      </div>
+      <div class="navbar-c">
+        <span>Savings</span><span>Categories</span><span>Home</span><span class="on5">Insight</span><span>Settings</span>
+      </div>
+    </div></div>
+
+  </div>
+</section>
+
+<script>
+document.getElementById('switcher').addEventListener('click', function(e){
+  var b = e.target.closest('.switch-btn');
+  if(!b) return;
+  var x = b.dataset.x;
+  document.querySelectorAll('.switch-btn').forEach(function(el){ el.classList.toggle('on', el===b); });
+  document.querySelectorAll('.explo').forEach(function(el){ el.classList.toggle('on', el.id==='explo-'+x); });
+});
+</script>

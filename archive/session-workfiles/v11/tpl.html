@@ -1,0 +1,33 @@
+<title>Trickle v11 Audit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Figtree:wght@400;600&display=swap">
+<style>
+/* layout: single column reading page, timeline grid of phone thumbnails, then three-list decision log */
+:root{--bg:#f5f6f1;--fg:#1b1d18;--mute:#62665b;--line:#dcdfd4;--card:#ffffff;--lime:#5f7d0e;--warm:#a4580f;--disp:"Fraunces",Georgia,serif;--body:"Figtree",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111310;--fg:#eef0e8;--mute:#9da193;--line:#2b2e27;--card:#191b17;--lime:#c6f432;--warm:#f2a93b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111310;--fg:#eef0e8;--mute:#9da193;--line:#2b2e27;--card:#191b17;--lime:#c6f432;--warm:#f2a93b;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--body);padding:32px 16px 64px}
+main{max-width:1080px;margin:0 auto;display:grid;gap:44px}
+h1,h2,h3{font-family:var(--disp);text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,5vw,46px)}h2{font-size:24px;margin-bottom:14px}h3{font-size:17px}
+.lede{color:var(--mute);max-width:65ch;margin:8px 0 0}
+.tl{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.v{display:grid;grid-template-columns:96px 1fr;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+.v img{width:96px;border-radius:6px;border:1px solid var(--line)}.v div{min-width:0}
+.v p{margin:4px 0 0;font-size:13px}.c{color:var(--mute)}.x{color:var(--mute);font-style:italic}
+.g{color:var(--lime)}.r{color:var(--warm)}
+.crit{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.k{border-top:2px solid var(--lime);padding-top:8px;display:grid}
+.kv{font-family:var(--disp);font-size:24px;font-variant-numeric:tabular-nums}.kl{font-weight:600;font-size:13px}.kn{color:var(--mute);font-size:12px}
+.log{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.log ul,.roots{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px}
+.t{color:var(--mute);font-size:12px;margin-left:4px}
+.col h3{margin-bottom:8px;letter-spacing:.02em}
+.never h3{color:var(--warm)}.keep h3{color:var(--lime)}
+</style>
+<main>
+<header><h1>Trickle v11 audit</h1><p class="lede">Nine prototype rounds, v2 to v10, read as one story. Each round fixed the last complaint by adding something new to learn. v11 keeps the calm UX of v8 and replaces every unit system with one tile that always means the same amount.</p></header>
+<section><h2>Success criteria</h2><div class="crit">%CRIT%</div></section>
+<section><h2>Timeline</h2><div class="tl">%CARDS%</div></section>
+<section><h2>Why users stayed unhappy</h2><ul class="roots">%ROOTS%</ul></section>
+<section><h2>Decision log</h2><div class="log"><div class="col keep"><h3>Keep</h3><ul>%KEEP%</ul></div><div class="col"><h3>Drop</h3><ul>%DROP%</ul></div><div class="col never"><h3>Never again</h3><ul>%NEVER%</ul></div></div></section>
+</main>

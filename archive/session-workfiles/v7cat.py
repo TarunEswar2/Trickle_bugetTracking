@@ -1,0 +1,51 @@
+# widget catalogue data: id, name, question, form, size, fields, tab, pinned, rule, thumb, ref
+W = [
+# --- Spending / budget (carry-over)
+("W01","Safe to spend today","How much can I spend today and stay on plan?","Hero number + half gauge","W","budget.left, period.daysLeft, today.spent","H","Yes (#1)","Always shown; day 1 uses period budget ÷ days","gauge","70b9401f half gauge"),
+("W02","Period pace","Am I ahead or behind for this budget period?","Pace bullet, elapsed tick, projection ghost","W","period.spent, period.budget, elapsed%","H","Yes (#2)","Needs ≥2 days of the period","bullet",""),
+("W03","Budget runway","At this rate, how many days does my budget last?","Dotted countdown ring, lime card","S","budget.left, 7-day avg spend","H","Yes (#3)","Needs ≥3 spend days","dotring","0485a569 lime card + dotted ring"),
+("W04","Category % cards","Which categories are near or over budget?","Bold coloured % bars (card = category, fill = used %)","L","cat.spent, cat.budget","H","Yes (#4)","Show once 1 category has spend","pctcards","41969c78 fitness % cards"),
+("W05","Today / period / last period","What did I spend lately?","3 stat tiles + sparkline","W","totals by day","I","No","Needs 1 txn","tiles",""),
+("W06","Under-budget streak","How many days in a row have I stayed under?","Dot row (14 days)","W","daily spend vs daily allowance","I","No","Needs 3 days","dots",""),
+("W07","Spend calendar","Which days ran hot, and is today normal?","Month calendar heatmap, dashed future days, today ring","L","daily totals, median","I","No","Needs 7 days","calendar","2a5aa968 dashed calendar"),
+("W08","This vs last period","Which categories moved?","Dumbbell per category","L","cat spend p-1, p (same days)","I","No","Needs 1 full previous period","dumbbell",""),
+("W09","Category share","What % of spend goes where?","Rounded pill blocks (area = share), ≤6 + Other","S","cat spend","I","No","Needs 5 txns","pills","9d7536cf pill blocks"),
+("W10","Month by month","How did each category move over 6 months?","Pie w/ callouts + fill jars","L","cat spend by month, budget","I","No","Needs 2 months; jars show empty cells","piejar",""),
+("W11","Daily range","How wide was each day's spend vs daily allowance?","Range bars per day (low/high txn, close = day total) — lime under, grey over","W","txns by day","I","No","Needs 7 days","candle","830d5dcf candlestick (no trading language)"),
+("W12","Repeat buys","Which small repeat purchases add up?","Pictogram rows + ₹/yr","W","merchant counts, avg","I","No","Needs a merchant with ≥3 buys","picto",""),
+("W13","When I spend","What time of day does money leave?","24h radial (toggle: part-of-day)","S","txn hour","I","No","Needs 15 txns","radial",""),
+("W14","Peak hour","When is my riskiest hour today?","Big time + small arc (twitch 'followers online')","S","txn hour histogram","I","No","Needs 15 txns","peak","70b9401f 2x2 cards"),
+("W15","Purchase sizes","Are my buys mostly small or big?","Histogram","W","txn amt buckets","I","No","Needs 20 txns","hist",""),
+("W16","Top merchants","Who gets most of my money?","Ranked bars","W","merchant totals","I","No","Needs 3 merchants","hbars",""),
+("W17","Fixed vs flexible","How much of spend is committed?","100% meter (Monarch fixed/flex)","S","subs + fixed cats vs rest","I","No","Needs 1 sub or fixed cat","meter",""),
+("W18","6-period trend","Is total spend rising?","Columns + budget line","W","period totals","I","No","Needs 2 periods","columns",""),
+# --- Income
+("W19","Income this period","How much came in, from where?","Stacked bar by source + total","W","income.amt, source","M","Yes","Needs 1 income","stackbar",""),
+("W20","Income source mix","Which sources do I rely on?","Rounded pill blocks by source","S","income by source (3 mo)","M","No","Needs 2 sources","pills","9d7536cf pill blocks"),
+("W21","Payday calendar","When is the next money due?","Calendar, lime payday dots, dashed expected days","W","recurring income dates","M","Yes","Needs 1 recurring income","calendar","2a5aa968 dashed calendar"),
+("W22","Expected vs received","Did income arrive as planned?","Paired bars per source","W","expected, received","M","No","Needs 1 recurring income in a closed period","dumbbell",""),
+("W23","In vs out","Did I spend more than came in?","Diverging bars per week/period","W","income, spend","M","No","Needs 2 weeks","diverging",""),
+# --- Balance / pools / transfers
+("W24","Balance split","Where does my balance sit right now?","Big number + 3-segment pool bar (To assign / Budget / Savings)","W","pools","M","Yes (#1 on Money)","Always","poolbar","1c2f8b19 gradient hero"),
+("W25","Pool rings","How full is each pool?","3 dotted rings with glyph icons","W","pools vs targets","M","No","Always","dotrings","0485a569 dotted rings"),
+("W26","To assign inbox","Is there money waiting for a job?","Lime chip card + amount + Assign button","S","toAssign, savedFromBudget","H","Yes (auto when > 0)","Hidden when ₹0","inbox","0485a569 lime card"),
+("W27","Balance history","How has my balance moved, by pool?","Stacked area (3 pools), scrub tooltip","L","daily pool snapshots","M","No","Needs 14 days","stackarea","0485a569 line + tooltip"),
+("W28","Money flow","Where did this period's money go?","Sankey: income sources → pools → categories/goals","L","income, transfers, spend","M","No","Needs 1 income + 5 txns","sankey",""),
+("W29","End-of-period forecast","Where will I end up?","Line to period end with range band + next payday","W","balance, avg spend, expected income","M","No","Needs 7 days","line","0485a569 line + tooltip"),
+("W30","Transfers log","What moved between pools?","Timeline list, typed glyph per move","W","transfers[]","M","No","Needs 1 transfer","list",""),
+("W31","Overspend covers","What paid for overspending?","Stacked bar by cover source (To assign / category / goal / let go)","S","covers[]","I","No","Needs 1 cover","stackbar",""),
+# --- Savings / sweeps
+("W32","Savings rate","What share of income did I save?","Waffle 10×10 + big %","S","saved ÷ income","S","Yes","Needs 1 income","waffle","d3168b82 waffle 67%"),
+("W33","Goal hero","How close is my top goal?","Gradient hero, giant %","L","goal.saved/target","S","Yes","Needs 1 goal","bigpct","1c2f8b19 FreeDom 60%"),
+("W34","Goal tiles","How are all goals doing?","Quarter-circle glyph tiles (quarters fill = 25% steps) + ring","W","goals[]","S","Yes","Needs 1 goal","glyph","7447311e quarter-circle glyphs"),
+("W35","Goal ETA","Will I hit the date?","Step-line + projection + target marker","W","contributions, byDate","S","No","Needs 3 contributions","stepline",""),
+("W36","Sweeps this period","How much leftover got swept?","Column per day/week, auto vs manual tone","W","sweeps[]","S","No","Needs 1 sweep","columns",""),
+("W37","Saved from budget (pending)","What swept money is still waiting for a goal?","Chip card + pick-goal button","S","savedFromBudget","S","Auto when > 0","Hidden when ₹0 or sweep=Auto","inbox",""),
+("W38","Contribution sources","What fills my savings?","100% bar: income rule / sweep / round-up / manual","S","contributions by type","S","No","Needs 3 contributions","meter",""),
+("W39","Withdrawals & slips","How often did I dip into goals?","Dot strip of withdrawals + goal slip days","W","withdraw/cover transfers","S","No","Needs 1 withdrawal","dots",""),
+# --- Subscriptions (Home only)
+("W40","Subscriptions due","What's charging soon?","Compact card: next 3 with icon rings + due-soon chip","W","subs next due","H","Yes","Needs 1 sub","list",""),
+("W41","Subs detail: calendar + yearly","When do subs hit and what's the yearly cost?","Calendar dots + 12-cell pictogram (detail screen)","L","subs[]","H→F","n/a (screen)","Needs 1 sub","calendar",""),
+# --- Insights grid
+("W42","Insight 2×2","What 4 things changed this week?","2×2 small cards: big number + delta + micro chart","L","derived deltas","I","No","Each tile hides itself below its rule","grid4","70b9401f 2x2 insight grid"),
+]

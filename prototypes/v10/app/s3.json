@@ -1,0 +1,1 @@
+[["splash","",[]],["splashend","",["js:S.reduced=true;render()"]],["onb1","",["js:A.splashgo()"]],["drawer","#demo",["[data-a=drawer][data-x='1']"]],["money","#demo",["[data-a=tab][data-x=money]","[data-a=open][data-x=income]"]],["save","#demo",["[data-a=tab][data-x=money]","[data-a=open][data-x=savings]"]],["home","#demo",[]]]

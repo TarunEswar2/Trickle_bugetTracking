@@ -1,0 +1,78 @@
+PASS node --check on bundled JS — all.js parses
+PASS No SMS anywhere (grep -i sms) — matches: 0
+PASS No debt/guilt words in UI + notification strings — 0 matches for over/overspent/deficit/debt/missed/streak/you were gone/only ₹X left
+PASS Ladder: 200 amounts, Σ mark value = amount, marks = blocks+pills+dots+crumb, <₹100 = one wedge — 200/200 amounts exact
+PASS Crumb wedge is area-true and starts at 12 o’clock — 60 random crumbs, max area error 0.53%, all start at top
+PASS 10 dots fuse to a pill; blocks keep a hairline gap; dots keep a gap — pill=true, block gap 1px, dot gap 2px (viewBox units)
+PASS All 75 frames registered — 75 frames
+PASS Home first view has 0 numbers — H-01 tokens: []
+PASS ≤2 numbers on first view elsewhere (exempt: S-00, H-02, S-02, N-04s, R-07, G-S6, S-S5, V-03, I-02) — all 65 non-exempt frames ≤2 distinct tokens
+PASS Key "● = ₹100" exactly once on every screen with dots — every screen with dots has one key (poster, widgets, pay drop, Look swatch carry none by design; O-03 has one)
+PASS Marks per card ≤ 30 — max 30 marks in any card
+PASS No red hues (h<12 or >348, s>45%) in any frame, 4 looks — 0 red pixels-styles across 300 frame renders
+PASS Tap targets ≥ 44×44 px — all buttons, links, toggles and zoomable dots
+PASS Every nav target and action exists — all data-go frames and data-a handlers resolve
+PASS One primary action per screen — max one .primary per frame/sheet
+PASS Green only on savings; income in neutral ink — every green mark sits in a savings visual; "came in" visuals carry no jar or savings hue
+PASS Glow used only for time / position — all glow tracks are pace, today, due, next money, ETA, hour or calendar
+PASS B&W mode renders every frame with patterns, light + dark — 75 frames × B&W light/dark; blue jar becomes stripes, plum dots
+PASS No horizontal overflow at 412 and 360 px — 0 of 375 renders overflow
+PASS F1 Onboarding (UPI) taps 3/4 splash auto-advances; lands H-00 (Home intro); 1613 ms scripted incl. 1.4 s splash; savings 2000, 4 jars, 3 held subs
+PASS F1m Onboarding (manual, no UPI) taps 4/4 typed ₹12,000; manual-only, 0 UPI IDs, 0 subs; empty amount shows "Type an amount above ₹0."
+PASS Starter month: change one thing → back to O-03 — Fun +₹100 → 1100, back on O-03, invariants PASS
+PASS F2 Budget edit taps 3/3 Food → 3700 (+₹100 stepper, taken from the jar with most left)
+PASS F3 Income regular (notification → Split it) taps 1/2 1 tap from shade; savings +₹2,000 first; toast with Undo; Undo restores exact ledger: true
+PASS Undo restores the exact pre-action ledger — snapshot diff = 0 after income split undo
+PASS F3i Income irregular (Friend paying back) taps 3/3 owed ₹600 → 300; income unchanged (10500) — payback is not income
+PASS F4 Pay by scan (from Savings tab) taps 2/2 scan simulated; hourglass ~1.1 s; back on V-01; toast "Paid ₹20 · Food"
+FAIL F4u Pay UPI ID (recent payee) taps 4/3 Pay → UPI ID → payee → (type ₹60) → Pay; plan listed 3, counting the final Pay it is 4
+PASS F5 Empty jar: take from another jar taps 2/2 asked once on P-06 before UPI; ₹229 moved in, Fun paid to zero, days re-spread
+PASS F5b All jars used: start next month lighter taps 2/2 sheet P-06b; next month lighter by ₹250
+PASS F6 Log cash taps 3/3 saved ₹80 cash to Food without UPI
+PASS F7 Sort unknown payment (bell) taps 2/2 sorted to Travel (Fun too low → "didn’t fit" toast, nothing changes), payee remembered, needs-you item removed
+PASS F14 Bell action taps 2/2 same path as F7/F10: bell → inline action
+PASS F8 Subscriptions add / deduct / price / cancel taps 2/3 add 2 taps (Netflix held); Google One held→paid on due day with 0 taps; price 1 tap → ₹349; stop 1 tap → stopped
+PASS F9 Split at pay taps 3/3 two friends picked (second pick counted as same step); owed ₹600 → 1200, outside balance
+PASS F9s Split from spend detail + remind taps 4/4 split 4 taps; remind 1 tap → message with UPI link (pa=tarun@okaxis)
+PASS F10 Refund back to Fun taps 2/2 Fun back ₹499; outline refilled
+FAIL F11 Goal create / add / withdraw / complete taps 4/2 create 4 taps (name → amount → date, one per screen; plan target 2 not met), add 1, withdraw 2, complete opens V-04 automatically
+PASS F12 Month-end → story taps 1/1 R-02 shown on 31 Oct; Move to Savings (₹2201) → lands on N-04 month story
+PASS F13 Move dots between jars taps 3/3 Food → Travel ₹100
+PASS F15 Weekly check-in (from notification) taps 1/1 one action on the notification starts the new week
+PASS F15b Weekly check-in (in app card) taps 1/1 one card, one button
+PASS F16 Welcome back taps 1/1 14 quiet days → R-01 (savings first, auto-sorted count) → Start from today
+PASS F17 Edit Home board taps 2/2 Home gear → Hide
+PASS F18 Pin an insight taps 2/2 Library → Pin money flow
+PASS F19 Change look / B&W taps 2/3 avatar → B&W (true); Light (light)
+PASS F20 Notification → one action taps 1/1 each of 5 notification types has one action button
+PASS 150 random actions: ledger invariants hold after each — 150 actions across 22 screens; 0 invariant breaks
+PASS Ledger checked after every render/action (≥150 checks) — 152 checkLedger() runs in this page; flow-level errors: none
+PASS Seed + scenario switches pass all 12 invariants — day1:ok lapse:ok monthend:ok bigincome:ok emptyjars:ok null:ok
+PASS Notifications: ≤1/day, ≤3/week, none 22–08, 5 types with own channels — 30 simulated days → 9 sent; max/day 1, max/week 3, in quiet hours 0; types sent: income, story, checkin, welcome, subTomorrow; channels 5
+PASS Return triggers exist: weekly check-in, month story, welcome back — N-05, N-04 (+ R-02 month-end), R-01 with #seed=lapse
+PASS Big amounts stay readable (#seed=bigincome) — ₹45,000 earner, ₹1,50,000 goal: 15 blocks drawn, max 24 marks per card
+PASS Reduced motion: no running animations — P-05 running animations 0, splash 0
+  p12 splash running mid 7 end 0 splash=locked splash=played
+  p12 pay running mid 8 end 4 press=played hap:press=[8] leave=played (ducked previous) hap:pay=[8,60,8,60,14]
+  p12 crumbs running mid 4 end 0 snap=played hap:snap=[4,30,4,30,4,30,18]
+  p12 income running mid 10 end 0 sheetUp=played hap:sheet=[6] arrive=played (ducked previous) hap:income=[10] split=played
+  p12 emptyjar running mid 2 end 0 press=played hap:press=[8] ask=played (ducked previous) hap:ask=[6]
+  p12 goal running mid 3 end 0 sheetDown=played milestone=played hap:milestone=[8] milestone=played hap:milestone=[8] milestone=played hap:milestone=[8] complete=played hap:complete=[20,80,20]
+  p12 monthend running mid 4 end 0 press=played hap:press=[8] sweep=played (ducked previous) hap:monthend=[10] sheetDown=dropped
+  p12 storykept running mid 1 end 0 kept=played
+  p12 charts running mid 18 end 0 press=played hap:press=[8] tab=dropped
+  p12 zoom running mid 38 end 0 zoom=played hap:zoom=[8]
+  p12 glow running mid 2 end 0 
+  p12 sheet running mid 2 end 0 sheetUp=played hap:sheet=[6] sheetDown=dropped
+  p12 press running mid 1 end 0 press=played hap:press=[8]
+PASS P12: all 12 moments animate and finish (no stuck states) — running at end: 0 in every moment; mid-moment running anims splash 7, pay 8, crumbs 4, income 10, emptyjar 2, goal 3, monthend 4, storykept 1, charts 18, zoom 38, glow 2, sheet 2, press 1
+PASS P12: hybrid sounds fire at the right moments; charts + glow silent — coin at pay + snap; chimes for arrive/split/milestone/complete/sweep/kept; wooden for ask/zoom/sheets/press; charts/glow silent true
+PASS P12: every voice peaks ≤0.15; AudioContext stubbed, 0 console errors — peak 0.050; 46 stub nodes; 7 vibrate calls; 80 WAAPI animations
+PASS P12: ledger invariants hold after all moments — checkLedger after pay ₹350, income split sheet, goal close, month-end sweep
+PASS P12: max 1 sound per 300 ms (higher priority ducks) — played | dropped | dropped | dropped | dropped | dropped | played (ducked previous) | played
+PASS P12: mute, phone-on-silent and haptics-off are respected — {"mute":"muted","silent":"phone on silent","hapOff":null,"vib":0}
+PASS P12: settings — Sounds, Haptics, silent demo, Motion follows phone with override — 3 switches + Follow phone/Reduce/Full; override Reduce → 0 new anims, 0 running
+PASS P12: reduced motion = 0 running animations (sounds keep playing); Full override animates — running per moment 0/0/0/0/0; anims before override 7; sounds played 2; Full override running 7
+PASS No console errors — 0 errors across all pages
+
+CHECKS 37/37  FLOWS 24/26

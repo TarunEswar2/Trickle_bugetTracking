@@ -1,0 +1,250 @@
+<title>Trickle v10 — Shape System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,500&display=swap">
+<style>
+/* Layout: one reading column of concept plates on the v9 ink stage; each plate = one rule or one worked example. Single dark look by choice. */
+:root{
+ --stage:#070707;--ink:#0B0B0C;--surface:#141414;--surface2:#1D1E20;--surface3:#27282B;--border:#26272A;
+ --text:#F4F4F2;--text2:#A9AAAD;--text3:#7C7D82;--slot:#34353a;
+ --accent:#C6F432;--save:#C6F432;--calm:#4FD18B;--warm:#F2A93B;--bone:#EDE9DC;
+ --food:#DC6A30;--travel:#3F8CE6;--fun:#D55181;--ess:#9085E9;--budget:#EDE9DC;--newm:#4FD18B;
+ --font:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+ --display:"Fraunces",Georgia,serif;
+ color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--stage);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:32px 64px}
+.wrap{max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:56px}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(34px,6vw,54px);line-height:1.05;margin:0;letter-spacing:-.015em;text-wrap:balance}
+h2{font-family:var(--display);font-weight:500;font-size:28px;margin:0;text-wrap:balance}
+h3{font-size:15px;margin:0;font-weight:700}
+p{margin:0;max-width:65ch}
+.muted{color:var(--text2)}.faint{color:var(--text3)}
+.lbl{font-size:11.5px;color:var(--text3);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+section{display:flex;flex-direction:column;gap:18px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:16px}
+.ladder{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+@media (max-width:620px){.ladder{grid-template-columns:repeat(3,1fr)}}
+.rung{display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 6px;border-radius:16px;background:var(--surface2);border:1px solid var(--border)}
+.rung .v{font-weight:700;font-variant-numeric:tabular-nums}
+.rung .sz{display:flex;align-items:center;gap:10px}
+.bw{filter:grayscale(1)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pile{display:grid;grid-template-columns:repeat(var(--c,10),var(--s,20px));gap:var(--g,4px)}
+.pile svg,.gl{display:block}
+button{font:inherit;color:inherit}
+.btn{min-height:44px;padding:0 16px;border-radius:14px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;font-weight:600}
+.btn:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tip{display:inline-block;background:var(--surface3);border:1px solid var(--border);border-radius:10px;padding:3px 9px;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.rules .card p{font-size:14px}
+.key{font-size:13px;color:var(--text2);display:flex;align-items:center;gap:6px}
+.bars{display:flex;flex-direction:column;gap:10px}
+.bars .b{display:grid;grid-template-columns:64px 1fr auto;gap:10px;align-items:center}
+.bars .b span{font-size:13px;color:var(--text2)}
+.num{font-variant-numeric:tabular-nums;font-weight:700}
+.big{font-family:var(--display);font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.stagebox{background:var(--ink);border:1px solid var(--border);border-radius:18px;overflow:hidden}
+.stagebox svg{width:100%;height:auto;display:block}
+.logos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px}
+.logo{align-items:center;text-align:center}
+.wm{font-family:var(--display);font-size:30px;letter-spacing:-.01em}
+.glowcard{position:relative;overflow:hidden}
+.glowcard .halo{position:absolute;inset:-40%;background:radial-gradient(circle at 70% 20%,rgba(79,209,139,.28),transparent 55%);animation:br 6s ease-in-out infinite alternate;pointer-events:none}
+@keyframes br{to{opacity:.5;transform:scale(1.05)}}
+.oq li{margin-bottom:10px;max-width:70ch}
+.splash{position:relative;cursor:pointer}
+.splash .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;font-size:15px;color:var(--text2);transition:opacity .6s}
+@media (prefers-reduced-motion:reduce){.glowcard .halo{animation:none}}
+</style>
+
+<div class="wrap">
+<header style="display:flex;flex-direction:column;gap:14px">
+ <span class="lbl">Trickle v10 · concept board</span>
+ <h1>Shape is how much.<br>Colour is what.</h1>
+ <p class="muted">Every rupee Trickle draws becomes a small shape from one six-step ladder. The same ₹100 triangle appears in your balance, a payment, a goal and a chart. Colour only ever says which pot the money belongs to.</p>
+ <div class="row" id="heroPile"></div>
+</header>
+
+<section id="s1">
+ <span class="lbl">1 · The ladder</span>
+ <h2>Six glyphs, one square cell</h2>
+ <p class="muted">Each glyph lives in a 24-unit cell with a 2-unit round-joined stroke in its own fill colour, which rounds every corner and gives all six the same edge weight. Sizes are set by optical area, not geometry: the triangle sits 1 unit low so it looks centred, the diamond runs to the edge because its area is small, and the ₹1000 circle is a coin (ring plus centre) so it never reads as a big ₹10 dot.</p>
+ <div class="card"><span class="lbl">Colour · large · 24px · 12px</span><div class="ladder" id="ladC"></div></div>
+ <div class="card"><span class="lbl">Black &amp; white mode</span><div class="ladder bw" id="ladB"></div>
+ <p class="faint" style="font-size:13px">In B&amp;W, shape still carries the amount. Categories switch to four brightness steps plus a text label next to every group.</p></div>
+ <div class="card"><span class="lbl">12px stress test · ₹6,350 in a list row</span>
+  <div class="row" id="tiny"></div><p class="faint" style="font-size:13px">Star, circle, diamond, triangle, square and dot stay distinct at 12px because each has a different silhouette class: points, ring, 4-corner, 3-corner, flat edges, small blob.</p></div>
+</section>
+
+<section id="s2">
+ <span class="lbl">2 · Rules</span>
+ <h2>How the shapes behave</h2>
+ <div class="rules">
+  <div class="card"><h3>Colour vs shape</h3><p class="muted">Shape = amount, always from the ladder. Colour = what: a category, Budget (bone), Savings (lime), New money (green). No shape ever changes meaning between screens.</p><div class="row" id="rCol"></div></div>
+  <div class="card"><h3>Amounts use mixed piles</h3><p class="muted">A single amount (balance, payment, goal, income) breaks down greedily into the biggest glyphs first and is always sorted star → dot. Tap a pile to see the exact ₹.</p><div class="row" id="rMix"></div></div>
+  <div class="card"><h3>Comparisons use one shape</h3><p class="muted">Charts that compare things draw every bar in one glyph, the chart's unit, chosen from the ladder so the biggest bar needs ≤ 40 glyphs. A key sits on top: "▲ = ₹100". Counting is honest.</p><div class="row" id="rCmp"></div></div>
+  <div class="card"><h3>Partial amounts</h3><p class="muted">Visuals round to the nearest ₹10. ₹37 draws 4 dots (₹40); ₹34 draws 3. Amounts under ₹5 draw one hollow dot so a payment is never invisible. Exact ₹ shows on tap and in text.</p><div class="row" id="rPart"></div></div>
+  <div class="card"><h3>Max glyph counts</h3><p class="muted">Mixed pile: ≤ 24 glyphs (greedy keeps a ₹9,990 pile at 17). Above ₹50,000 the pile shows stars only with a "+" count. Comparison chart: ≤ 40 per bar. Rows in lists: ≤ 8 glyphs at 12px.</p></div>
+  <div class="card"><h3>Not money? Plain dots</h3><p class="muted">Days, times, counts of buys and streaks use plain neutral dots with no ladder meaning, so a dot of colour never pretends to be ₹10.</p><div class="row" id="rDots"></div></div>
+ </div>
+</section>
+
+<section id="s3">
+ <span class="lbl">3 · Examples</span>
+ <h2>The system on real screens</h2>
+ <div class="grid2">
+  <div class="card"><span class="lbl">Balance</span><div class="big" data-t="bal">₹6,350</div><div id="exBal" tabindex="0" role="button" aria-label="Balance pile, tap for total"></div><span class="faint" style="font-size:13px">1 star · 1 circle · 3 triangles · 1 square, read left to right, biggest first. Tap the pile.</span></div>
+  <div class="card glowcard"><div class="halo"></div><span class="lbl" style="position:relative">Home · glow card</span>
+   <div style="position:relative;display:flex;flex-direction:column;gap:8px"><p class="muted">You're on pace. Safe to spend today</p><div class="big">₹420</div><div id="exGlow"></div><p class="faint" style="font-size:13px">12 days left · ₹4,950 in Budget</p></div></div>
+ </div>
+ <div class="grid2">
+  <div class="card"><div class="row" style="justify-content:space-between"><span class="lbl">Payment leaving Food</span><button class="btn" id="rpPay">Replay</button></div>
+   <div class="stagebox"><svg id="svPay" viewBox="0 0 360 220" role="img" aria-label="₹350 leaving the Food jar: 3 triangles and 1 square fly out to Swiggy"></svg></div>
+   <p class="faint" style="font-size:13px">₹350 at Swiggy = ▲▲▲■. The Food jar keeps ₹1,150.</p></div>
+  <div class="card"><div class="row" style="justify-content:space-between"><span class="lbl">Income arrives and splits</span><button class="btn" id="rpInc">Replay</button></div>
+   <div class="stagebox"><svg id="svInc" viewBox="0 0 360 220" role="img" aria-label="₹9,000 arrives and splits into Budget ₹6,000 and Savings ₹3,000"></svg></div>
+   <p class="faint" style="font-size:13px">₹9,000 from home: green new-money shapes recolour as they land. Budget gets ★◉, Savings gets ◉◉◉.</p></div>
+ </div>
+ <div class="grid3">
+  <div class="card"><span class="lbl">Goal · Laptop fund</span><div class="row" style="justify-content:space-between"><span class="num">₹4,200</span><span class="faint num">of ₹8,000</span></div><div id="exGoal"></div><p class="faint" style="font-size:13px">Saved shapes filled, the rest drawn as empty outlines of the same glyphs.</p></div>
+  <div class="card"><span class="lbl">This month · compare</span><div class="key" id="cmpKey"></div><div class="bars" id="exCmp"></div></div>
+  <div class="card"><span class="lbl">Repeat buys · Chai at Ramu's</span><div class="row" style="justify-content:space-between"><span class="num">18 times</span><span class="faint num">₹360 total</span></div><div id="exRep"></div><div id="exRepAmt"></div><p class="faint" style="font-size:13px">Top row: plain dots count visits. Bottom: the money, as a pile.</p></div>
+ </div>
+</section>
+
+<section id="s4">
+ <span class="lbl">4 · Logo &amp; first screen</span>
+ <h2>Shapes trickling into a jar</h2>
+ <div class="logos" id="logos"></div>
+ <div class="card"><div class="row" style="justify-content:space-between"><span class="lbl">Splash · doubles as the one-time legend</span><button class="btn" id="rpSplash">Tap to replay with sound</button></div>
+  <div class="stagebox splash" id="splashBox"><svg id="svSplash" viewBox="0 0 360 400" role="img" aria-label="Splash: star, coin, diamond, triangle, square, dot fall into the jar, each labelled with its value"></svg><div class="cap" id="splashCap">Each shape is an amount.</div></div>
+  <p class="faint" style="font-size:13px">Proposed notes (pentatonic, soft sine): star C4 262 Hz · coin E4 330 · diamond G4 392 · triangle A4 440 · square C5 523 · dot E5 659. Bigger money = lower, rounder note. Sound unlocks on first tap; reduced motion shows the final frame with labels and plays no fall.</p></div>
+</section>
+
+<section id="s5">
+ <span class="lbl">5 · Open questions</span>
+ <h2>Still to decide</h2>
+ <ol class="oq muted">
+  <li><b style="color:var(--text)">₹10 floor for students.</b> Most chai and auto spends are ₹10–₹40, so rows fill with dots. Should the ladder add a ₹20 step, or is "4 dots" fine because small spends should look small?</li>
+  <li><b style="color:var(--text)">Coin vs dot confusion at 12px.</b> The ring is 1.25px thick at 12px. On low-DPI Android screens do we bump list glyphs to 14px minimum?</li>
+  <li><b style="color:var(--text)">Rounding a pile vs the jar.</b> If visuals round to ₹10, a jar at ₹4 shows one hollow dot but three ₹4 jars would show three dots (₹30 implied). Accept, or show "under ₹10" as text only?</li>
+  <li><b style="color:var(--text)">Per-shape notes during big piles.</b> A ₹9,990 income plays 17 notes. Cap at the first 6 and then a single chord, or one note per denomination class?</li>
+ </ol>
+</section>
+</div>
+
+<script>
+var LAD=[{v:5000,k:'star',n:'Star'},{v:1000,k:'coin',n:'Circle'},{v:500,k:'dia',n:'Diamond'},{v:100,k:'tri',n:'Triangle'},{v:50,k:'sq',n:'Square'},{v:10,k:'dot',n:'Dot'}];
+var C={food:'#DC6A30',travel:'#3F8CE6',fun:'#D55181',ess:'#9085E9',budget:'#EDE9DC',save:'#C6F432',newm:'#4FD18B',ink:'#0B0B0C',slot:'#4a4b50'};
+function star(){var p=[];for(var i=0;i<10;i++){var r=i%2?4.7:10,a=-Math.PI/2+i*Math.PI/5;p.push((12+r*Math.cos(a)).toFixed(2)+','+(12.6+r*Math.sin(a)).toFixed(2));}return p.join(' ');}
+var STAR=star();
+function inner(k,c,hollow){var f=hollow?'none':c,s='stroke="'+c+'" stroke-width="2" stroke-linejoin="round" fill="'+f+'"';
+ switch(k){case 'dot':return '<circle cx="12" cy="12" r="'+(hollow?4:4.6)+'" '+s+'/>';
+ case 'sq':return '<rect x="5" y="5" width="14" height="14" rx="2.2" '+s+'/>';
+ case 'tri':return '<polygon points="12,4.5 20.5,19.5 3.5,19.5" '+s+'/>';
+ case 'dia':return '<polygon points="12,2.8 21.2,12 12,21.2 2.8,12" '+s+'/>';
+ case 'coin':return hollow?'<circle cx="12" cy="12" r="9" '+s+'/>':'<circle cx="12" cy="12" r="8.6" fill="none" stroke="'+c+'" stroke-width="2.8"/><circle cx="12" cy="12" r="4" fill="'+c+'"/>';
+ case 'star':return '<polygon points="'+STAR+'" '+s+'/>';
+ case 'plain':return '<circle cx="12" cy="12" r="4" fill="'+c+'"/>';}}
+function G(k,c,sz,hollow){return '<svg class="gl" width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" aria-hidden="true">'+inner(k,c,hollow)+'</svg>';}
+function round10(v){return Math.round(v/10)*10;}
+function breakdown(v){var r=round10(v),o=[];if(v>0&&r===0)return [{k:'dot',v:10,hollow:1}];LAD.forEach(function(l){while(r>=l.v){o.push(l);r-=l.v;}});return o;}
+function pile(v,c,sz,cols){var b=breakdown(v);return '<div class="pile" style="--s:'+sz+'px;--c:'+(cols||Math.min(b.length,12))+';--g:'+Math.round(sz*.22)+'px">'+b.map(function(l){return G(l.k,c,sz,l.hollow)}).join('')+'</div>';}
+function fmt(v){return '₹'+v.toLocaleString('en-IN');}
+function $(id){return document.getElementById(id);}
+var RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// hero
+$('heroPile').innerHTML=LAD.map(function(l,i){return G(l.k,[C.food,C.travel,C.fun,C.ess,C.budget,C.save][i],32)}).join('');
+// ladder
+function ladder(el){$(el).innerHTML=LAD.map(function(l){return '<div class="rung">'+G(l.k,C.save,56)+'<div class="sz">'+G(l.k,C.save,24)+G(l.k,C.save,12)+'</div><span class="v">'+fmt(l.v)+'</span><span class="faint" style="font-size:12px">'+l.n+'</span></div>'}).join('');}
+ladder('ladC');
+$('ladB').innerHTML=LAD.map(function(l){return '<div class="rung">'+G(l.k,'#F4F4F2',56)+'<div class="sz">'+G(l.k,'#F4F4F2',24)+G(l.k,'#F4F4F2',12)+'</div><span class="v">'+fmt(l.v)+'</span></div>'}).join('');
+$('tiny').innerHTML='<span class="num">₹6,350</span>'+pile(6350,C.budget,12)+'<span style="width:12px"></span><span class="faint">B&amp;W:</span><span class="bw">'+pile(6350,'#cfcfcf',12)+'</span>';
+// rules
+$('rCol').innerHTML=[['food','Food'],['travel','Travel'],['budget','Budget'],['save','Savings'],['newm','New']].map(function(x){return '<span class="key">'+G('tri',C[x[0]],18)+x[1]+'</span>'}).join('');
+$('rMix').innerHTML=pile(1760,C.food,20)+'<span class="tip">₹1,760</span>';
+$('rCmp').innerHTML='<span class="key">'+G('tri',C.ess,16)+'= ₹100</span>'+Array(7).fill(G('tri',C.ess,16)).join('');
+$('rPart').innerHTML='<span class="num">₹37</span>'+pile(37,C.fun,18)+'<span class="num" style="margin-left:10px">₹4</span>'+pile(4,C.fun,18);
+$('rDots').innerHTML='<span class="faint" style="font-size:13px">7-day streak</span>'+Array(7).fill(G('plain','#7C7D82',14)).join('');
+// examples
+$('exBal').innerHTML=pile(6350,C.budget,26);
+$('exBal').onclick=function(){var t=this.querySelector('.tip');if(t)t.remove();else this.insertAdjacentHTML('beforeend','<span class="tip" style="margin-top:8px">'+fmt(6350)+' exactly</span>');};
+$('exBal').onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();this.onclick();}};
+$('exGlow').innerHTML=pile(420,C.newm,22);
+// goal: filled 4200, outline remainder 3800
+(function(){var f=breakdown(4200),e=breakdown(3800);$('exGoal').innerHTML='<div class="pile" style="--s:22px;--c:8;--g:5px">'+f.map(function(l){return G(l.k,C.save,22)}).join('')+e.map(function(l){return G(l.k,C.slot,22,1)}).join('')+'</div>';})();
+// compare: Food 2400, Travel 1100, Snacks 650 → unit 100 (max 24)
+(function(){var d=[['Food',2400,'food'],['Travel',1100,'travel'],['Snacks',650,'fun']],unit=100;
+ $('cmpKey').innerHTML=G('tri','#A9AAAD',14)+' = ₹100 · every bar in triangles';
+ $('exCmp').innerHTML=d.map(function(x){var n=Math.round(x[1]/unit);return '<div class="b"><span>'+x[0]+'</span><div class="pile" style="--s:12px;--c:10;--g:2px">'+Array(n).fill(G('tri',C[x[2]],12)).join('')+'</div><span class="num" style="color:var(--text)">'+fmt(x[1])+'</span></div>'}).join('');})();
+$('exRep').innerHTML='<div class="pile" style="--s:12px;--c:9;--g:4px">'+Array(18).fill(G('plain','#A9AAAD',12)).join('')+'</div>';
+$('exRepAmt').innerHTML=pile(360,C.food,20);
+
+// ---------- animation helpers ----------
+var NS='http://www.w3.org/2000/svg';
+function jar(x,y,w,h,label,col){return '<g>'+jarPath(x,y,w,h,col,'#141414').replace('stroke-width="4"','stroke-width="2"')+'<text x="'+(x+w/2)+'" y="'+(y+h+22)+'" text-anchor="middle" fill="#A9AAAD" font-size="12" font-family="DM Sans,sans-serif" font-weight="700">'+label+'</text></g>';}
+function glyphG(k,c,s){var g=document.createElementNS(NS,'g');g.innerHTML='<g transform="scale('+(s/24)+')">'+inner(k,c)+'</g>';return g;}
+function fly(g,from,to,delay,dur,endCol,after){g.setAttribute('transform','translate('+to[0]+','+to[1]+')');if(RM){if(after)after();return;}
+ var a=g.animate([{transform:'translate('+from[0]+'px,'+from[1]+'px)',opacity:from[2]==null?1:from[2]},{transform:'translate('+to[0]+'px,'+to[1]+'px)',opacity:to[2]==null?1:to[2]}],{duration:dur,delay:delay,easing:'cubic-bezier(.5,0,.3,1)',fill:'backwards'});
+ a.onfinish=function(){g.style.opacity=to[2]==null?1:to[2];if(after)after();};}
+
+// payment
+function runPay(){var sv=$('svPay');sv.innerHTML=jar(30,40,130,140,'FOOD · ₹1,500 → ₹1,150',C.food)+'<text x="300" y="112" text-anchor="middle" fill="#F4F4F2" font-size="15" font-weight="700" font-family="DM Sans,sans-serif">Swiggy</text><text x="300" y="132" text-anchor="middle" fill="#A9AAAD" font-size="13" font-family="DM Sans,sans-serif">− ₹350</text>';
+ var stay=breakdown(1150),go=breakdown(350),all=stay.concat(go).sort(function(a,b){return b.v-a.v}),s=20;
+ // jar pile layout (full 1500 before)
+ var full=breakdown(1500);full.forEach(function(l,i){var g=glyphG(l.k,C.food,s);var x=44+(i%4)*26,y=150-Math.floor(i/4)*26;g.setAttribute('transform','translate('+x+','+y+')');sv.appendChild(g);
+  // 1500 = coin, dia; leaving: take 350 as 3 tri +1 sq — show break: diamond breaks into change
+ });
+ // For honesty: 1500 → coin+dia. paying 350 breaks the diamond (500) into 150 change: tri + sq stay.
+ var gs=sv.querySelectorAll(':scope > g:not(:first-child)');var dia=gs[1];
+ if(!RM){dia.animate([{opacity:1},{opacity:0}],{duration:300,delay:500,fill:'forwards'});}else dia.style.opacity=0;
+ var leave=['tri','tri','tri','sq'],change=['tri','sq'];
+ leave.forEach(function(k,i){var g=glyphG(k,C.food,s);sv.appendChild(g);fly(g,[70,124],[250+i*26,150,0.9],800+i*140,900,null,null);});
+ change.forEach(function(k,i){var g=glyphG(k,C.food,s);sv.appendChild(g);fly(g,[70,124,0],[70+i*26,124],900,500);});
+ if(RM){dia.style.opacity=0;}
+}
+// income
+function runInc(){var sv=$('svInc');sv.innerHTML='<text x="180" y="24" text-anchor="middle" fill="#4FD18B" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">+ ₹9,000 arrived</text>'+jar(30,90,130,100,'BUDGET ₹6,000',C.budget)+jar(200,90,130,100,'SAVINGS ₹3,000',C.save);
+ var toB=['star','coin'],toS=['coin','coin','coin'],s=24;
+ function drop(list,x0,col,d0){list.forEach(function(k,i){var g=glyphG(k,C.newm,s);sv.appendChild(g);var sx=108+ (d0?1:0)*0+i*30+(d0?60:0),tx=x0+i*30;
+  fly(g,[120+(d0?i+2:i)*26,40],[tx,150],d0*1+i*180+300,1000,null,function(){g.innerHTML='<g transform="scale('+(s/24)+')">'+inner(k,col)+'</g>';note(k);});});}
+ // start positions shown in a row
+ drop(toB,50,C.budget,0);drop(toS,215,C.save,500);}
+// sound
+var AC=null,soundOn=false;var FR={star:262,coin:330,dia:392,tri:440,sq:523,dot:659};
+function unlock(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}if(AC&&AC.state!=='running')AC.resume();soundOn=true;}
+function note(k){if(!soundOn||!AC||AC.state!=='running')return;var t=AC.currentTime,o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.value=FR[k]||440;g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.08,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+.5);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+.55);}
+
+// logos
+function jarPath(x,y,w,h,col,fill){var r=Math.min(18,w/4);return '<path d="M'+x+' '+(y+8)+' Q'+x+' '+y+' '+(x+8)+' '+y+' H'+(x+w-8)+' Q'+(x+w)+' '+y+' '+(x+w)+' '+(y+8)+' V'+(y+h-r)+' Q'+(x+w)+' '+(y+h)+' '+(x+w-r)+' '+(y+h)+' H'+(x+r)+' Q'+x+' '+(y+h)+' '+x+' '+(y+h-r)+' Z" fill="'+(fill||'none')+'" stroke="'+col+'" stroke-width="4" stroke-linejoin="round"/>';}
+function gAt(k,c,x,y,s){return '<g transform="translate('+x+','+y+') scale('+(s/24)+')">'+inner(k,c)+'</g>';}
+var LOGOS=[
+ ['A · Falling trail','Star, diamond and dot fall in a diagonal line into an open jar. Reads as motion, works as the splash end frame.',
+  '<svg viewBox="0 0 120 120" width="120" height="120">'+jarPath(24,52,72,60,'#EDE9DC')+gAt('star',C.save,62,4,20)+gAt('dia',C.travel,50,26,15)+gAt('dot',C.food,48,44,12)+gAt('coin',C.save,34,82,18)+gAt('tri',C.fun,58,86,16)+'</svg>'],
+ ['B · Filled jar','A solid lime jar with shapes knocked out as negative space, one dot dripping in from above. Strongest at app-icon size.',
+  '<svg viewBox="0 0 120 120" width="120" height="120">'+jarPath(24,40,72,72,C.save,C.save)+gAt('star','#0B0B0C',34,70,20)+gAt('dia','#0B0B0C',58,74,16)+gAt('tri','#0B0B0C',46,50,16)+gAt('dot',C.save,52,8,14)+gAt('dot',C.save,54,24,10)+'</svg>'],
+ ['C · Jar as letter','The jar outline doubles as a lowercase "t" stem; one star sits in the mouth. Pairs as a monogram next to the wordmark.',
+  '<svg viewBox="0 0 120 120" width="120" height="120"><path d="M50 14 v70 q0 20 20 20 h8" fill="none" stroke="#EDE9DC" stroke-width="9" stroke-linecap="round"/><path d="M34 40 h40" stroke="#EDE9DC" stroke-width="9" stroke-linecap="round"/>'+gAt('star',C.save,70,58,30)+gAt('dot',C.food,82,30,12)+'</svg>']];
+$('logos').innerHTML=LOGOS.map(function(l){return '<div class="card logo">'+l[2]+'<div class="wm">Trickle</div><h3>'+l[0]+'</h3><p class="faint" style="font-size:13px">'+l[1]+'</p></div>'}).join('');
+
+// splash
+function runSplash(){var sv=$('svSplash');sv.innerHTML=jarPath(110,190,140,150,'#EDE9DC','#141414');var cap=$('splashCap');
+ var seq=LAD.slice(),cols=[C.save,C.save,C.travel,C.fun,C.food,C.ess],slots=[[130,300],[165,300],[200,300],[140,268],[175,268],[210,268]];
+ seq.forEach(function(l,i){var g=glyphG(l.k,cols[i],30);sv.appendChild(g);var lab=document.createElementNS(NS,'text');lab.setAttribute('x',slots[i][0]+15);lab.setAttribute('y',slots[i][1]-(i<3?-44:62));lab.setAttribute('text-anchor','middle');lab.setAttribute('fill','#A9AAAD');lab.setAttribute('font-size','11');lab.setAttribute('font-family','DM Sans,sans-serif');lab.textContent='₹'+l.v.toLocaleString('en-IN');
+  var t=document.createElementNS(NS,'text');t.setAttribute('x',180);t.setAttribute('y',90);t.setAttribute('text-anchor','middle');t.setAttribute('fill','#F4F4F2');t.setAttribute('font-size','20');t.setAttribute('font-weight','700');t.setAttribute('font-family','DM Sans,sans-serif');t.textContent='₹'+l.v.toLocaleString('en-IN');t.style.opacity=0;sv.appendChild(t);
+  if(RM){t.remove();}
+  else{t.animate([{opacity:0},{opacity:1,offset:.2},{opacity:1,offset:.7},{opacity:0}],{duration:600,delay:i*520});}
+  fly(g,[165,20],[slots[i][0],slots[i][1]],i*520,650,null,function(){note(l.k);});
+ });
+ cap.style.opacity=1;}
+
+$('rpPay').onclick=function(){unlock();runPay();};
+$('rpInc').onclick=function(){unlock();runInc();};
+$('rpSplash').onclick=function(){unlock();runSplash();};
+$('splashBox').onclick=function(){unlock();runSplash();};
+runPay();runInc();runSplash();
+</script>

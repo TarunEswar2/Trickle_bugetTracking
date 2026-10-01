@@ -1,0 +1,588 @@
+<title>Trickle v14 — Viz 1: Budget gauge</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a design board. One column of sections A–G; each section is a question, a gallery of
+   dark phone frames (rows = options, columns = students), then what the drawing showed. */
+:root{
+  --bg:#f0f1ec; --surface:#fafaf7; --ink:#14181b; --ink2:#444c54; --muted:#727a83; --line:#d6d9d1;
+  --accent:#0d7a64; --accent-soft:#d9ece5; --amber:#a9680f; --tile:#0b0d10;
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; --tile:#07090b; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; --tile:#07090b; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px;padding-block:40px 80px}
+@media (max-width:600px){.wrap{padding-inline:16px;padding-block:24px 56px}}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.12;margin:0}
+h1{font-size:clamp(30px,5vw,50px);font-weight:700;letter-spacing:-.02em}
+h2{font-size:clamp(23px,3vw,31px);font-weight:700;letter-spacing:-.01em}
+h3{font-size:18px;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lead{font-size:18px;color:var(--ink2);max-width:62ch}
+.stack{display:flex;flex-direction:column;gap:14px}
+header.top{display:flex;flex-direction:column;gap:16px;padding-bottom:28px}
+section{display:flex;flex-direction:column;gap:18px;padding-block:40px;border-top:1px solid var(--line)}
+.sec-h{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.sec-h .k{font-family:var(--display);font-weight:700;font-size:clamp(23px,3vw,31px);color:var(--accent)}
+.q{color:var(--ink2)}
+ul.plain{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.logged{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.logged div{border-top:2px solid var(--ink);padding-top:10px}
+.logged b{display:block;font-family:var(--display);font-size:17px;margin-bottom:4px}
+.logged span{color:var(--ink2);font-size:15px}
+
+/* refs */
+.refs{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px}
+.ref{display:grid;grid-template-columns:150px minmax(0,1fr);gap:18px;align-items:start}
+.ref img{width:150px;border-radius:10px;display:block;border:1px solid var(--line)}
+.ref h3{margin-bottom:8px}
+.ref .tk{font-size:14.5px;color:var(--ink2)}
+.ref .tk b{color:var(--ink)}
+@media (max-width:420px){.ref{grid-template-columns:110px minmax(0,1fr)}.ref img{width:110px}}
+
+/* pool table + generic tables */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
+td.w{white-space:normal;min-width:220px}
+tr:last-child td{border-bottom:0}
+th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right}
+tr.pick td{background:var(--accent-soft)}
+tr.grp td{font-family:var(--display);font-weight:700;background:transparent;padding-top:16px}
+
+/* switcher */
+.sw{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:-24px;padding:10px 24px}
+@media (max-width:600px){.sw{margin-inline:-16px;padding-inline:16px}}
+.sw-in{display:flex;gap:8px;align-items:center;overflow-x:auto;scrollbar-width:none}
+.sw-in::-webkit-scrollbar{display:none}
+.sw .lbl{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap;margin-right:4px}
+.chip{font:inherit;font-size:14.5px;font-weight:600;white-space:nowrap;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer}
+.chip:hover{border-color:var(--ink2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip:focus-visible,.btn:focus-visible,.scroller:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.who{font-size:14.5px;color:var(--ink2);min-height:1.5em;padding-top:6px}
+@media (max-width:600px){.who{display:none}}
+
+/* galleries */
+.opt{display:flex;flex-direction:column;gap:10px}
+.opt>h4{margin:0;font-size:15.5px;font-weight:600;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.opt>h4 b{font-family:var(--display);background:var(--ink);color:var(--bg);border-radius:5px;padding:1px 7px;font-size:13.5px}
+.opt>h4 span{color:var(--muted);font-weight:400}
+.gal{display:flex;flex-direction:column;gap:26px}
+.row{display:grid;grid-template-columns:repeat(6,minmax(170px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.row.four{grid-template-columns:repeat(4,minmax(200px,1fr))}
+.row.single{grid-template-columns:repeat(auto-fill,minmax(230px,300px))}
+.fg{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fg figcaption{font-size:13px;color:var(--muted);line-height:1.3}
+.fg figcaption b{color:var(--ink);font-weight:600}
+svg.ph{width:100%;height:auto;display:block;font-family:var(--body)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px 28px}
+.note{border-top:1px solid var(--line);padding-top:10px;font-size:15px;color:var(--ink2);min-width:0}
+.note b.t{display:block;color:var(--ink);font-family:var(--display);font-size:16.5px;margin-bottom:3px}
+.lean{background:var(--accent-soft);border-radius:10px;padding:12px 16px;font-size:15.5px;max-width:none}
+.lean b{font-family:var(--display)}
+.flag{border-left:3px solid var(--amber);padding:2px 0 2px 14px;font-size:15.5px;color:var(--ink2);max-width:74ch}
+.flag b{color:var(--ink)}
+.zoom{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.zoom figure{margin:0;display:flex;flex-direction:column;gap:6px}
+.zoom svg{width:100%;height:auto;border-radius:10px;display:block;background:var(--tile)}
+.zoom figcaption{font-size:13.5px;color:var(--ink2)}
+.frames{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:10px;overflow-x:auto;padding-bottom:6px}
+.frames figure{margin:0;display:flex;flex-direction:column;gap:6px}
+.frames svg{width:100%;height:auto;border-radius:10px;background:var(--tile);display:block}
+.frames figcaption{font-size:12.5px;color:var(--muted);line-height:1.3}
+.live{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:700px){.live{grid-template-columns:minmax(0,1fr)}.live>:first-child{max-width:300px}}
+.btn{font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:9px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.scroller{aspect-ratio:390/844;width:100%;max-width:300px;overflow-y:auto;scroll-snap-type:y mandatory;border-radius:34px;border:2px solid #2b3038;background:#0b0d10;scrollbar-width:none}
+.scroller::-webkit-scrollbar{display:none}
+.scroller svg{scroll-snap-align:start;display:block;width:100%;height:auto;font-family:var(--body)}
+.decide{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px}
+.dq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.dq h3{font-size:17px}
+.dq ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:5px;font-size:15px;color:var(--ink2)}
+.dq ol{list-style:upper-alpha}
+.dq li.s{color:var(--ink)}
+.dq li.s::after{content:" suggested";font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-left:4px}
+.small{font-size:13.5px;color:var(--muted)}
+
+/* motion demo */
+#demoLiq{transition:transform 1.1s cubic-bezier(.34,1.4,.5,1)}
+#demoWave{transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(.3)}
+#demoWaveX{transform:translateX(0)}
+.slosh #demoWave{animation:settle 2.2s cubic-bezier(.2,.7,.2,1) both}
+.slosh #demoWaveX{animation:drift 2.2s cubic-bezier(.2,.7,.2,1) both}
+#demoGone{opacity:0}
+.slosh #demoGone{animation:gone 1.5s ease-out both}
+@keyframes settle{0%{transform:scaleY(2.6)}35%{transform:scaleY(1.5)}100%{transform:scaleY(.3)}}
+@keyframes drift{0%{transform:translateX(-160px)}100%{transform:translateX(0)}}
+@keyframes gone{0%{opacity:.55}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){#demoLiq{transition:none}.slosh #demoWave,.slosh #demoWaveX,.slosh #demoGone{animation:none}}
+</style>
+
+<div id="defs"></div>
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">Trickle v14 · visualisation 1 of 11 · options only, Tarun decides</div>
+  <h1>The budget gauge</h1>
+  <p class="lead">A 10×10 grid of rounded boxes that fills from the bottom like liquid. This board draws the open questions around it (what the liquid means, the scale, many categories, the Home gauge, the states, what a tap reveals, how it moves) for six kinds of student, not one.</p>
+  <div class="logged">
+    <div><b>Always 10×10, scale always shown</b><span>Budgets are a grid of 100 rounded boxes filling from the bottom. The scale is written every time: 1 box = ₹X. Logged 2 Oct.</span></div>
+    <div><b>One visualisation per screen</b><span>The user never sees more than one at a time. Scroll down for the next. Logged 2 Oct.</span></div>
+    <div><b>Two reference images</b><span>Apple Fitness rings and a waffle-grid slide, given as inspiration for this step. Logged 2 Oct.</span></div>
+  </div>
+</header>
+
+<section>
+  <div class="sec-h"><h2>Your references, and what is taken from each</h2></div>
+  <div class="refs">
+    <div class="ref"><img alt="Dark slide with three rounded-square waffle grids filled from the bottom in green, a big percentage and one line under each" src="data:image/jpeg;base64,{{REF2}}">
+      <div><h3>Waffle grids</h3>
+      <div class="tk stack"><span><b>Taken:</b> rounded boxes, filled from the bottom, quiet grey for the empty ones, one short line of words under the grid, dark ground, a single fill colour.</span><span><b>Changed:</b> the slide's grids are 8 wide with a ragged top row. Trickle's is always 10×10, and the top edge is the thing section B has to settle.</span><span><b>Left out:</b> the big percentage. Home shows no number, and a category shows words first.</span></div></div></div>
+    <div class="ref"><img alt="Apple Fitness screen with three nested activity rings, a week strip of mini rings per day, and a 750/500 stat over an hourly bar strip" src="data:image/jpeg;base64,{{REF1}}">
+      <div><h3>Apple Fitness rings</h3>
+      <div class="tk stack"><span><b>Tried:</b> a ring as the overall Home gauge (D2), nested rings for the top three categories (C4), the week strip of day minis (D3, D4).</span><span><b>Taken into the tap layer:</b> the "750/500" pattern, one exact figure against its target, becomes "₹140 left of ₹400" after a tap (F2).</span><span><b>Caution:</b> that screen shows a strip, three rings, a stat and a bar chart at once. It is the opposite of one visualisation per screen, and its rings rely on three memorised colours, which Trickle has already rejected for categories.</span></div></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>The student pool</h2></div>
+  <p class="q">Every option below is drawn for all six. They differ in money, number of categories, period, how long they have used the app, and where in the period they are.</p>
+  <div class="tw"><table id="poolT"></table></div>
+</section>
+
+<div class="sw" role="group" aria-label="Student switcher">
+  <div class="sw-in" id="sw"></div>
+  <div class="who" id="who"></div>
+</div>
+
+<section id="A">
+  <div class="sec-h"><span class="k">A</span><h2>What does the liquid mean?</h2></div>
+  <p class="q">Money left, which drains down as you spend, or money spent, which rises. Same students, same numbers, drawn both ways.</p>
+  <div class="gal" id="galA"></div>
+  <div class="notes">
+    <div class="note"><b class="t">A1 Left</b>The start of a period is a full, bright grid, and the worst state is a dark, quiet one. Nothing lights up when things go badly. A payment takes boxes away, which is the loss the pay screen (visualisation 2) wants to make felt. It matches a fuel gauge and the question students already ask, "how much do I have".</div>
+    <div class="note"><b class="t">A2 Spent</b>Gautham on Tuesday is a nearly blank screen at his best moment. Vaishak, almost out of money, gets the fullest and brightest grid of the six. A payment adds boxes, so paying looks like gaining. Going over would mean more liquid than the grid holds.</div>
+    <div class="note"><b class="t">Where rising does belong</b>Small buys adding up (visualisation 6) is an accumulation, and rising suits that. Keeping the budget gauge as "left" and accumulation as its own form avoids one shape meaning two opposite things.</div>
+  </div>
+  <p class="lean"><b>Leaning A1, money left.</b> It is the gentler of the two (the bad state is the quiet one) and it carries friction (boxes leave when you pay).</p>
+</section>
+
+<section id="B">
+  <div class="sec-h"><span class="k">B</span><h2>The scale, and the top edge</h2></div>
+  <p class="q">With 100 boxes always, one box is the budget divided by 100. That is ₹60 for a ₹6,000 budget and ₹6.52 for a ₹652 one. The alternative rounds the box to a clean value and leaves the unused boxes dotted. Separately: is the top of the liquid an even level across the row, or does it fill box by box?</p>
+  <div class="gal" id="galB"></div>
+  <h3>Top edge, close up</h3>
+  <div class="zoom" id="zoomB"></div>
+  <h3>What one box is worth, across the pool</h3>
+  <div class="tw"><table id="scaleT"></table></div>
+  <div class="notes">
+    <div class="note"><b class="t">B1 Exact, budget ÷ 100</b>The grid always is the budget: full means full, for everyone. The cost is fussy values (₹6.52, ₹9.20, 68 paise for a ₹68 subscription budget). Nobody counts 100 boxes, so the label gives a sense of size, not arithmetic, and an odd value does little harm.</div>
+    <div class="note"><b class="t">B2 Round box, unused boxes dotted</b>Clean values, but Gautham's untouched ₹652 looks two-thirds full and Nishad's ₹6,000 loses 40 boxes. There are now two kinds of empty box (spent, and never there), and the whole is no longer the grid. ₹652 at ₹10 a box also needs 65.2 boxes, so the 66th is only a fifth real.</div>
+    <div class="note"><b class="t">A third way: round the budget, not the box</b>If budgets are set in steps of ₹100, one box is always a whole number of rupees and B1 never looks fussy. Odd budgets then only appear when the app derives one, and those can read "1 box is about ₹6.50".</div>
+    <div class="note"><b class="t">B3 Box by box</b>One partly filled box at most, with a liquid level inside it. A ₹20 chai at ₹4 a box is exactly five boxes leaving, which lines up with the pay screen's crumbling squares. The even level (B1) is the more literal liquid, but it leaves ten half-filled boxes on the top row and the scale can no longer be checked by eye.</div>
+  </div>
+  <p class="flag"><b>Found while drawing:</b> at ₹25,000 one box is ₹250, so a ₹20 chai moves the monthly gauge by less than a tenth of a box. Honest, but there is no visible drop and no friction at that level. The category gauge (₹60 a box for food) and the week gauge do show it.</p>
+  <p class="lean"><b>Leaning B1 with budgets set in ₹100 steps, written "1 box = ₹X" beside a small box glyph, filled box by box (B3).</b> The fill question is close: the even level scores one point lower only because it cannot be checked against the scale.</p>
+</section>
+
+<section id="C">
+  <div class="sec-h"><span class="k">C</span><h2>Many categories: 2, 3, 4, 7, 12, 18</h2></div>
+  <p class="q">Four ways to get from "all my categories" to one gauge, each tested against one visualisation per screen and against Harsh's 18.</p>
+  <div class="gal" id="galC"></div>
+  <div class="live" id="liveC"></div>
+  <div class="notes">
+    <div class="note"><b class="t">C1 One grid per screen, snap scroll</b>The purest reading of the rule, and perfect for Vaishak, Gautham and Tarun (2 to 4 screens). At 18 it is 17 swipes to reach the last one and there is no way to find Gym except by scrolling past everything.</div>
+    <div class="note"><b class="t">C2a Index with tiny bars</b>Fast to scan, but 18 small bars side by side are 18 small gauges, in a second form. This is more than one visualisation on a screen, and it invites comparing categories with different budgets by bar length.</div>
+    <div class="note"><b class="t">C2b Index with words only</b>Names and one or two words ("nearly empty", "most left"). It is a list, not a chart, so the rule holds. Tap opens the full grid; swiping inside moves to the next. Works the same at 2 and at 18, and custom names (Gym, Bike EMI, Gifts) are as clear as defaults.</div>
+    <div class="note"><b class="t">C3 One grid, a band per category</b>Readable at 2 to 4. At 7 half the bands are too thin to name, at 12 and 18 almost all are. It needs a way to tell bands apart (two alternating tones here, since colour-coded categories were rejected) and it cannot show a category that has gone over: Harsh's Eating out simply disappears.</div>
+    <div class="note"><b class="t">C4 Nested rings, top 3 + others</b>A second form for the same information, so "grid = budget" stops being consistent. Without three memorised colours the rings need a legend to say which is which. "Others" hides 15 of Harsh's 18, including the ones he made himself.</div>
+  </div>
+  <p class="flag"><b>Found while drawing:</b> rent, an EMI, a gym fee or a phone plan go from full to empty in a single payment. Sorted "emptiest first" they sit at the top looking like trouble when they are simply paid. They are drawn here with the word "paid" and sorted last. Whether fixed bills get a gauge at all may belong to visualisation 8 (subscriptions coming up).</p>
+  <p class="lean"><b>Leaning C2b into C1:</b> a words-only index, tap for the grid, snap scroll between grids. With four categories or fewer the index can be skipped and the app opens straight on the first grid.</p>
+</section>
+
+<section id="D">
+  <div class="sec-h"><span class="k">D</span><h2>The overall gauge on Home</h2></div>
+  <p class="q">One sentence and one gauge, no ₹. Grid or ring, each with and without a week strip of day minis.</p>
+  <div class="gal" id="galD"></div>
+  <div class="notes">
+    <div class="note"><b class="t">D1 Grid</b>The same form as every category screen, so it is learned once. The sentence does the reading; the grid backs it up.</div>
+    <div class="note"><b class="t">D2 Ring</b>Reads about as fast and looks friendlier, but it is a second form for the same idea, and a ring has no boxes, so the logged rule "the scale is always shown" has nothing to attach to.</div>
+    <div class="note"><b class="t">D3 / D4 With the week strip</b>Seven minis plus the main gauge is eight gauges on one screen. It breaks the rule as written, and the minis are too small to read as levels at phone size. As plain day letters with today marked, the strip is navigation and does not count. As a picture of the week day by day, it is its own visualisation, one scroll down (it overlaps visualisation 9, this week vs last).</div>
+  </div>
+  <p class="flag"><b>Found while drawing, two conflicts:</b> (1) "the scale is always shown" meets "no ₹ on Home". D1 writes "1 box = 1% of this week" as a stand-in; the alternatives are to show the ₹ scale anyway or to reveal it on tap. (2) Home is "this week", but Nishad, Harsh and Vaishak run on a month or on irregular money. Their week has to be worked out from what is left, and it can disagree with the month: Vaishak's month is nearly empty while his week reads "most of it left".</p>
+  <p class="lean"><b>Leaning D1, grid, with no day strip on Home.</b> The week day by day becomes the next screen down.</p>
+</section>
+
+<section id="E">
+  <div class="sec-h"><span class="k">E</span><h2>States</h2></div>
+  <p class="q">Full, half, nearly empty, empty, three ways to draw "gone over", and last week's level as a ghost line. Each state is shown on the student it happens to; pick one student above to see all eight on the same budget.</p>
+  <div class="gal" id="galE"></div>
+  <div class="notes">
+    <div class="note"><b class="t">Empty</b>A dim grid and the word "empty". No red, no warning icon, no number. People stop looking at money they expect to be bad (the ostrich effect), so the empty screen has to be one a student is willing to open again tomorrow.</div>
+    <div class="note"><b class="t">Gone over, E5 boxes below the floor</b>With "left", going over is going below zero, so the extra sits under the grid as hatched boxes. It shows how far, but only for small overs: Harsh's ₹3,500 dinner on a ₹2,000 budget is 95 boxes under, so it has to be capped and the drawing stops being exact.</div>
+    <div class="note"><b class="t">Gone over, E6 amber floor line</b>The grid is empty and its floor turns amber, with the words "gone over". Works for any size, stays calm, and the amount waits for the tap. It says less at a glance.</div>
+    <div class="note"><b class="t">Gone over, E7 hatched inside the grid</b>Fills the grid from the top with "owed" boxes. It looks busy, reads as a second liquid, and breaks at more than 100%.</div>
+    <div class="note"><b class="t">E8 Ghost line</b>A dashed line where the level was at this point last week. Useful, but it is a second mark to decode on the glance layer. It may fit better after the tap, or be left to visualisation 9.</div>
+  </div>
+  <p class="lean"><b>Leaning E6 at a glance (amber floor line and words), with the amount on tap,</b> and the ghost line on the tap layer, not the glance.</p>
+</section>
+
+<section id="F">
+  <div class="sec-h"><span class="k">F</span><h2>Progressive disclosure</h2></div>
+  <p class="q">Glance, then tap, then detail. Rupees appear only after the first tap.</p>
+  <div class="gal" id="galF"></div>
+  <div class="notes">
+    <div class="note"><b class="t">F1 Glance</b>Grid, name, words, scale. No amount.</div>
+    <div class="note"><b class="t">F2 Tap</b>The exact figure against the budget (the Apple "750/500" pattern), and a pace: what that is per day for the days left. The grid does not move, so the number is read against the picture.</div>
+    <div class="note"><b class="t">F3 Detail</b>The grid shrinks to a corner and the transactions take the screen. A list is not a second visualisation.</div>
+  </div>
+  <p class="flag"><b>Found while drawing:</b> the per-day pace is kind when there is money (Tarun, "about ₹35 a day") and bleak when there is not (Yash, "about ₹30 a day" for a weekend). It may need to switch to words below some level.</p>
+</section>
+
+<section id="G">
+  <div class="sec-h"><span class="k">G</span><h2>Motion</h2></div>
+  <p class="q">Two moments: the liquid settling when the screen opens, and the level dropping when a payment lands.</p>
+  <div class="live">
+    <div id="demoHost"></div>
+    <div class="stack">
+      <div class="btns"><button class="btn" id="payBtn" type="button">Pay</button><button class="btn ghost" id="resetBtn" type="button">Start a new period</button></div>
+      <p class="small" id="demoSay"></p>
+      <ul class="plain">
+        <li><b>Settle on open</b>, about 2 s: the surface sloshes once and flattens to a faint meniscus. It never loops, so a resting screen is still.</li>
+        <li><b>Payment</b>, about 1.1 s: the level drops with a small overshoot, the boxes that just left stay as a pale ghost for a second, then fade. No red, no shake.</li>
+        <li><b>Reduced motion:</b> the level changes without animation.</li>
+        <li><b>Box-by-box variant:</b> the same drop, but the boxes empty one after another from the top row, right to left, about 40 ms apart.</li>
+      </ul>
+    </div>
+  </div>
+  <h3>Static frames</h3>
+  <div class="frames" id="framesG"></div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>Scores</h2></div>
+  <p class="q">1 to 5 on each test, 5 best. These are judgements from the drawings above, not test results.</p>
+  <div class="tw"><table id="scoreT"></table></div>
+  <div class="notes">
+    <div class="note"><b class="t">The whole must be visible</b>Garcia-Retamero and Cokely's work on icon arrays: people read a part correctly when the whole it belongs to is drawn. The 10×10 does this by construction. Dotted "unused" boxes (B2) and a ring with no boxes (D2) weaken it.</div>
+    <div class="note"><b class="t">100 boxes are a level, not a count</b>Kay et al. 2016 found people can count and reason with about 20 marks. 100 is well past that, so nobody will count them. The grid reads as a height, and the "1 box = ₹X" label gives a feel for size. This is why an odd box value is tolerable, and why a single clear top edge matters.</div>
+    <div class="note"><b class="t">The ostrich effect</b>People avoid checking finances they expect to be bad (Karlsson, Loewenstein and Seppi 2009). It matches Tarun's finding that a bad number on Home makes people close the app. Empty and gone-over are drawn to be calm for this reason.</div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>Recommendation</h2></div>
+  <p class="q">One per question, with the reason. None of this is decided.</p>
+  <div class="tw"><table>
+    <tr><th>Question</th><th>Suggested</th><th>Why</th></tr>
+    <tr><td><b>A</b> Liquid</td><td>Money left</td><td class="w">The bad state is the quiet one, the start of a period is the full one, and paying visibly removes boxes. Spent-rising gives the brightest screen to the student with the least money.</td></tr>
+    <tr><td><b>B</b> Scale</td><td>Budget ÷ 100, budgets in ₹100 steps</td><td class="w">The grid always is the whole budget, and one box is a whole number of rupees without dotted leftovers. Written "1 box = ₹X" with a box glyph; "about" when a derived budget is odd.</td></tr>
+    <tr><td><b>B</b> Top edge</td><td>Box by box, liquid inside the last box</td><td class="w">One partial box at most, a payment is a number of boxes, and it lines up with the crumbling squares of the pay screen. Close call against the even level.</td></tr>
+    <tr><td><b>C</b> Categories</td><td>Words-only index, tap for the grid</td><td class="w">Holds at 18, keeps one visualisation per screen, treats custom names like any other. Skip the index at four or fewer. Fixed bills show "paid".</td></tr>
+    <tr><td><b>D</b> Home</td><td>Grid, no day strip</td><td class="w">One form everywhere. The week day by day moves one scroll down as its own screen. The scale-on-Home conflict needs Tarun's call.</td></tr>
+    <tr><td><b>E</b> States</td><td>Calm empty; amber floor line for over</td><td class="w">Works at any size of over, no red, amount on tap. Ghost line on the tap layer.</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>Decisions for Tarun</h2></div>
+  <div class="decide">
+    <div class="dq"><h3>1. What does the liquid mean?</h3><ol><li class="s">Money left. It drains as you spend (A1).</li><li>Money spent. It rises (A2).</li></ol></div>
+    <div class="dq"><h3>2. How is the scale kept readable?</h3><ol><li>Exact, whatever it comes to: "1 box = ₹6.52" (B1).</li><li class="s">Exact, and budgets are set in ₹100 steps so a box is whole rupees.</li><li>Round the box (₹5, ₹10, ₹25, ₹100) and dot the unused boxes (B2).</li></ol></div>
+    <div class="dq"><h3>3. What is the top edge of the liquid?</h3><ol><li>An even level across the whole row, with a meniscus (B1).</li><li class="s">Box by box, with a liquid level inside the last box (B3).</li><li>Box by box, whole boxes only, rounded to the nearest box.</li></ol></div>
+    <div class="dq"><h3>4. How does a student with many categories reach a gauge?</h3><ol><li>Snap scroll only, emptiest first (C1).</li><li class="s">Words-only index, tap for the grid, snap scroll inside (C2b + C1).</li><li>Index with tiny bars (C2a). Breaks one-per-screen.</li><li>One layered grid (C3) or rings (C4).</li></ol><span class="small">Also: do fixed bills (rent, EMI, gym) get a gauge, the word "paid", or move to visualisation 8?</span></div>
+    <div class="dq"><h3>5. What is the Home gauge?</h3><ol><li class="s">The 10×10 grid, no day strip (D1).</li><li>A ring (D2).</li><li>Either, with a week strip of day minis (D3, D4).</li></ol><span class="small">And the scale on Home: hidden until tap, "1 box = 1% of this week", or the ₹ scale shown even though Home has no other ₹?</span></div>
+    <div class="dq"><h3>6. How does "gone over" look?</h3><ol><li>Hatched boxes below the floor, capped at two rows (E5).</li><li class="s">Amber floor line and the words "gone over"; amount on tap (E6).</li><li>Hatched boxes inside the grid from the top (E7).</li></ol><span class="small">And the ghost line for last week: on the glance, on tap, or not here at all?</span></div>
+  </div>
+  <p class="small">Still open from the drawing and not in the six: what the "whole" is for a student with no budget (Tarun-type in week one), and how Home's week is worked out for monthly and irregular money.</p>
+</section>
+
+</div>
+
+<script>
+(function(){
+const PBG='#0b0d10',EDGE='#2b3038',CELL='#2a3039',LIQ='#62dcb4',LIQ2='#2f9c7c',HI='#d4faee',INK='#f2f4f5',MUT='#8f97a1',AMB='#e3a43f',SAND='#cdb894',DASH='#3f4651';
+const C=27.5,G=5,P=32.5,SZ=320;
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const fmt=n=>'₹'+(Math.abs(n-Math.round(n))<1e-9?Math.round(n).toLocaleString('en-IN'):n.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}));
+const T=(x,y,s,sz,o={})=>`<text x="${x}" y="${y}" font-size="${sz}" font-weight="${o.w||400}" fill="${o.f||INK}" text-anchor="${o.a||'start'}">${esc(s)}</text>`;
+const rowTop=r=>SZ-C-r*P;
+
+/* shared defs: the 100 cells, a mask of them, the hatch for "over" */
+(function(){let c='';for(let r=0;r<10;r++)for(let k=0;k<10;k++)c+=`<rect x="${k*P}" y="${rowTop(r)}" width="${C}" height="${C}" rx="7"/>`;
+document.getElementById('defs').innerHTML=`<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><g id="gc">${c}</g><mask id="gm" maskUnits="userSpaceOnUse" x="-2" y="-2" width="324" height="324"><use href="#gc" fill="#fff"/></mask><pattern id="hatch" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)"><rect width="7" height="7" fill="#2a2011"/><rect width="2.6" height="7" fill="${AMB}"/></pattern></defs></svg>`;})();
+
+/* ---------- students ---------- */
+const S=[
+ {id:'v',short:'Vaishak-type',tag:'2 categories · nearly empty',money:'Irregular, ₹3,000 this month (₹3,000–8,000)',per:'this month',when:'day 24 of 30',daysLeft:7,dayWord:'days',use:'month 3',state:'nearly empty, buffer at zero',ghost:30,feat:0,
+  cats:[{n:'Food',b:2400,l:168},{n:'Everything else',b:600,l:210}],
+  home:{b:540,l:378,line:['Wednesday. Most of','this week\'s money is','still here.'],days:[.9,.8,.7]},
+  tx:[['Today','Hostel canteen',60],['Yesterday','Swiggy',189],['Mon','Tea stall',20],['Sun','Biryani point',220],['Sat','Canteen',75]]},
+ {id:'g',short:'Gautham-type',tag:'3 categories · start of week',money:'₹4,000 a month from home',per:'this week',when:'Tue, day 2 of 7',daysLeft:6,dayWord:'days',use:'week 1',state:'start of week, checks daily',ghost:80,feat:0,
+  cats:[{n:'Food & drinks',b:652,l:571},{n:'Music & YouTube',b:68,l:68},{n:'Other',b:200,l:180}],
+  home:{b:920,l:819,line:['Tuesday. Nearly all','of this week is','still here.'],days:[.95,.89]},
+  tx:[['Today','Juice shop',40],['Mon','Canteen lunch',41]]},
+ {id:'t',short:'Tarun-type',tag:'4 categories · mid-week',money:'₹6,000 a month allowance, no budget set',per:'this week',when:'Thu, day 4 of 7',daysLeft:4,dayWord:'days',use:'week 1',state:'mid-week; limits taken from a usual week',ghost:55,feat:0,
+  cats:[{n:'Coffee & snacks',b:400,l:140},{n:'Meals',b:700,l:310},{n:'Travel',b:200,l:120},{n:'Other',b:200,l:84}],
+  home:{b:1500,l:654,line:['Thursday. Under half','of this week is left,','three days to go.'],days:[.88,.71,.61,.436]},
+  tx:[['Today','Chai',20],['Today','Coffee',60],['Wed','Chai ×2',40],['Tue','Samosa + chai',45],['Mon','Cold coffee',95]]},
+ {id:'y',short:'Yash-type',tag:'7 categories · nearly empty',money:'₹9,000 a month, saving for a goal',per:'this week',when:'Fri, day 5 of 7',daysLeft:3,dayWord:'days',use:'month 6',state:'mental limit of ₹1,000 a week nearly used',ghost:35,feat:0,
+  cats:[{n:'Quick-commerce',b:1000,l:90},{n:'Meals',b:600,l:260},{n:'Going out',b:300,l:300},{n:'Travel',b:150,l:95},{n:'Other',b:100,l:45},{n:'Stationery',b:80,l:62},{n:'Phone & data',b:70,l:70}],
+  home:{b:2300,l:922,line:['Friday. Under half','of this week is left','for the weekend.'],days:[.9,.82,.74,.52,.40]},
+  tx:[['Today','Zepto · 4 items',312],['Wed','Blinkit · 5 items',268],['Tue','Zepto · 2 items',141],['Mon','Instamart · 3 items',189]]},
+ {id:'n',short:'Nishad-type',tag:'12 categories · mid-month',money:'Earns ₹25,000 a month, purpose accounts',per:'this month',when:'day 16 of 30',daysLeft:15,dayWord:'days',use:'month 6',state:'mid-month',ghost:50,feat:1,
+  cats:[{n:'Rent share',b:7000,l:0,fixed:1},{n:'Food & beverages',b:6000,l:2910},{n:'Travel',b:2500,l:1900},{n:'Friends & outings',b:2500,l:1340},{n:'Clothes',b:1500,l:1500},{n:'Offers & impulse',b:1500,l:793},{n:'Subscriptions',b:1250,l:802},{n:'Small stuff',b:750,l:215},{n:'Stationery',b:500,l:410},{n:'Phone & internet',b:500,l:0,fixed:1},{n:'Gifts',b:500,l:500},{n:'Health',b:500,l:380}],
+  home:{b:4200,l:2300,line:['Wednesday. About','half of this week','is left.'],days:[.85,.7,.55]},
+  tx:[['Today','Cafe',240],['Yesterday','Zomato',410],['Mon','Groceries',680],['Sun','Dinner with friends',1150],['Sat','Tea + snacks',90]]},
+ {id:'h',short:'Harsh-type',tag:'18 categories · one gone over',money:'₹12,000 a month',per:'this month',when:'day 21 of 30',daysLeft:10,dayWord:'days',use:'month 6',state:'one category over after a ₹3,500 dinner',ghost:45,feat:0,over:1,
+  cats:[{n:'Mess & meals',b:2400,l:700},{n:'Eating out',b:2000,l:-1900},{n:'Bike EMI',b:1800,l:0,fixed:1},{n:'Fuel',b:700,l:260},{n:'Snacks & tea',b:600,l:130},{n:'Clothes',b:600,l:600},{n:'Trips',b:600,l:600},{n:'Groceries',b:500,l:210},{n:'Gym',b:500,l:0,fixed:1},{n:'Gifts',b:400,l:400},{n:'Phone',b:300,l:0,fixed:1},{n:'Books',b:300,l:180},{n:'Misc',b:300,l:120},{n:'Subscriptions',b:250,l:101},{n:'Laundry',b:200,l:80},{n:'Haircut & care',b:200,l:50},{n:'Games',b:200,l:200},{n:'Stationery',b:150,l:90}],
+  home:{b:1400,l:1150,line:['Thursday. You have','barely touched','this week.'],days:[.95,.9,.86,.82]},
+  tx:[['Today','Mess',80],['Yesterday','Mess',80],['Sun','Mess',80],['Sat','Canteen',120],['Fri','Mess',80]]}
+];
+S.forEach(s=>{s.total={n:s.per==='this week'?'This week':'This month',b:s.cats.reduce((a,c)=>a+c.b,0),l:s.cats.reduce((a,c)=>a+c.l,0)}});
+
+/* ---------- words ---------- */
+function words(p){if(p<0)return'gone over';if(p===0)return'empty';if(p<10)return'nearly empty';if(p<25)return'a little left';if(p<45)return'under half left';if(p<=55)return'about half left';if(p<75)return'over half left';if(p<95)return'most of it left';return'full'}
+function wordsSpent(p){const s=100-p;if(s>100)return'gone over';if(s>=100)return'all spent';if(s>90)return'nearly all spent';if(s>75)return'most of it spent';if(s>55)return'over half spent';if(s>=45)return'about half spent';if(s>25)return'under half spent';if(s>5)return'a little spent';return'hardly any spent'}
+function shortW(c){const p=c.l/c.b*100;if(c.fixed&&c.l===0)return'paid';if(p<0)return'gone over';if(p===0)return'empty';if(p<10)return'nearly empty';if(p<25)return'a little';if(p<45)return'under half';if(p<=55)return'about half';if(p<75)return'over half';if(p<95)return'most left';return'full'}
+const NICE=[1,2,5,10,20,25,50,100,200,250,500,1000];
+function scaleOf(b,kind){if(kind==='round'){const step=NICE.find(s=>s>=b/100-1e-9);return{step,active:Math.ceil(b/step-1e-9)}}return{step:b/100,active:100}}
+const sorted=st=>[...st.cats].sort((a,b)=>((a.fixed&&a.l===0)?9:a.l/a.b)-((b.fixed&&b.l===0)?9:b.l/b.b));
+
+/* ---------- the grid ---------- */
+const yOf=rows=>{if(rows>=10)return 0;const f=Math.floor(rows+1e-9);return SZ-(f*P+(rows-f)*C)};
+function surf(y,amp,x0=0,x1=SZ){let d='';for(let x=x0;x<=x1;x+=8)d+=`${x===x0?'M':'L'}${x} ${(y+Math.sin(x/SZ*Math.PI*4+.6)*amp).toFixed(1)} `;return d}
+function grid(o){
+  const k=(o.size||SZ)/SZ,active=o.active==null?100:o.active,fill=o.fill||LIQ;let s='';
+  s+=`<use href="#gc" fill="${CELL}"/>`;
+  for(let i=active;i<100;i++){const r=Math.floor(i/10),c=i%10;s+=`<rect x="${c*P}" y="${rowTop(r)}" width="${C}" height="${C}" rx="7" fill="${PBG}" stroke="${DASH}" stroke-width="1.4" stroke-dasharray="3 3"/>`}
+  let m='';
+  if(o.bands){let acc=0;o.bands.forEach((b,i)=>{const y1=yOf(acc),y0=yOf(acc+b.rows);m+=`<rect x="0" y="${y0}" width="${SZ}" height="${y1-y0}" fill="${i%2?LIQ2:LIQ}"/>`;acc+=b.rows})}
+  else if(o.boxes>0){
+    if(o.mode==='box'){const full=Math.floor(o.boxes+1e-9),fr=o.boxes-full,R=Math.floor(full/10),K=full%10;
+      if(R>0)m+=`<rect x="0" y="${rowTop(R-1)}" width="${SZ}" height="${SZ-rowTop(R-1)}" fill="${fill}"/>`;
+      if(K>0&&R<10)m+=`<rect x="0" y="${rowTop(R)}" width="${K*P-G/2}" height="${C}" fill="${fill}"/>`;
+      if(fr>0.02&&R<10){const h=C*fr,y=rowTop(R)+C-h;m+=`<rect x="${K*P}" y="${y}" width="${C}" height="${h}" fill="${fill}"/><rect x="${K*P}" y="${y}" width="${C}" height="1.6" fill="${HI}"/>`}
+    }else{const rows=o.boxes/10,y=yOf(rows),amp=o.amp==null?1.7:o.amp;
+      if(o.gone){const y0=yOf(o.gone/10);m+=`<rect x="0" y="${y0}" width="${SZ}" height="${y-y0}" fill="#fff" opacity=".28"/>`}
+      if(rows>=10)m+=`<rect width="${SZ}" height="${SZ}" fill="${fill}"/>`;
+      else m+=`<path d="${surf(y,amp)}L${SZ} ${SZ} L0 ${SZ} Z" fill="${fill}"/><path d="${surf(y,amp)}" fill="none" stroke="${HI}" stroke-width="1.6"/>`}
+  }
+  if(o.over&&o.over.style==='inside'){const n=Math.min(100,Math.round(o.over.boxes));for(let i=0;i<n;i++){const r=9-Math.floor(i/10),c=i%10;s+=`<rect x="${c*P}" y="${rowTop(r)}" width="${C}" height="${C}" rx="7" fill="url(#hatch)" stroke="${AMB}" stroke-width="1.2"/>`}}
+  s+=`<g mask="url(#gm)">${m}</g>`;
+  if(o.bands){let acc=0;o.bands.forEach(b=>{const y1=yOf(acc),y0=yOf(acc+b.rows);if(y1-y0>=22){const w=Math.min(300,b.label.length*8.6+18);s+=`<rect x="8" y="${(y0+y1)/2-11}" width="${w}" height="22" rx="11" fill="${PBG}" opacity=".88"/>${T(17,(y0+y1)/2+5.5,b.label,15,{w:600})}`}acc+=b.rows})}
+  if(o.ghost!=null){const y=yOf(o.ghost/10);s+=`<line x1="-8" y1="${y}" x2="${SZ+8}" y2="${y}" stroke="${INK}" stroke-width="2" stroke-dasharray="7 6" opacity=".85"/><rect x="${SZ-98}" y="${y-27}" width="98" height="21" rx="6" fill="${PBG}" opacity=".9"/>${T(SZ-6,y-11,o.ghostLabel||'last week',15,{a:'end'})}`}
+  if(o.over&&o.over.style==='below'){const n=Math.min(20,Math.ceil(o.over.boxes));s+=`<line x1="-6" y1="${SZ+7}" x2="${SZ+6}" y2="${SZ+7}" stroke="${MUT}" stroke-width="2"/>`;
+    for(let i=0;i<n;i++){const r=Math.floor(i/10),c=i%10;s+=`<rect x="${c*P}" y="${SZ+14+r*P}" width="${C}" height="${C}" rx="7" fill="url(#hatch)" stroke="${AMB}" stroke-width="1.2"/>`}
+    if(o.over.boxes>20)s+=T(SZ,SZ+14+2*P+16,`and ${Math.round(o.over.boxes-20)} more boxes`,15,{a:'end',f:MUT})}
+  if(o.over&&o.over.style==='line')s+=`<rect x="-6" y="${SZ+4}" width="${SZ+12}" height="12" rx="6" fill="${AMB}" opacity=".22"/><rect x="-6" y="${SZ+7}" width="${SZ+12}" height="5" rx="2.5" fill="${AMB}"/>`;
+  return `<g transform="translate(${o.x||0} ${o.y||0}) scale(${k})">${s}</g>`;
+}
+
+/* ---------- phone chrome ---------- */
+const TABS=['Home','Income','Spending','Savings','Insights'];
+function tabbar(a){let s=`<line x1="0" y1="770" x2="390" y2="770" stroke="${EDGE}"/>`;TABS.forEach((t,i)=>{const x=39+78*i;s+=T(x,808,t,14,{a:'middle',f:i===a?INK:MUT,w:i===a?700:400});if(i===a)s+=`<rect x="${x-14}" y="782" width="28" height="4" rx="2" fill="${LIQ}"/>`});return s}
+function phone(inner,tab,label,bare){return `<svg class="ph" viewBox="0 0 390 844" role="img" aria-label="${esc(label)}">${bare?`<rect width="390" height="844" fill="${PBG}"/>`:`<rect x="1" y="1" width="388" height="842" rx="46" fill="${PBG}" stroke="${EDGE}" stroke-width="2"/><rect x="150" y="16" width="90" height="24" rx="12" fill="#000"/>`}${inner}${bare?'':tabbar(tab)}</svg>`}
+const scaleLine=(y,txt)=>`<rect x="35" y="${y-15}" width="17" height="17" rx="4.5" fill="none" stroke="${MUT}" stroke-width="1.6"/>${T(60,y,txt,19,{f:MUT})}`;
+
+/* ---------- screens ---------- */
+function gauge(st,cat,o={}){
+  const tone=o.tone||'left',left=o.state!=null?cat.b*o.state/100:cat.l,pct=left/cat.b*100;
+  const sc=scaleOf(cat.b,o.scale),paid=cat.fixed&&left===0&&o.state==null;
+  const boxes=tone==='spent'?Math.min(sc.active,(cat.b-left)/sc.step):Math.max(0,left)/sc.step;
+  let s=T(35,112,cat.n,30,{w:600})+T(35,144,`${st.per} · ${st.when}`,19,{f:MUT});
+  const g={x:35,y:178,boxes,mode:o.mode||'level',active:sc.active,fill:tone==='spent'?SAND:LIQ};
+  if(o.ghost)g.ghost=st.ghost,g.ghostLabel=st.per==='this week'?'last week':'last month';
+  let wy=548;
+  if(pct<0&&tone==='left'){const ob=-left/sc.step,style=o.over||'line';g.over={style,boxes:ob};if(style==='below')wy=548+(ob>20?92:ob>10?70:38)}
+  s+=grid(g);
+  const w=paid?'paid for this month':tone==='spent'?wordsSpent(pct):words(Math.round(pct*10)/10);
+  s+=T(35,wy,w,28,{w:600});
+  let sl=`1 box = ${fmt(sc.step)}`;if(sc.active<100)sl+=` · ${sc.active} boxes in use`;
+  s+=scaleLine(wy+40,sl);
+  if(o.amounts){const per=Math.max(0,left)/st.daysLeft;
+    s+=T(35,wy+96,left<0?`${fmt(-left)} over ${fmt(cat.b)}`:`${fmt(left)} left of ${fmt(cat.b)}`,26,{w:600});
+    s+=T(35,wy+130,left>0?`about ${fmt(Math.floor(per/5)*5||Math.round(per))} a day for ${st.daysLeft} ${st.dayWord}`:'nothing more planned here',19,{f:MUT});
+    s+=T(35,wy+160,`${g.ghostLabel||'last time'} at this point: ${fmt(Math.round(cat.b*st.ghost/100))} left`,19,{f:MUT})}
+  if(o.pager){const {i,n,next}=o.pager;s+=T(35,76,`${i+1} of ${n}`,17,{f:MUT});
+    const h=Math.min(18,300/n-4);for(let j=0;j<n;j++)s+=`<rect x="370" y="${188+j*(300/n)}" width="5" height="${h}" rx="2.5" fill="${j===i?INK:EDGE}"/>`;
+    if(next)s+=T(35,736,`↓  next: ${next}`,19,{f:MUT})}
+  return phone(s,2,`${st.short}: ${cat.n}, ${w}`,o.bare);
+}
+function index(st,bars){
+  const list=sorted(st),max=12,show=list.length>max?list.slice(0,max-1):list;
+  let s=T(35,112,'Spending',30,{w:600})+T(35,144,`${st.per} · emptiest first`,19,{f:MUT});
+  show.forEach((c,i)=>{const y=206+i*46,p=Math.max(0,Math.min(1,c.l/c.b)),over=c.l<0;
+    s+=T(35,y,c.n,20,{w:500});
+    if(bars){s+=`<rect x="262" y="${y-11}" width="93" height="11" rx="5.5" fill="${over?'none':CELL}"${over?` stroke="${AMB}" stroke-width="1.5"`:''}/>`;if(p>0)s+=`<rect x="262" y="${y-11}" width="${Math.max(6,93*p)}" height="11" rx="5.5" fill="${LIQ}"/>`}
+    else{s+=T(355,y,shortW(c),17,{a:'end',f:MUT});if(over)s+=`<circle cx="${355-9.2*9-12}" cy="${y-6}" r="4.5" fill="${AMB}"/>`}
+    s+=`<line x1="35" y1="${y+16}" x2="355" y2="${y+16}" stroke="${EDGE}" opacity=".7"/>`});
+  if(list.length>max)s+=T(35,206+(max-1)*46,`↓  ${list.length-show.length} more below`,19,{f:MUT});
+  return phone(s,2,`${st.short}: index of ${list.length} categories${bars?' with bars':''}`);
+}
+function layered(st){
+  const tot=st.total,cs=[...st.cats].filter(c=>c.l>0).sort((a,b)=>b.l-a.l),bands=cs.map(c=>({rows:c.l/tot.b*10,label:c.n}));
+  const thin=bands.filter(b=>b.rows*P<22).length,pos=cs.reduce((a,c)=>a+c.l,0);
+  let s=T(35,112,tot.n,30,{w:600})+T(35,144,'what is left, by category',19,{f:MUT});
+  s+=grid({x:35,y:178,bands});
+  s+=T(35,548,words(pos/tot.b*100),28,{w:600})+scaleLine(588,`1 box = ${fmt(tot.b/100)}`);
+  if(thin)s+=T(35,626,`${thin} of ${bands.length} bands too thin to name`,18,{f:AMB});
+  if(st.cats.some(c=>c.l<0))s+=T(35,thin?656:626,'one category went over: not shown',18,{f:AMB});
+  return phone(s,2,`${st.short}: one grid with a band per category`);
+}
+function arc(cx,cy,r,f){if(f<=0)return'';if(f>=.999)return`<circle cx="${cx}" cy="${cy}" r="${r}"/>`;const a=f*2*Math.PI;return`<path d="M${cx} ${cy-r} A${r} ${r} 0 ${f>.5?1:0} 1 ${(cx+r*Math.sin(a)).toFixed(1)} ${(cy-r*Math.cos(a)).toFixed(1)}"/>`}
+function rings(st){
+  const by=[...st.cats].sort((a,b)=>b.b-a.b),top=by.slice(0,3),rest=by.slice(3);
+  const items=top.map(c=>({n:c.n,f:c.l/c.b,w:shortW(c)}));
+  if(rest.length){const b=rest.reduce((a,c)=>a+c.b,0),l=rest.reduce((a,c)=>a+Math.max(0,c.l),0);items.push({n:`${rest.length} others`,f:l/b,w:shortW({b,l})})}
+  const cols=[LIQ,'#4cc19d','#3aa586','#7fa39a'],names=['outer','2nd','3rd','inner'];
+  let s=T(35,112,st.total.n,30,{w:600})+T(35,144,`biggest three${rest.length?' + others':''}`,19,{f:MUT});
+  items.forEach((it,i)=>{const r=132-i*27;s+=`<circle cx="195" cy="330" r="${r}" fill="none" stroke="${CELL}" stroke-width="21"/><g fill="none" stroke="${it.f<0?AMB:cols[i]}" stroke-width="21" stroke-linecap="round">${it.f<0?arc(195,330,r,.012):arc(195,330,r,Math.max(0,it.f))}</g>`;
+    const y=536+i*40;s+=T(35,y,names[i],14,{f:MUT})+T(84,y,it.n,18,{w:500})+T(355,y,it.w,15,{a:'end',f:MUT})});
+  return phone(s,2,`${st.short}: nested rings`);
+}
+function strip(st,kind){
+  const d=st.home.days,L='MTWTFSS';let s='';
+  for(let i=0;i<7;i++){const cx=58+i*45.7,today=i===d.length-1,past=i<d.length;
+    s+=T(cx,92,L[i],15,{a:'middle',f:today?INK:MUT,w:today?700:400});
+    if(kind==='ring'){s+=`<circle cx="${cx}" cy="124" r="15" fill="none" stroke="${CELL}" stroke-width="7"/>`;if(past)s+=`<g fill="none" stroke="${LIQ}" stroke-width="7" stroke-linecap="round">${arc(cx,124,15,d[i])}</g>`}
+    else{s+=`<rect x="${cx-17}" y="106" width="34" height="34" rx="9" fill="${past?CELL:'none'}" stroke="${past?'none':DASH}" stroke-width="1.4"/>`;if(past){const h=30*d[i];s+=`<rect x="${cx-15}" y="${138-h}" width="30" height="${h}" rx="${Math.min(7,h/2)}" fill="${LIQ}"/>`}}
+    if(today)s+=`<rect x="${cx-9}" y="148" width="18" height="3" rx="1.5" fill="${INK}"/>`}
+  return s;
+}
+function home(st,kind,withStrip){
+  const h=st.home,p=h.l/h.b;let s='',y0=withStrip?206:122;
+  if(withStrip)s+=strip(st,kind);
+  h.line.forEach((l,i)=>s+=T(35,y0+i*37,l,28,{w:600}));
+  if(kind==='ring'){const cy=withStrip?520:480;s+=`<circle cx="195" cy="${cy}" r="118" fill="none" stroke="${CELL}" stroke-width="38"/><g fill="none" stroke="${LIQ}" stroke-width="38" stroke-linecap="round">${arc(195,cy,118,p)}</g>`}
+  else if(withStrip){s+=grid({x:50,y:338,size:290,boxes:p*100,mode:'box'})+scaleLine(672,'1 box = 1% of this week')}
+  else{s+=grid({x:35,y:266,boxes:p*100,mode:'box'})+scaleLine(630,'1 box = 1% of this week')}
+  return phone(s,0,`${st.short}: Home, ${kind}${withStrip?' with week strip':''}`);
+}
+function detail(st,cat){
+  const p=cat.l/cat.b*100,sc=scaleOf(cat.b);
+  let s=T(35,112,cat.n,30,{w:600})+grid({x:35,y:140,size:112,boxes:Math.max(0,p),mode:'box'});
+  s+=T(168,176,words(p),22,{w:600})+T(168,208,`${fmt(cat.l)} left of ${fmt(cat.b)}`,19,{f:MUT})+T(168,238,`1 box = ${fmt(sc.step)}`,19,{f:MUT});
+  st.tx.forEach((t,i)=>{const y=318+i*62;s+=T(35,y,t[1],20,{w:500})+T(35,y+24,t[0],16,{f:MUT})+T(355,y,fmt(t[2]),20,{a:'end'})+`<line x1="35" y1="${y+38}" x2="355" y2="${y+38}" stroke="${EDGE}" opacity=".7"/>`});
+  s+=T(35,318+st.tx.length*62+4,'↓  earlier',19,{f:MUT});
+  return phone(s,2,`${st.short}: ${cat.n}, transactions`);
+}
+
+/* ---------- sections ---------- */
+const F=st=>st.cats[st.feat];
+const SEC={
+ A:[{code:'A1',name:'Liquid = money left',sub:'drains as you spend',draw:st=>gauge(st,F(st))},
+    {code:'A2',name:'Liquid = money spent',sub:'rises as you spend',draw:st=>gauge(st,F(st),{tone:'spent'})}],
+ B:[{code:'B1',name:'Exact scale, even level',sub:'1 box = budget ÷ 100; the top row fills evenly, with a meniscus',draw:st=>gauge(st,F(st))},
+    {code:'B2',name:'Round box, unused boxes dotted',sub:'1 box = the next round value up',draw:st=>gauge(st,F(st),{scale:'round'})},
+    {code:'B3',name:'Exact scale, box by box',sub:'whole boxes, and a liquid level inside the last one',draw:st=>gauge(st,F(st),{mode:'box'})}],
+ C:[{code:'C1',name:'One grid per category, snap scroll',sub:'emptiest first; position rail on the right, next name below',draw:st=>{const l=sorted(st);return gauge(st,l[0],{mode:'box',over:'line',pager:{i:0,n:l.length,next:l[1]&&l[1].n}})}},
+    {code:'C2a',name:'Index with tiny bars',sub:'tap a row to open its grid',draw:st=>index(st,true)},
+    {code:'C2b',name:'Index with words only',sub:'tap a row to open its grid',draw:st=>index(st,false)},
+    {code:'C3',name:'One grid, a band per category',sub:'what is left of the whole budget, stacked',draw:st=>layered(st)},
+    {code:'C4',name:'Nested rings',sub:'biggest three budgets, the rest as "others"',draw:st=>rings(st)}],
+ D:[{code:'D1',name:'Sentence + grid',sub:'no ₹; this week',draw:st=>home(st,'grid',false)},
+    {code:'D2',name:'Sentence + ring',sub:'no ₹; this week',draw:st=>home(st,'ring',false)},
+    {code:'D3',name:'Grid with a week strip',sub:'one mini per day, level at the end of that day',draw:st=>home(st,'grid',true)},
+    {code:'D4',name:'Ring with a week strip',sub:'the Apple arrangement',draw:st=>home(st,'ring',true)}],
+ E:[{code:'E1',name:'Full',ps:1,draw:st=>gauge(st,F(st),{state:100,mode:'box'})},
+    {code:'E2',name:'Half',ps:4,draw:st=>gauge(st,F(st),{state:50,mode:'box'})},
+    {code:'E3',name:'Nearly empty',ps:3,draw:st=>gauge(st,F(st),{state:st.id==='y'?9:6,mode:'box'})},
+    {code:'E4',name:'Empty',ps:0,draw:st=>gauge(st,F(st),{state:0,mode:'box'})},
+    {code:'E5',name:'Over: boxes below the floor',ps:5,draw:st=>gauge(st,st.id==='h'?st.cats[1]:F(st),{state:st.id==='h'?null:-14,over:'below'})},
+    {code:'E6',name:'Over: amber floor line',ps:5,draw:st=>gauge(st,st.id==='h'?st.cats[1]:F(st),{state:st.id==='h'?null:-14,over:'line'})},
+    {code:'E7',name:'Over: hatched inside the grid',ps:5,draw:st=>gauge(st,st.id==='h'?st.cats[1]:F(st),{state:st.id==='h'?null:-14,over:'inside'})},
+    {code:'E8',name:'Ghost line: last period',ps:2,draw:st=>gauge(st,F(st),{mode:'box',ghost:true})}],
+ F:[{code:'F1',name:'Glance',sub:'grid, name, words',draw:st=>gauge(st,F(st),{mode:'box'})},
+    {code:'F2',name:'After a tap',sub:'exact ₹ left of the budget, and a per-day pace',draw:st=>gauge(st,F(st),{mode:'box',amounts:true,ghost:true})},
+    {code:'F3',name:'Detail',sub:'transactions',draw:st=>detail(st,F(st))}]
+};
+const fig=(svg,cap)=>`<figure class="fg">${svg}<figcaption>${cap}</figcaption></figure>`;
+function render(cur){
+  for(const k in SEC){const el=document.getElementById('gal'+k),opts=SEC[k];
+    if(cur<0){
+      if(k==='E')el.innerHTML=`<div class="row four">${opts.map(o=>fig(o.draw(S[o.ps]),`<b>${o.code} ${o.name}</b><br>${S[o.ps].short}`)).join('')}</div>`;
+      else el.innerHTML=opts.map(o=>`<div class="opt"><h4><b>${o.code}</b>${o.name}<span>${o.sub||''}</span></h4><div class="row">${S.map(st=>fig(o.draw(st),`<b>${st.short}</b><br>${st.tag}`)).join('')}</div></div>`).join('');
+    }else{const st=S[cur];el.innerHTML=`<div class="row single">${opts.map(o=>fig(o.draw(st),`<b>${o.code} ${o.name}</b>${o.sub?'<br>'+o.sub:''}`)).join('')}</div>`}
+  }
+  const st=S[cur<0?5:cur],l=sorted(st);
+  document.getElementById('liveC').innerHTML=`<div class="scroller" tabindex="0" aria-label="Scrollable demo of C1 for ${st.short}">${l.map((c,i)=>gauge(st,c,{mode:'box',over:'line',bare:true,pager:{i,n:l.length,next:l[i+1]&&l[i+1].n}})).join('')}</div><div class="stack"><h3>C1, live: scroll inside the phone</h3><p class="q">${st.short}, ${l.length} categories, emptiest first. Each stop is one full screen. ${l.length>7?`Reaching the last one takes ${l.length-1} swipes.`:`${l.length-1} swipe${l.length>2?'s':''} covers everything.`}</p></div>`;
+  document.getElementById('who').innerHTML=cur<0?'All six side by side, ordered by number of categories. Pick one to see every option at a larger size.':`<b>${st.short}.</b> ${S[cur].money}. ${S[cur].cats.length} categories, ${S[cur].per.replace('this ','by ')}, ${S[cur].use}, ${S[cur].state}.`;
+  document.querySelectorAll('#sw .chip').forEach((b,i)=>b.setAttribute('aria-pressed',String(i-1===cur)));
+  demoInit(S[cur<0?2:cur]);
+}
+
+/* ---------- static tables ---------- */
+document.getElementById('poolT').innerHTML=`<tr><th>Student</th><th>Money</th><th class="n">Categories</th><th>Period</th><th>Using for</th><th>Where they are</th></tr>`+S.map(s=>`<tr><td><b>${s.short}</b></td><td class="w">${s.money}</td><td class="n">${s.cats.length}</td><td>${s.per.replace('this ','')}</td><td>${s.use}</td><td class="w">${s.state}</td></tr>`).join('');
+document.getElementById('scaleT').innerHTML=`<tr><th>Student</th><th>Budget shown</th><th class="n">Exact box</th><th class="n">Round box</th><th class="n">Boxes in use</th><th class="n">Whole budget</th><th class="n">Exact box</th></tr>`+S.map(s=>{const c=F(s),e=scaleOf(c.b),r=scaleOf(c.b,'round');return`<tr><td><b>${s.short}</b></td><td>${c.n}, ${fmt(c.b)}</td><td class="n">${fmt(e.step)}</td><td class="n">${fmt(r.step)}</td><td class="n">${r.active} of 100</td><td class="n">${fmt(s.total.b)}</td><td class="n">${fmt(s.total.b/100)}</td></tr>`}).join('')+`<tr><td><b>Smallest in the pool</b></td><td>Music &amp; YouTube, ₹68</td><td class="n">₹0.68</td><td class="n">₹1</td><td class="n">68 of 100</td><td class="n"></td><td class="n"></td></tr>`;
+const SC=[['A · what the liquid means'],['A1 Money left',5,5,5,5,4,5],['A2 Money spent',3,5,5,5,2,3],
+['B · scale and top edge'],['B1 Exact ÷ 100, any value',4,5,4,5,4,5],['B1 with budgets in ₹100 steps',5,5,4,5,4,5,1],['B2 Round box, dotted leftovers',3,3,4,4,4,3],['Top edge: even level',5,4,5,5,4,4],['Top edge: box by box (B3)',4,5,5,5,4,5,1],
+['C · many categories'],['C1 Snap scroll only',5,5,5,2,4,5],['C2a Index with tiny bars',4,5,5,4,3,3],['C2b Words-only index, tap for grid',4,5,5,5,4,5,1],['C3 One layered grid',2,3,3,1,3,2],['C4 Nested rings',3,4,4,2,3,1],
+['D · Home'],['D1 Grid',5,5,5,5,4,5,1],['D2 Ring',5,4,5,5,4,2],['D3 Grid + week strip',3,5,5,5,3,4],['D4 Ring + week strip',3,4,5,5,3,2],
+['E · gone over'],['E5 Boxes below the floor',4,4,3,5,3,4],['E6 Amber floor line + words',5,3,5,5,4,5,1],['E7 Hatched inside the grid',3,4,3,5,2,3]];
+document.getElementById('scoreT').innerHTML=`<tr><th>Option</th><th class="n">Reads in 3 s</th><th class="n">Honest</th><th class="n">₹652 and ₹25,000</th><th class="n">18 categories</th><th class="n">Low anxiety</th><th class="n">Consistent</th><th class="n">Total / 30</th></tr>`+SC.map(r=>r.length===1?`<tr class="grp"><td colspan="8">${r[0]}</td></tr>`:`<tr${r[7]?' class="pick"':''}><td>${r[7]?'<b>'+r[0]+'</b>':r[0]}</td>${r.slice(1,7).map(v=>`<td class="n">${v}</td>`).join('')}<td class="n"><b>${r.slice(1,7).reduce((a,b)=>a+b,0)}</b></td></tr>`).join('');
+
+/* ---------- close-up of the top edge ---------- */
+(function(){
+  const cs=62,gp=12,cell=(c,r)=>`<rect x="${20+c*(cs+gp)}" y="${24+r*(cs+gp)}" width="${cs}" height="${cs}" rx="16"`;
+  function panel(id,kind){let cells='',mk='';for(let r=0;r<2;r++)for(let c=0;c<3;c++){cells+=cell(c,r)+` fill="${CELL}"/>`;mk+=cell(c,r)+` fill="#fff"/>`}
+    const W=20*2+3*cs+2*gp,H=24*2+2*cs+gp;let m=`<rect x="0" y="${24+cs+gp}" width="${W}" height="${cs}" fill="${LIQ}"/>`;
+    const y=24+cs*.62;
+    if(kind==='flat')m+=`<rect x="0" y="${y}" width="${W}" height="${cs}" fill="${LIQ}"/>`;
+    if(kind==='wave'){let d='';for(let x=0;x<=W;x+=6)d+=`${x?'L':'M'}${x} ${(y+Math.sin(x/W*Math.PI*3.2)*4).toFixed(1)} `;m+=`<path d="${d}L${W} ${24+cs} L0 ${24+cs} Z" fill="${LIQ}"/><path d="${d}" fill="none" stroke="${HI}" stroke-width="2.5"/>`}
+    if(kind==='box'){m+=`<rect x="0" y="24" width="${20+cs+gp/2}" height="${cs}" fill="${LIQ}"/><rect x="${20+cs+gp}" y="${y}" width="${cs}" height="${cs}" fill="${LIQ}"/><rect x="${20+cs+gp}" y="${y}" width="${cs}" height="2.5" fill="${HI}"/>`}
+    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Close-up: ${kind}"><mask id="${id}" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}">${mk}</mask>${cells}<g mask="url(#${id})">${m}</g></svg>`}
+  const caps=[['flat','<b>Even level, flat.</b> Every box on the top row is filled to the same height. Reads as a tank.'],['wave','<b>Even level with a meniscus.</b> The same, with a slight curve and a light edge on the surface so it reads as liquid, not a bar.'],['box','<b>Box by box.</b> Whole boxes, then one box with its own small level. The partial box is the only place a fraction shows.']];
+  document.getElementById('zoomB').innerHTML=caps.map((c,i)=>`<figure>${panel('zm'+i,c[0])}<figcaption>${c[1]}</figcaption></figure>`).join('')+`<figure><svg viewBox="0 0 258 184" role="img" aria-label="Ways to write the scale"><g font-family="Figtree,system-ui,sans-serif"><rect x="20" y="29" width="19" height="19" rx="5" fill="none" stroke="${MUT}" stroke-width="1.8"/>${T(48,45,'1 box = ₹60',21,{f:INK})}<rect x="20" y="82" width="19" height="19" rx="5" fill="none" stroke="${MUT}" stroke-width="1.8"/>${T(48,98,'= ₹60',21,{f:INK})}<rect x="20" y="135" width="19" height="19" rx="5" fill="none" stroke="${MUT}" stroke-width="1.8"/>${T(48,151,'1 box is about ₹6.50',21,{f:INK})}</g></svg><figcaption><b>Writing the scale.</b> Glyph plus "1 box = ₹60" is used throughout this board. The glyph alone is shorter but leans on the picture. "About" covers odd derived budgets.</figcaption></figure>`;
+})();
+
+/* ---------- motion: static frames + live demo ---------- */
+(function(){
+  const fr=[[{boxes:43.6,amp:9},'<b>Open, 0 ms.</b> Surface sloshes in.'],[{boxes:43.6,amp:4.5},'<b>600 ms.</b> Smaller wave.'],[{boxes:43.6,amp:1.5},'<b>2 s.</b> At rest, faint meniscus.'],
+   [{boxes:43.6,amp:1.5},'<b>Before paying ₹75.</b> 1 box = ₹15.'],[{boxes:38.6,amp:6,gone:43.6},'<b>Payment lands.</b> Level drops 5 boxes; the part that left shows pale.'],[{boxes:38.6,amp:1.5},'<b>1.5 s later.</b> Settled at the new level.']];
+  document.getElementById('framesG').innerHTML=fr.map(f=>`<figure><svg viewBox="-16 -16 352 352" role="img" aria-label="Motion frame">${grid(f[0])}</svg><figcaption>${f[1]}</figcaption></figure>`).join('');
+})();
+let demo={};
+function demoInit(st){
+  const cat=F(st),step=cat.b/100,pay=step*5;demo={st,cat,step,pay,left:cat.l>pay?cat.l:cat.b*.6};
+  let wave='M-320 0 ';for(let x=-320;x<=640;x+=8)wave+=`L${x} ${(Math.sin(x/160*Math.PI*2)*5).toFixed(1)} `;
+  const inner=T(35,112,cat.n,30,{w:600})+T(35,144,`${st.per} · ${st.when}`,19,{f:MUT})+
+   `<g transform="translate(35 178)"><use href="#gc" fill="${CELL}"/><g mask="url(#gm)"><rect id="demoGone" x="0" width="320" y="0" height="0" fill="#fff"/><g id="demoLiq"><g id="demoWave"><g id="demoWaveX"><path d="${wave}L640 12 L-320 12 Z" fill="${LIQ}"/><path d="${wave}" fill="none" stroke="${HI}" stroke-width="1.6"/></g></g><rect x="0" y="3" width="320" height="340" fill="${LIQ}"/></g></g></g>`+
+   `<text id="demoWords" x="35" y="548" font-size="28" font-weight="600" fill="${INK}"></text>`+scaleLine(588,`1 box = ${fmt(step)}`);
+  document.getElementById('demoHost').innerHTML=phone(inner,2,'Motion demo');
+  document.getElementById('payBtn').textContent=`Pay ${fmt(pay)} (5 boxes)`;
+  demoSet(false);
+}
+function demoSet(anim,prevY){
+  const y=yOf(Math.max(0,demo.left)/demo.step/10),host=document.getElementById('demoHost');
+  document.getElementById('demoLiq').style.transform=`translateY(${y}px)`;
+  document.getElementById('demoWords').textContent=words(demo.left/demo.cat.b*100);
+  const g=document.getElementById('demoGone');
+  if(prevY!=null&&y>prevY){g.setAttribute('y',prevY);g.setAttribute('height',y-prevY)}else g.setAttribute('height',0);
+  document.getElementById('demoSay').textContent=`${demo.st.short}, ${demo.cat.n}. The glance layer shows words only; here for reference: ${fmt(Math.max(0,demo.left))} left of ${fmt(demo.cat.b)}.`;
+  host.classList.remove('slosh');void host.getBoundingClientRect();host.classList.add('slosh');
+}
+document.getElementById('payBtn').addEventListener('click',()=>{const py=yOf(Math.max(0,demo.left)/demo.step/10);demo.left=Math.max(0,demo.left-demo.pay);demoSet(true,py)});
+document.getElementById('resetBtn').addEventListener('click',()=>{demo.left=demo.cat.b;demoSet(true)});
+
+/* ---------- switcher ---------- */
+const sw=document.getElementById('sw');
+sw.innerHTML=`<span class="lbl">Student</span>`+['All six',...S.map(s=>s.short)].map((n,i)=>`<button class="chip" type="button" id="chip${i}" data-i="${i-1}">${n}</button>`).join('');
+sw.addEventListener('click',e=>{const b=e.target.closest('.chip');if(b)render(+b.dataset.i)});
+render(-1);
+})();
+</script>

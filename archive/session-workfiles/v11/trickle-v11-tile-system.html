@@ -1,0 +1,178 @@
+<title>Trickle v11 Tile System</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Figtree:wght@400;600&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>:root{--bg:#f3f5f2;--surface:#ffffff;--fg:#17201b;--muted:#5b675f;--line:#d9dfd9;--tile:#1f7a55;--tile-empty:#9fb3a7;--accent:#1f7a55;--accent-ink:#ffffff;--amber:#a56a00;--display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;--body:"Figtree",ui-sans-serif,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101613;--surface:#18201c;--fg:#e7eee9;--muted:#9aa89f;--line:#2b3631;--tile:#5cc896;--tile-empty:#4d6358;--accent:#5cc896;--accent-ink:#0d1a13;--amber:#e3a53a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#101613;--surface:#18201c;--fg:#e7eee9;--muted:#9aa89f;--line:#2b3631;--tile:#5cc896;--tile-empty:#4d6358;--accent:#5cc896;--accent-ink:#0d1a13;--amber:#e3a53a;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--body)}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:28px 60px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(28px,5vw,44px);letter-spacing:-.02em}
+h2{font-size:24px;margin-top:44px;margin-bottom:12px}
+h3{font-size:16px}
+p{max-width:65ch;margin:.5em 0}
+.muted{color:var(--muted)}
+.eyebrow{font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:13.5px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.num{text-align:right;font-family:var(--mono)}
+.pill{display:inline-block;font:600 11px var(--mono);padding:3px 8px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.pill.win{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.key{display:inline-flex;align-items:center;gap:6px;font:600 13px var(--mono)}
+.key i{display:inline-block;width:12px;height:12px;border-radius:2px;background:var(--tile)}
+svg.tiles{display:block;max-width:100%;height:auto}
+button{font:600 14px var(--body);border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:10px 14px;cursor:pointer}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{white-space:nowrap}.pill{white-space:nowrap;flex-shrink:0;align-self:flex-start}
+
+.hero{display:grid;gap:24px;grid-template-columns:1.2fr 1fr;align-items:center}
+@media(max-width:720px){.hero{grid-template-columns:1fr}}
+.rule{font:700 clamp(20px,3vw,28px)/1.25 var(--display)}
+.cand h3{margin-bottom:4px}.cand .row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-top:10px}
+.cand .lab{font:500 11px var(--mono);color:var(--muted);margin-top:4px}
+.bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden}.bar b{display:block;height:100%;background:var(--tile)}
+.scen{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.scen .v{font:600 13px var(--mono)}
+ul.rules li{margin:.35em 0;max-width:70ch}
+</style>
+<div class="wrap">
+<div class="hero">
+ <div>
+  <div class="eyebrow">Trickle v11 · Phase 2 → 3 result</div>
+  <h1>One tile is always ₹100.</h1>
+  <p class="rule" style="margin-top:14px">Ten tiles make a row, and a row is ₹1,000. Every row has a gap after the fifth tile.</p>
+  <p class="muted">Ten candidate unit systems were scored against the brief (tile value read in 5 s, comparison in 3 s, one unit app-wide), then the top three were run against ten real student money scenarios. This page shows the whole funnel.</p>
+  <span class="key"><i></i> = ₹100 &nbsp;·&nbsp; one row = ₹1,000</span>
+ </div>
+ <div class="card"><div class="eyebrow">₹6,000 monthly budget, ₹2,400 spent</div><div id="heroTiles" style="margin-top:12px"></div><p class="muted" style="font-size:13px">Filled tiles are what's left. Outlined tiles are spent. Read it as "3 rows and 6 tiles left", that is ₹3,600.</p></div>
+</div>
+
+<h2>Diverge: ten candidates</h2>
+<p class="muted">Each card draws the same two amounts: a ₹350 food order and a ₹2,400 food category. The bar is the weighted score (out of 5).</p>
+<div class="grid" id="cands"></div>
+
+<h2>Converge: weighted scoring</h2>
+<p class="muted">Weights: learnability 25%, glance speed 20%, honesty (area ∝ ₹) 15%, scalability ₹20→₹9,000 15%, cognitive load 15%, fit with the money model 10%. Scores 1–5.</p>
+<div class="scroll card"><table id="score"></table></div>
+
+<h2>Scenario run: the top three</h2>
+<p class="muted">Tile count and estimated read time from a counting model: subitize up to 4 items (~0.4 s), each visible group of 5 or row of 10 ~0.3 s, loose items beyond 4 counted at ~0.3 s each, +0.4 s for a partial tile. Budget assumed ₹6,000 for the day-tile.</p>
+<div class="scroll card"><table id="scenTable"></table></div>
+
+<h2>Winner rendered: ten scenarios</h2>
+<div class="scen" id="scen"></div>
+
+<h2>Why F wins</h2>
+<ul class="rules">
+<li><b>One fact to learn.</b> "A tile is ₹100" is a round number every Indian student already handles as a note. Rows of 10 give ₹1,000 for free (decimal place value, like an abacus rod) without a second glyph.</li>
+<li><b>Glance.</b> The 5|5 gap turns a row into two subitizable fives, so 37 tiles read as "3 rows + 5 + 2" in about 1.8 s instead of 11 s of counting.</li>
+<li><b>Never changes.</b> Unlike the day-tile (B) and 1% (C), the value survives a budget edit, a new month and a screenshot shared with a friend.</li>
+<li><b>Honest.</b> Area is proportional to rupees everywhere; sub-₹100 amounts are a partially filled tile (₹25 chai = a quarter tile), never a different shape.</li>
+<li><b>Runner-up D (ten-frames)</b> reads as fast but packs rows into 2×5 blocks, which breaks the left-to-right "row = ₹1,000" story and wraps badly in narrow cards. <b>B (day tile)</b> is the most meaningful per tile but fails S7: its value changes whenever the budget does, which is v9's failure again.</li>
+</ul>
+<h2>Rules that come with the tile</h2>
+<ul class="rules">
+<li>Key format, always the same: a filled tile, "= ₹100". Shown once per screen, bottom-left of the first tile visual.</li>
+<li>Max 100 tiles (10 rows, ₹10,000) per card. Above that, show a ₹10,000 square of 10×10 as a group, never a bigger tile.</li>
+<li>Below ₹100: a partial tile filled from the bottom. Below ₹10: a sliver, with the exact ₹ on tap.</li>
+<li>Leave the tile for time (hour-of-day, calendar position) and for trend lines; those are positions, not amounts.</li>
+</ul>
+<p class="muted" style="margin-top:30px;font-size:13px">Sources: Neurath's Isotype (count, don't scale); Park et al., "ATOM: A Grammar for Unit Visualizations" (IEEE TVCG 2018); Hill 2025, pie/donut vs bar accuracy (Information Visualization); subitizing limit ~4 (Kaufman et al. 1949, Wikipedia summary); ten-frames in early maths (NCTM practice). Read-time figures are model estimates until the Tile Test is run with people.</p>
+</div>
+<script>// Shared tile renderer for Trickle v11 pages. Renders SVG strings.
+// mode: 'F' rows of 10 split 5|5 (tile ₹100), 'D' ten-frame 2x5 blocks (tile ₹100),
+// 'B' one tile = one day of budget (₹200 at ₹6,000/month), plain rows of 10, 'A' flat ₹100 no grouping, etc.
+window.TILE = (function(){
+  const UNIT = {F:100, D:100, B:200, A:100, C:60, E:200, G:50, H:10, I:100};
+  function svg(mode, amount, opt){
+    opt = opt||{};
+    const s = opt.size||12, g = Math.max(2, Math.round(s*0.2)), gap5 = Math.round(s*0.55);
+    const unit = UNIT[mode]; let n = amount/unit;
+    const full = Math.floor(n+1e-9), part = n-full;
+    const maxTiles = opt.max||120; const clipped = full > maxTiles;
+    const shown = Math.min(full, maxTiles);
+    const cells = []; // [x,y,fraction]
+    const perRow = 10;
+    if (mode==='D'){
+      // ten-frames: blocks of 2 rows x 5, laid out 2 blocks per line
+      const bw = 5*(s+g)-g, bh = 2*(s+g)-g, bgap = Math.round(s*0.9);
+      const total = shown + (part>0.01?1:0);
+      for (let i=0;i<total;i++){
+        const b = Math.floor(i/10), k=i%10, bx=(b%2)*(bw+bgap), by=Math.floor(b/2)*(bh+bgap);
+        cells.push([bx+(k%5)*(s+g), by+Math.floor(k/5)*(s+g), i<shown?1:part]);
+      }
+    } else {
+      const total = shown + (part>0.01?1:0);
+      for (let i=0;i<total;i++){
+        const r=Math.floor(i/perRow), c=i%perRow;
+        const extra = (mode==='F'||mode==='B') && c>=5 ? gap5 : 0;
+        const rgap = (mode==='F') ? Math.round(s*0.35) : 0;
+        cells.push([c*(s+g)+extra, r*(s+g+rgap), i<shown?1:part]);
+      }
+    }
+    let w=0,h=0; cells.forEach(([x,y])=>{w=Math.max(w,x+s);h=Math.max(h,y+s);});
+    if(!cells.length){w=s;h=s;}
+    const fill = opt.fill||'var(--tile)', empty = opt.empty||'var(--tile-empty)';
+    const spent = opt.spent||0; // number of tiles (from end) drawn hollow
+    let out = `<svg class="tiles" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${opt.label||''}">`;
+    cells.forEach(([x,y,f],i)=>{
+      const hollow = i >= cells.length - spent;
+      if (f>=0.999){
+        out += hollow ? `<rect x="${x+0.75}" y="${y+0.75}" width="${s-1.5}" height="${s-1.5}" rx="2" fill="none" stroke="${empty}" stroke-width="1.5"/>`
+                      : `<rect x="${x}" y="${y}" width="${s}" height="${s}" rx="2" fill="${fill}"/>`;
+      } else {
+        const fh = Math.max(1.5, s*f);
+        out += `<rect x="${x+0.75}" y="${y+0.75}" width="${s-1.5}" height="${s-1.5}" rx="2" fill="none" stroke="${fill}" stroke-width="1.5" opacity=".55"/><rect x="${x}" y="${y+s-fh}" width="${s}" height="${fh}" rx="1.5" fill="${fill}"/>`;
+      }
+    });
+    out += '</svg>';
+    return {html: out, count: n, clipped};
+  }
+  return {svg, UNIT};
+})();
+</script>
+<script>
+const W=[.25,.20,.15,.15,.15,.10], HEAD=["Learn","Glance","Honest","Scale","Load","Fit"];
+const C=[
+ ["F","₹100 tile, rows of 10 split 5|5","Row = ₹1,000. Grouping only, one glyph.",[5,5,5,4,5,5]],
+ ["D","Ten-frame blocks of ₹100","2×5 blocks like school ten-frames; block = ₹1,000.",[4,4,5,4,4,5]],
+ ["A","₹100 flat, no grouping","Same unit as F without structure; must count.",[5,2,5,3,3,4]],
+ ["I","₹100 tile + ₹1,000 bar","Rows collapse into bars. Two glyphs = denominations again.",[3,4,4,4,3,4]],
+ ["B","1 tile = 1 day of budget","₹6,000/30 = ₹200 per tile. Meaningful, but moves with budget.",[3,4,5,3,3,2]],
+ ["E","Personal unit at onboarding","User picks ₹50/100/200. Differs between users and screenshots.",[3,3,5,3,3,3]],
+ ["G","₹50 flat","Chai-friendly; income becomes 180 tiles.",[4,2,5,2,2,4]],
+ ["C","1% of monthly budget","Proportional; value changes with budget.",[2,3,5,2,3,3]],
+ ["J","Coin and note glyphs","₹10 coin … ₹500 note. v10's shape ladder in costume.",[2,3,3,3,2,3]],
+ ["H","₹10 flat","Honest at chai scale; unusable at budget scale.",[4,1,5,1,1,3]],
+];
+const score=s=>s.reduce((a,v,i)=>a+v*W[i],0);
+const top3=new Set(["F","D","B"]);
+document.getElementById('heroTiles').innerHTML=TILE.svg('F',6000,{size:20,spent:24,label:'60 tiles, 24 outlined'}).html
+ .replace(/(<svg[^>]*>)/,'$1');
+// hero: spent tiles as outlines; 2350 spent = 23.5; approximate with 24 outlined for visual
+document.getElementById('cands').innerHTML=C.map(([k,n,d,s])=>{
+ const r=TILE.UNIT[k]?k:'A';
+ const a=TILE.svg(k==='J'?'A':r,350,{size:10}), b=TILE.svg(k==='J'?'A':r,2400,{size:10});
+ return `<div class="card cand"><div style="display:flex;justify-content:space-between;gap:8px"><h3>${k} · ${n}</h3>${k==='F'?'<span class="pill win">Winner</span>':top3.has(k)?'<span class="pill">Top 3</span>':''}</div>
+ <p class="muted" style="font-size:13px">${d}</p>
+ <div class="row"><div>${a.html}<div class="lab">₹350 · ${a.count.toFixed(1)}</div></div><div>${b.html}<div class="lab">₹2,400 · ${b.count.toFixed(0)}</div></div></div>
+ <div style="display:flex;align-items:center;gap:8px;margin-top:10px"><div class="bar" style="flex:1"><b style="width:${score(s)/5*100}%"></b></div><span class="num">${score(s).toFixed(2)}</span></div></div>`}).join('');
+document.getElementById('score').innerHTML='<tr><th>Candidate</th>'+HEAD.map((h,i)=>`<th class="num">${h} ${W[i]*100}%</th>`).join('')+'<th class="num">Total</th></tr>'+
+ [...C].sort((a,b)=>score(b[3])-score(a[3])).map(([k,n,,s])=>`<tr><td><b>${k}</b> ${n}</td>${s.map(v=>`<td class="num">${v}</td>`).join('')}<td class="num"><b>${score(s).toFixed(2)}</b></td></tr>`).join('');
+const S=[["Chai",25],["Auto ride",60],["Food order",350],["Subscription",499],["Week's spending",1200],["Food budget",2400],["Savings so far",3000],["Goal ₹8,000 at 52%",4160],["Monthly budget",6000],["Monthly income",9000]];
+function rt(mode,v){const n=v/TILE.UNIT[mode],f=Math.floor(n+1e-9),p=n-f>0.01?0.4:0;
+ if(mode==='F'){const rows=Math.floor(f/10),rem=f%10;return 0.5+rows*0.3+(rem>=5?0.3:0)+(rem%5?0.4:0)+p;}
+ if(mode==='D'){const bl=Math.floor(f/10),rem=f%10;return 0.5+bl*0.3+(rem>=5?0.3:0)+(rem%5?0.4:0)+p+0.2;}
+ return 0.5+(f<=4?0.4:0.4+0.3*(f-4))+p;}
+document.getElementById('scenTable').innerHTML='<tr><th>Scenario</th><th class="num">₹</th><th class="num">F tiles</th><th class="num">F read</th><th class="num">D tiles</th><th class="num">D read</th><th class="num">B tiles</th><th class="num">B read</th></tr>'+
+ S.map(([n,v])=>`<tr><td>${n}</td><td class="num">${v.toLocaleString('en-IN')}</td>${['F','D','B'].map(m=>`<td class="num">${(v/TILE.UNIT[m]).toFixed(v/TILE.UNIT[m]<10?2:0)}</td><td class="num">${rt(m,v).toFixed(1)} s</td>`).join('')}</tr>`).join('')+
+ `<tr><td><b>Average read</b></td><td></td>${['F','D','B'].map(m=>`<td></td><td class="num"><b>${(S.reduce((a,[,v])=>a+rt(m,v),0)/S.length).toFixed(1)} s</b></td>`).join('')}</tr>`;
+document.getElementById('scen').innerHTML=S.map(([n,v])=>{const t=TILE.svg('F',v,{size:14});
+ const f=Math.floor(v/100),rows=Math.floor(f/10),rem=f%10,part=v%100;
+ const say=[rows?rows+(rows>1?' rows':' row'):'',rem?rem+(rem>1?' tiles':' tile'):'',part?(part/100).toFixed(2).replace(/^0/,'')+' of a tile':''].filter(Boolean).join(' + ');
+ return `<div class="card"><div class="eyebrow">${n}</div><div style="margin:10px 0">${t.html}</div><div class="v">₹${v.toLocaleString('en-IN')} · ${say}</div></div>`}).join('');
+</script>

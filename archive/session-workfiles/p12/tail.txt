@@ -1,0 +1,4 @@
+| P11-Q1 | Pay UPI ID measured 4 taps (plan said 3) | A: recent payee chips under the viewfinder (3 taps) / B: keep as built | A | B — 4 taps accepted; the plan's target of 3 was miscounted | decided | 2026-10-01 |
+| P11-Q2 | New goal measured 4 taps (plan said 2) vs "one step per screen" | A: keep three one-decision steps / B: name + amount on one screen | A | A — keep one decision per screen; 4 taps accepted | decided | 2026-10-01 |
+
+Note: Tarun's message labelled these the other way round (Q1 = new goal, Q2 = Pay UPI ID); answers recorded against the matching question text.
