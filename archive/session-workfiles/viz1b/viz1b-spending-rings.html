@@ -1,0 +1,267 @@
+<title>Trickle v14 — Spending Rings</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a design board in the Viz 1 family. Sections A-F; each is a question, a gallery of dark phone
+   frames (rows = options, columns = students or moments), then what the drawing showed. Same tokens as Viz 1. */
+:root{
+  --bg:#f0f1ec; --surface:#fafaf7; --ink:#14181b; --ink2:#444c54; --muted:#727a83; --line:#d6d9d1;
+  --accent:#0d7a64; --accent-soft:#d9ece5; --amber:#a9680f;
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px;padding-block:40px 80px}
+@media (max-width:600px){.wrap{padding-inline:16px;padding-block:24px 56px}}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.12;margin:0}
+h1{font-size:clamp(30px,5vw,50px);font-weight:700;letter-spacing:-.02em}
+h2{font-size:clamp(23px,3vw,31px);font-weight:700;letter-spacing:-.01em}
+h3{font-size:18px;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lead{font-size:18px;color:var(--ink2);max-width:62ch}
+header.top{display:flex;flex-direction:column;gap:16px;padding-bottom:28px}
+section{display:flex;flex-direction:column;gap:18px;padding-block:40px;border-top:1px solid var(--line)}
+.sec-h{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.sec-h .k{font-family:var(--display);font-weight:700;font-size:clamp(23px,3vw,31px);color:var(--accent)}
+.q{color:var(--ink2)}
+ul.plain{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.logged{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.logged div{border-top:2px solid var(--ink);padding-top:10px}
+.logged b{display:block;font-family:var(--display);font-size:17px;margin-bottom:4px}
+.logged span{color:var(--ink2);font-size:15px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right}
+.opt{display:flex;flex-direction:column;gap:10px}
+.opt>h4{margin:0;font-size:15.5px;font-weight:600;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.opt>h4 b{font-family:var(--display);background:var(--ink);color:var(--bg);border-radius:5px;padding:1px 7px;font-size:13.5px}
+.opt>h4 span{color:var(--muted);font-weight:400}
+.gal{display:flex;flex-direction:column;gap:26px}
+.row{display:grid;grid-template-columns:repeat(6,minmax(170px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.row.four{grid-template-columns:repeat(4,minmax(200px,1fr))}
+.row.three{grid-template-columns:repeat(3,minmax(200px,300px))}
+.fg{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fg figcaption{font-size:13px;color:var(--muted);line-height:1.3}
+.fg figcaption b{color:var(--ink);font-weight:600}
+svg.ph{width:100%;height:auto;display:block;font-family:var(--body)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px 28px}
+.note{border-top:1px solid var(--line);padding-top:10px;font-size:15px;color:var(--ink2)}
+.note b{display:block;color:var(--ink);font-family:var(--display);font-size:16px;margin-bottom:3px}
+.demo{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:700px){.demo{grid-template-columns:minmax(0,1fr)}}
+.ctl{display:flex;flex-direction:column;gap:16px}
+.ctl .grp{display:flex;flex-direction:column;gap:7px}
+.ctl .lbl{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font:inherit;font-size:14.5px;font-weight:600;white-space:nowrap;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer}
+.chip:hover{border-color:var(--ink2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn{font:inherit;font-size:15px;font-weight:700;padding:10px 18px;border-radius:10px;border:0;background:var(--accent);color:#04231b;cursor:pointer;align-self:flex-start}
+.chip:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;max-width:420px;accent-color:var(--accent)}
+.small{font-size:13.5px;color:var(--muted)}
+.decide{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px}
+.dq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.dq h3{font-size:17px}
+.dq ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:5px;font-size:15px;color:var(--ink2);list-style:upper-alpha}
+.dq li.s{color:var(--ink)}
+.dq li.s::after{content:" suggested";font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-left:4px}
+
+svg.ph rect.bx{transition:fill .6s ease,transform .6s ease}
+@media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
+
+.lg{animation:lgin .9s ease .7s both}
+@keyframes lgin{from{opacity:0}to{opacity:1}}
+.static .lg{animation:none}
+@media (prefers-reduced-motion: reduce){.lg{animation:none}}
+
+svg.ph [data-open]{cursor:pointer}
+svg.ph [data-open]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+.lg.now{animation:none}
+
+svg.ph [data-go]{cursor:pointer}
+svg.ph [data-go]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Trickle v14 · Visualisation 1 follow-up · 2 Oct 2026</div>
+  <h1>Spending rings</h1>
+  <p class="lead">The nested rings are the main view of the Spending tab. Each category is a ring in its own colour, with no labels on the rings. Tap a category and a full screen opens with its grid and transactions. Drawn for all six students. Tap a row or ring in the demo.</p>
+</header>
+
+<section style="border-top:0;padding-top:0">
+  <div class="sec-h"><h2>Already decided</h2></div>
+  <div class="logged">
+    <div><b>V1-10 · Main view</b><span>The nested rings are the Spending tab's main view.</span></div>
+    <div><b>V1-11 · Full screen</b><span>Tapping a category opens a full screen, not a drop-down.</span></div>
+    <div><b>V1-12 · Colour-coded</b><span>Every ring has its own colour. No "outer / 2nd" tags, no numbers on the rings.</span></div>
+    <div><b>Carried over</b><span>A ring shows money left, so it drains (V1-1). Going over is an empty ring with an amber mark, no red (V1-4). The detail screen's scale is the green chip (V3-11).</span></div>
+  </div>
+  <p class="small">Not yet confirmed, drawn as defaults: five rings plus one "Others" ring, the same colours as the Income grid, a name list with colour swatches under the rings, the detail grid in the category's colour, and Fixed bills as one row.</p>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">A</span><h2>The Spending tab</h2></div>
+  <p class="q">All six students, left to right by number of categories. Rings run biggest budget outermost. Where there are more than five categories the rest share one light-orange "Others" ring.</p>
+  <div class="gal" id="secA"></div>
+  <div class="notes" id="noteA"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">B</span><h2>Tap a category: the full screen</h2></div>
+  <p class="q">The category each student would most likely tap. Grid in the category's colour, the scale chip, the exact figure, and its transactions. Harsh-type's Eating out has gone over.</p>
+  <div class="gal" id="secB"></div>
+  <div class="notes" id="noteB"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">C</span><h2>Tap "Others"</h2></div>
+  <p class="q">The Others ring opens the full list of what it holds. Nishad-type has 7 others and Harsh-type 13. Tapping a name opens its detail screen like B.</p>
+  <div class="gal" id="secC"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">D</span><h2>Try it</h2></div>
+  <p class="q">Pick a student, then tap a ring or a name. Back returns to the rings.</p>
+  <div class="demo">
+    <div id="demo"></div>
+    <div class="ctl">
+      <div class="grp"><span class="lbl">Student</span><div class="chips" id="cs"></div></div>
+      <span class="small">Tap a name or a ring to open it. Tap "Others" for the list. Tap ‹ Spending to go back.</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>Still to confirm</h2></div>
+  <div class="decide">
+    <div class="dq"><h3>1. How many rings?</h3><ol><li class="s">Biggest five, the rest as one "Others" ring.</li><li>Every category its own ring, thinner as they multiply.</li></ol></div>
+    <div class="dq"><h3>2. Colour of the detail grid</h3><ol><li class="s">The category's colour, so the colour follows you in.</li><li>Always the green liquid from Viz 1.</li></ol></div>
+    <div class="dq"><h3>3. Names under the rings</h3><ol><li class="s">Swatch and name, nothing else.</li><li>Names appear only when you press a ring.</li></ol></div>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+const PBG='#0b0d10',EDGE='#2b3038',CELL='#2a3039',INK='#f2f4f5',MUT='#8f97a1',GRN='#62dcb4',AMB='#e3a43f',HI='#d4faee';
+const CATS=['#5aa9ff','#b48cff','#ff7eb6','#f2d65b','#4fd1e6'],OTH='#f6b27c';
+const C=27.5,P=32.5,SZ=320;
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const fmt=n=>{const a=Math.abs(n);return '₹'+(Math.abs(a-Math.round(a))<1e-9?Math.round(a).toLocaleString('en-IN'):a.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}))};
+const T=(x,y,s,sz,o={})=>`<text x="${x}" y="${y}" font-size="${sz}" font-weight="${o.w||400}" fill="${o.f||INK}" text-anchor="${o.a||'start'}" ${o.ls?`letter-spacing="${o.ls}"`:''}>${esc(s)}</text>`;
+const rowTop=r=>SZ-C-r*P;
+function words(p){if(p<0)return'gone over';if(p<=0)return'empty';if(p<10)return'nearly empty';if(p<25)return'a little left';if(p<45)return'under half left';if(p<=55)return'about half left';if(p<75)return'over half left';if(p<95)return'most of it left';return'full'}
+const cut=(s,n)=>s.length>n?s.slice(0,n-1)+'…':s;
+
+/* students: [name, budget, left] ; week/month ; tx for the featured category */
+const S=[
+ {short:'Vaishak-type',per:'This month',cats:[['Food',2400,168],['Other',300,60]],fixed:'',feat:'Food',tx:[['Hostel canteen',60,'Today'],['Swiggy',189,'Yesterday'],['Tea stall',20,'Mon'],['Biryani point',220,'Sun'],['Canteen',75,'Sat']]},
+ {short:'Gautham-type',per:'This week',cats:[['Food & drinks',652,571],['Travel',75,40],['Other',25,25]],fixed:'YouTube Premium due Friday',feat:'Food & drinks',tx:[['Juice shop',40,'Today'],['Canteen lunch',41,'Mon']]},
+ {short:'Tarun-type',per:'This week',cats:[['Food',500,260],['Coffee & snacks',400,140],['Travel',175,175],['Other',100,70]],fixed:'',feat:'Coffee & snacks',tx:[['Chai',20,'Today'],['Coffee',60,'Today'],['Chai ×2',40,'Wed'],['Samosa + chai',45,'Tue'],['Cold coffee',95,'Mon']]},
+ {short:'Yash-type',per:'This week',cats:[['Quick-commerce',1000,90],['Food',225,160],['Travel',125,125],['Fun',100,40],['Study',75,75],['Phone',50,50],['Other',25,25]],fixed:'Phone plan paid',feat:'Quick-commerce',tx:[['Zepto · 4 items',312,'Today'],['Blinkit · 5 items',268,'Wed'],['Zepto · 2 items',141,'Tue'],['Instamart · 3 items',189,'Mon']]},
+ {short:'Nishad-type',per:'This month',cats:[['Food & beverages',6000,2910],['Travel',2000,1300],['Fun',1500,400],['Study',1200,1000],['Gifts',800,800],['Snacks',700,150],['Haircut',700,700],['Phone',600,450],['Misc',600,500],['Stationery',500,300],['Clothes',500,500],['Books',400,400]],fixed:'3 bills, 1 due soon',feat:'Food & beverages',tx:[['Cafe',240,'Today'],['Zomato',410,'Yesterday'],['Groceries',680,'Mon'],['Dinner with friends',1150,'Sun'],['Tea + snacks',90,'Sat']]},
+ {short:'Harsh-type',per:'This month',cats:[['Mess & meals',2400,700],['Eating out',1600,-1900],['Fuel',400,250],['Gifts',300,300],['Fun',300,120],['Study',200,150],['Snacks',100,40],['Printouts',100,100],['Haircut',100,100],['Coffee',100,30],['Books',100,100],['Repairs',100,100],['Medical',100,100],['Charity',100,100],['Laundry',75,60],['Stationery',75,75],['Parking',75,75],['Misc',75,75]],fixed:'3 bills, 1 due soon',feat:'Eating out',tx:[['Dinner with friends',3500,'Sat'],['Cafe',240,'Tue'],['Pizza place',380,'Sun']]}
+];
+S.forEach(s=>{const sorted=[...s.cats].sort((a,b)=>b[1]-a[1]);s.rank=sorted.map(c=>c[0]);
+  s.top=sorted.slice(0,5).map((c,i)=>({n:c[0],b:c[1],l:c[2],color:CATS[i]}));
+  const rest=sorted.slice(5);s.others=rest.map(c=>({n:c[0],b:c[1],l:c[2]}));
+  if(rest.length)s.top.push({n:rest.length===1?rest[0][0]:'Others',b:rest.reduce((a,c)=>a+c[1],0),l:rest.reduce((a,c)=>a+Math.max(0,c[2]),0),color:OTH,isOthers:rest.length>1})});
+const colorOf=(st,name)=>{const t=st.top.find(x=>x.n===name);return t?t.color:OTH};
+
+const TABS=['Home','Income','Spending','Savings','Insights'];
+const tabbar=a=>{let tb=`<line x1="0" y1="770" x2="390" y2="770" stroke="${EDGE}"/>`;TABS.forEach((t,i)=>{const x=39+78*i;tb+=T(x,808,t,14,{a:'middle',f:i===a?INK:MUT,w:i===a?700:400});if(i===a)tb+=`<rect x="${x-14}" y="782" width="28" height="4" rx="2" fill="${GRN}"/>`});return tb};
+const frame=(inner,label,tab)=>`<svg class="ph" viewBox="0 0 390 844" role="img" aria-label="${esc(label)}"><rect x="1" y="1" width="388" height="842" rx="46" fill="${PBG}" stroke="${EDGE}" stroke-width="2"/><rect x="150" y="16" width="90" height="24" rx="12" fill="#000"/>${inner}${tabbar(tab)}</svg>`;
+const scaleChip=(x,y,txt)=>`<rect x="${x}" y="${y}" width="${Math.round(txt.length*12.4+60)}" height="38" rx="12" fill="#17201e" stroke="${GRN}" stroke-opacity=".75" stroke-width="1.6"/><rect x="${x+12}" y="${y+10}" width="18" height="18" rx="5" fill="${GRN}"/>${T(x+40,y+27,txt,21,{w:700})}`;
+
+/* ---------- rings screen ---------- */
+function rings(st){
+  const n=st.top.length,cx=195,cy=322,R0=138,step=Math.min(22,(R0-26)/n),sw=Math.min(15,step-5);let g='';
+  st.top.forEach((c,i)=>{const r=R0-i*step,circ=2*Math.PI*r,f=Math.max(0,Math.min(1,c.l/c.b));
+    g+=`<g data-go="${c.isOthers?'others':'cat:'+c.n}" role="button" tabindex="0" aria-label="${esc(c.n)}"><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${CELL}" stroke-width="${sw}"/>`;
+    if(f>0)g+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${c.color}" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${(f*circ).toFixed(1)} ${circ.toFixed(1)}" transform="rotate(-90 ${cx} ${cy})"/>`;
+    if(c.l<=0)g+=`<circle cx="${cx}" cy="${cy-r}" r="${sw/2+1}" fill="${AMB}"/>`;
+    g+='</g>'});
+  return g}
+function spendScreen(st){
+  let s=T(35,76,'Spending',17,{f:MUT})+T(35,112,st.per,30,{w:600});
+  s+=rings(st);
+  const y0=512;
+  st.top.forEach((c,i)=>{const y=y0+i*27;
+    s+=`<g data-go="${c.isOthers?'others':'cat:'+c.n}" role="button" tabindex="0" aria-label="Open ${esc(c.n)}"><rect x="35" y="${y-18}" width="320" height="26" rx="8" fill="transparent"/><rect x="40" y="${y-14}" width="17" height="17" rx="5" fill="${c.color}"/>${T(68,y,cut(c.isOthers?`${st.others.length} others`:c.n,22),17.5,{w:500})}${T(349,y,'›',22,{a:'end',f:MUT})}</g>`});
+  const fy=y0+st.top.length*27+16;
+  if(st.fixed)s+=`<line x1="35" y1="${fy-18}" x2="355" y2="${fy-18}" stroke="${EDGE}"/>${T(40,fy+4,'Fixed',17.5,{w:600})}${T(349,fy+4,cut(st.fixed,28),15.5,{a:'end',f:MUT})}`;
+  return frame(s,`${st.short} spending: rings for ${st.top.map(c=>c.n).join(', ')}`,2)}
+
+/* ---------- detail screen ---------- */
+function liquid(L,color,k){let m='',pcs='';
+  for(let i=0;i<100;i++){const r=Math.floor(i/10),c=i%10;pcs+=`<rect x="${c*P}" y="${rowTop(r)}" width="${C}" height="${C}" rx="7" fill="${CELL}"/>`;
+    const fa=Math.max(0,Math.min(1,L-i));if(fa>0)pcs+=`<rect x="${c*P}" y="${rowTop(r)+C*(1-fa)}" width="${C}" height="${C*fa}" rx="${fa>.99?7:2}" fill="${color}"/>`}
+  return `<g transform="translate(35 178) scale(${k})">${pcs}</g>`}
+function detailScreen(st,name){
+  const cat=st.cats.find(c=>c[0]===name),b=cat[1],l=cat[2],color=colorOf(st,name),box=b/100,over=l<0;
+  const L=Math.max(0,l)/box,pct=l/b*100;
+  let s=T(35,76,'‹ Spending',17,{f:MUT}).replace('<text','<text data-go="back" role="button" tabindex="0" style="cursor:pointer"');
+  s+=`<rect x="35" y="86" width="14" height="14" rx="4" fill="${color}" transform="translate(0 -1)"/>`;
+  s=s.replace(`<rect x="35" y="86"`,`<rect x="35" y="87"`);
+  s+=T(58,112,cut(name,18),30,{w:600})+scaleChip(35,124,`1 box = ${fmt(box)}`);
+  s+=liquid(L,color,.42);
+  if(over)s+=`<rect x="29" y="${178+134+3}" width="146" height="5" rx="2.5" fill="${AMB}"/>`;
+  s+=T(185,200,over?'gone over':words(pct),22,{w:600});
+  s+=T(185,232,over?`${fmt(-l)} over ${fmt(b)}`:`${fmt(l)} left of ${fmt(b)}`,18,{f:MUT});
+  s+=T(185,258,over?`taken from next ${st.per.includes('week')?'week':'month'}`:st.per.toLowerCase(),17,{f:MUT});
+  s+=`<line x1="35" y1="338" x2="355" y2="338" stroke="${EDGE}"/>`;
+  s+=T(35,372,'Transactions',16,{f:MUT,w:600,ls:'.6'});
+  const tx=name===st.feat?st.tx:[];
+  tx.slice(0,6).forEach((t,i)=>{const y=410+i*54;s+=T(35,y,cut(t[0],20),19,{w:500})+T(355,y,fmt(t[1]),19,{a:'end',w:500})+T(35,y+22,t[2],14.5,{f:MUT})});
+  if(!tx.length)s+=T(35,410,'Nothing yet this period.',17,{f:MUT});
+  return frame(s,`${st.short} ${name} detail, ${over?'gone over':words(pct)}`,2)}
+
+/* ---------- others list ---------- */
+function othersScreen(st){
+  let s=T(35,76,'‹ Spending',17,{f:MUT}).replace('<text','<text data-go="back" role="button" tabindex="0" style="cursor:pointer"');
+  s+=T(35,112,`${st.others.length} others`,30,{w:600})+T(35,144,st.per,19,{f:MUT});
+  st.others.slice(0,13).forEach((c,i)=>{const y=190+i*41;
+    s+=`<g data-go="cat:${esc(c.n)}" role="button" tabindex="0" aria-label="Open ${esc(c.n)}"><rect x="35" y="${y-24}" width="320" height="36" rx="8" fill="transparent"/>${T(40,y,cut(c.n,20),18.5,{w:500})}${T(318,y,words(c.l/c.b*100),15.5,{a:'end',f:MUT})}${T(349,y,'›',22,{a:'end',f:MUT})}</g>`});
+  return frame(s,`${st.short} others list`,2)}
+
+const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c)}</figcaption></figure>`;
+document.getElementById('secA').innerHTML=`<div class="opt"><div class="row">`+S.map(st=>fg(spendScreen(st),st.short,`${st.cats.length} categories · ${st.per.toLowerCase()}`)).join('')+`</div></div>`;
+document.getElementById('noteA').innerHTML=`
+<div class="note"><b>Same picture from 2 to 18</b>Vaishak has two rings, Nishad and Harsh six (five plus Others). The rings only get thinner and the list longer.</div>
+<div class="note"><b>No numbers, no ring labels</b>The only text is the name list, with a swatch that matches the ring. Which ring is which is told by colour, and the name is one glance down.</div>
+<div class="note"><b>Gone over</b>Harsh's Eating out is an empty ring with a small amber mark at the top, no red. Yash's Quick-commerce is nearly empty.</div>`;
+document.getElementById('secB').innerHTML=`<div class="opt"><div class="row">`+S.map(st=>fg(detailScreen(st,st.feat),st.short,st.feat)).join('')+`</div></div>`;
+document.getElementById('noteB').innerHTML=`
+<div class="note"><b>The tap layer carries the numbers</b>"₹140 left of ₹400" appears here, with the scale chip above the grid and the transactions below. The rings screen has none of that.</div>
+<div class="note"><b>Colour follows you in</b>The grid's liquid is the same colour as the ring and swatch you tapped, so you know where you are without reading.</div>`;
+document.getElementById('secC').innerHTML=`<div class="opt"><div class="row three">`+[S[4],S[5]].map(st=>fg(othersScreen(st),st.short,`${st.others.length} others`)).join('')+fg(detailScreen(S[5],'Mess & meals'),'Harsh-type · from a ring','Mess & meals, no transactions drawn')+`</div></div>`;
+
+/* demo */
+const dem={s:5,view:'rings',cat:null};
+const demo=document.getElementById('demo');
+function draw(){const st=S[dem.s];demo.innerHTML=dem.view==='rings'?spendScreen(st):dem.view==='others'?othersScreen(st):detailScreen(st,dem.cat)}
+function act(k){if(k==='back'){dem.view=dem.view==='detail'&&dem.from==='others'?'others':'rings';dem.from=null}
+  else if(k==='others')dem.view='others';
+  else if(k&&k.startsWith('cat:')){dem.from=dem.view==='others'?'others':'rings';dem.view='detail';dem.cat=k.slice(4)}
+  draw()}
+demo.addEventListener('click',e=>{const t=e.target.closest('[data-go]');if(t)act(t.dataset.go)});
+demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-go]');if(t){e.preventDefault();act(t.dataset.go)}});
+const el=document.getElementById('cs');
+el.innerHTML=S.map((s,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${i===dem.s}">${s.short.replace('-type','')}</button>`).join('');
+el.onclick=e=>{const b=e.target.closest('button');if(!b)return;dem.s=+b.dataset.i;dem.view='rings';[...el.children].forEach((c,i)=>c.setAttribute('aria-pressed',i===dem.s));draw()};
+draw();
+})();
+</script>
