@@ -4,6 +4,7 @@ Trickle is a UPI-based budgeting app for students, designed by Tarun (MDes proje
 The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 
 ## Read first, in this order
+0. `HANDOVER.md` — where the last session stopped and the exact next step.
 1. `docs/claude/v14_decisions.md` — the authoritative decision log and the visualisation queue.
 2. `docs/claude/v14_stage0_facts.md` — approved facts and the 7 principles.
 3. `docs/research/brymans_analysis_interviews.md` — primary research (6 interviews).
