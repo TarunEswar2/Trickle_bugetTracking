@@ -101,6 +101,8 @@ his own gradients in Figma.
 2. Draw 3–4 options on one board, each shown for several students from the pool (income ₹3k–25k, weekly vs monthly, regular vs irregular). Follow `archive/session-workfiles/viz2/viz2-pay-friction.html` as the board pattern. Give a recommendation, ask him to choose.
 3. Log as "Viz 3" in `docs/claude/v14_decisions.md`, mark it DONE in the queue.
 
+Parked for the Savings tab / Viz 4 (Tarun, 2 Oct): add goals, make a payment toward a goal, show a few completed goals.
+
 Then continue the queue from item 4 (savings goal) in `docs/claude/v14_decisions.md`.
 
 ## Read next

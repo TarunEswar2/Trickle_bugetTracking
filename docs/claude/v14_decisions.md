@@ -53,14 +53,22 @@ Board: https://claude.ai/artifact/Fsvd6fogygvPdtsrHsqMyN (source archive/session
 | V3-1 | Income splits into spending and savings. Spending splits into budget and subscriptions. Savings splits into goals. |
 | V3-2 | All of it is drawn from the same grid (the 10x10 box grid). |
 | V3-3 | Colours: income grey, spending orange, savings green; the budget's categories are different colours (matches V1-9). |
-Board: https://claude.ai/artifact/KHq3fHEr8sebrJzRksghMQ (source archive/session-workfiles/viz3/viz3-income-split.html).
-Open (drawn as options, not decided): bands vs columns, which side savings sits on, drill-down vs all at once, how subscriptions differ from budget, many-category colours, empty groups.
+| V3-4 | Layout: **bands from the bottom** (not columns). |
+| V3-5 | **Savings at the bottom**, spending on top. |
+| V3-6 | Go deeper **level by level**, each step with a slow, smooth delay (my reading: the same grid splits in place, one step at a time). |
+| V3-7 | **Biggest five categories coloured, the rest shared as "others".** |
+| V3-8 | Labels must be separated and differentiated better: savings and spending are currently run together in one list. Either a **gutter between the savings group and the spending group**, or **drop-downs after step 2** (the split). Drawn as two options, not yet chosen. |
+Defaults, not explicitly answered: a group with nothing in it (no subscriptions / no goals) is not drawn; budget is light orange and subscriptions hatched orange.
+Board (updated): https://claude.ai/artifact/KHq3fHEr8sebrJzRksghMQ (source archive/session-workfiles/viz3/viz3-income-split.html).
+
+### Parked requirement (Tarun, 2 Oct) — Savings tab
+In the Savings tab the user must be able to **add goals**, **make a payment toward a goal**, and see **a few completed goals**. Not for now ("this happens later"); belongs with visualisation 4 (savings goal) and the Savings-tab screens. Keep track of it.
 
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
-3. Income split (spending vs savings) — IN PROGRESS (V3-1…V3-3 given)
-4. Savings goal (how much, by when, actually saved)
+3. Income split (spending vs savings) — IN PROGRESS (V3-1…V3-7 decided; label style V3-8 open)
+4. Savings goal (how much, by when, actually saved) — also: add goal, pay into a goal, completed goals (parked requirement above)
 5. Unspent → saved
 6. Small / repeat purchases
 7. Time patterns (e.g. nights)
