@@ -78,13 +78,17 @@ input[type=range]{width:100%;max-width:420px;accent-color:var(--accent)}
 .dq li.s{color:var(--ink)}
 .dq li.s::after{content:" suggested";font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-left:4px}
 
-svg.ph rect.bx{transition:fill .6s ease}
+svg.ph rect.bx{transition:fill .6s ease,transform .6s ease}
 @media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
 
 .lg{animation:lgin .9s ease .7s both}
 @keyframes lgin{from{opacity:0}to{opacity:1}}
 .static .lg{animation:none}
 @media (prefers-reduced-motion: reduce){.lg{animation:none}}
+
+svg.ph [data-open]{cursor:pointer}
+svg.ph [data-open]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+.lg.now{animation:none}
 </style>
 
 <div id="defs"></div>
@@ -92,19 +96,19 @@ svg.ph rect.bx{transition:fill .6s ease}
 <header class="top">
   <div class="eyebrow">Trickle v14 · Visualisation 3 of 11 · updated 2 Oct 2026</div>
   <h1>Income split</h1>
-  <p class="lead">Your choices are in: bands from the bottom, savings at the bottom, one step at a time, biggest five categories coloured and the rest as "others". What is left is the labels. Savings and spending ran together in one list, so below are two ways to pull them apart: a gutter between two groups, or drop-downs that appear after the split. Options only. You decide.</p>
+  <p class="lead">Drop-down labels, a gap between the savings and spending bands, and a scale line that stands out are now drawn in. Tap the labels in the demo to open them. What is left is two small defaults for you to confirm.</p>
 </header>
 
 <section style="border-top:0;padding-top:0">
   <div class="sec-h"><h2>Already decided</h2></div>
   <div class="logged">
-    <div><b>V3-1 to V3-3</b><span>Income → spending + savings; spending → budget + subscriptions; savings → goals. One grid. Income grey, spending orange, savings green, budget categories in their own colours.</span></div>
-    <div><b>V3-4 · Bands</b><span>Rows from the bottom, like the liquid in Viz 1.</span></div>
-    <div><b>V3-5 · Savings at the bottom</b><span>Spending sits on top of it.</span></div>
-    <div><b>V3-6 · Level by level</b><span>Each step splits the same grid in place, slowly and smoothly.</span></div>
-    <div><b>V3-7 · Biggest five</b><span>The five biggest categories get a colour, the rest share one "others".</span></div>
+    <div><b>V3-1 to V3-3</b><span>Income → spending + savings; spending → budget + subscriptions; savings → goals. One grid. Income grey, spending orange, savings green, categories in their own colours.</span></div>
+    <div><b>V3-4 to V3-7</b><span>Bands from the bottom, savings at the bottom, level by level with a slow smooth delay, biggest five categories coloured and the rest "Others".</span></div>
+    <div><b>V3-9 · Drop-downs</b><span>After the split, two lines: Savings and Spending. Each opens into its own list.</span></div>
+    <div><b>V3-10 · Gap in the grid</b><span>A visible gap between the savings band and the spending band.</span></div>
+    <div><b>V3-11 · Scale line</b><span>"1 box = ₹120" is a prominent chip, on every screen that shows it.</span></div>
   </div>
-  <p class="small">The student's name is not on the phone any more; it is in the caption. The scale line moved up under the title to make room for the labels.</p>
+  <p class="small">Where the split falls inside a row, the spending boxes in that row sit higher than the savings boxes beside them, so the edge steps instead of cutting a row in two.</p>
 </section>
 
 <section>
@@ -116,27 +120,26 @@ svg.ph rect.bx{transition:fill .6s ease}
 </section>
 
 <section>
-  <div class="sec-h"><span class="k">A</span><h2>Two ways to label it</h2></div>
-  <p class="q">Same grid, same colours. Only the list under the grid changes. Row L1 puts savings and spending side by side in two headed groups with a gutter between them. Row L2 shows two collapsed lines after the split ("Savings", "Spending") that open into their own lists when tapped.</p>
+  <div class="sec-h"><span class="k">A</span><h2>The four steps, and the drop-downs</h2></div>
+  <p class="q">Tarun-type and Nishad-type go step by step. The third row shows the drop-downs open at the deepest step, for 4, 12 and 18 categories.</p>
   <div class="gal" id="secA"></div>
   <div class="notes" id="noteA"></div>
 </section>
 
 <section>
   <div class="sec-h"><span class="k">B</span><h2>All six at the deepest step</h2></div>
-  <p class="q">Bands, savings at the bottom, biggest five coloured. Labels shown as L1 (groups with a gutter). Left to right by number of categories.</p>
+  <p class="q">First row: labels closed. Second row: Spending open. Left to right by number of categories.</p>
   <div class="gal" id="secB"></div>
   <div class="notes" id="noteB"></div>
 </section>
 
 <section>
   <div class="sec-h"><span class="k">C</span><h2>Try it, level by level</h2></div>
-  <p class="q">Each step recolours the same grid from the bottom up over about a second and a half, then the labels fade in. Play runs all four steps with a pause between. Reduced motion skips the fade and the pauses.</p>
+  <p class="q">Each step recolours the grid from the bottom up over about a second and a half, then the labels fade in. The gap opens at step 2. Tap Savings or Spending to open a list. Play runs all four steps with a pause between. Reduced motion skips the fades and pauses.</p>
   <div class="demo">
     <div id="demo"></div>
     <div class="ctl">
       <div class="grp"><span class="lbl">Student</span><div class="chips" id="cs"></div></div>
-      <div class="grp"><span class="lbl">Labels</span><div class="chips" id="cl"></div></div>
       <div class="grp"><span class="lbl">Step</span><div class="chips" id="cv"></div></div>
       <div class="chips"><button class="btn" id="play" type="button">Play all four</button><button class="chip" id="back" type="button">Back</button><button class="chip" id="next" type="button">Next</button></div>
       <span class="small" id="dnote"></span>
@@ -145,22 +148,21 @@ svg.ph rect.bx{transition:fill .6s ease}
 </section>
 
 <section>
-  <div class="sec-h"><h2>Decisions for Tarun</h2></div>
+  <div class="sec-h"><h2>Still to confirm</h2></div>
   <div class="decide">
-    <div class="dq"><h3>1. Which labels?</h3><ol><li class="s">Two headed groups side by side with a gutter (L1).</li><li>Collapsed "Savings" and "Spending" lines that open into drop-downs after the split (L2).</li></ol><span class="small">Also: did "gutter" mean only in the label list, or also a visible gap between the savings band and the spending band inside the grid?</span></div>
-    <div class="dq"><h3>2. Budget against subscriptions</h3><ol><li class="s">Budget light orange, subscriptions hatched orange.</li><li>Both the same orange with a line between.</li></ol></div>
-    <div class="dq"><h3>3. A group with nothing in it</h3><ol><li class="s">No subscriptions or no goals: not drawn.</li><li>Shown empty and named ("no goal yet").</li></ol></div>
+    <div class="dq"><h3>1. Budget against subscriptions</h3><ol><li class="s">Budget light orange, subscriptions hatched orange.</li><li>Both the same orange with a line between.</li></ol></div>
+    <div class="dq"><h3>2. A group with nothing in it</h3><ol><li class="s">No subscriptions or no goals: not drawn.</li><li>Shown empty and named ("no goal yet").</li></ol></div>
+    <div class="dq"><h3>3. The stepped edge</h3><ol><li class="s">Spending boxes in the split row sit higher than the savings boxes beside them (as drawn).</li><li>Round savings to whole rows so the gap is a straight line. This changes the shares: ₹1,000 of ₹6,000 would show as 20% instead of 17%.</li></ol></div>
   </div>
 </section>
 </div>
-
 <script>
 (function(){
 const PBG='#0b0d10',EDGE='#2b3038',INK='#f2f4f5',MUT='#8f97a1';
 const GREY='#6b727c',ORG='#f08a3c',ORGL='#f6b27c',GRN='#62dcb4';
 const GOALS=['#62dcb4','#2f9c7c','#a6efd6'];
 const CATS=['#5aa9ff','#b48cff','#ff7eb6','#f2d65b','#4fd1e6'];
-const C=27.5,P=32.5,SZ=320;
+const C=27.5,P=32.5,SZ=320,GAP=16;
 const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 const fmt=n=>'₹'+Math.round(n).toLocaleString('en-IN');
@@ -195,89 +197,79 @@ function regions(st,level){
       if(rest.length)parts.push({amt:rest.reduce((a,c)=>a+c[1],0),color:ORGL,name:rest.length===1?rest[0][0]:'Others'})}}
   const b=lr(top[1],parts.map(p=>p.amt));parts.forEach((p,i)=>out.push({n:b[i],color:p.color,name:p.name,g:'spend'}));
   return out.filter(r=>r.n>0)}
-function fills(st,level){const f=[];regions(st,level).forEach(r=>{for(let k=0;k<r.n;k++)f.push(r.color)});return f}
-
+function fills(st,level){const f=[],g=[];regions(st,level).forEach(r=>{for(let k=0;k<r.n;k++){f.push(r.color);g.push(r.g)}});return {f,g}}
+const scaleChip=(x,y,txt)=>`<rect x="${x}" y="${y}" width="${Math.round(txt.length*12.4+60)}" height="38" rx="12" fill="#17201e" stroke="${GRN}" stroke-opacity=".75" stroke-width="1.6"/><rect x="${x+12}" y="${y+10}" width="18" height="18" rx="5" fill="${GRN}"/>${T(x+40,y+27,txt,21,{w:700})}`;
 const cut=(s,n)=>s.length>n?s.slice(0,n-1)+'…':s;
 function legend(st,level,o){
-  const R=regions(st,level);let s='';
-  if(level===0)return `<rect x="35" y="531" width="18" height="18" rx="5" fill="${GREY}"/>${T(62,546,'Income',18,{w:500})}`;
-  const sav=R.filter(r=>r.g==='sav'),sp=R.filter(r=>r.g==='spend');
-  if(o.label==='L1'){
-    s+=`<line x1="190" y1="530" x2="190" y2="752" stroke="${EDGE}" stroke-width="1.5"/>`;
-    [[sav,35,'SAVINGS',GRN],[sp,205,'SPENDING',ORG]].forEach(([list,x,h,hc])=>{
-      s+=T(x,545,h,12.5,{f:MUT,w:700,ls:'1.4'})+`<rect x="${x}" y="552" width="${x===35?140:150}" height="2" rx="1" fill="${hc}"/>`;
-      list.forEach((r,i)=>{const y=582+i*28;s+=`<rect x="${x}" y="${y-15}" width="18" height="18" rx="5" fill="${r.color}"/>${T(x+26,y,cut(r.name,x===35?14:16),15.5,{w:500})}`})});
-  }else{
-    const hdr=(y0,label,list,hc,open)=>{const y=y0+24;let t=`<rect x="35" y="${y0}" width="320" height="36" rx="12" fill="#14181d" stroke="${EDGE}"/>`;
-      t+=`<rect x="47" y="${y0+9}" width="5" height="18" rx="2.5" fill="${hc}"/>${T(62,y,label,18,{w:600})}`;
-      let x=352-(list.length*17)-20;list.forEach(r=>{t+=`<rect x="${x}" y="${y-12}" width="12" height="12" rx="3" fill="${r.color}"/>`;x+=17});
-      t+=T(349,y,open?'▾':'▸',18,{a:'end',f:MUT});return t};
-    const items=(y,list)=>{let t='';list.forEach(r=>{y+=21;t+=`<rect x="62" y="${y-13}" width="15" height="15" rx="4.5" fill="${r.color}"/>${T(86,y,cut(r.name,22),15.5,{w:500})}`});return [t,y]};
-    let y=530;
-    s+=hdr(y,'Savings',sav,GRN,o.open==='sav'||o.open==='both');y+=36;
-    if(o.open==='sav'||o.open==='both'){const [t,ny]=items(y,sav);s+=t;y=ny+8}
-    y+=6;s+=hdr(y,'Spending',sp,ORG,o.open==='spend'||o.open==='both');y+=36;
-    if(o.open==='spend'||o.open==='both'){const [t]=items(y,sp);s+=t}
-  }
+  const R=regions(st,level);
+  if(level===0)return `<rect x="35" y="526" width="18" height="18" rx="5" fill="${GREY}"/>${T(62,541,'Income',18,{w:500})}`;
+  const sav=R.filter(r=>r.g==='sav'),sp=R.filter(r=>r.g==='spend'),canOpen=level>=2;
+  const hdr=(y0,key,label,list,hc,open)=>{const y=y0+24;let t=`<g ${canOpen?`data-open="${key}" role="button" tabindex="0" aria-expanded="${open}" aria-label="${label}"`:''}><rect x="35" y="${y0}" width="320" height="36" rx="12" fill="#14181d" stroke="${EDGE}"/>`;
+    t+=`<rect x="47" y="${y0+9}" width="5" height="18" rx="2.5" fill="${hc}"/>${T(62,y,label,18,{w:600})}`;
+    let x=352-(list.length*17)-(canOpen?20:2);list.forEach(r=>{t+=`<rect x="${x}" y="${y-12}" width="12" height="12" rx="3" fill="${r.color}"/>`;x+=17});
+    if(canOpen)t+=T(349,y,open?'▾':'▸',18,{a:'end',f:MUT});return t+'</g>'};
+  const items=(y,list)=>{let t='';list.forEach(r=>{y+=21;t+=`<rect x="62" y="${y-13}" width="15" height="15" rx="4.5" fill="${r.color}"/>${T(86,y,cut(r.name,22),15.5,{w:500})}`});return [t,y]};
+  let s='',y=524;const so=canOpen&&o.open==='sav',po=canOpen&&o.open==='spend';
+  s+=hdr(y,'sav','Savings',sav,GRN,so);y+=36;
+  if(so){const [t,ny]=items(y,sav);s+=t;y=ny+8}
+  y+=6;s+=hdr(y,'spend','Spending',sp,ORG,po);y+=36;
+  if(po){const [t]=items(y,sp);s+=t}
   return s}
 
 function phone(st,level,o){
-  o=Object.assign({label:'L1',open:'none'},o);
-  let g='';const f=fills(st,level);
-  for(let j=0;j<100;j++){const r=Math.floor(j/10),c=j%10;g+=`<rect class="bx" data-j="${j}" x="${c*P}" y="${rowTop(r)}" width="${C}" height="${C}" rx="7" style="fill:${f[j]}"/>`}
-  let s=T(35,76,'Income',17,{f:MUT})+T(35,112,'This month',30,{w:600});
-  s+=`<rect x="35" y="127" width="17" height="17" rx="4.5" fill="none" stroke="${MUT}" stroke-width="1.6"/>${T(60,142,`1 box = ${fmt(st.box)}`,19,{f:MUT})}`;
-  s+=`<g transform="translate(35 178)">${g}</g><g class="lg" id="lg">${legend(st,level,o)}</g>`;
+  o=Object.assign({open:'none'},o);
+  let g='';const {f,g:gr}=fills(st,level);
+  for(let j=0;j<100;j++){const r=Math.floor(j/10),c=j%10,up=level>=1&&gr[j]==='spend'?-GAP:0;g+=`<rect class="bx" data-j="${j}" x="${c*P}" y="${rowTop(r)}" width="${C}" height="${C}" rx="7" style="fill:${f[j]};transform:translateY(${up}px)"/>`}
+  let s=T(35,76,'Income',17,{f:MUT})+T(35,112,'This month',30,{w:600})+scaleChip(35,124,`1 box = ${fmt(st.box)}`);
+  s+=`<g transform="translate(35 ${176+GAP})">${g}</g><g class="lg" id="lg">${legend(st,level,o)}</g>`;
   const tabs=['Home','Income','Spending','Savings','Insights'];
   let tb=`<line x1="0" y1="770" x2="390" y2="770" stroke="${EDGE}"/>`;tabs.forEach((t,i)=>{const x=39+78*i;tb+=T(x,808,t,14,{a:'middle',f:i===1?INK:MUT,w:i===1?700:400});if(i===1)tb+=`<rect x="${x-14}" y="782" width="28" height="4" rx="2" fill="${GRN}"/>`});
   return `<svg class="ph" viewBox="0 0 390 844" role="img" aria-label="${esc(st.short)} income split, ${esc(regions(st,level).map(r=>r.name).join(', '))}"><rect x="1" y="1" width="388" height="842" rx="46" fill="${PBG}" stroke="${EDGE}" stroke-width="2"/><rect x="150" y="16" width="90" height="24" rx="12" fill="#000"/>${s}${tb}</svg>`}
 
 const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c)}</figcaption></figure>`;
-const LV=['Income','Split','Detail','Categories'];
 document.getElementById('pool').innerHTML=S.map(s=>`<tr><td>${s.short}</td><td class="n">${fmt(s.inc)}</td><td class="n">${fmt(s.box)}</td><td class="n">${fmt(s.sav)}</td><td>${s.goals.length?s.goals.map(g=>g[0]).join(', '):'none yet'}</td><td class="n">${s.subs?fmt(s.subs):'none'}</td><td class="n">${fmt(s.bud)}</td><td class="n">${s.cats.length}</td></tr>`).join('');
 const tar=S[2],nis=S[4],har=S[5];
-
-document.getElementById('secA').innerHTML=
- `<div class="opt"><h4><b>L1</b>Two groups with a gutter <span>savings left, spending right, a rule between</span></h4><div class="row four">`
- +fg(phone(tar,2,{label:'L1'}),'Tarun-type · step 3','1 goal, subscriptions, budget')
- +fg(phone(tar,3,{label:'L1'}),'Tarun-type · step 4','4 categories')
- +fg(phone(nis,3,{label:'L1'}),'Nishad-type · step 4','3 goals, 12 categories')
- +fg(phone(har,3,{label:'L1'}),'Harsh-type · step 4','2 goals, 18 categories')+`</div></div>`
- +`<div class="opt"><h4><b>L2</b>Drop-downs after the split <span>two collapsed lines, tap one to open it</span></h4><div class="row four">`
- +fg(phone(tar,2,{label:'L2'}),'Tarun-type · step 3','both closed')
- +fg(phone(tar,3,{label:'L2',open:'spend'}),'Tarun-type · step 4','Spending open')
- +fg(phone(nis,3,{label:'L2',open:'spend'}),'Nishad-type · step 4','Spending open')
- +fg(phone(nis,3,{label:'L2',open:'sav'}),'Nishad-type · step 4','Savings open')+`</div></div>`;
+const STEP=['1 · Income','2 · Split','3 · Detail','4 · Categories'];
+const rowOf=(st,c)=>`<div class="opt"><h4><b>${st.short.split('-')[0]}</b>${st.cats.length} categories <span>${st.goals.length||'no'} goal${st.goals.length===1?'':'s'}</span></h4><div class="row four">`+[0,1,2,3].map(l=>fg(phone(st,l),STEP[l],'')).join('')+`</div></div>`;
+document.getElementById('secA').innerHTML=rowOf(tar)+rowOf(nis)
+ +`<div class="opt"><h4><b>Open</b>step 4 with a list open <span>Tarun, Nishad, Nishad, Harsh</span></h4><div class="row four">`
+ +fg(phone(tar,3,{open:'spend'}),'Tarun-type','Spending open')
+ +fg(phone(nis,3,{open:'sav'}),'Nishad-type','Savings open, 3 goals')
+ +fg(phone(nis,3,{open:'spend'}),'Nishad-type','Spending open, 12 categories')
+ +fg(phone(har,3,{open:'spend'}),'Harsh-type','Spending open, 18 categories')+`</div></div>`;
 document.getElementById('noteA').innerHTML=`
-<div class="note"><b>L1 · gutter</b>Everything is on screen at once, and savings (green rule) and spending (orange rule) are two lists you read separately. Nothing to tap. Space is fixed: three goals fit, and seven spending lines fit.</div>
-<div class="note"><b>L2 · drop-downs</b>The screen stays calm after the split: two lines, each with a strip of its own colours. A name is one tap away, but you cannot match a colour to its name without opening the group. Open Spending for Nishad and the list nearly reaches the tab bar.</div>
-<div class="note"><b>Both</b>The grid does not change between L1 and L2. Step 1 and step 2 have no group list yet, only "Income" and then "Savings" and "Spending".</div>`;
-
-document.getElementById('secB').innerHTML=`<div class="opt"><div class="row">`+S.map(st=>fg(phone(st,3,{label:'L1'}),st.short,`${st.cats.length} categories`)).join('')+`</div></div>`;
+<div class="note"><b>The gap</b>It opens at step 2 and the spending band moves up by 16 points. It stays at every step after that. At step 1 the grid is one grey block.</div>
+<div class="note"><b>The scale chip</b>Green outline, a box glyph and bold white text, directly under the title and above the grid. It is the first thing under "This month". It reads as a key to the grid, not as a caption.</div>
+<div class="note"><b>Drop-downs</b>The closed lines show each group's colours as a strip, so you can see how many pieces each has without opening it. Nishad's Spending list (seven lines) just fits above the tab bar.</div>`;
+document.getElementById('secB').innerHTML=
+ `<div class="opt"><h4><b>Closed</b>labels collapsed</h4><div class="row">`+S.map(st=>fg(phone(st,3),st.short,`${st.cats.length} categories`)).join('')+`</div></div>`
+ +`<div class="opt"><h4><b>Open</b>Spending open</h4><div class="row">`+S.map(st=>fg(phone(st,3,{open:'spend'}),st.short,`${st.cats.length} categories`)).join('')+`</div></div>`;
 document.getElementById('noteB').innerHTML=`
-<div class="note"><b>2 to 18 categories</b>Vaishak has no subscriptions and no goal, so there is one savings line and two categories. Harsh has 18: five coloured, the other 13 are one "Others". The right column holds up to seven lines.</div>
-<div class="note"><b>Small to large income</b>A box is ₹30 for Vaishak and ₹250 for Nishad, and the scale line under the title says which.</div>`;
+<div class="note"><b>2 to 18 categories</b>Vaishak has no subscriptions and no goal, so his Savings line has one colour and Spending has two. Harsh has 18 categories: five coloured, 13 in "Others".</div>
+<div class="note"><b>Scale chip with a big box</b>Nishad's chip reads "1 box = ₹250" and Vaishak's "1 box = ₹30". The chip is the same size, so the number is easy to find on any screen.</div>`;
 
 /* demo */
-const dem={s:2,l:'L1',v:3,timer:0};
+const dem={s:2,v:3,open:'none',timer:0};
 const demo=document.getElementById('demo');
-const NOTE=['Step 1: all of it is income.','Step 2: income splits into savings and spending.','Step 3: spending splits into budget and subscriptions, savings into goals.','Step 4: the budget splits into its categories.'];
-function build(){demo.innerHTML=phone(S[dem.s],dem.v,{label:dem.l,open:'none'});grid()}
-function grid(){demo.querySelectorAll('rect.bx').forEach(r=>{const j=+r.dataset.j;r.style.transition=reduce?'none':'fill 1.5s ease';r.style.transitionDelay=reduce?'0s':(Math.floor(j/10)*0.12)+'s'})}
-function go(v){dem.v=Math.max(0,Math.min(3,v));const st=S[dem.s],f=fills(st,dem.v);
-  demo.querySelectorAll('rect.bx').forEach(r=>{r.style.fill=f[+r.dataset.j]});
-  const old=demo.querySelector('#lg'),tmp=document.createElement('div');tmp.innerHTML=phone(st,dem.v,{label:dem.l,open:'none'});
-  const nw=tmp.querySelector('#lg');old.replaceWith(nw);
+const NOTE=['Step 1: all of it is income.','Step 2: income splits into savings and spending, and the gap opens.','Step 3: spending splits into budget and subscriptions, savings into goals.','Step 4: the budget splits into its categories.'];
+function build(){demo.innerHTML=phone(S[dem.s],dem.v,{open:dem.open});grid()}
+function grid(){demo.querySelectorAll('rect.bx').forEach(r=>{const j=+r.dataset.j;r.style.transition=reduce?'none':'fill 1.5s ease, transform 1.5s ease';r.style.transitionDelay=reduce?'0s':(Math.floor(j/10)*0.12)+'s'})}
+function swapLegend(now){const old=demo.querySelector('#lg'),tmp=document.createElement('div');tmp.innerHTML=phone(S[dem.s],dem.v,{open:dem.open});const nw=tmp.querySelector('#lg');if(now)nw.classList.add('now');old.replaceWith(nw)}
+function go(v){dem.v=Math.max(0,Math.min(3,v));if(dem.v<2)dem.open='none';const st=S[dem.s],{f,g}=fills(st,dem.v);
+  demo.querySelectorAll('rect.bx').forEach(r=>{const j=+r.dataset.j;r.style.fill=f[j];r.style.transform=`translateY(${dem.v>=1&&g[j]==='spend'?-GAP:0}px)`});
+  swapLegend(false);
   [...document.getElementById('cv').children].forEach((c,i)=>c.setAttribute('aria-pressed',dem.v===i));
   document.getElementById('dnote').textContent=NOTE[dem.v]}
+function toggle(k){dem.open=dem.open===k?'none':k;swapLegend(true)}
+demo.addEventListener('click',e=>{const t=e.target.closest('[data-open]');if(t)toggle(t.dataset.open)});
+demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-open]');if(t){e.preventDefault();toggle(t.dataset.open)}});
 function chips(id,items,get,set){const el=document.getElementById(id);el.innerHTML=items.map((t,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${get()===i}">${t}</button>`).join('');
   el.onclick=e=>{const b=e.target.closest('button');if(!b)return;set(+b.dataset.i);[...el.children].forEach((c,i)=>c.setAttribute('aria-pressed',get()===i))}}
-chips('cs',S.map(s=>s.short.replace('-type','')),()=>dem.s,i=>{clearTimeout(dem.timer);dem.s=i;build();go(dem.v)});
-chips('cl',['L1 groups','L2 drop-downs'],()=>dem.l==='L1'?0:1,i=>{dem.l=i?'L2':'L1';go(dem.v)});
+chips('cs',S.map(s=>s.short.replace('-type','')),()=>dem.s,i=>{clearTimeout(dem.timer);dem.s=i;dem.open='none';build();go(dem.v)});
 chips('cv',['1 Income','2 Split','3 Detail','4 Categories'],()=>dem.v,i=>{clearTimeout(dem.timer);go(i)});
 document.getElementById('next').onclick=()=>{clearTimeout(dem.timer);go(dem.v+1)};
 document.getElementById('back').onclick=()=>{clearTimeout(dem.timer);go(dem.v-1)};
-document.getElementById('play').onclick=()=>{clearTimeout(dem.timer);dem.v=0;build();go(0);
+document.getElementById('play').onclick=()=>{clearTimeout(dem.timer);dem.v=0;dem.open='none';build();go(0);
   const step=()=>{if(dem.v>=3)return;dem.timer=setTimeout(()=>{go(dem.v+1);step()},reduce?600:3200)};step()};
 build();go(dem.v);
 })();
