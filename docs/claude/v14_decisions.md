@@ -38,6 +38,9 @@ Open inside Viz 1: top edge of the liquid (box-by-box vs even level), last week'
 
 | V1-11 | Tapping a ring / category opens a **full screen** (F3: its grid, scale chip, transactions), not a drop-down. |
 | V1-12 | The rings are **colour-coded**: each category its own colour, no labels like "outer" or numbers on the rings (V1-9). |
+| V1-13 | Inside a category there is a **"show previous week / month / period"** control with a **slider from 1 to 12 periods back**. It shows the category's grid **as it was at the same day of that earlier period** (a like-for-like view). Not the same as the old single "ghost line"; this is the full grid, any of the last 12 periods. |
+Defaults, not explicitly answered for V1-13: the slider appears after tapping "Compare with earlier weeks/months"; a dashed line on the earlier grid marks where this period is now; periods with no data are dimmed and cannot be picked; a new user (month 1) sees "No earlier weeks yet". "At that day" read as the same day-position within the period (e.g. Thursday of the week, the 17th of the month), not the end of the period.
+
 Defaults, not explicitly answered: rings show the biggest five budgets and the rest as one "Others" ring (matches V3-7), same colours as the Income grid; a name list with swatches sits under the rings; the detail grid's liquid is the category's colour; Fixed bills are one row under the list.
 
 Earlier defaults, now partly superseded by V1-10: (a) a ring's name appears when you press/tap it; rings show the biggest few and the rest group as "others", tap opens the full list. (b) ~~rings beside the words list~~ — rings are now the Spending tab's main view; the words-only list (V1-3) remains the fallback question for 12–18 categories.
