@@ -30,6 +30,12 @@ Base: claude/v14_stage0_facts.md (facts + 7 approved principles), research/bryma
 | V1-8 | No budget set: the app suggests one from 2 weeks of spending; until then the grid's full level = "your usual week". |
 Open inside Viz 1: top edge of the liquid (box-by-box vs even level), last week's ghost line — default to recommendation (box-by-box; ghost line on tap) unless Tarun says otherwise.
 
+### Viz 1 — follow-up from Tarun on the nested rings (C4), 2 Oct
+| # | Decision |
+|---|---|
+| V1-9 | Rings view: each category gets its own colour. No "outer / 2nd / 3rd" tags and no numbers or word-states beside the rings. Tapping a category opens its detail (F3: grid + scale + transactions). |
+Open, needs Tarun: (a) with 7–18 categories colours must repeat or ring-count must cap; colour-coded categories were rejected earlier for being hard to memorise, so how does a user know which ring is which without labels (name on tap/press, or a name chip)? (b) does the rings view replace the words-only list (V1-3) as the many-categories overview, or sit beside it? Not decided on his behalf.
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — NEXT (waiting for Tarun's inspiration)
