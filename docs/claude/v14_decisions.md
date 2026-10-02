@@ -122,6 +122,14 @@ Viz 7 closed by Tarun ("done with viz 7"). The defaults below stand as drawn: th
 | X-1 | **Viz 6 and Viz 7 each carry a plain sentence** saying **the time of day, the day of the week, and which part of the month the user tends to spend more**, "just in case the user finds the visualisation hard to understand". It follows the scale on screen (Day, Week, Month) and the Times / ₹ switch. |
 Drawn as: Day, "You spend most around 4 to 6 pm, and again around 10 pm."; Week, "You spend most on weekdays, in the afternoon."; Month, "You spend most in the middle of the month, around the 7th to 13th." Computed from the data. In Viz 6 the subject is the habit.
 
+### Viz 8 — Subscriptions coming up (Tarun, 2 Oct; options board in progress)
+| # | Decision |
+|---|---|
+| V8-1 | It lives in the **Spending tab, in the Fixed group** (V1-7: rent, EMI, subscriptions as paid / due soon), a scroll below the rings and repeats. |
+| V8-2 | It is **a calendar of what is due**: days with a payment due glow, so "in 2 days" is a spot you can see (same hotspot-calendar language as repeats). |
+| V8-3 | **When, not how much, until you tap**: the glance says which bill and when; the amount is one tap in. |
+Defaults, drawn but not decided: the calendar runs from the start of this week for six weeks; glow shows status (due soon, later), not amount; past dues show as paid ticks; a plain sentence under the heading says what is next (X-1); names and "in N days" as text rows under the calendar; no Home heads-up (not chosen).
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
@@ -130,7 +138,7 @@ Drawn as: Day, "You spend most around 4 to 6 pm, and again around 10 pm."; Week,
 5. Unspent → saved — DONE (V5-1…V5-10)
 6. Small / repeat purchases — DONE (V6-1, V6-2, V6-4, V6-5; V6-3 withdrawn)
 7. Time patterns (e.g. nights) — DONE (V7-1, V7-2, X-1)
-8. Subscriptions coming up (Fixed group) — NEXT
+8. Subscriptions coming up (Fixed group) — IN PROGRESS (V8-1…V8-3 given)
 9. This week vs last
 10. Transaction history
 11. Exact amounts on tap (progressive disclosure rules)
