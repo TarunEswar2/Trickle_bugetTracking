@@ -108,6 +108,13 @@ Board: https://claude.ai/artifact/AbKgJ6jeARMKgeGMdtLGox (source archive/session
 | V6-5 | **The habit list is the starting screen** of the repeats view: each habit with its **repeat count (x22, x12, x7…)**, **ordered by most repeats**. **No "All repeats"** entry. Tapping a habit opens its hotspot calendar. |
 Viz 6 closed by Tarun ("done"). The defaults below stand as drawn: three scales on a habit's calendar, Day (hours of a typical day), Week (weekday by time of day), Month (the last 30 days), opening on Month; a Times / ₹ switch for the glow; spending-orange glow; numbers on tap; fewer than 3 repeats shows an empty state.
 
+### Viz 7 — Time patterns (Tarun, 2 Oct; options board in progress)
+| # | Decision |
+|---|---|
+| V7-1 | It shows **all spending by time of day** (one hotspot view of everything, by hour and weekday), so "you spend more at night" shows across all categories, not one habit. |
+| V7-2 | It lives in the **Insights tab**. |
+Defaults, drawn but not decided: the same hotspot grids as Viz 6 (Day = hours of a typical day, Week = weekday by time of day, Month = the last 30 days) with a Times / ₹ switch and spending-orange glow; opens on Day; a calm sentence in words at the top ("A fair bit happens after 9 pm"), no scolding; a new user with few days gets a "fills in as you go" note.
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
@@ -115,7 +122,7 @@ Viz 6 closed by Tarun ("done"). The defaults below stand as drawn: three scales 
 4. Savings goal (how much, by when, actually saved) — DONE (V4-1…V4-21); also: add goal, pay into a goal, completed goals (parked requirement above)
 5. Unspent → saved — DONE (V5-1…V5-10)
 6. Small / repeat purchases — DONE (V6-1, V6-2, V6-4, V6-5; V6-3 withdrawn)
-7. Time patterns (e.g. nights) — NEXT
+7. Time patterns (e.g. nights) — IN PROGRESS (V7-1, V7-2 given)
 8. Subscriptions coming up (Fixed group)
 9. This week vs last
 10. Transaction history
