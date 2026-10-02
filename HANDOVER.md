@@ -171,3 +171,6 @@ this repo is where new decisions are logged; the Project copy will go stale unle
 
 ## Update: Instrument design system
 Second system "Trickle Instrument" built and published (`archive/session-workfiles/designsystem2/`, decisions DS2-1…DS2-6). Next: Tarun picks Night or Instrument; if Instrument, re-theme the mockup tokens (`mockup/`).
+
+## Update: Instrument mockup
+Mockup re-skinned in Instrument (`mockup2/`, build with `python3 build.py`). Not yet restyled one by one: sub-screens (category detail, settings, week-end, move flows) get the system through shared CSS only; check them in review.

@@ -285,6 +285,8 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 - DS2-5: Controls are keys (2px press) and dials with detent ticks; savings is a segmented dial by goal; goal reached uses a dot grille.
 - DS2-6: Motion mechanical and quiet (cell 45ms stagger, dial tick 25ms); reduced motion jumps to end state.
 
+- M2-1: Instrument mockup built from the Night mockup (same engine, profiles, events, flows). Only the skin changed: colour field per tab, LCD panels for grids/dials, dial-tick rings, dot-matrix status word on Home and amount on Pay, keys, moss goal-reached screen. Source `archive/session-workfiles/mockup2/`. Delegated, open to override.
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
