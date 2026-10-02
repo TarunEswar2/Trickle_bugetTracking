@@ -150,6 +150,15 @@ Viz 9 closed by Tarun ("next"). The defaults below stand as drawn: the weeks are
 Board: https://claude.ai/artifact/8LxmrXkdZfEGbp9H6uE8kZ (source archive/session-workfiles/viz10/viz10-history.html).
 Viz 10 closed by Tarun ("okay next"). The defaults below stand as drawn: it is the last screen of the Spending tab (Tarun's Spending tab: budget setting, how much spent, transaction history); a day header carries the day's total; ranges are Today, 7 days, 30 days, All; category chips use the ring colours; tapping a row opens a detail (category, when, how it was paid, and the habit it belongs to); an empty filter says so calmly; editing a transaction is a later flow.
 
+### Viz 11 — Exact amounts on tap (Tarun, 2 Oct; options board in progress)
+| # | Decision |
+|---|---|
+| V11-1 | The deliverable is **both a rules table and one standard tap pattern**. |
+| V11-2 | A tap on a spot, box or day reveals its exact amount as **a line under the picture** (the pattern used on every board so far). |
+| V11-3 | **Home shows no ₹ at all.** (The end-of-week pop-up is his own exception, V5-8/V5-10.) |
+Not chosen by Tarun, listed in the table as what the drawn boards do (to confirm): no numbers on the marks of grids and rings (the scale chip is the only figure); the Savings page shows no amounts until a goal is opened; over / nothing-left is words first.
+Three kinds of tap outcome, as drawn: a spot, box or day gives **a line under the picture**; a category, habit, goal or purchase opens **its own full screen**; the weekly pop-up is **a pop-up on Home**.
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
