@@ -109,7 +109,7 @@ svg.ph [data-go]{cursor:pointer}
 <header class="top">
   <div class="eyebrow">Trickle v14 · Visualisation 6 of 11 · redrawn 2 Oct 2026</div>
   <h1>Repeat purchases</h1>
-  <p class="lead">Calendar hotspots. Pick a habit, or all of them, then look at it by day, week or month. The brighter a spot glows, the more often it happens there. Switch to rupees and it glows by how much was spent. Tap a spot for the exact count and amount. It sits in the Spending tab, a scroll below the rings. Options only. You decide.</p>
+  <p class="lead">Your repeating habits as a list, most repeats first, each with how many times (×22, ×12). Tap one for its calendar hotspots, by day, week or month. The brighter a spot glows, the more often it happens there. Switch to rupees and it glows by how much was spent. Tap a spot for the exact count and amount. It sits in the Spending tab, a scroll below the rings. Options only. You decide.</p>
 </header>
 
 <section style="border-top:0;padding-top:0">
@@ -117,9 +117,10 @@ svg.ph [data-go]{cursor:pointer}
   <div class="logged">
     <div><b>V6-1 · What counts</b><span>The same place or kind, 3 or more times in 30 days, any amount.</span></div>
     <div><b>V6-2 · Where</b><span>A view inside the Spending tab, reached by scrolling.</span></div>
+    <div><b>V6-5 · The list first</b><span>The starting screen is the habit list with its counts (×22), most repeats first. No "All repeats".</span></div>
     <div><b>V6-4 · Calendar hotspots</b><span>Show how much and how many times, per day, per week and per month, as glowing calendar spots. The filling boxes are withdrawn.</span></div>
   </div>
-  <p class="small">Drawn as defaults, not decided: a picker with "All repeats" first, three scales (Day, Week, Month), a Times | ₹ switch, orange glow for spending, numbers only on tap. All figures are made up. Today on this board is 2 October 2026.</p>
+  <p class="small">Drawn as defaults, not decided: three scales (Day, Week, Month) opening on Month, a Times | ₹ switch, orange glow for spending, rupees and exact counts on tap. All figures are made up. Today on this board is 2 October 2026.</p>
 </section>
 
 <section>
@@ -131,14 +132,14 @@ svg.ph [data-go]{cursor:pointer}
 </section>
 
 <section>
-  <div class="sec-h"><span class="k">A</span><h2>All repeats, by month</h2></div>
-  <p class="q">The first view: every repeating purchase together, as a calendar of the last 30 days. Weekdays run across the top, weeks stack down. A bright spot is a day with several repeats. Gautham-type is in his first week, so nothing repeats yet.</p>
+  <div class="sec-h"><span class="k">A</span><h2>The starting screen: your habits</h2></div>
+  <p class="q">Every habit with how many times it happened, most repeats first. Tap one to open its calendar. Gautham-type is in his first week, so nothing repeats yet.</p>
   <div class="gal" id="secA"></div>
   <div class="notes" id="noteA"></div>
 </section>
 
 <section>
-  <div class="sec-h"><span class="k">B</span><h2>One habit, three scales</h2></div>
+  <div class="sec-h"><span class="k">B</span><h2>A habit, three scales</h2></div>
   <p class="q">The same habit by day, by week and by month. Day: the hours of a typical day. Week: weekday against time of day. Month: the last 30 days. Four habits from four students.</p>
   <div class="gal" id="secB"></div>
   <div class="notes" id="noteB"></div>
@@ -146,20 +147,14 @@ svg.ph [data-go]{cursor:pointer}
 
 <section>
   <div class="sec-h"><span class="k">C</span><h2>How many, and how much</h2></div>
-  <p class="q">The switch under the grid. Times glows by how often. ₹ glows by how much. Chai many times for little looks very different from Zepto a few times for a lot.</p>
+  <p class="q">The switch under the grid. Times glows by how often. ₹ glows by how much, so a day with one big order stands out.</p>
   <div class="gal" id="secC"></div>
   <div class="notes" id="noteC"></div>
 </section>
 
 <section>
-  <div class="sec-h"><span class="k">D</span><h2>Choosing a habit</h2></div>
-  <p class="q">The picker at the top. "All repeats" first, then each habit in the colour of its category, most frequent first.</p>
-  <div class="gal" id="secD"></div>
-</section>
-
-<section>
-  <div class="sec-h"><span class="k">E</span><h2>Try it</h2></div>
-  <p class="q">Pick a student, open the picker and choose a habit, switch Day, Week or Month, switch Times or ₹, and tap a spot.</p>
+  <div class="sec-h"><span class="k">D</span><h2>Try it</h2></div>
+  <p class="q">Pick a student, tap a habit, switch Day, Week or Month, switch Times or ₹, and tap a spot.</p>
   <div class="demo">
     <div id="demo"></div>
     <div class="ctl">
@@ -170,13 +165,13 @@ svg.ph [data-go]{cursor:pointer}
 </section>
 
 <section>
-  <div class="sec-h"><h2>Decisions for Tarun</h2></div>
+  <div class="sec-h"><h2>Still to confirm</h2></div>
   <div class="decide">
     <div class="dq"><h3>1. The three scales</h3><ol><li class="s">Day = hours of a typical day, Week = weekday by time of day, Month = the last 30 days.</li><li>Day = today only, Week = this week, Month = this month (real, not typical).</li></ol></div>
-    <div class="dq"><h3>2. Which view opens first</h3><ol><li class="s">Month, with All repeats.</li><li>Week.</li></ol></div>
+    <div class="dq"><h3>2. Which scale opens first</h3><ol><li class="s">Month.</li><li>Week.</li></ol></div>
     <div class="dq"><h3>3. How much and how many</h3><ol><li class="s">A Times | ₹ switch under the grid. Glow follows the choice.</li><li>Both at once: glow for times, a small bar for rupees.</li></ol></div>
     <div class="dq"><h3>4. Glow colour</h3><ol><li class="s">Spending orange for every habit.</li><li>The habit's category colour.</li></ol></div>
-    <div class="dq"><h3>5. Choosing a habit</h3><ol><li class="s">A drop-down with All repeats first.</li><li>A row of chips along the top.</li></ol></div>
+    <div class="dq"><h3>5. Rupees on the list</h3><ol><li class="s">Only the count (×22). Rupees are one tap in.</li><li>Count and total rupees on each row.</li></ol></div>
   </div>
 </section>
 </div>
@@ -217,7 +212,7 @@ function makeEvents(st,hb,idx){const [name,cat,n,avg,when]=hb,hs=hoursOf(when),w
   while(ev.length<n&&tries<600){tries++;const off=Math.floor(rnd(idx*101+k*7+tries)*30),dt=addDays(TODAY,-off),d=dow(dt);
     if(wkd&&d>4)continue;if(wke&&d<5)continue;if(sun&&d!==6)continue;if((perDay[off]||0)>=(n>22?3:2))continue;
     perDay[off]=(perDay[off]||0)+1;const hour=hs[Math.floor(rnd(idx*53+tries*3)*hs.length)];
-    ev.push({off,dt,d,hour,amt:Math.max(5,Math.round(avg*(.8+.4*rnd(idx*17+tries))/5)*5)});k++}
+    ev.push({off,dt,d,hour,amt:Math.max(5,Math.round(avg*(.55+.9*rnd(idx*17+tries))/5)*5)});k++}
   return ev}
 S.forEach((st,si)=>{st.habits=st.habits.map((h,i)=>({name:h[0],cat:h[1],n:h[2],avg:h[3],when:h[4],color:catColor(st.short,h[1]),ev:null})).sort((a,b)=>b.n-a.n);
   st.habits.forEach((h,i)=>{h.ev=makeEvents(st,[h.name,h.cat,h.n,h.avg,h.when],si*31+i)})});
@@ -273,66 +268,66 @@ function summary(st,hi,ag){
   const wd=ag.wk.map(r=>r.reduce((a,c)=>a+c.n,0)),weekday=wd.slice(0,5).reduce((a,b)=>a+b,0),all=wd.reduce((a,b)=>a+b,0)||1;
   return `Mostly ${BLK[pb].toLowerCase()}s${weekday/all>.75?', mostly weekdays':weekday/all<.45?', mostly weekends':''}`}
 
-function repScreen(st,o){
-  o=Object.assign({hi:-1,scale:'month',metric:'times',sel:null,open:false},o);
-  let s=T(35,76,'Spending',17,{f:MUT})+T(35,112,'Repeats',30,{w:700});
+function listScreen(st){
+  let s=T(35,76,'Spending',17,{f:MUT})+T(35,112,'Repeats',30,{w:700})+T(35,144,'Last 30 days, most repeats first',16.5,{f:MUT});
   if(!st.habits.length){
-    s+=`<rect x="35" y="170" width="320" height="170" rx="16" fill="none" stroke="${EDGE}" stroke-dasharray="4 5"/>`;
-    s+=T(195,236,'Nothing repeats yet',22,{a:'middle',w:700})+T(195,268,'When something happens',16.5,{a:'middle',f:MUT})+T(195,290,'three times, it shows up here.',16.5,{a:'middle',f:MUT});
+    s+=`<rect x="35" y="190" width="320" height="170" rx="16" fill="none" stroke="${EDGE}" stroke-dasharray="4 5"/>`;
+    s+=T(195,256,'Nothing repeats yet',22,{a:'middle',w:700})+T(195,288,'When something happens',16.5,{a:'middle',f:MUT})+T(195,310,'three times, it shows up here.',16.5,{a:'middle',f:MUT});
     return frame(s,`${st.short} repeats, nothing yet`)}
-  const cur=o.hi<0?{name:'All repeats',color:'#f2f4f5'}:st.habits[o.hi];
-  s+=`<g data-go="pick" role="button" tabindex="0" aria-label="Choose a habit"><rect x="35" y="128" width="320" height="42" rx="12" fill="#14181d" stroke="${EDGE}"/><rect x="48" y="140" width="18" height="18" rx="5" fill="${cur.color}"/>${T(76,155,cut(cur.name,20),18,{w:600})}${T(349,156,o.open?'▾':'▸',18,{a:'end',f:MUT})}</g>`;
-  if(o.open){
-    const opts=[{name:'All repeats',color:'#f2f4f5',i:-1},...st.habits.map((h,i)=>({name:h.name,color:h.color,i,n:h.n}))];
-    opts.forEach((p,j)=>{const y=186+j*40;s+=`<g data-h="${p.i}" role="button" tabindex="0" aria-label="${esc(p.name)}"><rect x="35" y="${y}" width="320" height="36" rx="10" fill="${p.i===o.hi?'#1c2430':'transparent'}" stroke="${p.i===o.hi?'#3a4656':'none'}"/><rect x="48" y="${y+9}" width="16" height="16" rx="4.5" fill="${p.color}"/>${T(76,y+24,cut(p.name,22),17,{w:p.i===o.hi?700:500})}${p.i<0?'':T(341,y+24,'',14,{a:'end'})}</g>`});
-    return frame(s,`${st.short} choose a habit`)}
-  s+=`<rect x="35" y="184" width="320" height="38" rx="12" fill="#14181d" stroke="${EDGE}"/>`;
-  [['day','Day'],['week','Week'],['month','Month']].forEach(([k,l],i)=>{const x=38+i*106;s+=`<g data-scale="${k}" role="button" tabindex="0">${o.scale===k?`<rect x="${x}" y="187" width="104" height="32" rx="10" fill="#2a2018"/>`:''}${T(x+52,209,l,16.5,{a:'middle',w:o.scale===k?700:500,f:o.scale===k?ORG:MUT})}</g>`});
-  const g=grid(st,o.hi,o.scale,o.metric,o.sel);s+=g.svg;
-  const ly=o.scale==='week'?514:o.scale==='day'?520:o.sel!=null||true?(Math.ceil((30+dow(addDays(TODAY,-29)))/7)*46+280):520;
-  const ky=Math.max(ly,520);
-  [.12,.3,.5,.75,1].forEach((k,i)=>{s+=`<rect x="${35+i*20}" y="${ky}" width="16" height="16" rx="4" fill="${ORG}" opacity="${k}"/>`});
-  s+=T(142,ky+13,'less → more',14,{f:MUT});
-  s+=`<rect x="236" y="${ky-6}" width="119" height="30" rx="10" fill="#14181d" stroke="${EDGE}"/>`;
-  [['times','Times'],['amt','₹']].forEach(([k,l],i)=>{const x=239+i*58;s+=`<g data-metric="${k}" role="button" tabindex="0">${o.metric===k?`<rect x="${x}" y="${ky-3}" width="56" height="24" rx="8" fill="#2a2018"/>`:''}${T(x+28,ky+14,l,14.5,{a:'middle',w:o.metric===k?700:500,f:o.metric===k?ORG:MUT})}</g>`});
-  const iy=ky+58;
-  if(g.info)s+=T(35,iy,g.info,21,{w:700});else s+=T(35,iy,summary(st,o.hi,g.ag),17,{f:MUT})+T(35,iy+26,'Tap a spot for how many and how much.',15,{f:'#5f6772'});
-  return frame(s,`${st.short} ${cur.name} by ${o.scale}, ${o.metric==='amt'?'rupees':'times'}`)}
+  st.habits.forEach((h,i)=>{const y=172+i*54;
+    s+=`<g data-h="${i}" role="button" tabindex="0" aria-label="${esc(h.name)}, ${h.n} times"><rect x="35" y="${y}" width="320" height="46" rx="12" fill="#12161b" stroke="${EDGE}"/><rect x="50" y="${y+14}" width="18" height="18" rx="5" fill="${h.color}"/>${T(80,y+30,cut(h.name,18),19,{w:600})}${T(318,y+31,`×${h.n}`,21,{a:'end',w:700})}${T(345,y+30,'›',22,{a:'end',f:MUT})}</g>`});
+  return frame(s,`${st.short} repeats list, ${st.habits.map(h=>h.name+' x'+h.n).join(', ')}`)}
+
+function calScreen(st,hi,o){
+  o=Object.assign({scale:'month',metric:'times',sel:null},o);const h=st.habits[hi];
+  let s=T(35,76,'‹ Repeats',17,{f:MUT}).replace('<text','<text data-go="back" role="button" tabindex="0" style="cursor:pointer"');
+  s+=`<rect x="35" y="88" width="14" height="14" rx="4" fill="${h.color}"/>`+T(58,112,cut(h.name,16),30,{w:700})+T(35,142,`×${h.n} in 30 days`,17,{f:MUT});
+  s+=`<rect x="35" y="164" width="320" height="38" rx="12" fill="#14181d" stroke="${EDGE}"/>`;
+  [['day','Day'],['week','Week'],['month','Month']].forEach(([k,l],i)=>{const x=38+i*106;s+=`<g data-scale="${k}" role="button" tabindex="0">${o.scale===k?`<rect x="${x}" y="167" width="104" height="32" rx="10" fill="#2a2018"/>`:''}${T(x+52,189,l,16.5,{a:'middle',w:o.scale===k?700:500,f:o.scale===k?ORG:MUT})}</g>`});
+  const g=grid(st,hi,o.scale,o.metric,o.sel);s+=g.svg;
+  const ky=o.scale==='week'?514:o.scale==='day'?520:Math.ceil((30+dow(addDays(TODAY,-29)))/7)*46+280;
+  [.12,.3,.5,.75,1].forEach((k,i)=>{s+=`<rect x="${35+i*20}" y="${Math.max(ky,520)}" width="16" height="16" rx="4" fill="${ORG}" opacity="${k}"/>`});
+  const yy=Math.max(ky,520);
+  s+=T(142,yy+13,'less → more',14,{f:MUT});
+  s+=`<rect x="236" y="${yy-6}" width="119" height="30" rx="10" fill="#14181d" stroke="${EDGE}"/>`;
+  [['times','Times'],['amt','₹']].forEach(([k,l],i)=>{const x=239+i*58;s+=`<g data-metric="${k}" role="button" tabindex="0">${o.metric===k?`<rect x="${x}" y="${yy-3}" width="56" height="24" rx="8" fill="#2a2018"/>`:''}${T(x+28,yy+14,l,14.5,{a:'middle',w:o.metric===k?700:500,f:o.metric===k?ORG:MUT})}</g>`});
+  const iy=yy+58;
+  if(g.info)s+=T(35,iy,g.info,21,{w:700});else s+=T(35,iy,`Usually ${h.when}`,17,{f:MUT})+T(35,iy+26,'Tap a spot for how many and how much.',15,{f:'#5f6772'});
+  return frame(s,`${st.short} ${h.name} by ${o.scale}, ${o.metric==='amt'?'rupees':'times'}`)}
 
 const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c)}</figcaption></figure>`;
 document.getElementById('pool').innerHTML=S.map(st=>`<tr><td>${st.short}</td><td>${st.habits.length?st.habits.map(h=>`${h.name} ${h.n}`).join(' · '):'none yet (first week)'}</td></tr>`).join('');
-document.getElementById('secA').innerHTML=`<div class="opt"><div class="row">`+S.map(st=>fg(repScreen(st),st.short,st.habits.length?`${st.habits.length} habit${st.habits.length>1?'s':''}, all repeats`:'nothing yet')).join('')+`</div></div>`;
+document.getElementById('secA').innerHTML=`<div class="opt"><div class="row">`+S.map(st=>fg(listScreen(st),st.short,st.habits.length?`${st.habits.length} habit${st.habits.length>1?'s':''}`:'nothing yet')).join('')+`</div></div>`;
 document.getElementById('noteA').innerHTML=`
-<div class="note"><b>Hotspots, not boxes</b>Each day is a spot that glows by how many repeats happened on it. Harsh's mess shows as a run of bright days; Vaishak's two habits are a lighter scatter.</div>
-<div class="note"><b>Words first</b>Under the calendar: "Mostly afternoons, mostly weekdays". Counts and rupees wait for a tap.</div>
-<div class="note"><b>The empty state</b>Gautham-type has fewer than three of anything, so the view says so and says when it will show.</div>`;
+<div class="note"><b>The list is the view</b>Each habit with how many times it happened, ordered by most repeats: Tarun's chai ×22 first, then ×12, ×9, ×5. Colour is the habit's category colour.</div>
+<div class="note"><b>The count is the glance</b>×22 or ×7 says how big a habit is before you open it. The hotspots, and the rupees, are one tap in.</div>
+<div class="note"><b>2 to 7 habits</b>Vaishak has two, Harsh seven, and about nine fit on a screen before it scrolls. Gautham-type is in his first week, so it says nothing repeats yet.</div>`;
 const pick=[[S[2],0],[S[3],0],[S[4],0],[S[5],0]];
-document.getElementById('secB').innerHTML=[['day','Day','hours of a typical day'],['week','Week','weekday against time of day'],['month','Month','the last 30 days']].map(([k,n,d])=>`<div class="opt"><h4><b>${n}</b>${d}</h4><div class="row four">`+pick.map(([st,i])=>fg(repScreen(st,{hi:i,scale:k}),st.short,st.habits[i].name)).join('')+`</div></div>`).join('');
+document.getElementById('secB').innerHTML=[['day','Day','hours of a typical day'],['week','Week','weekday against time of day'],['month','Month','the last 30 days']].map(([k,n,d])=>`<div class="opt"><h4><b>${n}</b>${d}</h4><div class="row four">`+pick.map(([st,i])=>fg(calScreen(st,i,{scale:k}),st.short,`${st.habits[i].name} ×${st.habits[i].n}`)).join('')+`</div></div>`).join('');
 document.getElementById('noteB').innerHTML=`
 <div class="note"><b>Day</b>Which hours it happens. Tarun's chai is one bright spot at 4 pm, a very narrow habit. Nishad's corner shop is two clusters, afternoon and night.</div>
 <div class="note"><b>Week</b>Which weekdays and which time of day. Tarun's chai is a block of weekday afternoons with the weekend dark. Harsh's mess is lit all week.</div>
 <div class="note"><b>Month</b>Which days it actually happened. It shows gaps and bursts that a typical week hides.</div>`;
-document.getElementById('secC').innerHTML=`<div class="opt"><div class="row four">`+[[S[3],-1,'times'],[S[3],-1,'amt'],[S[4],-1,'times'],[S[4],-1,'amt']].map(([st,i,m])=>fg(repScreen(st,{hi:i,scale:'month',metric:m}),st.short,`all repeats · ${m==='amt'?'₹':'times'}`)).join('')+`</div></div>`;
+document.getElementById('secC').innerHTML=`<div class="opt"><div class="row four">`+[[S[3],0,'times'],[S[3],0,'amt'],[S[4],3,'times'],[S[4],3,'amt']].map(([st,i,m])=>fg(calScreen(st,i,{scale:'month',metric:m}),st.short,`${st.habits[i].name} · ${m==='amt'?'₹':'times'}`)).join('')+`</div></div>`;
 document.getElementById('noteC').innerHTML=`
-<div class="note"><b>Same calendar, two answers</b>Yash-type's repeats by times: a bright run of days, mostly chai and Metro. By ₹: the nights with Zepto and Blinkit jump out, because each is a big spend. Cheap and frequent, or rare and large, read differently.</div>
-<div class="note"><b>One switch</b>"How many" and "how much" are the same calendar with a different glow, so the picture is learnt once. Tapping a spot gives both numbers either way.</div>`;
-document.getElementById('secD').innerHTML=`<div class="opt"><div class="row four">`+[[S[4],true],[S[5],true],[S[2],true],[S[0],true]].map(([st,o])=>fg(repScreen(st,{open:o}),st.short,`${st.habits.length} habits`)).join('')+`</div></div>`;
+<div class="note"><b>Same calendar, two answers</b>A day can have one big order or several small ones. By times it glows for the busy days; by ₹ it glows for the expensive ones. Tapping a spot gives both numbers either way.</div>
+<div class="note"><b>One switch</b>"How many" and "how much" are the same calendar with a different glow, so the picture is learnt once.</div>`;
 
 /* demo */
-const dem={s:2,hi:-1,scale:'month',metric:'times',sel:null,open:false};
+const dem={s:2,hi:null,scale:'month',metric:'times',sel:null};
 const demo=document.getElementById('demo'),dn=document.getElementById('dnote');
-function draw(){demo.innerHTML=repScreen(S[dem.s],{hi:dem.hi,scale:dem.scale,metric:dem.metric,sel:dem.sel,open:dem.open});
-  dn.textContent=!S[dem.s].habits.length?'Nothing repeats yet in his first week.':dem.open?'Choose a habit.':'Tap a spot for its count and amount. Switch Day, Week, Month or Times, ₹.'}
+function draw(){const st=S[dem.s];demo.innerHTML=dem.hi==null?listScreen(st):calScreen(st,dem.hi,{scale:dem.scale,metric:dem.metric,sel:dem.sel});
+  dn.textContent=dem.hi==null?(st.habits.length?'Tap a habit.':'Nothing repeats yet in his first week.'):'Tap a spot for its count and amount. Switch Day, Week, Month or Times, ₹. Tap ‹ Repeats to go back.'}
 demo.addEventListener('click',e=>{
-  const h=e.target.closest('[data-h]');if(h){dem.hi=+h.dataset.h;dem.open=false;dem.sel=null;draw();return}
+  const h=e.target.closest('[data-h]');if(h){dem.hi=+h.dataset.h;dem.sel=null;dem.scale='month';dem.metric='times';draw();return}
   const c=e.target.closest('[data-c]');if(c){dem.sel=+c.dataset.c;draw();return}
   const sc=e.target.closest('[data-scale]');if(sc){dem.scale=sc.dataset.scale;dem.sel=null;draw();return}
   const m=e.target.closest('[data-metric]');if(m){dem.metric=m.dataset.metric;draw();return}
-  const g=e.target.closest('[data-go]');if(g){dem.open=!dem.open;draw()}});
+  const g=e.target.closest('[data-go]');if(g&&g.dataset.go==='back'){dem.hi=null;dem.sel=null;draw()}});
 demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-go],[data-h],[data-c],[data-scale],[data-metric]');if(t){e.preventDefault();t.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
 const el=document.getElementById('cs');
 el.innerHTML=S.map((s,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${i===dem.s}">${s.short.replace('-type','')}</button>`).join('');
-el.onclick=e=>{const b=e.target.closest('button');if(!b)return;dem.s=+b.dataset.i;dem.hi=-1;dem.sel=null;dem.open=false;[...el.children].forEach((c,i)=>c.setAttribute('aria-pressed',i===dem.s));draw()};
+el.onclick=e=>{const b=e.target.closest('button');if(!b)return;dem.s=+b.dataset.i;dem.hi=null;dem.sel=null;[...el.children].forEach((c,i)=>c.setAttribute('aria-pressed',i===dem.s));draw()};
 draw();
 })();
 </script>
