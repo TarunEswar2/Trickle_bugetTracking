@@ -111,7 +111,7 @@ svg.ph [data-go]{cursor:pointer}
     <div><b>V4-1 to V4-3</b><span>Fills like Viz 1. An ETA for every goal. Goals are a collapsible list. The first Savings page is only the gauge; a tapped goal opens its statistics.</span></div>
     <div><b>V4-8 · Text rows</b><span>No visualisation next to a goal. A row is its name, how far along and its ETA.</span></div>
     <div><b>V4-9 · Segmented ring</b><span>One ring, split into a section per goal by its amount, each section filled in its own green by amount saved.</span></div>
-    <div><b>V4-10 to V4-15 · Months and days</b><span>A By month | By day toggle. By month is just the month boxes. By day has the month stepper and that month's days as week columns. Green added, amber taken out, glowing by amount.</span></div>
+    <div><b>V4-10 to V4-15 · Months and days</b><span>A By month | By day toggle. By month is just the month boxes. By day has the month stepper and that month's days as weekday columns. Green added, amber taken out, glowing by amount.</span></div>
     <div><b>V4-13 · Most saved</b><span>Shown by glow and a halo on the biggest months, not written.</span></div>
     <div><b>V4-4, V4-6, V4-7</b><span>Celebration screen, glow rule for the boxes, pay from savings (flow later).</span></div>
   </div>
@@ -135,7 +135,7 @@ svg.ph [data-go]{cursor:pointer}
 
 <section>
   <div class="sec-h"><span class="k">B</span><h2>Inside a goal: months, then days</h2></div>
-  <p class="q">A By month | By day toggle. By month: every month box, the selected month outlined, its amount written under. By day: the month stepper and that month's days as week columns, every day a box.</p>
+  <p class="q">A By month | By day toggle. By month: every month box, the selected month outlined, its amount written under. By day: the month stepper and that month's days as weekday columns, every day a box.</p>
   <div class="gal" id="secB"></div>
   <div class="notes" id="noteB"></div>
 </section>
@@ -308,9 +308,9 @@ function dayData(g,idx){
 function dayCalendar(g,sel,dsel){
   const arr=dayData(g,sel),d=monthDate(g,sel),dim=arr.length,firstDow=(new Date(d.getFullYear(),d.getMonth(),1).getDay()+6)%7;
   let mx=1;for(let i=0;i<g.nets.length;i++)dayData(g,i).forEach(v=>{if(v!=null)mx=Math.max(mx,Math.abs(v))});
-  const BW=40,GP=5,x0=66,y0=316;let s='';
-  ['M','T','W','T','F','S','S'].forEach((l,r)=>{s+=T(44,y0+r*(BW+GP)+BW/2+5,l,13.5,{f:MUT,a:'middle'})});
-  for(let i=0;i<dim;i++){const col=Math.floor((i+firstDow)/7),row=(i+firstDow)%7,x=x0+col*(BW+GP),y=y0+row*(BW+GP),v=arr[i],dn=i+1;
+  const BW=40,GP=6,x0=35,y0=336;let s='';
+  ['M','T','W','T','F','S','S'].forEach((l,c)=>{s+=T(x0+c*(BW+GP)+BW/2,y0-12,l,13.5,{f:MUT,a:'middle',w:600})});
+  for(let i=0;i<dim;i++){const row=Math.floor((i+firstDow)/7),col=(i+firstDow)%7,x=x0+col*(BW+GP),y=y0+row*(BW+GP),v=arr[i],dn=i+1;
     if(v==null){s+=`<rect x="${x}" y="${y}" width="${BW}" height="${BW}" rx="9" fill="none" stroke="#2a3038" stroke-dasharray="3 4"/>${T(x+6,y+16,String(dn),12,{f:'#3b424c'})}`;continue}
     const sel2=dsel===i?'stroke="#fff" stroke-width="2.5"':'';
     if(v===0){s+=`<g data-d="${i}" role="button" tabindex="0" aria-label="${dn}"><rect x="${x}" y="${y}" width="${BW}" height="${BW}" rx="9" fill="#1b2026" ${sel2}/>${T(x+6,y+16,String(dn),12,{f:'#5a626d'})}</g>`;continue}
@@ -371,11 +371,11 @@ document.getElementById('noteA').innerHTML=`
 const wg=S.filter(s=>s.goals.length);
 document.getElementById('secB').innerHTML=`<div class="opt"><h4><b>By month</b>every month box <span>no stepper; the biggest months carry a bright halo</span></h4><div class="row">`
  +wg.map(st=>fg(stats1(st,0),st.short,`${st.goals[0].name}, ${st.goals[0].nets.length} month${st.goals[0].nets.length>1?'s':''}`)).join('')+fg(stats1(S[4],1,{sel:3}),'Nishad-type','Emergency, 15 months, window shifted')+`</div></div>`
- +`<div class="opt"><h4><b>By day</b>the stepper, then that month's days <span>weeks as columns, Monday to Sunday down</span></h4><div class="row">`
+ +`<div class="opt"><h4><b>By day</b>the stepper, then that month's days <span>Monday to Sunday as columns, weeks stacked as rows</span></h4><div class="row">`
  +wg.map(st=>fg(stats1(st,0,{view:'day'}),st.short,st.goals[0].name)).join('')+fg(stats1(S[4],1,{view:'day'}),'Nishad-type','Emergency')+`</div></div>`;
 document.getElementById('noteB').innerHTML=`
 <div class="note"><b>By month is only the boxes</b>Every month at a glance, no stepper. Tap one and its amount is written below; the three biggest months carry a bright halo, so the most saved are seen, not read.</div>
-<div class="note"><b>The stepper lives in By day</b>‹ › moves through the months and the grid shows that month's days: weeks as columns, Monday to Sunday down, the date in each box. Tap a day for its amount.</div>
+<div class="note"><b>The stepper lives in By day</b>‹ › moves through the months and the grid shows that month's days: Monday to Sunday as seven columns, the weeks stacked as rows, the date in each box. Tap a day for its amount.</div>
 <div class="note"><b>The two are linked</b>The month you tapped in By month is the month By day opens on. Step to another month in By day and By month highlights it when you go back.</div>
 <div class="note"><b>Long goals</b>Emergency has 15 months. By month slides its twelve-box window as you step, so every month is still reachable.</div>`;
 
