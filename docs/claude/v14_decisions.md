@@ -116,6 +116,12 @@ Viz 6 closed by Tarun ("done"). The defaults below stand as drawn: three scales 
 Board: https://claude.ai/artifact/FdbjxsRYHqwkQ5hgxcCBzV (source archive/session-workfiles/viz7/viz7-when-you-spend.html).
 Defaults, drawn but not decided: the same hotspot grids as Viz 6 (Day = hours of a typical day, Week = weekday by time of day, Month = the last 30 days) with a Times / ₹ switch and spending-orange glow; opens on Day; a calm sentence in words at the top ("A fair bit happens after 9 pm"), no scolding; a new user with few days gets a "fills in as you go" note.
 
+### Cross-cutting (Tarun, 2 Oct) — plain-language sentence under hotspots
+| # | Decision |
+|---|---|
+| X-1 | **Viz 6 and Viz 7 each carry a plain sentence** saying **the time of day, the day of the week, and which part of the month the user tends to spend more**, "just in case the user finds the visualisation hard to understand". It follows the scale on screen (Day, Week, Month) and the Times / ₹ switch. |
+Drawn as: Day, "You spend most around 4 to 6 pm, and again around 10 pm."; Week, "You spend most on weekdays, in the afternoon."; Month, "You spend most in the middle of the month, around the 7th to 13th." Computed from the data. In Viz 6 the subject is the habit.
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
