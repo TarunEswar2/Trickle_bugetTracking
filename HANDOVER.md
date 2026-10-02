@@ -39,7 +39,8 @@ v14 so far:
 | Visualisation 6 — repeat purchases | Decided (V6-1, V6-2, V6-4, V6-5): habit list with ×counts, calendar hotspots by day / week / month, Times / ₹ |
 | Visualisation 7 — time patterns | Decided (V7-1, V7-2, X-1): all spending by time of day in Insights, hotspot grids, plain sentence |
 | Visualisation 8 — fixed bills coming up | Decided (V8-1…V8-4): Fixed calendar in Spending, glow = status, list with amounts |
-| Visualisation 9 — this week vs last | **Next** |
+| Visualisation 9 — this week vs last | Decided (V9-1…V9-3): Insights, two grids side by side with last week faded, by category on tap |
+| Visualisation 10 — transaction history | **Next** |
 | Onboarding, per-tab screens, identity, v14 build, user tests | Not started |
 
 ## How Tarun wants to work (this matters more than anything else here)
@@ -101,16 +102,16 @@ green→amber transition, v7's range of data visualisations, sounds/motion from 
 his own gradients in Figma.
 
 ## The exact next step
-**Visualisation 9 — this week vs last.** Existing precedent to reuse or beat: V1-14/V1-15 (then and now side by side, the earlier one faded) on the category screen; v12's "ghost of last week" idea (no red).
+**Visualisation 10 — transaction history** (Tarun's Spending tab: "budget setting, how much spent, transaction history"; v12 put the All spends list in Spending with filters and a spend detail).
 
-1. Ask Tarun where it lives and what is compared (all spending, or by category).
-2. Draw 3–4 options across the pool incl. a first-week student with no last week, recommend one, log as "Viz 9", mark DONE.
+1. Ask Tarun where and how: a list grouped by day? a calendar? filters? how it connects to the rings and repeats.
+2. Draw 3–4 options across the pool (a few transactions to hundreds; manual vs UPI-linked), recommend one, log as "Viz 10", mark DONE.
 
-Remaining after 9 (2 more): 10 transaction history, 11 exact amounts on tap (progressive-disclosure rules).
+Remaining after 10 (1 more): 11 exact amounts on tap (progressive-disclosure rules, the closing visualisation: it should consolidate what each tap reveals across Viz 1–10).
 
 After the queue: onboarding, grey wireframes per tab, the flows (parked list below), identity, the v14 build, real user tests.
 
-Carry-overs: V3-11 scale chip on every grid screen; X-1 plain sentence under hotspots; parked flows: add a goal, pay toward a goal, pay from savings, celebration triggers, weekly pop-up timing, Home heads-up for fixed bills. Unanswered points are logged as defaults in the decisions file.
+Carry-overs: V3-11 scale chip on every grid screen; X-1 plain sentence under hotspots; parked flows: add a goal, pay toward a goal, pay from savings, celebration triggers, weekly pop-up timing, Home heads-up for fixed bills, a category row opening its look-back from the week-vs-last list. Unanswered points are logged as defaults in the decisions file.
 
 ## Read next
 1. `docs/claude/v14_decisions.md` — decision log and queue (authoritative).

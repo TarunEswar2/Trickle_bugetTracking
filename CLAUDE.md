@@ -32,4 +32,4 @@ The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 - `references/inspiration/` — images Tarun supplied as visual references.
 
 ## Next up
-Visualisation 9: this week vs last. Viz 1–8 are decided. Then 10 transaction history, 11 exact amounts on tap.
+Visualisation 10: transaction history (Tarun's Spending tab: budget setting, how much spent, transaction history). Viz 1–9 are decided. Then 11 exact amounts on tap (progressive-disclosure rules).
