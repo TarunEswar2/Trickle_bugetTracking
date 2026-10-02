@@ -132,6 +132,14 @@ Drawn as: Day, "You spend most around 4 to 6 pm, and again around 10 pm."; Week,
 Board: https://claude.ai/artifact/4Py7ojfodqGQ6hcaLd42fZ (source archive/session-workfiles/viz8/viz8-fixed-bills.html).
 Viz 8 closed by Tarun ("next"). The defaults below stand as drawn: the calendar runs from the start of this week for six weeks; glow shows status (due soon, later), not amount; past dues show as paid ticks; a plain sentence under the heading says what is next (X-1); the bills as text rows under the calendar with name, amount and "in N days" (V8-4); no Home heads-up (not chosen).
 
+### Viz 9 — This week vs last (Tarun, 2 Oct; options board in progress)
+| # | Decision |
+|---|---|
+| V9-1 | It lives in the **Insights tab**. |
+| V9-2 | It compares **all spending first, then by category on tap**; a category's own then-and-now is its look-back (V1-13..V1-15, already decided). |
+| V9-3 | The form is **two grids side by side, last week faded** (the same form as the category look-back, V1-14/V1-15). |
+Defaults, drawn but not decided: the weeks are compared **at the same point** (e.g. Monday to Thursday); each grid shows money left (V1-1); a plain sentence says more, less or the same, in words, no red (X-1); the by-category list shows the change in rupees on the tap layer, biggest change first, amber for more and green for less (not good or bad, just direction); a student in his first week has no last week and sees only this week with a note.
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
@@ -141,7 +149,7 @@ Viz 8 closed by Tarun ("next"). The defaults below stand as drawn: the calendar 
 6. Small / repeat purchases — DONE (V6-1, V6-2, V6-4, V6-5; V6-3 withdrawn)
 7. Time patterns (e.g. nights) — DONE (V7-1, V7-2, X-1)
 8. Subscriptions coming up (Fixed group) — DONE (V8-1…V8-4)
-9. This week vs last — NEXT
+9. This week vs last — IN PROGRESS (V9-1…V9-3 given)
 10. Transaction history
 11. Exact amounts on tap (progressive disclosure rules)
 
