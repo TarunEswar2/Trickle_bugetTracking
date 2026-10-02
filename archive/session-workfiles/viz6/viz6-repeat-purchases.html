@@ -100,13 +100,16 @@ svg.ph rect.bx{transition:fill 1.3s ease}
 @media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
 
 svg.ph [data-go]{cursor:pointer}
+
+.sw3{display:flex;gap:8px;flex-wrap:wrap}
 </style>
 
+<div id="defs"></div>
 <div class="wrap">
 <header class="top">
-  <div class="eyebrow">Trickle v14 · Visualisation 6 of 11 · 2 Oct 2026</div>
+  <div class="eyebrow">Trickle v14 · Visualisation 6 of 11 · redrawn 2 Oct 2026</div>
   <h1>Repeat purchases</h1>
-  <p class="lead">A view in the Spending tab, a scroll below the rings. Every habit, the same place or kind three or more times in 30 days, is one box. The box lights a little more each time, so five coffees read as one growing habit, not five transactions. Tap a box for the details. Drawn for all six students, including one with nothing repeating yet. Options only. You decide.</p>
+  <p class="lead">Calendar hotspots. Pick a habit, or all of them, then look at it by day, week or month. The brighter a spot glows, the more often it happens there. Switch to rupees and it glows by how much was spent. Tap a spot for the exact count and amount. It sits in the Spending tab, a scroll below the rings. Options only. You decide.</p>
 </header>
 
 <section style="border-top:0;padding-top:0">
@@ -114,14 +117,13 @@ svg.ph [data-go]{cursor:pointer}
   <div class="logged">
     <div><b>V6-1 · What counts</b><span>The same place or kind, 3 or more times in 30 days, any amount.</span></div>
     <div><b>V6-2 · Where</b><span>A view inside the Spending tab, reached by scrolling.</span></div>
-    <div><b>V6-3 · The unit</b><span>A box that fills with each repeat.</span></div>
-    <div><b>Carried over</b><span>Colour follows the category (V1-12). Amounts on tap. The scale chip is on any screen with a grid (V3-11). No red.</span></div>
+    <div><b>V6-4 · Calendar hotspots</b><span>Show how much and how many times, per day, per week and per month, as glowing calendar spots. The filling boxes are withdrawn.</span></div>
   </div>
-  <p class="small">Not decided, drawn as defaults: a full box means a purchase every day for 30 days, each repeat fills 1/30 of it; habits are sorted by most repeats; names sit under the boxes with no numbers. All figures are made up. Today on this board is 2 October 2026.</p>
+  <p class="small">Drawn as defaults, not decided: a picker with "All repeats" first, three scales (Day, Week, Month), a Times | ₹ switch, orange glow for spending, numbers only on tap. All figures are made up. Today on this board is 2 October 2026.</p>
 </section>
 
 <section>
-  <div class="sec-h"><h2>The pool</h2><span class="q">The habits in each student's last 30 days.</span></div>
+  <div class="sec-h"><h2>The pool</h2><span class="q">The habits in each student's last 30 days, with how many times each happened.</span></div>
   <div class="tw"><table>
     <tr><th>Student</th><th>Habits (times in 30 days)</th></tr>
     <tbody id="pool"></tbody>
@@ -129,34 +131,40 @@ svg.ph [data-go]{cursor:pointer}
 </section>
 
 <section>
-  <div class="sec-h"><span class="k">A</span><h2>The Spending tab, a scroll down</h2></div>
-  <p class="q">One box per habit, biggest first, in the colour of its category. The more a box is lit, the more often it has happened. Gautham-type is in his first week, so nothing repeats yet.</p>
+  <div class="sec-h"><span class="k">A</span><h2>All repeats, by month</h2></div>
+  <p class="q">The first view: every repeating purchase together, as a calendar of the last 30 days. Weekdays run across the top, weeks stack down. A bright spot is a day with several repeats. Gautham-type is in his first week, so nothing repeats yet.</p>
   <div class="gal" id="secA"></div>
   <div class="notes" id="noteA"></div>
 </section>
 
 <section>
-  <div class="sec-h"><span class="k">B</span><h2>How a habit grows</h2></div>
-  <p class="q">Tarun-type's chai over a month: 3 times, 8, 15 and 22. The first time a habit counts is the third repeat.</p>
+  <div class="sec-h"><span class="k">B</span><h2>One habit, three scales</h2></div>
+  <p class="q">The same habit by day, by week and by month. Day: the hours of a typical day. Week: weekday against time of day. Month: the last 30 days. Four habits from four students.</p>
   <div class="gal" id="secB"></div>
   <div class="notes" id="noteB"></div>
 </section>
 
 <section>
-  <div class="sec-h"><span class="k">C</span><h2>Tap a habit</h2></div>
-  <p class="q">The full screen. The big box, how often in words, then the numbers: how many times, how much in all, about how much each, and when. Recent ones at the bottom.</p>
+  <div class="sec-h"><span class="k">C</span><h2>How many, and how much</h2></div>
+  <p class="q">The switch under the grid. Times glows by how often. ₹ glows by how much. Chai many times for little looks very different from Zepto a few times for a lot.</p>
   <div class="gal" id="secC"></div>
   <div class="notes" id="noteC"></div>
 </section>
 
 <section>
-  <div class="sec-h"><span class="k">D</span><h2>Try it</h2></div>
-  <p class="q">Pick a student, tap a box, then go back.</p>
+  <div class="sec-h"><span class="k">D</span><h2>Choosing a habit</h2></div>
+  <p class="q">The picker at the top. "All repeats" first, then each habit in the colour of its category, most frequent first.</p>
+  <div class="gal" id="secD"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">E</span><h2>Try it</h2></div>
+  <p class="q">Pick a student, open the picker and choose a habit, switch Day, Week or Month, switch Times or ₹, and tap a spot.</p>
   <div class="demo">
     <div id="demo"></div>
     <div class="ctl">
       <div class="grp"><span class="lbl">Student</span><div class="chips" id="cs"></div></div>
-      <span class="small" id="dnote">Tap a box to open it.</span>
+      <span class="small" id="dnote">Tap a spot for its count and amount.</span>
     </div>
   </div>
 </section>
@@ -164,105 +172,167 @@ svg.ph [data-go]{cursor:pointer}
 <section>
   <div class="sec-h"><h2>Decisions for Tarun</h2></div>
   <div class="decide">
-    <div class="dq"><h3>1. What fills a box?</h3><ol><li class="s">A purchase every day for 30 days. Each repeat is a thirtieth, so 3 repeats are barely lit and 22 are mostly full.</li><li>Full at 10 repeats. Lights up quickly but most habits max out.</li></ol></div>
-    <div class="dq"><h3>2. Box colour</h3><ol><li class="s">The habit's category colour, so Zepto and Blinkit share Quick-commerce's.</li><li>One colour for every habit.</li></ol></div>
-    <div class="dq"><h3>3. On the glance screen</h3><ol><li class="s">Names under the boxes, no numbers.</li><li>The count on each box.</li></ol></div>
-    <div class="dq"><h3>4. Almost a habit</h3><ol><li class="s">Hide anything under 3 repeats.</li><li>Show 2 repeats as a dashed outline, "nearly a habit".</li></ol></div>
-    <div class="dq"><h3>5. Order</h3><ol><li class="s">Most repeats first.</li><li>Most rupees first.</li></ol></div>
+    <div class="dq"><h3>1. The three scales</h3><ol><li class="s">Day = hours of a typical day, Week = weekday by time of day, Month = the last 30 days.</li><li>Day = today only, Week = this week, Month = this month (real, not typical).</li></ol></div>
+    <div class="dq"><h3>2. Which view opens first</h3><ol><li class="s">Month, with All repeats.</li><li>Week.</li></ol></div>
+    <div class="dq"><h3>3. How much and how many</h3><ol><li class="s">A Times | ₹ switch under the grid. Glow follows the choice.</li><li>Both at once: glow for times, a small bar for rupees.</li></ol></div>
+    <div class="dq"><h3>4. Glow colour</h3><ol><li class="s">Spending orange for every habit.</li><li>The habit's category colour.</li></ol></div>
+    <div class="dq"><h3>5. Choosing a habit</h3><ol><li class="s">A drop-down with All repeats first.</li><li>A row of chips along the top.</li></ol></div>
   </div>
 </section>
 </div>
 
 <script>
 (function(){
-const PBG='#0b0d10',EDGE='#2b3038',CELL='#2a3039',INK='#f2f4f5',MUT='#8f97a1',GRN='#62dcb4',AMB='#e3a43f';
+const PBG='#0b0d10',EDGE='#2b3038',CELL='#2a3039',DIM='#1b2026',INK='#f2f4f5',MUT='#8f97a1',GRN='#62dcb4',ORG='#f08a3c';
 const CATC=['#5aa9ff','#b48cff','#ff7eb6','#f2d65b','#4fd1e6'],OTHC='#f6b27c';
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 const fmt=n=>'₹'+Math.round(Math.abs(n)).toLocaleString('en-IN');
 const T=(x,y,s,sz,o={})=>`<text x="${x}" y="${y}" font-size="${sz}" font-weight="${o.w||400}" fill="${o.f||INK}" text-anchor="${o.a||'start'}" ${o.ls?`letter-spacing="${o.ls}"`:''}>${esc(s)}</text>`;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const rnd=n=>{const x=Math.sin(n*12.9898)*43758.5453;return x-Math.floor(x)};
 const cut=(s,n)=>s.length>n?s.slice(0,n-1)+'…':s;
+document.getElementById('defs').innerHTML=`<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4"/></filter></defs></svg>`;
+const TODAY=new Date(2026,9,2),DAY=86400000;
+const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],DN=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const addDays=(d,n)=>new Date(d.getTime()+n*DAY);
+const dow=d=>(d.getDay()+6)%7;
 const CATB={'Vaishak-type':[['Food',2400],['Other',300]],'Gautham-type':[['Food & drinks',2600],['Travel',300],['Other',100]],'Tarun-type':[['Coffee & snacks',1600],['Food',2000],['Travel',700],['Other',400]],'Yash-type':[['Quick-commerce',4000],['Food',900],['Travel',500],['Fun',400],['Study',300],['Phone',200],['Other',100]],'Nishad-type':[['Food & beverages',6000],['Travel',2000],['Fun',1500],['Study',1200],['Gifts',800],['Snacks',700],['Haircut',700],['Phone',600],['Misc',600],['Stationery',500],['Clothes',500],['Books',400]],'Harsh-type':[['Mess & meals',2400],['Eating out',1600],['Fuel',400],['Gifts',300],['Fun',300],['Study',200],['Snacks',100],['Printouts',100],['Haircut',100],['Coffee',100],['Books',100],['Repairs',100],['Medical',100],['Charity',100],['Laundry',75],['Stationery',75],['Parking',75],['Misc',75]]};
 const catColor=(st,cat)=>{const r=[...CATB[st]].sort((a,b)=>b[1]-a[1]).findIndex(c=>c[0]===cat);return r>=0&&r<5?CATC[r]:OTHC};
-/* habit: [name, category, times in 30 days, avg rupees, usual time, recent[[what, rupees, when]]] */
 const S=[
- {short:'Vaishak-type',habits:[['Mess','Food',18,70,'lunch, most days',[['Mess',70,'Today'],['Mess',70,'Yesterday'],['Mess',75,'Mon']]],['Tea stall','Food',7,20,'afternoons',[['Tea stall',20,'Wed'],['Tea stall',20,'Mon']]]]},
+ {short:'Vaishak-type',habits:[['Mess','Food',18,70,'lunch, most days'],['Tea stall','Food',7,20,'afternoons']]},
  {short:'Gautham-type',habits:[]},
- {short:'Tarun-type',habits:[['Chai','Coffee & snacks',22,22,'4 to 5 pm, weekdays',[['Chai',20,'Today'],['Chai',25,'Yesterday'],['Chai',20,'Wed'],['Chai',25,'Tue']]],['Canteen lunch','Food',12,80,'1 pm, weekdays',[['Canteen lunch',80,'Today'],['Canteen lunch',85,'Wed']]],['Coffee','Coffee & snacks',9,60,'mornings',[['Coffee',60,'Today'],['Coffee',60,'Tue']]],['Samosa + chai','Coffee & snacks',5,45,'evenings',[['Samosa + chai',45,'Tue'],['Samosa + chai',45,'Sat']]]]},
- {short:'Yash-type',habits:[['Zepto','Quick-commerce',11,260,'late evenings',[['Zepto · 4 items',312,'Today'],['Zepto · 2 items',141,'Tue']]],['Chai','Food',9,20,'afternoons',[['Chai',20,'Today']]],['Blinkit','Quick-commerce',8,240,'nights',[['Blinkit · 5 items',268,'Wed']]],['Swiggy','Food',6,180,'dinner',[['Swiggy',189,'Yesterday']]],['Instamart','Quick-commerce',5,190,'nights',[['Instamart · 3 items',189,'Mon']]],['Metro card','Travel',4,100,'mornings',[['Metro card',100,'Mon']]]]},
- {short:'Nishad-type',habits:[['Corner shop','Snacks',20,35,'afternoons and nights',[['Corner shop',40,'Today'],['Corner shop',30,'Yesterday']]],['Cafe','Food & beverages',14,150,'mornings',[['Cafe',240,'Today'],['Cafe',120,'Mon']]],['Auto','Travel',12,80,'mornings and evenings',[['Auto',80,'Today']]],['Zomato','Food & beverages',9,410,'dinner',[['Zomato',410,'Yesterday']]],['Juice bar','Food & beverages',6,90,'evenings',[['Juice bar',90,'Sat']]],['Stationery','Stationery',4,120,'weekdays',[['Stationery',120,'Wed']]],['Pharmacy','Misc',3,200,'now and then',[['Pharmacy',200,'Tue']]]]},
- {short:'Harsh-type',habits:[['Mess','Mess & meals',26,80,'lunch and dinner',[['Mess',80,'Today'],['Mess',80,'Yesterday']]],['Tea','Snacks',15,15,'afternoons',[['Tea',15,'Today']]],['Cafe','Eating out',7,240,'weekends',[['Cafe',240,'Tue']]],['Fuel','Fuel',6,230,'weekly',[['Fuel',230,'Mon']]],['Pizza place','Eating out',4,380,'Sundays',[['Pizza place',380,'Sun']]],['Coffee','Coffee',4,70,'mornings',[['Coffee',70,'Wed']]],['Gym juice','Fuel',3,60,'evenings',[['Gym juice',60,'Fri']]]]}
+ {short:'Tarun-type',habits:[['Chai','Coffee & snacks',22,22,'4 to 5 pm, weekdays'],['Canteen lunch','Food',12,80,'1 pm, weekdays'],['Coffee','Coffee & snacks',9,60,'mornings'],['Samosa + chai','Coffee & snacks',5,45,'evenings']]},
+ {short:'Yash-type',habits:[['Zepto','Quick-commerce',11,260,'late evenings and nights'],['Chai','Food',9,20,'afternoons'],['Blinkit','Quick-commerce',8,240,'nights'],['Swiggy','Food',6,180,'dinner'],['Instamart','Quick-commerce',5,190,'nights'],['Metro card','Travel',4,100,'mornings, weekdays']]},
+ {short:'Nishad-type',habits:[['Corner shop','Snacks',20,35,'afternoons and nights'],['Cafe','Food & beverages',14,150,'mornings'],['Auto','Travel',12,80,'mornings and evenings, weekdays'],['Zomato','Food & beverages',9,410,'dinner'],['Juice bar','Food & beverages',6,90,'evenings'],['Stationery','Stationery',4,120,'afternoons, weekdays'],['Pharmacy','Misc',3,200,'evenings']]},
+ {short:'Harsh-type',habits:[['Mess','Mess & meals',26,80,'lunch and dinner'],['Tea','Snacks',15,15,'afternoons'],['Cafe','Eating out',7,240,'weekends, afternoons'],['Fuel','Fuel',6,230,'mornings, weekends'],['Pizza place','Eating out',4,380,'Sundays, nights'],['Coffee','Coffee',4,70,'mornings'],['Gym juice','Fuel',3,60,'evenings']]}
 ];
-S.forEach(st=>{st.habits=st.habits.map(h=>({name:h[0],cat:h[1],n:h[2],avg:h[3],when:h[4],recent:h[5],color:catColor(st.short,h[1])})).sort((a,b)=>b.n-a.n)});
-const words=n=>n>=24?'almost every day':n>=15?'most days':n>=8?'often':n>=4?'now and then':'just starting';
+/* make events for each habit from its numbers and its "usual time" */
+function hoursOf(w){w=w.toLowerCase();let h=[];
+  if(/4 to 5/.test(w))return[16];if(/1 pm/.test(w))return[13];
+  if(/morning/.test(w))h.push(7,8,9,10);if(/lunch/.test(w))h.push(12,13,14);if(/afternoon/.test(w))h.push(15,16,17);
+  if(/evening/.test(w))h.push(18,19,20);if(/dinner/.test(w))h.push(19,20,21);if(/late evening/.test(w))h.push(21,22);if(/night/.test(w))h.push(22,23,0);
+  return h.length?h:[12,13,17,18,19]}
+function makeEvents(st,hb,idx){const [name,cat,n,avg,when]=hb,hs=hoursOf(when),w=when.toLowerCase(),wkd=/weekday/.test(w),wke=/weekend/.test(w),sun=/sunday/.test(w),ev=[];
+  const perDay={};let tries=0,k=0;
+  while(ev.length<n&&tries<600){tries++;const off=Math.floor(rnd(idx*101+k*7+tries)*30),dt=addDays(TODAY,-off),d=dow(dt);
+    if(wkd&&d>4)continue;if(wke&&d<5)continue;if(sun&&d!==6)continue;if((perDay[off]||0)>=(n>22?3:2))continue;
+    perDay[off]=(perDay[off]||0)+1;const hour=hs[Math.floor(rnd(idx*53+tries*3)*hs.length)];
+    ev.push({off,dt,d,hour,amt:Math.max(5,Math.round(avg*(.8+.4*rnd(idx*17+tries))/5)*5)});k++}
+  return ev}
+S.forEach((st,si)=>{st.habits=st.habits.map((h,i)=>({name:h[0],cat:h[1],n:h[2],avg:h[3],when:h[4],color:catColor(st.short,h[1]),ev:null})).sort((a,b)=>b.n-a.n);
+  st.habits.forEach((h,i)=>{h.ev=makeEvents(st,[h.name,h.cat,h.n,h.avg,h.when],si*31+i)})});
+const events=(st,hi)=>hi<0?st.habits.flatMap(h=>h.ev):st.habits[hi].ev;
+const BLK=['Night','Morning','Afternoon','Evening'],BLKH=['12–5 am','6–11 am','12–5 pm','6–11 pm'];
+const blockOf=h=>Math.floor(h/6);
+const hourLabel=h=>{const a=h%12===0?12:h%12;return `${a} ${h<12?'am':'pm'}`};
+function aggregate(evs){
+  const hour=Array.from({length:24},()=>({n:0,s:0})),wk=Array.from({length:7},()=>Array.from({length:4},()=>({n:0,s:0}))),day=Array.from({length:30},()=>({n:0,s:0}));
+  evs.forEach(e=>{hour[e.hour].n++;hour[e.hour].s+=e.amt;const b=wk[e.d][blockOf(e.hour)];b.n++;b.s+=e.amt;const dd=day[29-e.off];dd.n++;dd.s+=e.amt});
+  return {hour,wk,day}}
+const unit=n=>n===1?'time':'times';
 
 const TABS=['Home','Income','Spending','Savings','Insights'];
 const tabbar=a=>{let tb=`<line x1="0" y1="770" x2="390" y2="770" stroke="${EDGE}"/>`;TABS.forEach((t,i)=>{const x=39+78*i;tb+=T(x,808,t,14,{a:'middle',f:i===a?INK:MUT,w:i===a?700:400});if(i===a)tb+=`<rect x="${x-14}" y="782" width="28" height="4" rx="2" fill="${GRN}"/>`});return tb};
-let UID=0;
 const frame=(inner,label)=>`<svg class="ph" viewBox="0 0 390 844" role="img" aria-label="${esc(label)}"><rect x="1" y="1" width="388" height="842" rx="46" fill="${PBG}" stroke="${EDGE}" stroke-width="2"/>${inner}<rect x="150" y="16" width="90" height="24" rx="12" fill="#000"/>${tabbar(2)}</svg>`;
-const scaleChip=(x,y,txt)=>`<rect x="${x}" y="${y}" width="${Math.round(txt.length*12.4+60)}" height="38" rx="12" fill="#17201e" stroke="${GRN}" stroke-opacity=".75" stroke-width="1.6"/><rect x="${x+12}" y="${y+10}" width="18" height="18" rx="5" fill="${GRN}"/>${T(x+40,y+27,txt,21,{w:700})}`;
-/* a habit box: rounded, fills from the bottom by n/30 */
-function habitBox(x,y,w,h,n,color){const id='hb'+(UID++),f=clamp(n/30,0,1),lh=h*f;
-  return `<defs><clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${Math.min(16,w/5)}"/></clipPath></defs><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${Math.min(16,w/5)}" fill="${CELL}"/><g clip-path="url(#${id})"><rect x="${x}" y="${(y+h-lh).toFixed(1)}" width="${w}" height="${lh.toFixed(1)}" fill="${color}"/>${lh>2&&lh<h-1?`<rect x="${x}" y="${(y+h-lh).toFixed(1)}" width="${w}" height="1.8" fill="#d4faee" opacity=".7"/>`:''}</g>`}
+/* one hotspot cell */
+function spot(x,y,w,h,v,max,sel,attr,label,textCol){
+  const k=max>0?v/max:0;let s='';
+  if(v<=0)s+=`<g ${attr}><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="${DIM}" ${sel?'stroke="#fff" stroke-width="2.5"':''}/>${label?T(x+6,y+15,label,11.5,{f:'#4a525d'}):''}</g>`;
+  else{if(k>.5)s+=`<rect x="${x+2}" y="${y+2}" width="${w-4}" height="${h-4}" rx="9" fill="${ORG}" opacity="${(k*.85).toFixed(2)}" filter="url(#glow)"/>`;
+    s+=`<g ${attr}><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="${ORG}" opacity="${(.2+.8*Math.pow(k,.8)).toFixed(2)}" ${sel?'stroke="#fff" stroke-width="2.5"':''}/>${label?T(x+6,y+15,label,11.5,{f:k>.55?'#2a1604':INK,w:600}):''}</g>`}
+  return s}
 
-function spendRepeats(st){
+function grid(st,hi,scale,metric,sel){
+  const ag=aggregate(events(st,hi)),val=c=>metric==='amt'?c.s:c.n;let s='',max=1,info=null;
+  if(scale==='day'){
+    ag.hour.forEach(c=>{max=Math.max(max,val(c))});
+    ['Night','Morning','Afternoon','Evening'].forEach((b,r)=>{s+=T(35,284+r*58+18,b,11.5,{f:MUT});s+=T(35,284+r*58+34,BLKH[r],11,{f:'#5a626d'})});
+    for(let r=0;r<4;r++)for(let c=0;c<6;c++){const hr=r*6+c,x=96+c*43,y=270+r*58,cell=ag.hour[hr];
+      s+=spot(x,y,38,52,val(cell),max,sel===hr,`data-c="${hr}" role="button" tabindex="0" aria-label="${hourLabel(hr)}"`,String(hr%12===0?12:hr%12),true)}
+    if(sel!=null){const c=ag.hour[sel];info=`${hourLabel(sel)}: ${c.n} ${unit(c.n)}, ${fmt(c.s)}`}
+  }else if(scale==='week'){
+    ag.wk.forEach(r=>r.forEach(c=>{max=Math.max(max,val(c))}));
+    DN.forEach((d,c)=>{s+=T(96+c*37+13,258,d[0],13,{a:'middle',f:MUT,w:600})});
+    BLK.forEach((b,r)=>{s+=T(35,270+r*58+30,b,11.5,{f:MUT})});
+    for(let r=0;r<4;r++)for(let c=0;c<7;c++){const x=96+c*37,y=270+r*58,cell=ag.wk[c][r];
+      s+=spot(x,y,32,52,val(cell),max,sel===r*7+c,`data-c="${r*7+c}" role="button" tabindex="0" aria-label="${DN[c]} ${BLK[r]}"`,'',false)}
+    if(sel!=null){const r=Math.floor(sel/7),c=sel%7,cell=ag.wk[c][r];info=`${DN[c]} ${BLK[r].toLowerCase()}s: ${cell.n} ${unit(cell.n)}, ${fmt(cell.s)}`}
+  }else{
+    ag.day.forEach(c=>{max=Math.max(max,val(c))});
+    const start=addDays(TODAY,-29),fd=dow(start);
+    DN.forEach((d,c)=>{s+=T(35+c*46+20,258,d[0],13,{a:'middle',f:MUT,w:600})});
+    for(let i=0;i<30;i++){const dt=addDays(start,i),col=dow(dt),row=Math.floor((i+fd)/7),x=35+col*46,y=270+row*46,cell=ag.day[i];
+      s+=spot(x,y,40,40,val(cell),max,sel===i,`data-c="${i}" role="button" tabindex="0" aria-label="${dt.getDate()} ${MN[dt.getMonth()]}"`,String(dt.getDate()),true)}
+    if(sel!=null){const dt=addDays(start,sel),c=ag.day[sel];info=`${DN[dow(dt)]} ${dt.getDate()} ${MN[dt.getMonth()]}: ${c.n} ${unit(c.n)}, ${fmt(c.s)}`}
+  }
+  return {svg:s,info,ag}}
+
+function summary(st,hi,ag){
+  if(hi>=0)return `Usually ${st.habits[hi].when}`;
+  const bt=[0,0,0,0];ag.hour.forEach((c,h)=>{bt[blockOf(h)]+=c.n});const pb=bt.indexOf(Math.max(...bt));
+  const wd=ag.wk.map(r=>r.reduce((a,c)=>a+c.n,0)),weekday=wd.slice(0,5).reduce((a,b)=>a+b,0),all=wd.reduce((a,b)=>a+b,0)||1;
+  return `Mostly ${BLK[pb].toLowerCase()}s${weekday/all>.75?', mostly weekdays':weekday/all<.45?', mostly weekends':''}`}
+
+function repScreen(st,o){
+  o=Object.assign({hi:-1,scale:'month',metric:'times',sel:null,open:false},o);
   let s=T(35,76,'Spending',17,{f:MUT})+T(35,112,'Repeats',30,{w:700});
-  s+=T(35,144,'Last 30 days',17,{f:MUT})+scaleChip(35,158,'Full = every day');
   if(!st.habits.length){
-    s+=`<rect x="35" y="230" width="320" height="150" rx="16" fill="none" stroke="${EDGE}" stroke-dasharray="4 5"/>`;
-    s+=T(195,288,'Nothing repeats yet',22,{a:'middle',w:700})+T(195,318,'When something happens',16.5,{a:'middle',f:MUT})+T(195,340,'three times, it shows up here.',16.5,{a:'middle',f:MUT});
+    s+=`<rect x="35" y="170" width="320" height="170" rx="16" fill="none" stroke="${EDGE}" stroke-dasharray="4 5"/>`;
+    s+=T(195,236,'Nothing repeats yet',22,{a:'middle',w:700})+T(195,268,'When something happens',16.5,{a:'middle',f:MUT})+T(195,290,'three times, it shows up here.',16.5,{a:'middle',f:MUT});
     return frame(s,`${st.short} repeats, nothing yet`)}
-  const cols=3,tw=96,gap=16;
-  st.habits.slice(0,12).forEach((h,i)=>{const c=i%cols,r=Math.floor(i/cols),x=35+c*(tw+gap),y=224+r*128;
-    s+=`<g data-go="h:${i}" role="button" tabindex="0" aria-label="${esc(h.name)}"><rect x="${x-4}" y="${y-6}" width="${tw+8}" height="124" rx="14" fill="transparent"/>${habitBox(x,y,tw,84,h.n,h.color)}${T(x+tw/2,y+106,cut(h.name,13),15.5,{a:'middle',w:600})}</g>`});
-  return frame(s,`${st.short} repeat purchases, ${st.habits.length} habits`)}
-
-function growScreen(st,h,n){
-  let s=T(35,76,'Spending',17,{f:MUT})+T(35,112,'Repeats',30,{w:700})+T(35,144,'Last 30 days',17,{f:MUT})+scaleChip(35,158,'Full = every day');
-  s+=habitBox(35+112,236,96,84,n,h.color)+T(195,350,cut(h.name,13),16,{a:'middle',w:600});
-  s+=T(195,404,words(n),20,{a:'middle',w:700})+T(195,432,n<3?'not a habit yet':'it is a habit',16,{a:'middle',f:MUT});
-  return frame(s,`${h.name} after ${n} times`)}
-
-function detail(st,i){
-  const h=st.habits[i];let s=T(35,76,'‹ Repeats',17,{f:MUT}).replace('<text','<text data-go="back" role="button" tabindex="0" style="cursor:pointer"');
-  s+=`<rect x="35" y="88" width="14" height="14" rx="4" fill="${h.color}"/>`+T(58,112,cut(h.name,16),30,{w:700});
-  s+=scaleChip(35,124,'Full = every day');
-  s+=habitBox(35,186,150,130,h.n,h.color);
-  s+=T(205,222,words(h.n),20,{w:700})+T(205,250,`${h.n} times`,18,{f:MUT})+T(205,276,'in 30 days',16,{f:MUT});
-  s+=`<line x1="35" y1="344" x2="355" y2="344" stroke="${EDGE}"/>`;
-  s+=T(35,382,`${fmt(h.n*h.avg)} in all`,26,{w:700})+T(35,410,`about ${fmt(h.avg)} each`,17,{f:MUT})+T(35,440,`Usually ${h.when}`,17,{f:MUT});
-  s+=T(35,486,'RECENT',13,{f:MUT,w:700,ls:'1.6'});
-  h.recent.slice(0,4).forEach((r,j)=>{const y=520+j*46;s+=T(35,y,cut(r[0],20),18,{w:500})+T(355,y,fmt(r[1]),18,{a:'end',w:500})+T(35,y+20,r[2],14,{f:MUT})});
-  return frame(s,`${st.short} ${h.name} detail, ${h.n} times`)}
+  const cur=o.hi<0?{name:'All repeats',color:'#f2f4f5'}:st.habits[o.hi];
+  s+=`<g data-go="pick" role="button" tabindex="0" aria-label="Choose a habit"><rect x="35" y="128" width="320" height="42" rx="12" fill="#14181d" stroke="${EDGE}"/><rect x="48" y="140" width="18" height="18" rx="5" fill="${cur.color}"/>${T(76,155,cut(cur.name,20),18,{w:600})}${T(349,156,o.open?'▾':'▸',18,{a:'end',f:MUT})}</g>`;
+  if(o.open){
+    const opts=[{name:'All repeats',color:'#f2f4f5',i:-1},...st.habits.map((h,i)=>({name:h.name,color:h.color,i,n:h.n}))];
+    opts.forEach((p,j)=>{const y=186+j*40;s+=`<g data-h="${p.i}" role="button" tabindex="0" aria-label="${esc(p.name)}"><rect x="35" y="${y}" width="320" height="36" rx="10" fill="${p.i===o.hi?'#1c2430':'transparent'}" stroke="${p.i===o.hi?'#3a4656':'none'}"/><rect x="48" y="${y+9}" width="16" height="16" rx="4.5" fill="${p.color}"/>${T(76,y+24,cut(p.name,22),17,{w:p.i===o.hi?700:500})}${p.i<0?'':T(341,y+24,'',14,{a:'end'})}</g>`});
+    return frame(s,`${st.short} choose a habit`)}
+  s+=`<rect x="35" y="184" width="320" height="38" rx="12" fill="#14181d" stroke="${EDGE}"/>`;
+  [['day','Day'],['week','Week'],['month','Month']].forEach(([k,l],i)=>{const x=38+i*106;s+=`<g data-scale="${k}" role="button" tabindex="0">${o.scale===k?`<rect x="${x}" y="187" width="104" height="32" rx="10" fill="#2a2018"/>`:''}${T(x+52,209,l,16.5,{a:'middle',w:o.scale===k?700:500,f:o.scale===k?ORG:MUT})}</g>`});
+  const g=grid(st,o.hi,o.scale,o.metric,o.sel);s+=g.svg;
+  const ly=o.scale==='week'?514:o.scale==='day'?520:o.sel!=null||true?(Math.ceil((30+dow(addDays(TODAY,-29)))/7)*46+280):520;
+  const ky=Math.max(ly,520);
+  [.12,.3,.5,.75,1].forEach((k,i)=>{s+=`<rect x="${35+i*20}" y="${ky}" width="16" height="16" rx="4" fill="${ORG}" opacity="${k}"/>`});
+  s+=T(142,ky+13,'less → more',14,{f:MUT});
+  s+=`<rect x="236" y="${ky-6}" width="119" height="30" rx="10" fill="#14181d" stroke="${EDGE}"/>`;
+  [['times','Times'],['amt','₹']].forEach(([k,l],i)=>{const x=239+i*58;s+=`<g data-metric="${k}" role="button" tabindex="0">${o.metric===k?`<rect x="${x}" y="${ky-3}" width="56" height="24" rx="8" fill="#2a2018"/>`:''}${T(x+28,ky+14,l,14.5,{a:'middle',w:o.metric===k?700:500,f:o.metric===k?ORG:MUT})}</g>`});
+  const iy=ky+58;
+  if(g.info)s+=T(35,iy,g.info,21,{w:700});else s+=T(35,iy,summary(st,o.hi,g.ag),17,{f:MUT})+T(35,iy+26,'Tap a spot for how many and how much.',15,{f:'#5f6772'});
+  return frame(s,`${st.short} ${cur.name} by ${o.scale}, ${o.metric==='amt'?'rupees':'times'}`)}
 
 const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c)}</figcaption></figure>`;
 document.getElementById('pool').innerHTML=S.map(st=>`<tr><td>${st.short}</td><td>${st.habits.length?st.habits.map(h=>`${h.name} ${h.n}`).join(' · '):'none yet (first week)'}</td></tr>`).join('');
-document.getElementById('secA').innerHTML=`<div class="opt"><div class="row">`+S.map(st=>fg(spendRepeats(st),st.short,st.habits.length?`${st.habits.length} habit${st.habits.length>1?'s':''}`:'nothing yet')).join('')+`</div></div>`;
+document.getElementById('secA').innerHTML=`<div class="opt"><div class="row">`+S.map(st=>fg(repScreen(st),st.short,st.habits.length?`${st.habits.length} habit${st.habits.length>1?'s':''}, all repeats`:'nothing yet')).join('')+`</div></div>`;
 document.getElementById('noteA').innerHTML=`
-<div class="note"><b>One box a habit</b>Tarun's chai is one box, 22 repeats lit to about three quarters, not 22 rows in a list. It is what you asked for: a growing habit, not a pile of transactions.</div>
-<div class="note"><b>Colour is the category</b>Zepto, Instamart and Blinkit are all Quick-commerce blue; Yash's Swiggy and chai are Food purple. You can see which budget a habit eats without a label.</div>
-<div class="note"><b>3 to 7 habits</b>Vaishak has two, Harsh seven. Twelve boxes fit on a screen, a third more would scroll. The glance screen has no numbers.</div>
-<div class="note"><b>The empty state</b>Gautham-type is in his first week with fewer than three of anything. It says so, and says when it will show.</div>`;
-const ch=S[2].habits[0];
-document.getElementById('secB').innerHTML=`<div class="opt"><div class="row four">`+[3,8,15,22].map(n=>fg(growScreen(S[2],ch,n),`${n} times`,n===3?'the first time it counts':n===22?'about three quarters full':words(n))).join('')+`</div></div>`;
+<div class="note"><b>Hotspots, not boxes</b>Each day is a spot that glows by how many repeats happened on it. Harsh's mess shows as a run of bright days; Vaishak's two habits are a lighter scatter.</div>
+<div class="note"><b>Words first</b>Under the calendar: "Mostly afternoons, mostly weekdays". Counts and rupees wait for a tap.</div>
+<div class="note"><b>The empty state</b>Gautham-type has fewer than three of anything, so the view says so and says when it will show.</div>`;
+const pick=[[S[2],0],[S[3],0],[S[4],0],[S[5],0]];
+document.getElementById('secB').innerHTML=[['day','Day','hours of a typical day'],['week','Week','weekday against time of day'],['month','Month','the last 30 days']].map(([k,n,d])=>`<div class="opt"><h4><b>${n}</b>${d}</h4><div class="row four">`+pick.map(([st,i])=>fg(repScreen(st,{hi:i,scale:k}),st.short,st.habits[i].name)).join('')+`</div></div>`).join('');
 document.getElementById('noteB').innerHTML=`
-<div class="note"><b>Slow to fill, on purpose</b>Three chais light a thirtieth part each, so a new habit is barely there and then keeps growing. A box that is nearly full is a habit you have almost every day.</div>
-<div class="note"><b>Words, not a number</b>"now and then", "often", "most days", "almost every day". The count is one tap away.</div>`;
-const feats=[[S[0],0],[S[2],0],[S[3],0],[S[4],0],[S[5],1]];
-document.getElementById('secC').innerHTML=`<div class="opt"><div class="row">`+feats.map(([st,i])=>fg(detail(st,i),st.short,`${st.habits[i].name}, ${st.habits[i].n} times`)).join('')+`</div></div>`;
+<div class="note"><b>Day</b>Which hours it happens. Tarun's chai is one bright spot at 4 pm, a very narrow habit. Nishad's corner shop is two clusters, afternoon and night.</div>
+<div class="note"><b>Week</b>Which weekdays and which time of day. Tarun's chai is a block of weekday afternoons with the weekend dark. Harsh's mess is lit all week.</div>
+<div class="note"><b>Month</b>Which days it actually happened. It shows gaps and bursts that a typical week hides.</div>`;
+document.getElementById('secC').innerHTML=`<div class="opt"><div class="row four">`+[[S[3],-1,'times'],[S[3],-1,'amt'],[S[4],-1,'times'],[S[4],-1,'amt']].map(([st,i,m])=>fg(repScreen(st,{hi:i,scale:'month',metric:m}),st.short,`all repeats · ${m==='amt'?'₹':'times'}`)).join('')+`</div></div>`;
 document.getElementById('noteC').innerHTML=`
-<div class="note"><b>Numbers live here</b>Times, rupees in all, rupees each, and when. A chai that feels like nothing is ₹484 a month, shown plainly.</div>
-<div class="note"><b>Not nagging</b>It says what happened. There is no "you should", no total in red, and nothing to dismiss.</div>`;
+<div class="note"><b>Same calendar, two answers</b>Yash-type's repeats by times: a bright run of days, mostly chai and Metro. By ₹: the nights with Zepto and Blinkit jump out, because each is a big spend. Cheap and frequent, or rare and large, read differently.</div>
+<div class="note"><b>One switch</b>"How many" and "how much" are the same calendar with a different glow, so the picture is learnt once. Tapping a spot gives both numbers either way.</div>`;
+document.getElementById('secD').innerHTML=`<div class="opt"><div class="row four">`+[[S[4],true],[S[5],true],[S[2],true],[S[0],true]].map(([st,o])=>fg(repScreen(st,{open:o}),st.short,`${st.habits.length} habits`)).join('')+`</div></div>`;
 
-const dem={s:2,view:'list',i:0};
+/* demo */
+const dem={s:2,hi:-1,scale:'month',metric:'times',sel:null,open:false};
 const demo=document.getElementById('demo'),dn=document.getElementById('dnote');
-function draw(){const st=S[dem.s];demo.innerHTML=dem.view==='list'?spendRepeats(st):detail(st,dem.i);dn.textContent=dem.view==='list'?(st.habits.length?'Tap a box to open it.':'Nothing repeats yet in his first week.'):'Tap ‹ Repeats to go back.'}
-demo.addEventListener('click',e=>{const t=e.target.closest('[data-go]');if(!t)return;const k=t.dataset.go;
-  if(k==='back'){dem.view='list'}else if(k.startsWith('h:')){dem.i=+k.slice(2);dem.view='detail'}draw()});
-demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-go]');if(t){e.preventDefault();t.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
+function draw(){demo.innerHTML=repScreen(S[dem.s],{hi:dem.hi,scale:dem.scale,metric:dem.metric,sel:dem.sel,open:dem.open});
+  dn.textContent=!S[dem.s].habits.length?'Nothing repeats yet in his first week.':dem.open?'Choose a habit.':'Tap a spot for its count and amount. Switch Day, Week, Month or Times, ₹.'}
+demo.addEventListener('click',e=>{
+  const h=e.target.closest('[data-h]');if(h){dem.hi=+h.dataset.h;dem.open=false;dem.sel=null;draw();return}
+  const c=e.target.closest('[data-c]');if(c){dem.sel=+c.dataset.c;draw();return}
+  const sc=e.target.closest('[data-scale]');if(sc){dem.scale=sc.dataset.scale;dem.sel=null;draw();return}
+  const m=e.target.closest('[data-metric]');if(m){dem.metric=m.dataset.metric;draw();return}
+  const g=e.target.closest('[data-go]');if(g){dem.open=!dem.open;draw()}});
+demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-go],[data-h],[data-c],[data-scale],[data-metric]');if(t){e.preventDefault();t.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
 const el=document.getElementById('cs');
 el.innerHTML=S.map((s,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${i===dem.s}">${s.short.replace('-type','')}</button>`).join('');
-el.onclick=e=>{const b=e.target.closest('button');if(!b)return;dem.s=+b.dataset.i;dem.view='list';[...el.children].forEach((c,i)=>c.setAttribute('aria-pressed',i===dem.s));draw()};
+el.onclick=e=>{const b=e.target.closest('button');if(!b)return;dem.s=+b.dataset.i;dem.hi=-1;dem.sel=null;dem.open=false;[...el.children].forEach((c,i)=>c.setAttribute('aria-pressed',i===dem.s));draw()};
 draw();
 })();
 </script>
