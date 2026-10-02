@@ -103,6 +103,7 @@ Viz 5 closed by Tarun ("done next"). The defaults below stand as drawn: default 
 | V6-1 | What counts: **the same place or kind, 3 or more times in 30 days, any amount** (the v9 definition). |
 | V6-2 | It is **a view inside the Spending tab**, reached by scrolling (one visualisation per screen). |
 | V6-3 | The unit is **a box that fills with each repeat**: one box per habit, lighting a little more every time, so five coffees read as one growing habit. |
+Board: https://claude.ai/artifact/AbKgJ6jeARMKgeGMdtLGox (source archive/session-workfiles/viz6/viz6-repeat-purchases.html).
 Defaults, drawn but not decided: a full box = a purchase every day for 30 days (each repeat fills 1/30); box colour = the habit's category colour (V1-12); names under the boxes and no numbers; habits sorted by most repeats; tap a box for a full-screen detail (times, rupees, usual time); fewer than 3 repeats shows an empty state; the scale chip says "Full box = every day".
 
 ## Visualisation queue (one at a time)
