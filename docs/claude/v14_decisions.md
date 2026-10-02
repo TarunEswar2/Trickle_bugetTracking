@@ -148,7 +148,7 @@ Viz 9 closed by Tarun ("next"). The defaults below stand as drawn: the weeks are
 | V10-2 | You find a purchase with **filter chips: category and a day range**. |
 | V10-3 | Each row says **name, amount, time** (with a category colour dot). Everything else is one tap in. |
 Board: https://claude.ai/artifact/8LxmrXkdZfEGbp9H6uE8kZ (source archive/session-workfiles/viz10/viz10-history.html).
-Defaults, drawn but not decided: it is the last screen of the Spending tab (Tarun's Spending tab: budget setting, how much spent, transaction history); a day header carries the day's total; ranges are Today, 7 days, 30 days, All; category chips use the ring colours; tapping a row opens a detail (category, when, how it was paid, and the habit it belongs to); an empty filter says so calmly; editing a transaction is a later flow.
+Viz 10 closed by Tarun ("okay next"). The defaults below stand as drawn: it is the last screen of the Spending tab (Tarun's Spending tab: budget setting, how much spent, transaction history); a day header carries the day's total; ranges are Today, 7 days, 30 days, All; category chips use the ring colours; tapping a row opens a detail (category, when, how it was paid, and the habit it belongs to); an empty filter says so calmly; editing a transaction is a later flow.
 
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
@@ -160,7 +160,7 @@ Defaults, drawn but not decided: it is the last screen of the Spending tab (Taru
 7. Time patterns (e.g. nights) — DONE (V7-1, V7-2, X-1)
 8. Subscriptions coming up (Fixed group) — DONE (V8-1…V8-4)
 9. This week vs last — DONE (V9-1…V9-3)
-10. Transaction history — IN PROGRESS (V10-1…V10-3 given)
+10. Transaction history — DONE (V10-1…V10-3)
 11. Exact amounts on tap (progressive disclosure rules)
 
 ## Parked / superseded

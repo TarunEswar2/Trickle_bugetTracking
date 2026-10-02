@@ -32,4 +32,4 @@ The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 - `references/inspiration/` — images Tarun supplied as visual references.
 
 ## Next up
-Visualisation 10: transaction history (Tarun's Spending tab: budget setting, how much spent, transaction history). Viz 1–9 are decided. Then 11 exact amounts on tap (progressive-disclosure rules).
+Visualisation 11, the last: exact amounts on tap (the progressive-disclosure rules across all screens). Viz 1–10 are decided. Then onboarding, per-tab wireframes, flows, identity, the v14 build, user tests.

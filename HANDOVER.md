@@ -40,7 +40,8 @@ v14 so far:
 | Visualisation 7 — time patterns | Decided (V7-1, V7-2, X-1): all spending by time of day in Insights, hotspot grids, plain sentence |
 | Visualisation 8 — fixed bills coming up | Decided (V8-1…V8-4): Fixed calendar in Spending, glow = status, list with amounts |
 | Visualisation 9 — this week vs last | Decided (V9-1…V9-3): Insights, two grids side by side with last week faded, by category on tap |
-| Visualisation 10 — transaction history | **Next** |
+| Visualisation 10 — transaction history | Decided (V10-1…V10-3): day-grouped list, filter chips, name/amount/time rows |
+| Visualisation 11 — exact amounts on tap | **Next (the last)** |
 | Onboarding, per-tab screens, identity, v14 build, user tests | Not started |
 
 ## How Tarun wants to work (this matters more than anything else here)
@@ -102,16 +103,11 @@ green→amber transition, v7's range of data visualisations, sounds/motion from 
 his own gradients in Figma.
 
 ## The exact next step
-**Visualisation 10 — transaction history** (Tarun's Spending tab: "budget setting, how much spent, transaction history"; v12 put the All spends list in Spending with filters and a spend detail).
+**Visualisation 11 — exact amounts on tap**, the last in the queue: the progressive-disclosure rules. It consolidates what each screen shows at a glance and what a tap reveals across Viz 1–10. Ask Tarun what form he wants (a rules table? one standard "tap reveals" pattern drawn once? both?), log as "Viz 11", mark DONE.
 
-1. Ask Tarun where and how: a list grouped by day? a calendar? filters? how it connects to the rings and repeats.
-2. Draw 3–4 options across the pool (a few transactions to hundreds; manual vs UPI-linked), recommend one, log as "Viz 10", mark DONE.
+After the queue (Tarun's v14 order): onboarding (`docs/claude/build_plan.md`, `docs/claude/screens_to_design.md`), grey wireframes per tab with one visualisation per screen, the flows (parked list below), identity, the v14 build, then real user tests (never run).
 
-Remaining after 10 (1 more): 11 exact amounts on tap (progressive-disclosure rules, the closing visualisation: it should consolidate what each tap reveals across Viz 1–10).
-
-After the queue: onboarding, grey wireframes per tab, the flows (parked list below), identity, the v14 build, real user tests.
-
-Carry-overs: V3-11 scale chip on every grid screen; X-1 plain sentence under hotspots; parked flows: add a goal, pay toward a goal, pay from savings, celebration triggers, weekly pop-up timing, Home heads-up for fixed bills, a category row opening its look-back from the week-vs-last list. Unanswered points are logged as defaults in the decisions file.
+Carry-overs: V3-11 scale chip on every grid screen (the Viz 1 board still has the old small line); X-1 plain sentence under hotspots; parked flows: add a goal, pay toward a goal, pay from savings, celebration triggers, weekly pop-up timing, Home heads-up for fixed bills, a category row opening its look-back from the week-vs-last list, editing a transaction's category. Unanswered points are logged as defaults in the decisions file.
 
 ## Read next
 1. `docs/claude/v14_decisions.md` — decision log and queue (authoritative).
