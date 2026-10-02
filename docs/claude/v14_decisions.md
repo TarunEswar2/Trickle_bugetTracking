@@ -81,12 +81,21 @@ Interpretation to confirm: the top gauge is all savings together, goals stacked 
 - Pay from savings by choosing a goal like a category (V4-7).
 - Celebration screen triggers: wherever a goal is completed (pay screen, income arriving, manual top-up).
 
+### Viz 5 — Unspent → saved (Tarun, 2 Oct; options board in progress)
+| # | Decision |
+|---|---|
+| V5-1 | It happens **at the end of every week**, as a **pop-up screen on Home**. |
+| V5-2 | The pop-up **shows a grid with red boxes that turn green** (the unspent money moving into savings). |
+| V5-3 | He can **choose which goals the money goes into**. |
+| V5-4 | It then **shows the updated savings ring** (the full segmented ring, V4-17). |
+Flag for Tarun: **red breaks the no-red rule** (V1-4, principle 1). Drawn as he asked, treated as an explicit exception for this one moment; to confirm. Defaults drawn, not decided: the pop-up shows words, with ₹ and the scale chip only on the choose step (Home has no ₹, V1-5); default selection is all goals, split evenly; a week with nothing left over gets a quiet card, no red; no "skip" button.
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
 3. Income split (spending vs savings) — DONE (V3-1…V3-11)
 4. Savings goal (how much, by when, actually saved) — DONE (V4-1…V4-21); also: add goal, pay into a goal, completed goals (parked requirement above)
-5. Unspent → saved — NEXT
+5. Unspent → saved — IN PROGRESS (V5-1…V5-4 given)
 6. Small / repeat purchases
 7. Time patterns (e.g. nights)
 8. Subscriptions coming up (Fixed group)
