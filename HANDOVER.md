@@ -168,3 +168,6 @@ this repo is where new decisions are logged; the Project copy will go stale unle
 - The halftone gradient tiles Tarun asked for in Figma were never built.
 - No user has tested any version. His own conversations with students are the only
   outside input since the six interviews.
+
+## Update: Instrument design system
+Second system "Trickle Instrument" built and published (`archive/session-workfiles/designsystem2/`, decisions DS2-1…DS2-6). Next: Tarun picks Night or Instrument; if Instrument, re-theme the mockup tokens (`mockup/`).

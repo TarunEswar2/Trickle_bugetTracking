@@ -276,6 +276,15 @@ Tarun's request: "mockup now, along with a way to switch profiles and simulate d
 | M-5 | **Left out of this pass:** onboarding (has its own board), PIN and lock, import wizard, notifications screens; settings rows other than account and linking are stubs. |
 | M-6 | **Category colours follow size:** the five biggest categories take the five category colours in size order; the rest share peach. |
 
+## Design system B — Instrument (delegated, open to override)
+Second visual direction from Tarun's hardware-instrument moodboard. Published beside Night (DS-1…DS-10); Tarun picks. Source: `archive/session-workfiles/designsystem2/`.
+- DS2-1: One flat colour field per tab: Home carbon #0E0E10, Spending signal #FF6A1A, Income bone #E9E5DC, Savings moss #2F9D5A, Insights mustard #FFC20A. No gradients or meshes.
+- DS2-2: Data sits on black LCD panels; amounts in Barlow Condensed, labels Space Mono, body Inter Tight.
+- DS2-3: Own 5x7 bitmap dot-matrix font for short words and numbers only (CALM, DONE, amount on Pay). Never a money unit; money stays the 10x10 cell grid.
+- DS2-4: Moodboard vermilion retuned to orange (hue 23) to honour the no-red rule. Warnings are amber LED on black only. Ink on colour is always #0E0E10 (white on signal fails contrast).
+- DS2-5: Controls are keys (2px press) and dials with detent ticks; savings is a segmented dial by goal; goal reached uses a dot grille.
+- DS2-6: Motion mechanical and quiet (cell 45ms stagger, dial tick 25ms); reduced motion jumps to end state.
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE

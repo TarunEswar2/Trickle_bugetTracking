@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trickle v14 — Instrument design system</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Space+Mono:wght@400;700&family=Inter+Tight:wght@400;500;600;700&display=swap">
+<style>
+:root{--c0:#0E0E10;--c1:#17181B;--c2:#232427;--c3:#2E3033;--lcd:#070708;--hair:#34363A;--bone:#E9E5DC;--paper:#F4F1EA;--stone:#B9B4A8;--sig:#FF6A1A;--sigd:#D9500F;--moss:#2F9D5A;--mint:#63E6A5;--must:#FFC20A;--warn:#FF9F0A;--sage:#9FAE9A;--mauve:#7B6C69;
+--num:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;--mono:"Space Mono",ui-monospace,Menlo,monospace;--body:"Inter Tight",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}html{color-scheme:dark}
+body{margin:0;background:var(--sage);color:#0E0E10;font-family:var(--body);font-size:16px;line-height:1.5}
+.top{background:var(--c0);color:var(--bone);padding:28px 24px 0}
+.wrap{max-width:1180px;margin:0 auto}
+.main{background:var(--paper);color:#0E0E10;padding:26px 24px 90px;min-height:70vh}
+h1,h2,h3{margin:0;font-family:var(--num);text-transform:uppercase;letter-spacing:.01em;line-height:1}
+h1{font-size:clamp(54px,9vw,120px);font-weight:800}
+h2{font-size:clamp(30px,4vw,48px);font-weight:700;margin-bottom:8px}
+h3{font-size:24px;font-weight:700;margin-bottom:6px}
+p{margin:0}
+.lab{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase}
+.lead{max-width:62ch;font-size:18px;margin-top:14px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;padding:22px 0 0;margin-top:20px}
+.tab{font-family:var(--mono);font-size:12.5px;letter-spacing:.07em;text-transform:uppercase;padding:11px 16px;border:0;border-radius:12px 12px 0 0;background:#232427;color:var(--stone);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--paper);color:#0E0E10;font-weight:700}
+.tab:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--sig);outline-offset:2px}
+.sec{display:flex;flex-direction:column;gap:20px}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}.g4{grid-template-columns:repeat(auto-fit,minmax(175px,1fr))}
+.card{background:#fff;border:2px solid #0E0E10;border-radius:20px;padding:18px;min-width:0}
+.card.k{background:var(--c0);color:var(--bone);border-color:var(--c0)}
+.sm{font-size:14px}.mut{opacity:.65}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.sw{border-radius:18px;padding:12px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;border:2px solid #0E0E10}
+.sw b{font-family:var(--num);font-size:24px;text-transform:uppercase;font-weight:700;line-height:1}.sw span{font-family:var(--mono);font-size:11.5px}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:700;border:1.5px solid #0E0E10;border-radius:6px;padding:1px 7px;margin:0 4px 4px 0;text-transform:uppercase}
+.tag.ok{background:var(--mint)}.tag.bad{background:var(--warn)}
+table{border-collapse:collapse;width:100%;font-size:14.5px}th,td{text-align:left;padding:9px 10px;border-bottom:1.5px solid #0E0E10;vertical-align:top}th{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase}
+.tw{overflow-x:auto;border:2px solid #0E0E10;border-radius:16px;background:#fff}
+.lcd{background:var(--lcd);border-radius:16px;padding:14px;box-shadow:inset 0 0 0 2px #1d1e21,inset 0 8px 24px rgba(0,0,0,.85),0 1px 0 rgba(255,255,255,.08);color:var(--bone)}
+.key{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:var(--bone);background:linear-gradient(180deg,#34363a,#222326);border:0;border-radius:14px;padding:13px 18px;box-shadow:0 2px 0 #0a0a0b,inset 0 1px 0 rgba(255,255,255,.18);cursor:pointer}
+.key:active{transform:translateY(2px);box-shadow:0 0 0 #0a0a0b,inset 0 1px 0 rgba(255,255,255,.1)}
+.key.sig{background:linear-gradient(180deg,#ff8340,#ff6a1a);color:#1a0a02}.key.moss{background:linear-gradient(180deg,#43b36f,#2f9d5a);color:#04160b}.key.must{background:linear-gradient(180deg,#ffd13a,#ffc20a);color:#1a1300}.key.bone{background:linear-gradient(180deg,#f3efe6,#dcd7cb);color:#0e0e10}
+.pill{display:inline-flex;align-items:center;gap:10px;background:#0E0E10;color:var(--bone);border-radius:999px;padding:6px 8px 6px 18px;font-family:var(--mono);font-weight:700;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+.pill i{width:34px;height:34px;border-radius:50%;background:var(--sig);display:inline-block;box-shadow:0 0 12px rgba(255,106,26,.7)}
+.led{display:inline-block;width:10px;height:10px;border-radius:50%}
+.field{border-radius:22px;padding:18px;border:2px solid #0E0E10}
+.phone{width:281px;height:608px;position:relative}.phone .in{width:390px;height:844px;transform:scale(.72);transform-origin:top left;border-radius:46px;overflow:hidden;position:absolute;left:0;top:0;border:3px solid #0E0E10}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+pre{margin:0;white-space:pre-wrap;word-break:break-word;font-family:var(--mono);font-size:12px;background:var(--c0);color:var(--bone);border-radius:14px;padding:14px;max-height:360px;overflow:auto}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<div class="top"><div class="wrap">
+ <div class="lab" style="color:var(--stone)">Trickle v14 · Design system B · 2 Oct 2026</div>
+ <h1 style="margin-top:8px;color:var(--bone)">Trickle <span style="color:var(--sig)">Instrument</span></h1>
+ <p class="lead" style="color:var(--stone)">A hardware-instrument language: flat saturated colour fields, black LCD panels, dot-matrix readouts, physical dials and keys. Built from your moodboard, then checked against Nothing, Teenage Engineering, Braun and contrast research. Every money meaning stays; only the skin changes.</p>
+ <nav class="tabs" id="tabs" role="tablist"></nav>
+</div></div>
+<div class="main"><div class="wrap"><main id="main"></main></div></div>
+<script>
