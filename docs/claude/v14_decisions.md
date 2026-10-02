@@ -287,6 +287,8 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 
 - M2-1: Instrument mockup built from the Night mockup (same engine, profiles, events, flows). Only the skin changed: colour field per tab, LCD panels for grids/dials, dial-tick rings, dot-matrix status word on Home and amount on Pay, keys, moss goal-reached screen. Source `archive/session-workfiles/mockup2/`. Delegated, open to override.
 
+- M2-2: Full-flow mockup. The Instrument mockup now opens on onboarding (title, PIN set and confirm, UPI link with soft failure or manual balance, permissions, category path with split slider, or the no-budget three questions, categories with search and create, equal or manual share with fixed bills and buffer, goals with dates, all set) and builds a live ledger from the answers. Added PIN lock screen, Settings sub-screens (notifications, PIN and lock, data: import placeholder, export, delete) and a re-fit-to-real-weeks sheet. Known gap: first week is not prorated. Delegated, open to override.
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE

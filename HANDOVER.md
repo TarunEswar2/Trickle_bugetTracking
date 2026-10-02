@@ -174,3 +174,6 @@ Second system "Trickle Instrument" built and published (`archive/session-workfil
 
 ## Update: Instrument mockup
 Mockup re-skinned in Instrument (`mockup2/`, build with `python3 build.py`). Not yet restyled one by one: sub-screens (category detail, settings, week-end, move flows) get the system through shared CSS only; check them in review.
+
+## Update: full-flow mockup
+Instrument mockup (`mockup2/`, `ui_d.js`) now has onboarding, lock, settings sub-screens, import and re-fit (M2-2). Open gaps: first-week proration, DETECT/LOOKBACK polish. Next: Tarun reviews; apply overrides to mockup and blueprint.

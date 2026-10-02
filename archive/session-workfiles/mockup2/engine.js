@@ -82,6 +82,7 @@ function newState(key){
  // goal histories: 12 months of additions (+) and takeouts (-)
  S.goals.forEach((g,i)=>{const r=mulberry(i*31+key.charCodeAt(0));const m=Math.min(12,g.createdMonthsAgo||0);const base=Math.round((g.saved/Math.max(1,m))/10)*10;g.hist=[];for(let k=0;k<12;k++){if(k<12-m){g.hist.push(0);continue}let v=base*(.5+r()*1.2);if(r()<.12)v=-base*(.2+r()*.4);g.hist.push(Math.round(v/10)*10)}});
  S.cats.sort((a,b)=>b.amt-a.amt);S.cats.forEach((c,i)=>c.order=i);
+ if(P.fresh){S.txns=[];S.cats.forEach(c=>c.left=c.amt);S.bufLeft=S.bufAmt;S.bills.forEach(b=>b.paid=[])}
  return S}
 /* ===== ledger helpers ===== */
 const goalNeeded=(g)=>g.byMonths?Math.ceil(g.target/g.byMonths/10)*10:null;
