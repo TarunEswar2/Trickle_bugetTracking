@@ -250,6 +250,21 @@ Tarun's instruction: fix logic gaps, complete all other flows, figure out the wh
 | D-35 | **Scale rounding** (reconciles V1-2 with sliders in ₹5 steps): category amounts move in ₹5 steps; 1 box = amount ÷ 100, shown as "1 box = ₹X", rounded to the nearest rupee with "≈" when not whole. A goal's grid is its target ÷ 100. |
 | D-36 | **The Home grid covers the week's flexible money** (all categories plus the buffer, money left). Fixed bills are not in it. No scale on Home. |
 
+## Design system (Tarun, 2 Oct)
+Tarun's request: "nice gradients and colors … research well, collect refs, make a design system", with two reference images (a purple goals app with gradient ground and gradient rings; his Figma colour sheet). Built as the **Trickle Night** design system: https://claude.ai/artifact/3vrR99iZ8rmzw51MeFRXde (source `archive/session-workfiles/designsystem/`, rebuild with `python3 build.py`; reference images in `references/inspiration/ds/`). Research sources are listed in its References tab.
+| # | Decision (delegated unless noted) |
+|---|---|
+| DS-1 | **Dark-first system called Trickle Night**; Day (light) theme from the v12 Figma tokens is a later mapping. Tarun asked for it; the contents are delegated. |
+| DS-2 | **Ground:** a near-black blue (#05070B base) with two faint blooms (plum top-left, teal top-right), like his purple reference; four surface levels (#05070B, #0B0E14, #12161E, #1A1F29), hairline #262C37. Never pure black. |
+| DS-3 | **Ink:** #F5F7FA / #A3ABB8 / #6E7685 (muted is non-text only). All text pairs pass AA; computed live on the Colour tab. |
+| DS-4 | **Meaning colours kept** and given depth gradients (highlight → shade, made in OKLCH): spend #F08A3C, save #62DCB4, amber #E3A43F, buffer #9AA4B0, fixed #8D7A66, income #C9CDD6; goals greens #62DCB4 / #3FAE8C / #9BE8CF. **No red** (his sheet's "sketch red" is retired). |
+| DS-5 | **Category colour change:** cat/2 moves from #B48CFF to **#CDB6FF** (under deuteranopia the old violet was almost identical to the blue, distance 0.8 → 12.4). Other four unchanged (#5AA9FF, #FF7EB6, #F2D65B, #4FD1E6; rest #F6B27C). |
+| DS-6 | **Three kinds of gradient:** liquid (box fills), glow (hotspot halos), mesh (a few big moments). Mesh recipe = his Figma squircle tile (base sweep, four blooms, bottom fade, haze) + grain. Eight named meshes (Savings Grove, Goal Reached, Payday, Ember, Dusk, Night Glow, Fresh Start, Month Story). One mesh per screen at most; never behind data; never behind small text without a scrim. |
+| DS-7 | **Type:** Bricolage Grotesque (display) + Figtree (body), tabular numerals, Indian digit grouping; scale 48/34/22/16/14/12.5. |
+| DS-8 | **Depth by light:** lighter with height, a thin top highlight, soft dark shadows; no hard offsets (the CRED NeoPOP look is rejected as it fights the soft grid). Radius: chip 10, tile 14, card 18, sheet 28, button 16. |
+| DS-9 | **Components and data visuals specified** (buttons, segmented, chips, box tiles, list rows, banner, amount field, keypad, slider, switch, tab bar, scale chip, confirmation records; fuel grid, nested rings with glowing caps, segmented ring, hotspots, month boxes, source strip, income split). |
+| DS-10 | **Motion tokens:** 120 / 200 / 320 / 600 / 1300 ms; crumble 18 ms per box; celebration once; reduced motion shows the finished state; no shake or pulse on warnings. |
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
