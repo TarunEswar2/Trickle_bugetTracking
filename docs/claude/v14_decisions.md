@@ -265,6 +265,17 @@ Tarun's request: "nice gradients and colors … research well, collect refs, mak
 | DS-9 | **Components and data visuals specified** (buttons, segmented, chips, box tiles, list rows, banner, amount field, keypad, slider, switch, tab bar, scale chip, confirmation records; fuel grid, nested rings with glowing caps, segmented ring, hotspots, month boxes, source strip, income split). |
 | DS-10 | **Motion tokens:** 120 / 200 / 320 / 600 / 1300 ms; crumble 18 ms per box; celebration once; reduced motion shows the finished state; no shake or pulse on warnings. |
 
+## Mockup (Tarun, 2 Oct)
+Tarun's request: "mockup now, along with a way to switch profiles and simulate different events". Built as a clickable high-fidelity prototype: https://claude.ai/artifact/RuuvM1tyRSEj8fKvQrkLmZ (source `archive/session-workfiles/mockup/`, rebuild with `python3 build.py`). Visualisation was folded into the mockup (composition decided while building). Decisions below are delegated.
+| # | Decision (delegated) |
+|---|---|
+| M-1 | **One engine, no painted numbers:** every figure on screen comes from a live ledger (pots, the O-23 cascade, week-end, fixed reserve, goals, moves). A Ledger panel shows the pots and a balance check. |
+| M-2 | **Six profiles** from the student pool (Vaishak manual and 2 categories; Gautham week 1 with no history; Tarun; Yash; Nishad 12 categories and big bills; Harsh 18 categories and 3 goals), each with seeded history. Switching resets that profile. |
+| M-3 | **Simulator events:** time (+1 day, +3 days, Sunday 8 pm week-end, new week); payments seen on the link (known and unknown places); spends (small, over budget, all the way to savings, use up the week); credits (income-sized, friend's ₹200); bills (due tomorrow, due now); goals (reaches target, +₹500); switches (bank declines, bank slow, low account balance, link lost). |
+| M-4 | **Covered screens:** Home, Spending (rings, repeats, fixed bills, history, category detail with compare, habit calendar, transaction detail and re-file, budget handling, sort tray), Income (split grid in three levels, add money, unsorted credits), Savings (ring, goal statistics by month and by day, add goal, edit, move money, free savings), Insights (when you spend, this week vs last), Pay (merged screen, crumble pay screen with all over-budget cases, hand-off, waiting, confirmation, failure, "Is it done?"), week-end pop-up, goal celebration, settings. |
+| M-5 | **Left out of this pass:** onboarding (has its own board), PIN and lock, import wizard, notifications screens; settings rows other than account and linking are stubs. |
+| M-6 | **Category colours follow size:** the five biggest categories take the five category colours in size order; the rest share peach. |
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
