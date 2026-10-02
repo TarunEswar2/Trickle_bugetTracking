@@ -100,22 +100,22 @@ svg.ph [data-go]{cursor:pointer}
 <div id="defs"></div>
 <div class="wrap">
 <header class="top">
-  <div class="eyebrow">Trickle v14 · Visualisation 4 of 11 · 2 Oct 2026</div>
+  <div class="eyebrow">Trickle v14 · Visualisation 4 of 11 · updated 2 Oct 2026</div>
   <h1>Savings goals</h1>
-  <p class="lead">The first Savings page is a fuel gauge for all your savings, with a smaller gauge for each goal stacked below it and an ETA at the bottom of every gauge. Tap a goal for its statistics, by month in glowing green and amber boxes or by day. A finished goal gets a celebration screen. Options only. You decide.</p>
+  <p class="lead">The Savings page is one segmented ring. Each goal is its own section, sized by its amount and filled in its own green by how much is saved. Below it the goals are plain text rows, each with its ETA. Tap a goal for its months, step through them with the arrows, and scroll for the most saved months. Options only. You decide.</p>
 </header>
 
 <section style="border-top:0;padding-top:0">
   <div class="sec-h"><h2>Already decided</h2></div>
   <div class="logged">
-    <div><b>V4-1 · Fill and ETA</b><span>Fills from the bottom like Viz 1. Every goal shows its ETA at the bottom.</span></div>
-    <div><b>V4-2 · Half fuel gauge</b><span>No rings, because rings mean spending. A half gauge, with each goal's smaller gauge stacked below. The goals are a collapsible list.</span></div>
-    <div><b>V4-3 · First page</b><span>The Savings page shows only this gauge. Tapping a goal opens its statistics.</span></div>
-    <div><b>V4-4 · Celebration</b><span>An intro-style screen when a goal is done, wherever it happens: days it took, how much saved. Finished goals move to Completed.</span></div>
-    <div><b>V4-5 and V4-6 · Statistics</b><span>A day-by-day option. Months are green (added) and amber (taken out) boxes that glow more the bigger the amount.</span></div>
-    <div><b>V4-7 · Pay from savings</b><span>Choose a goal like choosing a category. Flow comes later.</span></div>
+    <div><b>V4-1 to V4-3</b><span>Fills like Viz 1. An ETA for every goal. Goals are a collapsible list. The first Savings page is only the gauge; a tapped goal opens its statistics.</span></div>
+    <div><b>V4-8 · Text rows</b><span>No visualisation next to a goal. A row is its name, how far along and its ETA.</span></div>
+    <div><b>V4-9 · Segmented ring</b><span>One ring, split into a section per goal by its amount, each section filled in its own green by amount saved.</span></div>
+    <div><b>V4-10 · Months only</b><span>By day is gone. Months in green (added) and amber (taken out) glowing boxes, with a toggle to move through the months.</span></div>
+    <div><b>V4-11 · Most saved</b><span>A most saved months screen. One visualisation per screen, the next by scrolling.</span></div>
+    <div><b>V4-4, V4-6, V4-7</b><span>Celebration screen, glow rule for the boxes, pay from savings (flow later).</span></div>
   </div>
-  <p class="small">Goals use the same shades of green as on the Income grid. All figures here are made up for the six students. Today on this board is 2 October 2026.</p>
+  <p class="small">Sections are sized by each goal's target amount. Greens are the same shades as on the Income grid. All figures are made up. Today on this board is 2 October 2026.</p>
 </section>
 
 <section>
@@ -127,36 +127,36 @@ svg.ph [data-go]{cursor:pointer}
 </section>
 
 <section>
-  <div class="sec-h"><span class="k">A</span><h2>The Savings page: two gauge forms</h2></div>
-  <p class="q">Same page both ways: all savings together on top, one smaller gauge per goal below, a Completed row at the end. Row A is a segmented half ring, from your reference, filling from its lower ends. Row B is half of Viz 1's grid, ten boxes by five, filling from the bottom.</p>
+  <div class="sec-h"><span class="k">A</span><h2>The Savings page: the ring</h2></div>
+  <p class="q">All six students. Row A is a half ring, your earlier choice. Row B is a full ring like your donut reference. Both are split by goal; 1 goal is one section, Nishad-type's 3 goals are three.</p>
   <div class="gal" id="secA"></div>
   <div class="notes" id="noteA"></div>
 </section>
 
 <section>
-  <div class="sec-h"><span class="k">B</span><h2>Inside a goal: by month and by day</h2></div>
-  <p class="q">The goal's statistics. By month: twelve boxes, green for added, amber for taken out, glowing more for bigger amounts. By day: the last twelve weeks, one box a day, same colours.</p>
+  <div class="sec-h"><span class="k">B</span><h2>Inside a goal: months, one at a time</h2></div>
+  <p class="q">First screen: the goal's twelve month boxes with arrows to step through the months. The selected month has a white outline and its amount is written under the boxes. Stepping past the first or last box moves the window, so a 15-month goal is fully reachable. Second screen, by scrolling: the most saved months.</p>
   <div class="gal" id="secB"></div>
   <div class="notes" id="noteB"></div>
 </section>
 
 <section>
   <div class="sec-h"><span class="k">C</span><h2>When a goal is done</h2></div>
-  <p class="q">The celebration screen, pushed like an intro screen. Then the Completed list. Three students, three different goals.</p>
+  <p class="q">The celebration, then the Completed list. Completed rows are text too.</p>
   <div class="gal" id="secC"></div>
   <div class="notes" id="noteC"></div>
 </section>
 
 <section>
   <div class="sec-h"><span class="k">D</span><h2>Try it</h2></div>
-  <p class="q">Pick a student and a gauge form. Tap Goals to collapse the list, a goal for its statistics, a month or a day for its amount, Completed for the list. "Finish this goal" plays the celebration and moves the goal to Completed.</p>
+  <p class="q">Pick a student and a ring form. Tap Goals to collapse the list, a goal for its months, the arrows or a box to change month, "Most saved months" to scroll on. "Finish this goal" plays the celebration and moves the goal to Completed.</p>
   <div class="demo">
     <div id="demo"></div>
     <div class="ctl">
       <div class="grp"><span class="lbl">Student</span><div class="chips" id="cs"></div></div>
-      <div class="grp"><span class="lbl">Gauge form</span><div class="chips" id="cf"></div></div>
+      <div class="grp"><span class="lbl">Ring form</span><div class="chips" id="cf"></div></div>
       <div class="chips"><button class="btn" id="fin" type="button">Finish this goal</button><button class="chip" id="rst" type="button">Reset</button></div>
-      <span class="small" id="dnote">Tap a goal to open its statistics.</span>
+      <span class="small" id="dnote">Tap a goal to open its months.</span>
     </div>
   </div>
 </section>
@@ -164,11 +164,11 @@ svg.ph [data-go]{cursor:pointer}
 <section>
   <div class="sec-h"><h2>Decisions for Tarun</h2></div>
   <div class="decide">
-    <div class="dq"><h3>1. Which gauge form?</h3><ol><li class="s">Half ring of segments (A).</li><li>Half grid, 10 by 5 boxes (B).</li></ol></div>
-    <div class="dq"><h3>2. What is on top?</h3><ol><li class="s">One gauge for all savings together, goals stacked below it.</li><li>No total: the goals are all equal gauges, nearest finish first.</li></ol></div>
-    <div class="dq"><h3>3. What is the ETA at the bottom?</h3><ol><li class="s">A month and year ("Mar 2027"), from the last three months' pace.</li><li>"About 5 months".</li></ol></div>
-    <div class="dq"><h3>4. A goal with no target date</h3><ol><li class="s">The ETA is from pace. If you set a date, the statistics also say on pace, a little earlier or a little later. No red.</li><li>A date is required when you make the goal.</li></ol></div>
-    <div class="dq"><h3>5. Month and day boxes</h3><ol><li class="s">No numbers on the boxes; tap one for its amount.</li><li>Show the net amount on each month box.</li></ol></div>
+    <div class="dq"><h3>1. Which ring?</h3><ol><li class="s">Half ring (A). A fuel gauge, and not a donut, which keeps it apart from the spending rings.</li><li>Full segmented ring (B), like your donut reference.</li></ol></div>
+    <div class="dq"><h3>2. How are the sections sized?</h3><ol><li class="s">By each goal's target amount, so a ₹30,000 goal gets twice the arc of a ₹15,000 one.</li><li>All sections equal, whatever the amount.</li></ol></div>
+    <div class="dq"><h3>3. Months: what does the toggle do?</h3><ol><li class="s">Moves a white outline through the month boxes and writes that month's amount below.</li><li>Shows one month at a time, full screen.</li></ol></div>
+    <div class="dq"><h3>4. Most saved months</h3><ol><li class="s">The top three as glowing boxes on the next screen down, amounts on tap.</li><li>Mark them on the month boxes with a star instead (one screen fewer).</li></ol></div>
+    <div class="dq"><h3>5. A goal row</h3><ol><li class="s">Name, a colour dot that matches its ring section, then "how far · ETA".</li><li>No colour dot; the order matches the ring instead.</li></ol></div>
   </div>
 </section>
 </div>
@@ -176,10 +176,10 @@ svg.ph [data-go]{cursor:pointer}
 <script>
 (function(){
 const PBG='#0b0d10',EDGE='#2b3038',CELL='#2a3039',INK='#f2f4f5',MUT='#8f97a1',GRN='#62dcb4',AMB='#e3a43f';
-const GOALC=['#62dcb4','#2f9c7c','#a6efd6'];
+const GOALC=['#62dcb4','#2f9c7c','#a6efd6','#79d9b4','#1f7d63'];
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 const fmt=n=>'₹'+Math.round(Math.abs(n)).toLocaleString('en-IN');
-const T=(x,y,s,sz,o={})=>`<text x="${x}" y="${y}" font-size="${sz}" font-weight="${o.w||400}" fill="${o.f||INK}" text-anchor="${o.a||'start'}" ${o.ls?`letter-spacing="${o.ls}"`:''} ${o.op?`opacity="${o.op}"`:''}>${esc(s)}</text>`;
+const T=(x,y,s,sz,o={})=>`<text x="${x}" y="${y}" font-size="${sz}" font-weight="${o.w||400}" fill="${o.f||INK}" text-anchor="${o.a||'start'}" ${o.ls?`letter-spacing="${o.ls}"`:''}>${esc(s)}</text>`;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const rnd=n=>{const x=Math.sin(n*12.9898)*43758.5453;return x-Math.floor(x)};
 const cut=(s,n)=>s.length>n?s.slice(0,n-1)+'…':s;
@@ -190,124 +190,115 @@ const TODAY=new Date(2026,9,2),DAY=86400000;
 const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const mon=d=>`${MN[d.getMonth()]} ${d.getFullYear()}`;
 const addDays=(d,n)=>new Date(d.getTime()+n*DAY);
-function mk(name,per,months,left,idx,seed){
-  const nets=[];for(let m=0;m<12;m++){if(m>=12-months){const r=rnd(seed*7+m*3+idx);nets.push(r<.14?-Math.round(per*(.3+.5*rnd(seed+m))/10)*10:Math.round(per*(.55+.9*rnd(seed*5+m))/10)*10)}else nets.push(null)}
-  const saved=Math.max(0,nets.reduce((a,v)=>a+(v||0),0));
-  const last=nets.filter(v=>v!==null).slice(-3),pace=Math.max(200,last.reduce((a,v)=>a+v,0)/last.length);
+function mk(name,per,months,left,seed){
+  const nets=[];for(let m=0;m<months;m++){const r=rnd(seed*7+m*3);nets.push(r<.14&&m>0?-Math.round(per*(.3+.5*rnd(seed+m))/10)*10:Math.round(per*(.55+.9*rnd(seed*5+m))/10)*10)}
+  const saved=Math.max(0,nets.reduce((a,v)=>a+v,0));
+  const last=nets.slice(-3),pace=Math.max(200,last.reduce((a,v)=>a+v,0)/last.length);
   const target=Math.ceil((saved+pace*left)/500)*500;
   const eta=addDays(TODAY,Math.round((target-saved)/pace*30.4));
-  const startDays=Math.round(months*30.4-6);
-  const days=[];for(let d=0;d<84;d++){const ago=83-d,dt=addDays(TODAY,-ago);if(ago>startDays){days.push(null);continue}
-    let v=0;if(dt.getDate()===1)v+=Math.round(pace*.6/10)*10;if(rnd(seed*11+d)<.1)v+=Math.round(pace/4*(.5+rnd(seed+d))/10)*10;if(rnd(seed*13+d)<.025)v-=Math.round(pace*.3/10)*10;days.push(v)}
-  return {name,per,months,nets,saved,pace,target,eta,startDays,days,color:GOALC[idx%3]}}
+  return {name,per,months,nets,saved,pace,target,eta,startDays:Math.round(months*30.4-6)}}
 const S=[
  {short:'Vaishak-type',goals:[],done:[],loose:300},
- {short:'Gautham-type',goals:[mk('Phone',800,2,11,0,2)],done:[]},
- {short:'Tarun-type',goals:[mk('Laptop',1000,1,15,0,3)],done:[]},
- {short:'Yash-type',goals:[mk('Motorcycle',2000,9,13,0,4)],done:[]},
- {short:'Nishad-type',goals:[mk('Trip',3000,10,3,0,5),mk('Emergency',3000,12,6,1,6),mk('Laptop',2000,5,24,2,7)],done:[{name:'Phone',days:94,amount:16000,date:'Aug 2026'},{name:'Course',days:61,amount:7500,date:'May 2026'}]},
- {short:'Harsh-type',goals:[mk('Bike service',1500,8,1,0,8),mk('Trip',1000,3,11,1,9)],done:[{name:'Helmet',days:42,amount:3200,date:'Jul 2026'}]}
+ {short:'Gautham-type',goals:[mk('Phone',800,2,11,2)],done:[]},
+ {short:'Tarun-type',goals:[mk('Laptop',1000,1,15,3)],done:[]},
+ {short:'Yash-type',goals:[mk('Motorcycle',2000,9,13,4)],done:[]},
+ {short:'Nishad-type',goals:[mk('Trip',3000,10,3,5),mk('Emergency',3000,15,6,6),mk('Laptop',2000,5,24,7)],done:[{name:'Phone',days:94,amount:16000,date:'Aug 2026'},{name:'Course',days:61,amount:7500,date:'May 2026'}]},
+ {short:'Harsh-type',goals:[mk('Bike service',1500,8,1,8),mk('Trip',1000,3,11,9)],done:[{name:'Helmet',days:42,amount:3200,date:'Jul 2026'}]}
 ];
-S.forEach(s=>{s.goals.sort((a,b)=>a.eta-b.eta);s.goals.forEach((g,i)=>g.color=GOALC[i%3])});
+S.forEach(s=>{s.goals.sort((a,b)=>a.eta-b.eta);s.goals.forEach((g,i)=>g.color=GOALC[i%GOALC.length])});
 const tot=st=>{const sv=st.goals.reduce((a,g)=>a+g.saved,0),tg=st.goals.reduce((a,g)=>a+g.target,0);return {saved:sv,target:tg,frac:tg?clamp(sv/tg,0,1):0,eta:st.goals.reduce((a,g)=>g.eta>a?g.eta:a,TODAY)}};
 const sw=p=>p>=95?'reached':p<5?'just started':p<25?'a good start':p<45?'under half':p<=55?'about half':p<75?'over half':'nearly there';
+function lr(total,vals){const sum=vals.reduce((a,b)=>a+b,0)||1,ex=vals.map(v=>v/sum*total),fl=ex.map(Math.floor);let left=total-fl.reduce((a,b)=>a+b,0);ex.map((e,i)=>[e-fl[i],i]).sort((a,b)=>b[0]-a[0]).forEach(([,i])=>{if(left>0){fl[i]++;left--}});return fl}
 
-/* ---------- gauges ---------- */
+/* ---------- the segmented ring: one section per goal ---------- */
 const pt=(cx,cy,r,th)=>[cx+r*Math.cos(th),cy+r*Math.sin(th)];
-function seg(cx,cy,r0,r1,t0,t1,color,op){const a0=Math.PI+t0*Math.PI,a1=Math.PI+t1*Math.PI,[x0,y0]=pt(cx,cy,r1,a0),[x1,y1]=pt(cx,cy,r1,a1),[x2,y2]=pt(cx,cy,r0,a1),[x3,y3]=pt(cx,cy,r0,a0);
-  return `<path d="M${x0.toFixed(1)} ${y0.toFixed(1)}A${r1} ${r1} 0 0 1 ${x1.toFixed(1)} ${y1.toFixed(1)}L${x2.toFixed(1)} ${y2.toFixed(1)}A${r0} ${r0} 0 0 0 ${x3.toFixed(1)} ${y3.toFixed(1)}Z" fill="${color}" stroke="${color}" stroke-width="2.4" stroke-linejoin="round" opacity="${op==null?1:op}"/>`}
-function halfRing(cx,cy,R,th,frac,color,n){n=n||20;let s='';const gap=.012,full=Math.floor(frac*n+1e-9),part=frac*n-full;
-  for(let i=0;i<n;i++){const t0=i/n+gap,t1=(i+1)/n-gap;
-    s+=seg(cx,cy,R-th,R,t0,t1,CELL);
-    if(i<full)s+=seg(cx,cy,R-th,R,t0,t1,color);
-    else if(i===full&&part>.02)s+=seg(cx,cy,R-th,R,t0,t0+(t1-t0)*part,color)}
+function segA(cx,cy,r0,r1,a0,a1,color){const [x0,y0]=pt(cx,cy,r1,a0),[x1,y1]=pt(cx,cy,r1,a1),[x2,y2]=pt(cx,cy,r0,a1),[x3,y3]=pt(cx,cy,r0,a0);
+  return `<path d="M${x0.toFixed(1)} ${y0.toFixed(1)}A${r1} ${r1} 0 0 1 ${x1.toFixed(1)} ${y1.toFixed(1)}L${x2.toFixed(1)} ${y2.toFixed(1)}A${r0} ${r0} 0 0 0 ${x3.toFixed(1)} ${y3.toFixed(1)}Z" fill="${color}" stroke="${color}" stroke-width="2.2" stroke-linejoin="round"/>`}
+function ringSections(cx,cy,R,th,startA,sweep,items,n){
+  const k=items.length;if(!k)return ringSections(cx,cy,R,th,startA,sweep,[{w:1,f:0,color:GRN}],n);
+  let counts=lr(n,items.map(i=>i.w));counts=counts.map(c=>Math.max(c,2));
+  const gapSec=k>1?.1:0,segGap=.014,tn=counts.reduce((a,b)=>a+b,0),segW=(sweep-(k-1)*gapSec)/tn;let s='',idx=0;
+  items.forEach((it,j)=>{const c=counts[j];for(let i=0;i<c;i++){const a0=startA+idx*segW+j*gapSec+segGap/2,a1=a0+segW-segGap;
+    s+=segA(cx,cy,R-th,R,a0,a1,CELL);
+    const full=Math.floor(it.f*c+1e-9),part=it.f*c-full;
+    if(i<full)s+=segA(cx,cy,R-th,R,a0,a1,it.color);else if(i===full&&part>.02)s+=segA(cx,cy,R-th,R,a0,a0+(a1-a0)*part,it.color);idx++}});
   return s}
-function halfGrid(x,y,w,frac,color,gap){gap=gap||5;const cols=10,rows=5,bw=(w-gap*(cols-1))/cols;let s='';const L=frac*50;
-  for(let i=0;i<50;i++){const r=Math.floor(i/10),c=i%10,bx=x+c*(bw+gap),by=y+(rows-1-r)*(bw+gap);
-    s+=`<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${bw.toFixed(1)}" rx="${(bw*.25).toFixed(1)}" fill="${CELL}"/>`;
-    const fa=clamp(L-i,0,1);if(fa>0)s+=`<rect x="${bx.toFixed(1)}" y="${(by+bw*(1-fa)).toFixed(1)}" width="${bw.toFixed(1)}" height="${(bw*fa).toFixed(1)}" rx="${fa>.99?(bw*.25).toFixed(1):1.5}" fill="${color}"/>`}
-  return s}
-const gridH=(w,gap)=>{const bw=(w-gap*9)/10;return bw*5+gap*4};
+const items=st=>st.goals.map(g=>({w:g.target,f:clamp(g.saved/g.target,0,1),color:g.color}));
 
-/* ---------- phone chrome ---------- */
+/* ---------- chrome ---------- */
 const TABS=['Home','Income','Spending','Savings','Insights'];
 const tabbar=a=>{let tb=`<line x1="0" y1="770" x2="390" y2="770" stroke="${EDGE}"/>`;TABS.forEach((t,i)=>{const x=39+78*i;tb+=T(x,808,t,14,{a:'middle',f:i===a?INK:MUT,w:i===a?700:400});if(i===a)tb+=`<rect x="${x-14}" y="782" width="28" height="4" rx="2" fill="${GRN}"/>`});return tb};
 const frame=(inner,label,tab,bare)=>`<svg class="ph" viewBox="0 0 390 844" role="img" aria-label="${esc(label)}"><rect x="1" y="1" width="388" height="842" rx="46" fill="${PBG}" stroke="${EDGE}" stroke-width="2"/>${inner}<rect x="150" y="16" width="90" height="24" rx="12" fill="#000"/>${bare?'':tabbar(tab)}</svg>`;
 
 /* ---------- the Savings page ---------- */
 function savingsScreen(st,form,o){
-  o=Object.assign({goalsOpen:true,doneOpen:false},o);
+  o=Object.assign({goalsOpen:true},o);
   const t=tot(st),n=st.goals.length;let s=T(35,76,'Savings',17,{f:MUT})+T(35,112,'Your goals',30,{w:600});
-  if(form==='A'){
-    s+=halfRing(195,282,128,38,n?t.frac:0,GRN,20);
+  let y0;
+  if(form==='half'){
+    s+=ringSections(195,282,128,40,Math.PI,Math.PI,items(st),30);
     s+=T(195,262,n?sw(t.frac*100):'no goal yet',22,{a:'middle',w:600});
-    s+=T(195,318,n?`All goals by ${mon(t.eta)}`:'Add a goal to start',17,{a:'middle',f:MUT});
+    s+=T(195,320,n?`All goals by ${mon(t.eta)}`:'Add a goal to start',17,{a:'middle',f:MUT});y0=360;
   }else{
-    const w=320;s+=halfGrid(35,150,w,n?t.frac:0,GRN,5);
-    const gh=gridH(w,5);s+=T(35,150+gh+34,n?`${sw(t.frac*100)} · all goals by ${mon(t.eta)}`:'No goal yet · add one to start',17,{f:MUT});
+    s+=ringSections(195,252,108,36,-Math.PI/2,2*Math.PI-.0001,items(st),48);
+    s+=T(195,246,n?sw(t.frac*100):'no goal yet',22,{a:'middle',w:600});
+    s+=T(195,272,n?`by ${mon(t.eta)}`:'add a goal',16,{a:'middle',f:MUT});y0=388;
   }
-  const y0=372;
   if(n){
     s+=`<g data-go="goals" role="button" tabindex="0" aria-expanded="${o.goalsOpen}" aria-label="Goals"><rect x="35" y="${y0}" width="320" height="36" rx="12" fill="#14181d" stroke="${EDGE}"/>${T(52,y0+24,`Goals · ${n}`,17.5,{w:600})}${T(349,y0+25,o.goalsOpen?'▾':'▸',18,{a:'end',f:MUT})}</g>`;
-    let y=y0+46;
+    let y=y0+48;
     if(o.goalsOpen)st.goals.forEach((g,i)=>{const f=clamp(g.saved/g.target,0,1);
-      s+=`<g data-go="goal:${i}" role="button" tabindex="0" aria-label="${esc(g.name)} statistics"><rect x="35" y="${y-4}" width="320" height="84" rx="12" fill="transparent"/>`;
-      if(form==='A'){s+=halfRing(95,y+46,46,15,f,g.color,20)}
-      else{s+=halfGrid(35,y+4,120,f,g.color,3)}
-      s+=T(95,y+(form==='A'?68:gridH(120,3)+22),`ETA ${mon(g.eta)}`,14.5,{a:'middle',f:MUT});
-      s+=T(176,y+30,cut(g.name,16),20,{w:600})+T(176,y+56,sw(f*100),16,{f:MUT})+T(349,y+40,'›',24,{a:'end',f:MUT})+'</g>';
-      y+=88});
-    const cy=o.goalsOpen?y+2:y0+46;
+      s+=`<g data-go="goal:${i}" role="button" tabindex="0" aria-label="${esc(g.name)} months"><rect x="35" y="${y-6}" width="320" height="62" rx="12" fill="transparent"/><circle cx="46" cy="${y+12}" r="7" fill="${g.color}"/>${T(64,y+19,cut(g.name,18),20,{w:600})}${T(64,y+44,`${sw(f*100)} · ETA ${mon(g.eta)}`,16,{f:MUT})}${T(349,y+28,'›',24,{a:'end',f:MUT})}</g>`;y+=64});
+    const cy=o.goalsOpen?y+4:y0+48;
     if(st.done.length)s+=`<g data-go="done" role="button" tabindex="0" aria-label="Completed goals"><rect x="35" y="${cy}" width="320" height="36" rx="12" fill="#14181d" stroke="${EDGE}"/>${T(52,cy+24,`Completed · ${st.done.length}`,17.5,{w:600})}${T(349,cy+25,'›',22,{a:'end',f:MUT})}</g>`;
   }else s+=`<rect x="35" y="${y0}" width="320" height="44" rx="14" fill="none" stroke="${EDGE}" stroke-dasharray="4 4"/>${T(195,y0+28,`${fmt(st.loose)} saved, not in a goal yet`,16.5,{a:'middle',f:MUT})}`;
   return frame(s,`${st.short} savings, ${n?sw(t.frac*100):'no goal yet'}`,3)}
 
-/* ---------- goal statistics ---------- */
-function monthBoxes(g,sel){
-  const max=Math.max(1,...g.nets.map(v=>v==null?0:Math.abs(v)));let s='';
-  for(let m=0;m<12;m++){const c=m%4,r=Math.floor(m/4),x=35+c*82,y=372+r*76,v=g.nets[m],dt=new Date(TODAY.getFullYear(),TODAY.getMonth()-(11-m),1);
-    const lab=MN[dt.getMonth()];
-    if(v==null){s+=`<rect x="${x}" y="${y}" width="74" height="68" rx="12" fill="none" stroke="#2f353d" stroke-dasharray="3 4"/>${T(x+10,y+22,lab,14,{f:'#4a5260'})}`;continue}
+/* ---------- months ---------- */
+const monthDate=(g,idx)=>new Date(TODAY.getFullYear(),TODAY.getMonth()-(g.nets.length-1-idx),1);
+function winIdx(g,sel){const total=g.nets.length;if(total<=12)return Array.from({length:12},(_,j)=>total-12+j);const start=clamp(sel-6,0,total-12);return Array.from({length:12},(_,j)=>start+j)}
+function monthBoxes(g,sel,y0){
+  const max=Math.max(1,...g.nets.map(v=>Math.abs(v)));let s='';const idxs=winIdx(g,sel);
+  idxs.forEach((idx,j)=>{const c=j%4,r=Math.floor(j/4),x=35+c*82,y=y0+r*76,v=idx>=0?g.nets[idx]:null,lab=idx>=0?MN[monthDate(g,idx).getMonth()]:MN[new Date(TODAY.getFullYear(),TODAY.getMonth()-(g.nets.length-1-idx),1).getMonth()];
+    if(v==null){s+=`<rect x="${x}" y="${y}" width="74" height="68" rx="12" fill="none" stroke="#2f353d" stroke-dasharray="3 4"/>${T(x+10,y+22,lab,14,{f:'#4a5260'})}`;return}
     const i=Math.abs(v)/max,col=v<0?AMB:GRN,op=.2+.8*i;
     if(i>.5)s+=`<rect x="${x+4}" y="${y+4}" width="66" height="60" rx="12" fill="${col}" opacity="${(i*.8).toFixed(2)}" filter="url(#glow)"/>`;
-    s+=`<g data-m="${m}" role="button" tabindex="0" aria-label="${lab}"><rect x="${x}" y="${y}" width="74" height="68" rx="12" fill="${col}" opacity="${op.toFixed(2)}" ${sel===m?`stroke="#fff" stroke-width="2.5"`:''}/>${T(x+10,y+22,lab,14,{f:i>.55?'#06231b':INK,w:600})}</g>`}
+    s+=`<g data-m="${idx}" role="button" tabindex="0" aria-label="${lab}"><rect x="${x}" y="${y}" width="74" height="68" rx="12" fill="${col}" opacity="${op.toFixed(2)}" ${sel===idx?`stroke="#fff" stroke-width="3"`:''}/>${T(x+10,y+22,lab,14,{f:i>.55?'#06231b':INK,w:600})}</g>`});
   return s}
-function dayBoxes(g,sel){
-  const max=Math.max(1,...g.days.map(v=>v==null?0:Math.abs(v)));let s='';
-  s+=T(35,424+25*1,'M',12.5,{f:MUT})+T(35,424+25*3,'W',12.5,{f:MUT})+T(35,424+25*5,'F',12.5,{f:MUT});
-  const start=addDays(TODAY,-83);const firstDow=(start.getDay()+6)%7;let lastMon=-1;
-  for(let d=0;d<84;d++){const dt=addDays(start,d),dow=(dt.getDay()+6)%7,wk=Math.floor((d+firstDow)/7),x=54+wk*25,y=396+dow*25,v=g.days[d];
-    if(dt.getDate()<=7&&dow===0&&dt.getMonth()!==lastMon){s+=T(x,386,MN[dt.getMonth()],12.5,{f:MUT});lastMon=dt.getMonth()}
-    if(v==null){s+=`<rect x="${x}" y="${y}" width="20" height="20" rx="5" fill="none" stroke="#2f353d"/>`;continue}
-    if(v===0){s+=`<g data-d="${d}"><rect x="${x}" y="${y}" width="20" height="20" rx="5" fill="#1b2026"${sel===d?' stroke="#fff" stroke-width="2"':''}/></g>`;continue}
-    const i=Math.abs(v)/max,col=v<0?AMB:GRN;
-    if(i>.5)s+=`<rect x="${x}" y="${y}" width="20" height="20" rx="5" fill="${col}" opacity="${(i*.8).toFixed(2)}" filter="url(#glow)"/>`;
-    s+=`<g data-d="${d}"><rect x="${x}" y="${y}" width="20" height="20" rx="5" fill="${col}" opacity="${(.25+.75*i).toFixed(2)}"${sel===d?' stroke="#fff" stroke-width="2"':''}/></g>`}
-  return s}
-function statsScreen(st,gi,form,o){
-  o=Object.assign({view:'month',sel:null},o);const g=st.goals[gi],f=clamp(g.saved/g.target,0,1);
+function stats1(st,gi,sel){
+  const g=st.goals[gi];if(sel==null)sel=g.nets.length-1;
   let s=T(35,76,'‹ Savings',17,{f:MUT}).replace('<text','<text data-go="back" role="button" tabindex="0" style="cursor:pointer"');
-  s+=`<rect x="35" y="87" width="14" height="14" rx="4" fill="${g.color}"/>`+T(58,112,cut(g.name,18),30,{w:600});
-  if(form==='A'){s+=halfRing(195,232,92,26,f,g.color,20)+T(195,220,sw(f*100),16.5,{a:'middle',w:600})+T(195,262,`ETA ${mon(g.eta)}`,19,{a:'middle',w:700})}
-  else{s+=halfGrid(75,150,240,f,g.color,4);const gh=gridH(240,4);s+=T(195,150+gh+30,`ETA ${mon(g.eta)}`,19,{a:'middle',w:700})}
-  s+=T(195,288,`${fmt(g.saved)} of ${fmt(g.target)}`,16.5,{a:'middle',f:MUT});
-  s+=`<rect x="35" y="304" width="320" height="38" rx="12" fill="#14181d" stroke="${EDGE}"/>`;
-  [['month','By month'],['day','By day']].forEach(([k,l],i)=>{const x=38+i*158;s+=`<g data-view="${k}" role="button" tabindex="0">${o.view===k?`<rect x="${x}" y="307" width="156" height="32" rx="10" fill="#26302d"/>`:''}${T(x+78,329,l,16.5,{a:'middle',w:o.view===k?700:500,f:o.view===k?INK:MUT})}</g>`});
-  s+=o.view==='month'?monthBoxes(g,o.sel):dayBoxes(g,o.sel);
-  const ky=o.view==='month'?624:600;
+  s+=`<circle cx="42" cy="101" r="7" fill="${g.color}"/>`+T(58,112,cut(g.name,18),30,{w:600});
+  s+=T(35,150,`ETA ${mon(g.eta)}`,20,{w:700})+T(35,176,`${fmt(g.saved)} of ${fmt(g.target)} saved`,16.5,{f:MUT});
+  const d=monthDate(g,sel),v=g.nets[sel];
+  s+=`<rect x="35" y="204" width="320" height="44" rx="14" fill="#14181d" stroke="${EDGE}"/>`;
+  s+=`<g data-step="-1" role="button" tabindex="0" aria-label="Earlier month"><rect x="35" y="204" width="64" height="44" fill="transparent"/>${T(67,234,'‹',28,{a:'middle',f:sel>0?INK:'#4a5260'})}</g>`;
+  s+=T(195,233,`${MN[d.getMonth()]} ${d.getFullYear()}`,19,{a:'middle',w:700});
+  s+=`<g data-step="1" role="button" tabindex="0" aria-label="Later month"><rect x="291" y="204" width="64" height="44" fill="transparent"/>${T(323,234,'›',28,{a:'middle',f:sel<g.nets.length-1?INK:'#4a5260'})}</g>`;
+  s+=monthBoxes(g,sel,268);
+  const ky=526;
   s+=`<rect x="35" y="${ky-12}" width="14" height="14" rx="4" fill="${GRN}"/>${T(56,ky,'added',15,{f:MUT})}<rect x="116" y="${ky-12}" width="14" height="14" rx="4" fill="${AMB}"/>${T(137,ky,'taken out',15,{f:MUT})}${T(355,ky,'brighter = more',15,{a:'end',f:MUT})}`;
-  let line='Tap a '+(o.view==='month'?'month':'day')+' for its amount';
-  if(o.sel!=null){if(o.view==='month'){const v=g.nets[o.sel],dt=new Date(TODAY.getFullYear(),TODAY.getMonth()-(11-o.sel),1);line=`${MN[dt.getMonth()]}: ${v<0?'took out ':'added '}${fmt(v)}`}
-    else{const v=g.days[o.sel],dt=addDays(TODAY,o.sel-83);line=`${dt.getDate()} ${MN[dt.getMonth()]}: ${v===0?'nothing moved':(v<0?'took out ':'added ')+fmt(v)}`}}
-  s+=T(35,ky+34,line,17,{f:o.sel!=null?INK:MUT,w:o.sel!=null?600:400});
-  s+=T(35,ky+66,`Started ${mon(addDays(TODAY,-g.startDays))} · ${g.per>0?fmt(g.pace)+' a month lately':''}`,15,{f:MUT});
-  return frame(s,`${st.short} ${g.name} statistics, by ${o.view}`,3)}
+  s+=T(35,ky+44,`${MN[d.getMonth()]}: ${v<0?'took out ':'added '}${fmt(v)}`,22,{w:600});
+  s+=`<g data-go="most" role="button" tabindex="0" aria-label="Most saved months"><rect x="35" y="676" width="320" height="52" rx="14" fill="#14181d" stroke="${EDGE}"/>${T(52,708,'Most saved months',17.5,{w:600})}${T(349,708,'↓',20,{a:'end',f:MUT})}</g>`;
+  return frame(s,`${st.short} ${g.name} by month, ${MN[d.getMonth()]}`,3)}
+function stats2(st,gi,sel){
+  const g=st.goals[gi],max=Math.max(1,...g.nets.map(v=>Math.abs(v)));
+  const top=g.nets.map((v,i)=>[v,i]).filter(a=>a[0]>0).sort((a,b)=>b[0]-a[0]).slice(0,3);
+  let s=T(35,76,'↑ '+cut(g.name,16),17,{f:MUT}).replace('<text','<text data-go="stats" role="button" tabindex="0" style="cursor:pointer"');
+  s+=T(35,112,'Most saved months',28,{w:600})+T(35,142,`Your biggest ${top.length} for ${g.name}`,17,{f:MUT});
+  const ranks=['most','second','third'];
+  top.forEach(([v,i],r)=>{const x=35+r*108,y=196,w=100,op=.2+.8*(v/max);
+    s+=`<rect x="${x+6}" y="${y+6}" width="${w-12}" height="${w-12}" rx="16" fill="${GRN}" opacity="${(v/max*.8).toFixed(2)}" filter="url(#glow)"/><rect x="${x}" y="${y}" width="${w}" height="${w}" rx="16" fill="${GRN}" opacity="${op.toFixed(2)}"/>`;
+    s+=T(x+14,y+34,MN[monthDate(g,i).getMonth()],20,{w:700,f:'#06231b'})+T(x+14,y+58,String(monthDate(g,i).getFullYear()),15,{f:'#06231b'})+T(x+w/2,y+w+28,ranks[r],15,{a:'middle',f:MUT})+(sel===i?`<rect x="${x}" y="${y}" width="${w}" height="${w}" rx="16" fill="none" stroke="#fff" stroke-width="3"/>`:'')+`<g data-mm="${i}" role="button" tabindex="0" aria-label="${MN[monthDate(g,i).getMonth()]}"><rect x="${x}" y="${y}" width="${w}" height="${w}" fill="transparent"/></g>`});
+  if(!top.length)s+=T(35,200,'Nothing saved yet.',17,{f:MUT});
+  s+=sel!=null?T(35,400,`${MN[monthDate(g,sel).getMonth()]}: added ${fmt(g.nets[sel])}`,22,{w:600}):T(35,400,'Tap a month for its amount.',16,{f:MUT});
+  return frame(s,`${st.short} ${g.name} most saved months`,3)}
 
 /* ---------- celebration and completed ---------- */
 function celebrate(name,days,amount){
   let s=`<rect x="1" y="1" width="388" height="460" rx="46" fill="url(#cel)"/>`;
   s+=T(195,92,'GOAL REACHED',15,{a:'middle',w:700,ls:'2.2'});
-  s+=halfRing(195,250,118,34,1,'#d9fbee',20);
+  s+=ringSections(195,250,118,34,Math.PI,Math.PI,[{w:1,f:1,color:'#d9fbee'}],30);
   s+=T(195,330,name,40,{a:'middle',w:700});
   s+=T(195,418,String(days),76,{a:'middle',w:700})+T(195,450,days===1?'day to get there':'days to get there',20,{a:'middle',f:MUT});
   s+=T(195,536,fmt(amount),52,{a:'middle',w:700,f:GRN})+T(195,568,'saved for it',20,{a:'middle',f:MUT});
@@ -316,79 +307,76 @@ function celebrate(name,days,amount){
   return frame(s,`${name} goal reached in ${days} days, ${fmt(amount)} saved`,3,true)}
 function doneScreen(st){
   let s=T(35,76,'‹ Savings',17,{f:MUT}).replace('<text','<text data-go="back" role="button" tabindex="0" style="cursor:pointer"');
-  s+=T(35,112,'Completed',30,{w:600})+T(35,144,`${st.done.length} goal${st.done.length>1?'s':''} reached`,19,{f:MUT});
-  st.done.forEach((d,i)=>{const y=186+i*104;
-    s+=`<rect x="35" y="${y}" width="320" height="92" rx="16" fill="#14181d" stroke="${EDGE}"/>`+halfRing(88,y+62,34,11,1,GRN,12);
-    s+=T(140,y+34,cut(d.name,16),21,{w:600})+T(140,y+60,`${d.days} days · ${fmt(d.amount)}`,16.5,{f:MUT})+T(140,y+80,d.date,14.5,{f:MUT})});
+  s+=T(35,112,'Completed',30,{w:600})+T(35,144,`${st.done.length} goal${st.done.length===1?'':'s'} reached`,19,{f:MUT});
+  st.done.forEach((d,i)=>{const y=186+i*84;
+    s+=`<rect x="35" y="${y}" width="320" height="72" rx="16" fill="#14181d" stroke="${EDGE}"/>`+T(54,y+31,cut(d.name,18),21,{w:600})+T(54,y+56,`${d.days} days · ${fmt(d.amount)}`,16.5,{f:MUT})+T(341,y+31,d.date,14.5,{a:'end',f:MUT})});
   if(!st.done.length)s+=T(35,200,'Nothing completed yet.',17,{f:MUT});
   return frame(s,`${st.short} completed goals`,3)}
 
 const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c)}</figcaption></figure>`;
-/* pool table */
 document.getElementById('pool').innerHTML=S.map(st=>st.goals.length?st.goals.map((g,i)=>`<tr><td>${i?'':st.short}</td><td>${g.name}</td><td class="n">${fmt(g.target)}</td><td class="n">${fmt(g.saved)}</td><td class="n">${fmt(g.pace)}</td><td>${mon(g.eta)}</td><td>${mon(addDays(TODAY,-g.startDays))}</td></tr>`).join(''):`<tr><td>${st.short}</td><td colspan="6">no goal yet · ${fmt(st.loose)} saved</td></tr>`).join('');
 
-const FORMS=[['A','Half ring','segmented, fills from its lower ends'],['B','Half grid','10 by 5 boxes, fills from the bottom']];
-document.getElementById('secA').innerHTML=FORMS.map(([k,n,d])=>`<div class="opt"><h4><b>${k}</b>${n} <span>${d}</span></h4><div class="row">`+S.map(st=>fg(savingsScreen(st,k),st.short,st.goals.length?`${st.goals.length} goal${st.goals.length>1?'s':''}${st.done.length?` · ${st.done.length} done`:''}`:'no goal yet')).join('')+`</div></div>`).join('');
+const FORMS=[['half','A','Half ring','one section per goal, filling left to right'],['full','B','Full segmented ring','one section per goal, filling clockwise from the top']];
+document.getElementById('secA').innerHTML=FORMS.map(([f,k,n,d])=>`<div class="opt"><h4><b>${k}</b>${n} <span>${d}</span></h4><div class="row">`+S.map(st=>fg(savingsScreen(st,f),st.short,st.goals.length?`${st.goals.length} goal${st.goals.length>1?'s':''}${st.done.length?` · ${st.done.length} done`:''}`:'no goal yet')).join('')+`</div></div>`).join('');
 document.getElementById('noteA').innerHTML=`
-<div class="note"><b>One page, one picture</b>The Savings page is only the gauges. There is no amount on it. The ETA is at the bottom of each gauge, as asked, and the words say how far along.</div>
-<div class="note"><b>A · half ring</b>It is your reference: segments in an arc. The lower ends are where it starts, so it fills sideways round the arc rather than straight up. It looks like a fuel gauge, but it is a different form from the Viz 1 grid.</div>
-<div class="note"><b>B · half grid</b>Half of the Viz 1 grid, ten boxes by five, filling from the bottom with the liquid rule you already chose. It is the same language as spending, so it relies on colour alone to say "savings".</div>
-<div class="note"><b>2 to 3 goals</b>Nishad has three goals plus Completed and it just fits. Four or more goals scroll, and Goals can be collapsed to leave only the total and Completed.</div>`;
+<div class="note"><b>The ring is the page</b>Nothing else is drawn. The goal rows below are text: a colour dot that matches the section, how far along, and the ETA. No gauge sits next to a goal.</div>
+<div class="note"><b>Sections by amount</b>Nishad's Laptop is the biggest target, so it has the longest section; its shade of green differs from Trip and Emergency. The more a section is lit, the closer that goal is.</div>
+<div class="note"><b>A · half ring</b>The fuel gauge you chose. With one goal it is a single long section. It is the same family as the Viz 1 gauge and does not look like the spending rings.</div>
+<div class="note"><b>B · full ring</b>Closer to your donut reference and easier to split into many sections, but it is a ring, the form you set aside for spending.</div>`;
 
-/* B stats */
-const withGoal=S.filter(s=>s.goals.length);
-document.getElementById('secB').innerHTML=`<div class="opt"><h4><b>By month</b>twelve boxes <span>green added, amber taken out, brighter = more</span></h4><div class="row">`+withGoal.map(st=>fg(statsScreen(st,0,'A',{view:'month'}),st.short,`${st.goals[0].name}`)).join('')+fg(statsScreen(S[4],1,'A',{view:'month'}),'Nishad-type','Emergency, 12 months')+`</div></div>`
- +`<div class="opt"><h4><b>By day</b>last twelve weeks <span>one box a day, same colours</span></h4><div class="row">`+withGoal.map(st=>fg(statsScreen(st,0,'A',{view:'day'}),st.short,`${st.goals[0].name}`)).join('')+fg(statsScreen(S[4],1,'A',{view:'day'}),'Nishad-type','Emergency')+`</div></div>`;
+const wg=S.filter(s=>s.goals.length);
+document.getElementById('secB').innerHTML=`<div class="opt"><h4><b>Months</b>first screen <span>arrows step through, white outline = selected, amount written under</span></h4><div class="row">`
+ +wg.map(st=>fg(stats1(st,0),st.short,`${st.goals[0].name}, ${st.goals[0].nets.length} month${st.goals[0].nets.length>1?'s':''}`)).join('')+fg(stats1(S[4],1,3),'Nishad-type','Emergency, 15 months, window shifted')+`</div></div>`
+ +`<div class="opt"><h4><b>Most saved</b>second screen, by scrolling <span>the top three months, glowing</span></h4><div class="row">`
+ +wg.map(st=>fg(stats2(st,0),st.short,st.goals[0].name)).join('')+fg(stats2(S[4],1),'Nishad-type','Emergency')+`</div></div>`;
 document.getElementById('noteB').innerHTML=`
-<div class="note"><b>New goals look new</b>Tarun-type started this month, so only the last box is lit and the other eleven are dashed outlines. Gautham-type shows two. A long goal like Emergency fills all twelve.</div>
-<div class="note"><b>Amber is a withdrawal</b>A month where more went out than in is amber. It glows by how much, so a big withdrawal stands out. It is a note, not a warning, and it is never red.</div>
-<div class="note"><b>Days show the rhythm</b>Pay day lights the first of the month, small top-ups scatter, and the odd amber day is money taken out. Dark boxes are days nothing moved.</div>
-<div class="note"><b>Amounts on tap</b>No number sits on any box. Tapping one writes its amount underneath, which you can try below.</div>`;
+<div class="note"><b>One visualisation per screen</b>The month boxes are the only drawing on the first screen. The most saved months are on the next screen down, as you asked.</div>
+<div class="note"><b>New goals look new</b>Tarun-type started this month, so one box is lit and eleven are dashed. Most saved shows only what exists: one month for Tarun, two for Gautham.</div>
+<div class="note"><b>Stepping past the edge</b>Emergency has 15 months. Stepping back past the first box moves the whole window, so every month is reachable.</div>
+<div class="note"><b>Numbers on tap</b>Only the selected month's amount is written. The boxes carry none.</div>`;
 
-/* C celebrations */
 document.getElementById('secC').innerHTML=`<div class="opt"><div class="row">`
- +fg(celebrate('Phone',94,16000),'Nishad-type','Phone, 94 days')
- +fg(celebrate('Helmet',42,3200),'Harsh-type','Helmet, 42 days')
- +fg(celebrate('Trip',211,15000),'Yash-type','Trip, 211 days')
- +fg(doneScreen(S[4]),'Nishad-type','Completed, 2 goals')
- +fg(doneScreen(S[5]),'Harsh-type','Completed, 1 goal')
- +fg(doneScreen(S[1]),'Gautham-type','Completed, empty')
- +`</div></div>`;
+ +fg(celebrate('Phone',94,16000),'Nishad-type','Phone, 94 days')+fg(celebrate('Helmet',42,3200),'Harsh-type','Helmet, 42 days')+fg(celebrate('Trip',211,15000),'Yash-type','Trip, 211 days')
+ +fg(doneScreen(S[4]),'Nishad-type','Completed, 2 goals')+fg(doneScreen(S[5]),'Harsh-type','Completed, 1 goal')+fg(doneScreen(S[1]),'Gautham-type','Completed, empty')+`</div></div>`;
 document.getElementById('noteC').innerHTML=`
-<div class="note"><b>Pushed like an intro</b>It takes the whole screen with the green glow from the top, whichever screen finished the goal. It carries the two figures you named: days it took, and how much is saved.</div>
-<div class="note"><b>Then Completed</b>"See completed goals" opens a list of finished goals, each as a full gauge with its days, amount and month. Done goes back to Savings, where the goal is gone from the stack.</div>`;
+<div class="note"><b>Pushed like an intro</b>The celebration takes the whole screen with a green glow from the top, from wherever the goal was finished. It carries the two figures you named: the days it took and how much is saved.</div>
+<div class="note"><b>Then Completed</b>"See completed goals" opens the list: name, days, amount, month. Done goes back to Savings, where the goal has left the ring and the list.</div>`;
+
 /* ---------- demo ---------- */
-const dem={s:4,form:'A',view:'savings',gi:0,stat:'month',sel:null,goalsOpen:true,celeb:null};
 const copyS=()=>S.map(s=>({...s,goals:s.goals.map(g=>({...g})),done:s.done.map(d=>({...d}))}));
 let DS=copyS();
+const dem={s:4,form:'half',view:'savings',gi:0,sel:null,msel:null,goalsOpen:true,celeb:null};
 const demo=document.getElementById('demo'),dn=document.getElementById('dnote');
 function draw(){const st=DS[dem.s];let h;
   if(dem.view==='savings')h=savingsScreen(st,dem.form,{goalsOpen:dem.goalsOpen});
-  else if(dem.view==='stats')h=statsScreen(st,dem.gi,dem.form,{view:dem.stat,sel:dem.sel});
+  else if(dem.view==='stats')h=stats1(st,dem.gi,dem.sel);
+  else if(dem.view==='most')h=stats2(st,dem.gi,dem.msel);
   else if(dem.view==='celebrate')h=celebrate(dem.celeb.name,dem.celeb.days,dem.celeb.amount);
   else h=doneScreen(st);
   demo.innerHTML=h;
-  document.getElementById('fin').disabled=!(dem.view==='stats');
-  dn.textContent=dem.view==='savings'?(st.goals.length?'Tap a goal to open its statistics.':`${st.short} has no goal yet. Making one is for the flow stage.`):dem.view==='stats'?'Tap By day, a month or a day. "Finish this goal" plays the celebration.':dem.view==='celebrate'?'Done returns to Savings with the goal moved to Completed.':'Completed goals.'}
-function act(k){const st=DS[dem.s];
+  document.getElementById('fin').disabled=!(dem.view==='stats'||dem.view==='most');
+  dn.textContent=dem.view==='savings'?(st.goals.length?'Tap a goal to open its months.':`${st.short} has no goal yet. Making one is for the flow stage.`):dem.view==='stats'?'Use the arrows or tap a box to change month. "Most saved months" scrolls on.':dem.view==='most'?'Tap ↑ to go back up to the months.':dem.view==='celebrate'?'Done returns to Savings with the goal moved to Completed.':'Completed goals.'}
+function act(k){
   if(k==='back'){dem.view='savings';dem.sel=null}
   else if(k==='goals')dem.goalsOpen=!dem.goalsOpen;
   else if(k==='done')dem.view='done';
-  else if(k&&k.startsWith('goal:')){dem.gi=+k.slice(5);dem.view='stats';dem.sel=null;dem.stat='month'}
+  else if(k==='most'){dem.view='most';dem.msel=null}
+  else if(k==='stats')dem.view='stats';
+  else if(k&&k.startsWith('goal:')){dem.gi=+k.slice(5);dem.view='stats';dem.sel=null}
   draw()}
 demo.addEventListener('click',e=>{
+  const st=e.target.closest('[data-step]');if(st){const g=DS[dem.s].goals[dem.gi],cur=dem.sel==null?g.nets.length-1:dem.sel;dem.sel=clamp(cur+ +st.dataset.step,0,g.nets.length-1);draw();return}
+  const mm=e.target.closest('[data-mm]');if(mm){dem.msel=+mm.dataset.mm;draw();return}
   const m=e.target.closest('[data-m]');if(m){dem.sel=+m.dataset.m;draw();return}
-  const d=e.target.closest('[data-d]');if(d){dem.sel=+d.dataset.d;draw();return}
-  const v=e.target.closest('[data-view]');if(v){dem.stat=v.dataset.view;dem.sel=null;draw();return}
   const t=e.target.closest('[data-go]');if(t)act(t.dataset.go)});
-demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-go],[data-m],[data-d],[data-view]');if(t){e.preventDefault();t.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
+demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-go],[data-m],[data-mm],[data-step]');if(t){e.preventDefault();t.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
 document.getElementById('fin').onclick=()=>{const st=DS[dem.s],g=st.goals[dem.gi];if(!g)return;
   dem.celeb={name:g.name,days:Math.max(1,g.startDays),amount:g.target};st.goals.splice(dem.gi,1);st.done.unshift({name:g.name,days:dem.celeb.days,amount:g.target,date:mon(TODAY)});dem.view='celebrate';draw()};
 document.getElementById('rst').onclick=()=>{DS=copyS();dem.view='savings';dem.sel=null;draw()};
-function chips(id,items,get,set){const el=document.getElementById(id);el.innerHTML=items.map((t,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${get()===i}">${t}</button>`).join('');
+function chips(id,its,get,set){const el=document.getElementById(id);el.innerHTML=its.map((t,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${get()===i}">${t}</button>`).join('');
   el.onclick=e=>{const b=e.target.closest('button');if(!b)return;set(+b.dataset.i);[...el.children].forEach((c,i)=>c.setAttribute('aria-pressed',get()===i))}}
 chips('cs',S.map(s=>s.short.replace('-type','')),()=>dem.s,i=>{dem.s=i;dem.view='savings';dem.sel=null;draw()});
-chips('cf',['A · Half ring','B · Half grid'],()=>dem.form==='A'?0:1,i=>{dem.form=i?'B':'A';draw()});
+chips('cf',['A · Half ring','B · Full ring'],()=>dem.form==='half'?0:1,i=>{dem.form=i?'full':'half';draw()});
 draw();
 })();
 </script>
