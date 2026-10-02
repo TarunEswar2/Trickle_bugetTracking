@@ -102,9 +102,10 @@ Viz 5 closed by Tarun ("done next"). The defaults below stand as drawn: default 
 |---|---|
 | V6-1 | What counts: **the same place or kind, 3 or more times in 30 days, any amount** (the v9 definition). |
 | V6-2 | It is **a view inside the Spending tab**, reached by scrolling (one visualisation per screen). |
-| V6-3 | The unit is **a box that fills with each repeat**: one box per habit, lighting a little more every time, so five coffees read as one growing habit. |
+| V6-3 | ~~The unit is a box that fills with each repeat.~~ **WITHDRAWN 2 Oct**: Tarun: "this is not working at all". |
+| V6-4 | Repeat purchases must communicate **how much and how many times, per day, per week and per month**, using **calendar hotspots** (glowing calendar cells, the style of the savings By-day grid). |
 Board: https://claude.ai/artifact/AbKgJ6jeARMKgeGMdtLGox (source archive/session-workfiles/viz6/viz6-repeat-purchases.html).
-Defaults, drawn but not decided: a full box = a purchase every day for 30 days (each repeat fills 1/30); box colour = the habit's category colour (V1-12); names under the boxes and no numbers; habits sorted by most repeats; tap a box for a full-screen detail (times, rupees, usual time); fewer than 3 repeats shows an empty state; the scale chip says "Full box = every day".
+Defaults, drawn but not decided: a habit picker (an "All repeats" entry plus each habit) in a dropdown; three scales, Day (hours of a typical day), Week (weekday by time of day), Month (a calendar of the last 30 days); a Times / ₹ switch for the glow; spending-orange glow; numbers only on tap; fewer than 3 repeats shows an empty state.
 
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
@@ -112,7 +113,7 @@ Defaults, drawn but not decided: a full box = a purchase every day for 30 days (
 3. Income split (spending vs savings) — DONE (V3-1…V3-11)
 4. Savings goal (how much, by when, actually saved) — DONE (V4-1…V4-21); also: add goal, pay into a goal, completed goals (parked requirement above)
 5. Unspent → saved — DONE (V5-1…V5-10)
-6. Small / repeat purchases — IN PROGRESS (V6-1…V6-3 given)
+6. Small / repeat purchases — IN PROGRESS (V6-1, V6-2, V6-4 given; V6-3 withdrawn)
 7. Time patterns (e.g. nights)
 8. Subscriptions coming up (Fixed group)
 9. This week vs last
