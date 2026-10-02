@@ -68,7 +68,11 @@ References he sent: iOS year-progress waffle (green filled grid, "299d left · 1
 | V4-15 | **The month toggle moves from By month to By day** (amends V4-14). **By month** has no stepper: just every month box (biggest months haloed). **By day** has the **month stepper** and shows **that month's days as week columns**. My reading: tapping a month box selects it, and By day then opens on that month. |
 | V4-16 | **In By day the days are columns, not rows** (amends V4-14/V4-15): Monday to Sunday run **across the top as seven columns**, the **weeks stack down as rows**, like a calendar. Replaces the weeks-as-columns layout. |
 Note: V4-12 puts two visualisations on one scrolling page. Kept to the one-visualisation-per-screen rule by having the day grid sit a scroll below the months (each is alone on screen). Board's "today" is now 28 October 2026 so the current month has days to show.
-Open: half ring (the earlier decision) or a full segmented ring (like his reference of a donut split into sections) — both drawn. Sections are sized by **target** amount (my reading of "based on the amounts").
+| V4-17 | **Full segmented ring** for the Savings page (not the half ring). Supersedes the half-gauge form in V4-2 for the main visualisation. |
+| V4-18 | Ring sections are **sized by each goal's target amount**. |
+| V4-19 | Goal rows keep the **colour dot** that matches their ring section. |
+| V4-20 | The **halo stays on the three biggest months** in By month. |
+| V4-21 | By month and By day **share the selected month**: the month tapped in By month is the month By day opens on. |
 Board: https://claude.ai/artifact/X9aNwLv6pGGZb5sFcxiXEm (source archive/session-workfiles/viz4/viz4-savings-goals.html).
 Interpretation to confirm: the top gauge is all savings together, goals stacked below it; "fill from the bottom" on a half gauge means filling up from the arc's lower ends, or a half-height grid (two forms drawn).
 
@@ -81,8 +85,8 @@ Interpretation to confirm: the top gauge is all savings together, goals stacked 
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
 3. Income split (spending vs savings) — DONE (V3-1…V3-11)
-4. Savings goal (how much, by when, actually saved) — IN PROGRESS (V4-1…V4-16 given); also: add goal, pay into a goal, completed goals (parked requirement above)
-5. Unspent → saved
+4. Savings goal (how much, by when, actually saved) — DONE (V4-1…V4-21); also: add goal, pay into a goal, completed goals (parked requirement above)
+5. Unspent → saved — NEXT
 6. Small / repeat purchases
 7. Time patterns (e.g. nights)
 8. Subscriptions coming up (Fixed group)

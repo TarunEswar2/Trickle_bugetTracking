@@ -32,4 +32,4 @@ The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 - `references/inspiration/` — images Tarun supplied as visual references.
 
 ## Next up
-Visualisation 4: savings goal (how much, by when, actually saved), plus the parked Savings-tab needs (add goal, pay into a goal, completed goals). Viz 1–3 are decided.
+Visualisation 5: unspent → saved (principle 6: what you don't spend becomes savings). Viz 1–4 are decided.
