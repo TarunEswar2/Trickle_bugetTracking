@@ -42,7 +42,9 @@ v14 so far:
 | Visualisation 9 — this week vs last | Decided (V9-1…V9-3): Insights, two grids side by side with last week faded, by category on tap |
 | Visualisation 10 — transaction history | Decided (V10-1…V10-3): day-grouped list, filter chips, name/amount/time rows |
 | Visualisation 11 — exact amounts on tap | Decided (V11-1 … V11-3); board published, 5 defaults unconfirmed |
-| Onboarding, per-tab screens, identity, v14 build, user tests | Not started |
+| Onboarding | Done (O-1…O-28) |
+| Flows (pay, move money; the rest delegated) | Done; whole-app blueprint published |
+| Visualisation → mockup → identity → v14 build → user tests | Next |
 
 ## How Tarun wants to work (this matters more than anything else here)
 - **He makes every decision; every flow runs through him.** Draw options, explain the
@@ -103,7 +105,7 @@ green→amber transition, v7's range of data visualisations, sounds/motion from 
 his own gradients in Figma.
 
 ## The exact next step
-**Flows have started: the pay screen flow board is published** (https://claude.ai/artifact/LhuVGnFaj29oBbg3cYoX3u, F-1 logged, eight questions waiting, F-2 to F-4 logged; log his answers as F-5…). **Moving money board published** (https://claude.ai/artifact/H8t1Ep7UbonszCB2kbk4Xn, F-5 logged, six questions waiting). **Onboarding is DONE** (O-1…O-28; final board https://claude.ai/artifact/16Z1Z4yx1VDWk3AT7rYP6j). Viz 1–11 are done too. Tarun said he will come back for **flows**; start with the parked flows listed below, one decision at a time. Per-tab grey wireframes follow.
+**The whole-app blueprint is published** (https://claude.ai/artifact/RVjueXaXCsmCKyF6UUEErj; source `archive/session-workfiles/blueprint/`, rebuild with `python3 build.py`). Tarun delegated the rest of the design: logic gaps and all remaining flows were closed as **D-1…D-36** (delegated, open to override) in the decisions log. Pay (F-1…F-7), move money (F-5) and onboarding (O-1…O-28) are his. Grey mockups are skipped. **Next: the visualisation stage** (compose each tab; see the blueprint's Next tab), then mockup, build, user tests. Expect him to review the blueprint and override some D-decisions: log each override as a new ID and update the blueprint data files (`data_screens.js`, `data_flows.js`, `data_model.js`).
 
 After the queue (Tarun's v14 order): onboarding (`docs/claude/build_plan.md`, `docs/claude/screens_to_design.md`), grey wireframes per tab with one visualisation per screen, the flows (parked list below), identity, the v14 build, then real user tests (never run).
 

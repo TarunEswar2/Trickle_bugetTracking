@@ -210,7 +210,7 @@ Board: https://claude.ai/artifact/16Z1Z4yx1VDWk3AT7rYP6j (source `archive/sessio
 Drawn as first drafts, NOT decided (superseded by board 3's nine confirm-questions, O-25): title screen content; 4-digit PIN with an amber mismatch line; link/manual as two equal cards with Excel/CSV import as a small placeholder line; permissions = notifications + fingerprint/face only (no SMS, per hard rule); savings split as a slider only, starting share 0; weekly sliders cap at what is left (nothing-left line, no auto-take from others); unassigned boxes are 'spare'; step 6 savings are monthly so each goal shows an ETA, and compares it with the chosen date (in time, or amber 'N months late'), goals skippable; 'no budget' path = savings split, step 6, tracks four weeks then offers a weekly budget; recommended eight (Canteen & mess, Chai & coffee, Snacks, Bus & metro, Auto & cab, Mobile recharge, Outings, Stationery); (going-over wording dropped: sliders now stop at the budget, O-7). The 50 names are a draft list (8 groups); fixed bills/subscriptions live in the Fixed group (V8), not the list.
 
 ## Delegated phase — "figure out the entire app" (Tarun, 2 Oct)
-Tarun's instruction: fix logic gaps, complete all other flows, figure out the whole app, skip the grey-mockup stage, arrange data, screens and flows into one tabbed artifact; then visualisation, then mockup; do not ask or wait for decisions, keep him updated. **Everything below is Claude's decision under that delegation (status: delegated, open to override).** Source: the Blueprint artifact (`archive/session-workfiles/blueprint/blueprint.html`).
+Tarun's instruction: fix logic gaps, complete all other flows, figure out the whole app, skip the grey-mockup stage, arrange data, screens and flows into one tabbed artifact; then visualisation, then mockup; do not ask or wait for decisions, keep him updated. **Everything below is Claude's decision under that delegation (status: delegated, open to override).** Source: the Blueprint artifact https://claude.ai/artifact/RVjueXaXCsmCKyF6UUEErj (`archive/session-workfiles/blueprint/blueprint.html`).
 | # | Decision (delegated) |
 |---|---|
 | D-1 | A week runs **Monday to Sunday**, local time; weekly amounts reset Monday 00:00. |
@@ -247,6 +247,8 @@ Tarun's instruction: fix logic gaps, complete all other flows, figure out the wh
 | D-32 | **First-run states:** Home "Your week starts now" with a full grid; rings full; History "Nothing yet"; Insights "fills in as you go" (V7, V9 defaults); Repeats needs 3 repeats. |
 | D-33 | **Accessibility:** colour never carries meaning alone (names accompany every colour); 44-pt touch targets; reduced motion respected; every box has a screen-reader label; amounts read in words. |
 | D-34 | **Savings rows and the Insights tab:** Insights holds "When you spend" and "This week vs last" only for now (V7, V9); a Sankey stays parked (HANDOVER). |
+| D-35 | **Scale rounding** (reconciles V1-2 with sliders in ₹5 steps): category amounts move in ₹5 steps; 1 box = amount ÷ 100, shown as "1 box = ₹X", rounded to the nearest rupee with "≈" when not whole. A goal's grid is its target ÷ 100. |
+| D-36 | **The Home grid covers the week's flexible money** (all categories plus the buffer, money left). Fixed bills are not in it. No scale on Home. |
 
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
