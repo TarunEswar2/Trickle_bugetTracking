@@ -111,7 +111,7 @@ svg.ph [data-go]{cursor:pointer}
 <header class="top">
   <div class="eyebrow">Trickle v14 · Visualisation 8 of 11 · 2 Oct 2026</div>
   <h1>Fixed bills coming up</h1>
-  <p class="lead">The Fixed group in the Spending tab, a scroll below the rings and repeats. A calendar of what is due: the days with a payment glow, so "in 2 days" is a spot you can see. A sentence says what is next. Under it, each bill and when, with no amounts. Tap a day for the amount. Drawn for all six students, including one with no fixed bills. Options only. You decide.</p>
+  <p class="lead">The Fixed group in the Spending tab, a scroll below the rings and repeats. A calendar of what is due: the days with a payment glow, so "in 2 days" is a spot you can see. A sentence says what is next. Under it, each bill with its amount and when. Tap a day for the details. Drawn for all six students, including one with no fixed bills. Options only. You decide.</p>
 </header>
 
 <section style="border-top:0;padding-top:0">
@@ -119,7 +119,7 @@ svg.ph [data-go]{cursor:pointer}
   <div class="logged">
     <div><b>V8-1 · Where</b><span>The Spending tab, in the Fixed group (rent, EMI, subscriptions).</span></div>
     <div><b>V8-2 · The form</b><span>A calendar of what is due.</span></div>
-    <div><b>V8-3 · Amounts</b><span>When, not how much, until you tap.</span></div>
+    <div><b>V8-3 and V8-4 · Amounts</b><span>The calendar spots carry no amount. The list under it shows each bill, its amount and when.</span></div>
     <div><b>Carried over</b><span>The hotspot calendar look, a plain sentence (X-1), no red.</span></div>
   </div>
   <p class="small">Drawn as defaults, not decided: it starts on this week and runs six weeks; glow is due soon (brighter) or later (dimmer), never the amount; past dues show as ticks; today has a white outline. Today on this board is Sunday 25 October 2026. All figures are made up.</p>
@@ -135,7 +135,7 @@ svg.ph [data-go]{cursor:pointer}
 
 <section>
   <div class="sec-h"><span class="k">A</span><h2>The Fixed calendar</h2></div>
-  <p class="q">Six weeks from Monday 19 October. Bright spots are due in the next 7 days, dim ones later, ticks are paid. Under the calendar the bills are listed with when, and no amounts. Vaishak-type has none.</p>
+  <p class="q">Six weeks from Monday 19 October. Bright spots are due in the next 7 days, dim ones later, ticks are paid. Under the calendar the bills are listed with their amount and when. Vaishak-type has none.</p>
   <div class="gal" id="secA"></div>
   <div class="notes" id="noteA"></div>
 </section>
@@ -172,7 +172,7 @@ svg.ph [data-go]{cursor:pointer}
     <div class="dq"><h3>1. How far ahead</h3><ol><li class="s">This week and the next five, six weeks.</li><li>The next 30 days only.</li><li>This calendar month.</li></ol></div>
     <div class="dq"><h3>2. What glows</h3><ol><li class="s">Status: due within 7 days is bright, later is dim. The amount is never encoded.</li><li>The amount, so big bills stand out.</li></ol></div>
     <div class="dq"><h3>3. Paid bills</h3><ol><li class="s">A quiet tick on the days this week that already went.</li><li>Not shown; the calendar starts from today.</li></ol></div>
-    <div class="dq"><h3>4. The list under the calendar</h3><ol><li class="s">Names and "in 2 days", no amounts.</li><li>Names, when and the amount.</li><li>No list, calendar only.</li></ol></div>
+    <div class="dq"><h3>4. The list under the calendar</h3><ol><li class="s">Name, amount and "in 2 days" (as you asked).</li><li>Name and when only.</li><li>No list, calendar only.</li></ol></div>
     <div class="dq"><h3>5. A heads-up on Home</h3><ol><li class="s">Not in this view. Decide later with the Home screen.</li><li>A one-line note on Home in the week a bill is due.</li></ol></div>
   </div>
 </section>
@@ -255,7 +255,7 @@ function screen(st,o){
   let iy=ly+40;
   if(info){s+=T(35,iy,info.date,15,{f:MUT,w:600});info.slice(0,3).forEach((l,i)=>{const parts=l.split(' · ');s+=T(35,iy+28+i*44,parts.length>1?parts[0]+'  '+parts[1]:cut(l,30),20,{w:700})+(parts.length>2?T(35,iy+48+i*44,parts[2],14.5,{f:MUT}):'')});}
   else{const up=upcoming(st,today).slice(0,4);
-    up.forEach((b,i)=>{const y=iy+i*30;s+=`<rect x="35" y="${y-15}" width="9" height="9" rx="2.5" fill="${ORG}" opacity="${diffDays(b.d,today)<=7?1:.4}"/>${T(52,y-5,cut(b.name,18),16.5,{w:600})}${T(355,y-5,ago(diffDays(b.d,today)),15.5,{a:'end',f:diffDays(b.d,today)<=7?ORG:MUT,w:diffDays(b.d,today)<=7?700:400})}`})}
+    up.forEach((b,i)=>{const y=iy+i*30;s+=`<rect x="35" y="${y-15}" width="9" height="9" rx="2.5" fill="${ORG}" opacity="${diffDays(b.d,today)<=7?1:.4}"/>${T(52,y-5,cut(b.name,15),15.5,{w:600})}${T(272,y-5,fmt(b.amt),15.5,{a:'end',w:600})}${T(355,y-5,ago(diffDays(b.d,today)),14.5,{a:'end',f:diffDays(b.d,today)<=7?ORG:MUT,w:diffDays(b.d,today)<=7?700:400})}`})}
   return {svg:frame(s,`${st.short} fixed bills calendar`),info}}
 
 const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c)}</figcaption></figure>`;
@@ -263,13 +263,13 @@ document.getElementById('pool').innerHTML=S.map(st=>`<tr><td>${st.short}</td><td
 document.getElementById('secA').innerHTML=`<div class="opt"><div class="row">`+S.map(st=>fg(screen(st).svg,st.short,sentence(st,BASE).main)).join('')+`</div></div>`;
 document.getElementById('noteA').innerHTML=`
 <div class="note"><b>"In 2 days" is a spot</b>Nishad-type's Coursera on Tuesday is the brightest spot on his calendar, two days out. You can see how close it is before you read the sentence.</div>
-<div class="note"><b>When, not how much</b>The glow is status, not amount, so ₹999 and ₹119 look alike until you tap. The list under the calendar names each bill and when, and nothing else.</div>
+<div class="note"><b>The glow is status, the list has the amounts</b>The spots are status, not amount, so ₹999 and ₹119 glow alike. The list under the calendar names each bill with its amount and when.</div>
 <div class="note"><b>Past dues are quiet ticks</b>This week's already-paid bills are a grey tick, not a spot, so the calendar is about what is ahead.</div>
 <div class="note"><b>No bills, no calendar</b>Vaishak-type has none. The view says so and says what will appear.</div>`;
 const picks=[[S[4],8],[S[5],17],[S[2],9]];
 document.getElementById('secB').innerHTML=`<div class="opt"><div class="row three">`+picks.map(([st,i])=>fg(screen(st,{sel:i}).svg,st.short,screen(st,{sel:i}).info?screen(st,{sel:i}).info.date:'')).join('')+`</div></div>`;
 document.getElementById('noteB').innerHTML=`
-<div class="note"><b>One tap, the amount</b>Tapping Tuesday 27 October on Nishad's calendar writes "Coursera · ₹999 · every month". The bill is the only place the amount appears.</div>
+<div class="note"><b>One tap, the day</b>Tapping Tuesday 27 October on Nishad's calendar writes "Coursera ₹999, every month". The amount is also on the list rows.</div>
 <div class="note"><b>Two bills, one day</b>A day with more than one bill shows "+1" on its spot, and the tap lists them.</div>`;
 const w=(st,d)=>sentence(st,addDays(BASE,d));
 document.getElementById('secC').innerHTML=`<div class="opt"><div class="row four">`+[[S[4],0,'Coursera is 2 days out'],[S[4],2,'Coursera is due today'],[S[3],0,'a week with nothing'],[S[0],0,'no bills at all']].map(([st,d,c])=>fg(screen(st,{today:addDays(BASE,d)}).svg,st.short,c)).join('')+`</div></div>`;
