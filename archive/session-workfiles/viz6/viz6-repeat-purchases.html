@@ -237,6 +237,35 @@ function spot(x,y,w,h,v,max,sel,attr,label,textCol){
     s+=`<g ${attr}><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="${ORG}" opacity="${(.2+.8*Math.pow(k,.8)).toFixed(2)}" ${sel?'stroke="#fff" stroke-width="2.5"':''}/>${label?T(x+6,y+15,label,11.5,{f:k>.55?'#2a1604':INK,w:600}):''}</g>`}
   return s}
 
+
+/* plain-language "when" sentence, computed from the aggregate */
+const ord=n=>{const v=n%100;return n+(v>=11&&v<=13?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th'))};
+const wrapText=(s,n)=>{const w=s.split(' '),out=[];let cur='';w.forEach(x=>{if((cur+' '+x).trim().length>n){out.push(cur.trim());cur=x}else cur=(cur+' '+x).trim()});if(cur)out.push(cur);return out};
+function whenPhrase(ag,scale,metric){
+  const v=c=>metric==='amt'?c.s:c.n;
+  if(scale==='day'){
+    const h=ag.hour.map(v),tot=h.reduce((a,b)=>a+b,0);if(!tot)return null;
+    const win=i=>h[i]+h[(i+1)%24];let bi=0;for(let i=1;i<24;i++)if(win(i)>win(bi))bi=i;
+    const single=Math.max(h[bi],h[(bi+1)%24])/(win(bi)||1)>=.7,p=single?(h[bi]>=h[(bi+1)%24]?bi:(bi+1)%24):null;
+    const lab=x=>{x=x%24;const a=x%12===0?12:x%12;return a+(x<12?' am':' pm')};
+    let t=single?`around ${lab(p)}`:`between ${lab(bi)} and ${lab(bi+2)}`;
+    const h2=h.slice();for(let d=-2;d<=3;d++)h2[((bi+d)%24+24)%24]=0;const m2=Math.max(...h2);
+    if(m2>=.6*win(bi)/ (single?1:2)&&m2>0){const i2=h2.indexOf(m2);t+=`, and again around ${lab(i2)}`}
+    return t}
+  if(scale==='week'){
+    const wd=ag.wk.map(r=>r.reduce((a,c)=>a+v(c),0)),bt=[0,1,2,3].map(b=>ag.wk.reduce((a,r)=>a+v(r[b]),0)),tot=wd.reduce((a,b)=>a+b,0);if(!tot)return null;
+    const avgWd=wd.slice(0,5).reduce((a,b)=>a+b,0)/5,avgWe=(wd[5]+wd[6])/2;
+    let dayP=avgWe>=1.4*avgWd?'on weekends':avgWe<=.7*avgWd?'on weekdays':'on any day of the week';
+    const top=wd.indexOf(Math.max(...wd)),others=(tot-wd[top])/6;
+    if(wd[top]>=1.6*others&&dayP==='on any day of the week')dayP=`on ${['Mondays','Tuesdays','Wednesdays','Thursdays','Fridays','Saturdays','Sundays'][top]}`;
+    const pb=bt.indexOf(Math.max(...bt)),blk=['at night','in the morning','in the afternoon','in the evening'][pb];
+    return `${dayP}, ${blk}`}
+  const d=ag.day.map(v),tot=d.reduce((a,b)=>a+b,0);if(!tot)return null;
+  const start=addDays(TODAY,-29),g=[0,0,0];d.forEach((x,i)=>{const dt=addDays(start,i).getDate();g[dt<=10?0:dt<=20?1:2]+=x});
+  const gi=g.indexOf(Math.max(...g)),names=['the first part of the month','the middle of the month','the last part of the month'];
+  let bi=0,bs=-1;for(let i=0;i<=23;i++){const sm=d.slice(i,i+7).reduce((a,b)=>a+b,0);if(sm>bs){bs=sm;bi=i}}
+  const a=addDays(start,bi).getDate(),b=addDays(start,bi+6).getDate();
+  return g[gi]/tot>=.42?`in ${names[gi]}, around the ${ord(a)} to ${ord(b)}`:`evenly through the month, busiest around the ${ord(a)} to ${ord(b)}`}
 function grid(st,hi,scale,metric,sel){
   const ag=aggregate(events(st,hi)),val=c=>metric==='amt'?c.s:c.n;let s='',max=1,info=null;
   if(scale==='day'){
@@ -291,8 +320,11 @@ function calScreen(st,hi,o){
   s+=T(142,yy+13,'less → more',14,{f:MUT});
   s+=`<rect x="236" y="${yy-6}" width="119" height="30" rx="10" fill="#14181d" stroke="${EDGE}"/>`;
   [['times','Times'],['amt','₹']].forEach(([k,l],i)=>{const x=239+i*58;s+=`<g data-metric="${k}" role="button" tabindex="0">${o.metric===k?`<rect x="${x}" y="${yy-3}" width="56" height="24" rx="8" fill="#2a2018"/>`:''}${T(x+28,yy+14,l,14.5,{a:'middle',w:o.metric===k?700:500,f:o.metric===k?ORG:MUT})}</g>`});
-  const iy=yy+58;
-  if(g.info)s+=T(35,iy,g.info,21,{w:700});else s+=T(35,iy,`Usually ${h.when}`,17,{f:MUT})+T(35,iy+26,'Tap a spot for how many and how much.',15,{f:'#5f6772'});
+  const wp=whenPhrase(g.ag,o.scale,o.metric);
+  const sent=wp?(o.metric==='amt'?`Most of what you spend on ${h.name} goes ${wp}.`:`${h.name} mostly happens ${wp}.`):'Not enough yet to see a pattern.';
+  wrapText(sent,31).forEach((ln,i)=>{s+=T(35,yy+52+i*23,ln,16.5,{w:600})});
+  const iy=yy+52+wrapText(sent,31).length*23+22;
+  if(g.info)s+=T(35,iy,g.info,21,{w:700});else s+=T(35,iy,'Tap a spot for how many and how much.',15,{f:'#5f6772'});
   return frame(s,`${st.short} ${h.name} by ${o.scale}, ${o.metric==='amt'?'rupees':'times'}`)}
 
 const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c)}</figcaption></figure>`;
