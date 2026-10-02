@@ -105,7 +105,8 @@ Viz 5 closed by Tarun ("done next"). The defaults below stand as drawn: default 
 | V6-3 | ~~The unit is a box that fills with each repeat.~~ **WITHDRAWN 2 Oct**: Tarun: "this is not working at all". |
 | V6-4 | Repeat purchases must communicate **how much and how many times, per day, per week and per month**, using **calendar hotspots** (glowing calendar cells, the style of the savings By-day grid). |
 Board: https://claude.ai/artifact/AbKgJ6jeARMKgeGMdtLGox (source archive/session-workfiles/viz6/viz6-repeat-purchases.html).
-Defaults, drawn but not decided: a habit picker (an "All repeats" entry plus each habit) in a dropdown; three scales, Day (hours of a typical day), Week (weekday by time of day), Month (a calendar of the last 30 days); a Times / ₹ switch for the glow; spending-orange glow; numbers only on tap; fewer than 3 repeats shows an empty state.
+| V6-5 | **The habit list is the starting screen** of the repeats view: each habit with its **repeat count (x22, x12, x7…)**, **ordered by most repeats**. **No "All repeats"** entry. Tapping a habit opens its hotspot calendar. |
+Defaults, drawn but not decided: three scales on a habit's calendar, Day (hours of a typical day), Week (weekday by time of day), Month (the last 30 days), opening on Month; a Times / ₹ switch for the glow; spending-orange glow; numbers on tap; fewer than 3 repeats shows an empty state.
 
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
@@ -113,7 +114,7 @@ Defaults, drawn but not decided: a habit picker (an "All repeats" entry plus eac
 3. Income split (spending vs savings) — DONE (V3-1…V3-11)
 4. Savings goal (how much, by when, actually saved) — DONE (V4-1…V4-21); also: add goal, pay into a goal, completed goals (parked requirement above)
 5. Unspent → saved — DONE (V5-1…V5-10)
-6. Small / repeat purchases — IN PROGRESS (V6-1, V6-2, V6-4 given; V6-3 withdrawn)
+6. Small / repeat purchases — IN PROGRESS (V6-1, V6-2, V6-4, V6-5 given; V6-3 withdrawn)
 7. Time patterns (e.g. nights)
 8. Subscriptions coming up (Fixed group)
 9. This week vs last
