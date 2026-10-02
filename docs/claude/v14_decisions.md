@@ -58,6 +58,11 @@ References he sent: iOS year-progress waffle (green filled grid, "299d left · 1
 | V4-5 | A goal's statistics offer a **day-wise split** option. |
 | V4-6 | **Month view uses amber and green boxes**: **amber = deducted from savings**, **green = added to savings**; **the more a box glows, the more was saved** (or taken). |
 | V4-7 | **Pay out of savings**: when paying, the user can choose a goal like choosing a category. **Screens and flow are for later**; only the data visualisation is for now. |
+| V4-8 | **No visualisation next to any goal** on the Savings page: a goal row is text (name, how far, ETA). |
+| V4-9 | The **main savings visualisation is a segmented ring**. With two goals the ring is **split into two sections sized by their amounts**, and each section is **filled in its own shade of green** by how much is saved. |
+| V4-10 | **"By day" is removed.** Statistics show **months only**, with a **toggle to move through the months** and see each one. |
+| V4-11 | Also show the **most saved months**. **Every visualisation is progressive**: one per screen, the next reached by scrolling. |
+Open: half ring (the earlier decision) or a full segmented ring (like his reference of a donut split into sections) — both drawn. Sections are sized by **target** amount (my reading of "based on the amounts").
 Board: https://claude.ai/artifact/X9aNwLv6pGGZb5sFcxiXEm (source archive/session-workfiles/viz4/viz4-savings-goals.html).
 Interpretation to confirm: the top gauge is all savings together, goals stacked below it; "fill from the bottom" on a half gauge means filling up from the arc's lower ends, or a half-height grid (two forms drawn).
 
@@ -70,7 +75,7 @@ Interpretation to confirm: the top gauge is all savings together, goals stacked 
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
 3. Income split (spending vs savings) — DONE (V3-1…V3-11)
-4. Savings goal (how much, by when, actually saved) — IN PROGRESS (V4-1…V4-7 given); also: add goal, pay into a goal, completed goals (parked requirement above)
+4. Savings goal (how much, by when, actually saved) — IN PROGRESS (V4-1…V4-11 given); also: add goal, pay into a goal, completed goals (parked requirement above)
 5. Unspent → saved
 6. Small / repeat purchases
 7. Time patterns (e.g. nights)
