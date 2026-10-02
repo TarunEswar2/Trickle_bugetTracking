@@ -76,9 +76,14 @@ Note: V4-12 puts two visualisations on one scrolling page. Kept to the one-visua
 Board: https://claude.ai/artifact/X9aNwLv6pGGZb5sFcxiXEm (source archive/session-workfiles/viz4/viz4-savings-goals.html).
 Interpretation to confirm: the top gauge is all savings together, goals stacked below it; "fill from the bottom" on a half gauge means filling up from the arc's lower ends, or a half-height grid (two forms drawn).
 
+### Flows (Tarun, 2 Oct)
+| # | Decision |
+|---|---|
+| F-1 | **"Pay toward a goal" means using the saved money to actually pay for, buy or experience the goal** (e.g. paying for the trip), **not a separate contribution payment.** It is **handled like categories while paying**: on the pay screen the goal is chosen the way a category is. This **merges two parked items** (pay toward a goal + V4-7 pay out of savings) into one flow. Money goes *into* goals through the splits (setup, week-end pop-up, new income), not through a payment flow. |
+
 ### Parked for the flow stage (after the visualisation queue; Tarun confirmed "we will work on the flow later")
-- Savings tab: add a goal, make a payment toward a goal, show completed goals (V4-4).
-- Pay from savings by choosing a goal like a category (V4-7).
+- Savings tab: add a goal (done, O-14), show completed goals (V4-4).
+- ~~Make a payment toward a goal~~ and ~~pay from savings by choosing a goal like a category (V4-7)~~ are one flow: **spend a goal's money to pay for it, chosen like a category (F-1)**. Screens still to draw.
 - Celebration screen triggers: wherever a goal is completed (pay screen, income arriving, manual top-up).
 
 ### Viz 5 — Unspent → saved (Tarun, 2 Oct; board published)
