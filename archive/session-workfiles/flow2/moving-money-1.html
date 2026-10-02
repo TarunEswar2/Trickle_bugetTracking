@@ -1,0 +1,267 @@
+<title>Trickle v14 — Moving Money</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a design board in the Viz 1 family. Sections A-F; each is a question, a gallery of dark phone
+   frames (rows = options, columns = students or moments), then what the drawing showed. Same tokens as Viz 1. */
+:root{
+  --bg:#f0f1ec; --surface:#fafaf7; --ink:#14181b; --ink2:#444c54; --muted:#727a83; --line:#d6d9d1;
+  --accent:#0d7a64; --accent-soft:#d9ece5; --amber:#a9680f;
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px;padding-block:40px 80px}
+@media (max-width:600px){.wrap{padding-inline:16px;padding-block:24px 56px}}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.12;margin:0}
+h1{font-size:clamp(30px,5vw,50px);font-weight:700;letter-spacing:-.02em}
+h2{font-size:clamp(23px,3vw,31px);font-weight:700;letter-spacing:-.01em}
+h3{font-size:18px;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lead{font-size:18px;color:var(--ink2);max-width:62ch}
+header.top{display:flex;flex-direction:column;gap:16px;padding-bottom:28px}
+section{display:flex;flex-direction:column;gap:18px;padding-block:40px;border-top:1px solid var(--line)}
+.sec-h{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.sec-h .k{font-family:var(--display);font-weight:700;font-size:clamp(23px,3vw,31px);color:var(--accent)}
+.q{color:var(--ink2)}
+ul.plain{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.logged{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.logged div{border-top:2px solid var(--ink);padding-top:10px}
+.logged b{display:block;font-family:var(--display);font-size:17px;margin-bottom:4px}
+.logged span{color:var(--ink2);font-size:15px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right}
+.opt{display:flex;flex-direction:column;gap:10px}
+.opt>h4{margin:0;font-size:15.5px;font-weight:600;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.opt>h4 b{font-family:var(--display);background:var(--ink);color:var(--bg);border-radius:5px;padding:1px 7px;font-size:13.5px}
+.opt>h4 span{color:var(--muted);font-weight:400}
+.gal{display:flex;flex-direction:column;gap:26px}
+.row{display:grid;grid-template-columns:repeat(6,minmax(170px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.row.four{grid-template-columns:repeat(4,minmax(200px,1fr))}
+.row.three{grid-template-columns:repeat(3,minmax(200px,300px))}
+.fg{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fg figcaption{font-size:13px;color:var(--muted);line-height:1.3}
+.fg figcaption b{color:var(--ink);font-weight:600}
+svg.ph{width:100%;height:auto;display:block;font-family:var(--body)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px 28px}
+.note{border-top:1px solid var(--line);padding-top:10px;font-size:15px;color:var(--ink2)}
+.note b{display:block;color:var(--ink);font-family:var(--display);font-size:16px;margin-bottom:3px}
+.demo{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:700px){.demo{grid-template-columns:minmax(0,1fr)}}
+.ctl{display:flex;flex-direction:column;gap:16px}
+.ctl .grp{display:flex;flex-direction:column;gap:7px}
+.ctl .lbl{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font:inherit;font-size:14.5px;font-weight:600;white-space:nowrap;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer}
+.chip:hover{border-color:var(--ink2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn{font:inherit;font-size:15px;font-weight:700;padding:10px 18px;border-radius:10px;border:0;background:var(--accent);color:#04231b;cursor:pointer;align-self:flex-start}
+.chip:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;max-width:420px;accent-color:var(--accent)}
+.small{font-size:13.5px;color:var(--muted)}
+.decide{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px}
+.dq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.dq h3{font-size:17px}
+.dq ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:5px;font-size:15px;color:var(--ink2);list-style:upper-alpha}
+.dq li.s{color:var(--ink)}
+.dq li.s::after{content:" suggested";font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-left:4px}
+
+svg.ph rect.bx{transition:fill .6s ease,transform .6s ease}
+@media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
+
+.lg{animation:lgin .9s ease .7s both}
+@keyframes lgin{from{opacity:0}to{opacity:1}}
+.static .lg{animation:none}
+@media (prefers-reduced-motion: reduce){.lg{animation:none}}
+
+svg.ph [data-open]{cursor:pointer}
+svg.ph [data-open]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+.lg.now{animation:none}
+
+svg.ph [data-go]{cursor:pointer}
+svg.ph [data-go]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+
+svg.ph [data-go]{cursor:pointer}
+.sw2{display:flex;gap:8px;flex-wrap:wrap}
+
+svg.ph rect.bx{transition:fill 1.3s ease}
+@media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
+
+svg.ph [data-go]{cursor:pointer}
+
+.sw3{display:flex;gap:8px;flex-wrap:wrap}
+
+
+
+
+
+.rt{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.rt table{min-width:960px;font-size:14px}
+.rt td{white-space:normal;vertical-align:top;min-width:150px}
+.rt td:first-child{min-width:130px;font-weight:600}
+.rt th{white-space:nowrap}
+.ref{display:inline-block;font-size:11.5px;letter-spacing:.04em;background:var(--accent-soft);color:var(--ink);border-radius:5px;padding:0 6px;margin-left:4px;font-weight:600}
+.tap3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.tap3 .box{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface)}
+.tap3 b{font-family:var(--display);display:block;margin-bottom:4px}
+.tap3 span{color:var(--ink2);font-size:15px}
+</style>
+
+<div id="defs"></div>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Trickle v14 · Flows, board 2 · 2 Oct 2026</div>
+  <h1>Moving money</h1>
+  <p class="lead">You can move money out of savings to somewhere else: another goal, a category, the buffer, or free savings (F-5). This is not paying. Nothing leaves your account; it only changes which pot the money belongs to. Same screen family as the pay screen: an amount, two tabs, boxes. Drawn for Vaishak (₹3k, 1 goal), Yash (₹9k, 2 goals) and Harsh (₹12k, 3 goals).</p>
+</header>
+
+<section style="border-top:0;padding-top:0">
+  <div class="sec-h"><h2>Already decided</h2></div>
+  <div class="logged">
+    <div><b>F-5 · Move money out of savings</b><span>To another goal, a category, the buffer, and so on.</span></div>
+    <div><b>F-2 · One screen, two tabs</b><span>An amount, Budget | Savings tabs, choices as boxes. Reused here.</span></div>
+    <div><b>V4-6 · Amber and green</b><span>Amber = taken out of savings. Green = added to savings.</span></div>
+    <div><b>V11 · Words first</b><span>Boxes carry a word; amounts on tap or on the record.</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">A</span><h2>Where it starts</h2></div>
+  <p class="q">From a goal's own screen: a "Move money" button, beside "Pay with this" (the pay flow). My reading; question 1 asks whether it should also start elsewhere.</p>
+  <div class="gal"><div class="opt"><div class="row" id="secA"></div></div></div>
+  <div class="notes" id="noteA"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">B</span><h2>The move screen, across the pool</h2></div>
+  <p class="q">"From" at the top, with what it holds. The amount, with the most it can move. Then "To" in two tabs: Budget (the buffer first, then categories) and Savings (free savings first, then the other goals). The goal being emptied is left out of the list.</p>
+  <div class="gal"><div class="opt"><div class="row three" id="secB"></div></div></div>
+  <div class="notes" id="noteB"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">C</span><h2>Changing the "From"</h2></div>
+  <p class="q">Tapping the "From" pill opens the same boxes, so the source can be any pot, not only a goal (question 2).</p>
+  <div class="gal"><div class="opt"><div class="row three" id="secC"></div></div></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">D</span><h2>Awkward moments</h2></div>
+  <div class="gal"><div class="opt"><div class="row three" id="secD"></div></div></div>
+  <div class="notes" id="noteD"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">E</span><h2>The confirmation</h2></div>
+  <p class="q">Same confirmation shape as a payment (F-4): what moved, from where, to where, when, and what it changes. A move cannot fail, so there is only the success.</p>
+  <div class="gal"><div class="opt"><div class="row three" id="secE"></div></div></div>
+  <div class="notes" id="noteE"></div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>For you to decide</h2></div>
+  <div class="decide">
+    <div class="dq"><h3>1. Where "Move money" lives</h3><ol><li class="s">On a goal's own screen, and in a category's screen for moving money back.</li><li>Only on a goal's screen.</li><li>Also a button on the Savings tab itself.</li></ol></div>
+    <div class="dq"><h3>2. What can be the source</h3><ol><li class="s">Any pot: a goal, free savings, the buffer or a category. Savings is where it starts.</li><li>Only savings, as you said.</li></ol></div>
+    <div class="dq"><h3>3. Money into a category</h3><ol><li class="s">Adds to its amount for this week only. A small "Make it every week" option changes its weekly amount.</li><li>Always changes the weekly amount.</li></ol></div>
+    <div class="dq"><h3>4. Taking everything out of a goal</h3><ol><li class="s">Ask "Keep Laptop, with nothing in it?" or "Remove it". Keeping leaves an empty goal.</li><li>Remove it automatically.</li></ol></div>
+    <div class="dq"><h3>5. What the confirmation says about dates</h3><ol><li class="s">Plain words: "Laptop is a month later. Trip is 2 months sooner."</li><li>No dates on the confirmation; see them on the goal.</li></ol></div>
+    <div class="dq"><h3>6. How it shows in a goal's month view</h3><ol><li class="s">An amber box on the day it left, a green box on the day it arrived in another goal (V4-6).</li><li>It is not shown, since it is not a payment.</li></ol></div>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+const PBG='#0b0d10',EDGE='#2b3038',DIM='#1b2026',INK='#f2f4f5',MUT='#8f97a1',GRN='#62dcb4',AMB='#e3a43f',ORG='#f08a3c',BUF='#9aa4b0';
+const COL=['#5aa9ff','#b48cff','#ff7eb6','#f2d65b','#4fd1e6'],REST='#f6b27c',GG=['#62dcb4','#3fae8c','#9be8cf'];
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const T=(x,y,s,sz,o={})=>`<text x="${x}" y="${y}" font-size="${sz}" font-weight="${o.w||400}" fill="${o.f||INK}" text-anchor="${o.a||'start'}">${esc(s)}</text>`;
+const R=(x,y,w,h,r,f,o='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${f}" ${o}/>`;
+const frame=(inner,label)=>`<svg class="ph" viewBox="0 0 390 844" role="img" aria-label="${esc(label)}"><rect x="1" y="1" width="388" height="842" rx="46" fill="${PBG}" stroke="${EDGE}" stroke-width="2"/>${inner}<rect x="150" y="16" width="90" height="24" rx="12" fill="#000"/></svg>`;
+const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c||'')}</figcaption></figure>`;
+const btn=(y,label,pri=true)=>pri?R(35,y,320,54,16,GRN)+T(195,y+34,label,17,{a:'middle',w:700,f:'#04231b'}):R(35,y,320,54,16,'none',`stroke="${EDGE}" stroke-width="1.5"`)+T(195,y+34,label,17,{a:'middle',w:600,f:INK});
+const chip=(x,y,txt)=>R(x,y,128,34,17,'#262c33')+T(x+64,y+23,txt,16.5,{a:'middle',w:700});
+const catCol=i=>i<5?COL[i]:REST;
+const ST={
+ V:{n:'Vaishak',cats:[['Food','plenty'],['Travel','some']],goals:[['Phone','40% there',2400,'₹2,400']]},
+ Y:{n:'Yash',cats:[['Food','some'],['Travel','plenty'],['Phone & data','plenty'],['College & study','low'],['Chai & coffee','some'],['Snacks','plenty'],['Outings','low']],goals:[['Laptop','35% there',10500,'₹10,500'],['Trip','70% there',4200,'₹4,200']]},
+ H:{n:'Harsh',cats:[['Food','some'],['Travel','plenty'],['Phone & data','plenty'],['College & study','some'],['Personal care','plenty'],['Other basics','plenty'],['Chai & coffee','low'],['Snacks','some'],['Groceries','plenty'],['Eating out','low'],['Food delivery','empty'],['Petrol','some'],['Bike upkeep','plenty'],['Wi-Fi & data','plenty'],['Laundry','plenty'],['Movies','some'],['Games','plenty'],['Outings','low']],goals:[['Bike','20% there',12000,'₹12,000'],['Laptop','45% there',18000,'₹18,000'],['Trip','60% there',6000,'₹6,000']]}
+};
+function grid(x0,y0,box,gap,liq,ghost,col,gcol){let s='';for(let i=0;i<100;i++){const row=9-Math.floor(i/10),c=i%10,x=x0+c*(box+gap),y=y0+row*(box+gap);
+  if(i<liq)s+=R(x,y,box,box,5,col);else if(i<liq+ghost)s+=`<rect x="${x+.8}" y="${y+.8}" width="${box-1.6}" height="${box-1.6}" rx="5" fill="none" stroke="${gcol}" stroke-width="1.6" stroke-dasharray="4 3"/>`;else s+=R(x,y,box,box,5,DIM)}return s}
+
+/* boxes */
+function tiles(list,sel,y0,rowsMax){let o='';const cw=156,ch=46,gx=8,gy=8;const rows=rowsMax||Math.floor((470-y0+gy)/(ch+gy));const max=rows*2;let shown=0;
+  list.forEach(t=>{if(shown>=max)return;const c=shown%2,r=Math.floor(shown/2),x=35+c*(cw+gx),y=y0+r*(ch+gy),on=t.n===sel;shown++;
+    o+=R(x,y,cw,ch,12,on?t.col:DIM,on?'opacity=".22"':'')+(on?R(x,y,cw,ch,12,'none',`stroke="${t.col}" stroke-width="2"`):'')+`<circle cx="${x+16}" cy="${y+16}" r="5.5" fill="${t.col}"/>`+T(x+28,y+21,t.n,13.5,{w:700})+T(x+16,y+38,t.w,11.5,{f:t.g?GRN:MUT})});
+  const more=list.length-shown;if(more>0)o+=T(35,y0+rows*(ch+gy)+12,'+ '+more+' more, scroll or search',12.5,{f:MUT});return o}
+const destList=(k,tab,srcGoal)=>{const s=ST[k];if(tab==='b')return [{n:'Buffer',w:'this week',col:BUF}].concat(s.cats.map((c,i)=>({n:c[0],w:c[1],col:catCol(i)})));
+  return [{n:'Free savings',w:'not given yet',col:GRN,g:1}].concat(s.goals.filter(g=>g[0]!==srcGoal).map((g,i)=>({n:g[0],w:g[1],col:GG[(i+1)%3],g:1})))};
+const keypad=(y0)=>{let o='';['1','2','3','4','5','6','7','8','9','','0','⌫'].forEach((kk,i)=>{const c=i%3,r=Math.floor(i/3),x=195+(c-1)*100,y=y0+r*42;if(kk)o+=T(x,y+8,kk,22,{a:'middle',f:INK,w:500})});return o};
+function move(k,src,amt,tab,sel,note){const s=ST[k],g=s.goals.find(x=>x[0]===src);
+  let o=T(35,76,'Move money',15,{f:MUT,w:600});
+  o+=R(35,90,320,46,14,DIM)+T(52,108,'FROM',10.5,{f:MUT,w:600})+`<circle cx="53" cy="125" r="5.5" fill="${GRN}"/>`+T(66,129,src+' · '+g[3]+' saved',14,{w:700})+T(341,121,'›',20,{a:'end',f:MUT});
+  o+=T(35,188,'₹ '+amt,40,{w:700})+T(35,208,'Most you can move: '+g[3],12.5,{f:MUT});
+  const w=k==='H'?118:156;[['Budget','b'],['Savings','s']].forEach((t,i)=>{const on=t[1]===tab,x=35+i*(w+8);o+=R(x,222,w,32,16,on?INK:'none',on?'':`stroke="${EDGE}" stroke-width="1.5"`)+T(x+w/2,243,t[0],13.5,{a:'middle',w:700,f:on?'#111':MUT})});
+  if(k==='H')o+=R(311,222,44,32,16,'none',`stroke="${EDGE}" stroke-width="1.5"`)+T(333,243,'⌕',15,{a:'middle',f:MUT});
+  o+=T(35,274,'TO',10.5,{f:MUT,w:600});
+  o+=tiles(destList(k,tab,src),sel,282,3);
+  if(note)o+=T(35,490,note,13.5,{f:AMB,w:600});
+  o+=keypad(524);
+  return frame(o+btn(696,note?'Move '+g[3]:'Move ₹'+amt),k+' move')}
+
+/* A: goal screen entry */
+const goalScr=()=>{let o=T(35,76,'Savings',17,{f:MUT})+T(35,112,'Laptop',30,{w:700})+T(35,142,'Savings goal',16,{f:MUT});
+  o+=grid(70,170,22,3.5,35,0,GG[0],GG[0])+chip(35,452,'1 box = ₹300')+T(35,516,'Ready Dec 2028',18,{w:600})+T(35,542,'at ₹1,160 a month',14.5,{f:MUT});
+  o+=R(35,590,320,54,16,GRN)+T(195,624,'Move money',17,{a:'middle',w:700,f:'#04231b'})+R(35,654,320,46,16,'none',`stroke="${EDGE}" stroke-width="1.5"`)+T(195,683,'Pay with this',15.5,{a:'middle',w:600});
+  return frame(o+`<line x1="0" y1="770" x2="390" y2="770" stroke="${EDGE}"/>`+['Home','Income','Spending','Savings','Insights'].map((t,i)=>T(39+78*i,808,t,14,{a:'middle',f:i===3?INK:MUT,w:i===3?700:400})).join(''),'Goal screen')};
+document.getElementById('secA').innerHTML=fg(goalScr(),'Laptop (Yash)','Move money and Pay with this');
+document.getElementById('noteA').innerHTML=`<div class="note"><b>Two different actions</b>"Pay with this" is the pay flow: money leaves your account. "Move money" only reassigns it between pots.</div><div class="note"><b>Same place as the goal's stats</b>The goal's screen already shows its grid, scale and date, so the buttons sit under them.</div>`;
+
+/* B */
+document.getElementById('secB').innerHTML=[fg(move('V','Phone','300','b','Food'),'Vaishak','Phone → Food'),fg(move('Y','Laptop','1,000','s','Trip'),'Yash','Laptop → Trip'),fg(move('H','Laptop','500','b','Buffer'),'Harsh','Laptop → Buffer')].join('');
+document.getElementById('noteB').innerHTML=`<div class="note"><b>Budget tab: buffer first</b>The buffer is the first box, because it is where spare money naturally goes. Then the categories.</div><div class="note"><b>Savings tab: free savings first</b>Savings not given to any goal, then the other goals. The source goal is left out.</div><div class="note"><b>The cap is on screen</b>"Most you can move: ₹10,500" sits under the amount.</div><div class="note"><b>Vaishak has one goal</b>His Savings tab offers only free savings, so Budget is where his money goes.</div>`;
+
+/* C picker for From */
+function fromPick(){let o=strip(move('Y','Laptop','1,000','s','Trip'));o+=R(1,170,388,673,36,'#14181b')+R(1,170,388,2,0,EDGE)+T(35,222,'Move from',22,{w:700});
+  o+=[['Budget',0],['Savings',1]].map((t,i)=>R(35+i*164,240,156,32,16,t[1]?INK:'none',t[1]?'':`stroke="${EDGE}" stroke-width="1.5"`)+T(35+i*164+78,261,t[0],13.5,{a:'middle',w:700,f:t[1]?'#111':MUT})).join('');
+  const list=[{n:'Free savings',w:'not given yet',col:GRN,g:1},{n:'Laptop',w:'₹10,500',col:GG[0],g:1},{n:'Trip',w:'₹4,200',col:GG[1],g:1}];
+  o+=tiles(list,'Laptop',290,3);return frame(o,'Move from picker')}
+function strip(svg){return svg.replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'').replace(/<rect x="1" y="1"[^>]*\/>/,'').replace(/<rect x="150"[^>]*\/>/,'')}
+document.getElementById('secC').innerHTML=fg(fromPick(),'Move from','Savings tab selected, Laptop picked');
+
+/* D */
+const over=()=>move('Y','Laptop','12,000','s','Trip','Laptop has ₹10,500 saved.');
+const emptied=()=>{let o=grid(70,176,22,3.5,0,35,GG[0],AMB)+T(35,76,'Moving all of Laptop',17,{f:MUT})+T(35,112,'₹10,500 · Laptop → Trip',22,{w:600})+T(35,144,'Laptop will have nothing in it',16,{f:AMB,w:600});
+  o+=chip(35,458,'1 box = ₹300')+R(35,512,320,128,18,DIM)+T(55,548,'Keep Laptop, with nothing in it?',16.5,{w:700})+T(55,574,'Or remove it from your goals.',14.5,{f:MUT})+R(55,592,120,34,17,GRN)+T(115,614,'Keep it',14,{a:'middle',w:700,f:'#04231b'})+R(185,592,120,34,17,'none',`stroke="${MUT}" stroke-width="1.5"`)+T(245,614,'Remove it',14,{a:'middle',w:600});
+  return frame(o+btn(706,'Move ₹10,500'),'Emptying a goal')};
+const intoCat=()=>{let o=T(35,76,'Moving to Outings',17,{f:MUT})+T(35,112,'₹300 · Laptop → Outings',22,{w:600})+T(35,144,'This week',16,{f:MUT});
+  o+=grid(70,176,22,3.5,18,10,REST,REST)+chip(35,458,'1 box = ₹4')+T(35,532,'Outings gets more this week.',16,{w:600})+R(35,566,320,46,16,'none',`stroke="${GRN}" stroke-width="1.5"`)+T(195,595,'Make it every week',15,{a:'middle',w:700,f:GRN});
+  return frame(o+btn2('Back','Move ₹300'),'Into a category')};
+const btn2=(l1,l2)=>R(35,706,150,54,16,'none',`stroke="${EDGE}" stroke-width="1.5"`)+T(110,739,l1,16,{a:'middle',w:600})+R(195,706,160,54,16,GRN)+T(275,739,l2,17,{a:'middle',w:700,f:'#04231b'});
+document.getElementById('secD').innerHTML=[fg(over(),'1 · More than is there','capped, said in amber words'),fg(emptied(),'2 · Emptying a goal','asks if it stays'),fg(intoCat(),'3 · Into a category','this week, with a choice')].join('');
+document.getElementById('noteD').innerHTML=`<div class="note"><b>Capped, not blocked</b>Typing more than the goal holds shows what it holds. "Move ₹10,500" moves everything instead of failing.</div><div class="note"><b>Emptying is a decision</b>A goal with nothing in it can stay or go; it asks once.</div><div class="note"><b>Into a category: this week</b>The default adds to this week only. "Make it every week" changes its weekly amount.</div>`;
+
+/* E */
+function conf(rows,line1,line2,amt){let o=`<circle cx="195" cy="150" r="46" fill="none" stroke="${GRN}" stroke-width="5"/><path d="M174 151 l15 15 l29 -33" fill="none" stroke="${GRN}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`;
+  o+=T(195,244,'Moved',30,{a:'middle',w:700,f:GRN})+T(195,298,amt,46,{a:'middle',w:700});
+  o+=R(35,326,320,182,18,DIM);rows.forEach((r,i)=>{const y=356+i*42;o+=T(55,y+8,r[0],13,{f:MUT})+T(341,y+8,r[1],14,{a:'end',w:600});if(i<rows.length-1)o+=`<line x1="55" y1="${y+22}" x2="341" y2="${y+22}" stroke="${EDGE}"/>`});
+  o+=T(35,548,line1,16,{w:600});if(line2)o+=T(35,574,line2,16,{w:600});
+  return frame(o+btn(706,'Done'),'Moved')}
+document.getElementById('secE').innerHTML=[fg(conf([['From','Laptop'],['To','Trip'],['When','2 Oct, 6:10 pm'],['Kind','Savings to savings']],'Laptop is a month later.','Trip is 2 months sooner.','₹1,000'),'1 · Goal to goal','Yash'),fg(conf([['From','Phone'],['To','Food'],['When','2 Oct, 6:20 pm'],['Kind','Savings to budget']],'Food gets ₹300 more this week.','Phone is a month later.','₹300'),'2 · Goal to category','Vaishak'),fg(conf([['From','Laptop'],['To','Buffer'],['When','2 Oct, 6:30 pm'],['Kind','Savings to budget']],'Your buffer is ₹500 bigger this week.','Laptop is a month later.','₹500'),'3 · Goal to buffer','Harsh')].join('');
+document.getElementById('noteE').innerHTML=`<div class="note"><b>Same shape as a payment</b>A green check, "Moved", the amount, a small record, then plain sentences about what changed.</div><div class="note"><b>What it does to the goal</b>Taking from a goal pushes its date later; giving to one brings it closer. Said in words, not as a warning.</div><div class="note"><b>It is a record, so amounts are shown</b>Like the payment confirmation (V11).</div>`;
+})();
+</script>

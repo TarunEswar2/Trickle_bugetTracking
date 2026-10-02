@@ -83,8 +83,11 @@ Interpretation to confirm: the top gauge is all savings together, goals stacked 
 | F-2 | **"How much" and "What is it for" are merged into one screen.** What it is for is shown in **two tabs, Budget | Savings** (layout C), with **categories and goals drawn as boxes** (tiles). This settles the step-order and chooser-layout questions on the pay flow board. |
 | F-3 | **The pay screen handles all overspending and not-enough-money edge cases** (no separate steps or screens for them). Drawn: over a category (buffer, then other categories equally, then savings, per O-23), a goal with too little saved (same order), and a low account balance as a warning; "Where it comes from" opens the split. |
 | F-4 | **A final, nice confirmation screen with all the relevant data, shown as a success or a failure.** Drawn: amount, to whom, what for, where it came from, when, UPI reference; success green, failure amber with the reason and "nothing was taken from your budget". |
+| F-5 | **The user can move money out of savings to other parts**: to **another savings goal**, to **categories**, to **the buffer**, "etc". A **Move money** flow, separate from paying. My reading, to confirm: it is reached from a goal's screen; "etc" also covers free (unassigned) savings and moving between other pots. |
 
 Pay screen flow board (2 Oct): https://claude.ai/artifact/LhuVGnFaj29oBbg3cYoX3u (source `archive/session-workfiles/flow1/pay-flow-1.html`). Board updated for F-2, F-3, F-4. Questions still waiting (eight on the board): what Pay does (hand-off to the UPI app assumed), box layout (2 columns), the goal pay screen look, not-enough-saved handling, when a goal is finished, money left in a finished goal.
+
+Moving money board (2 Oct): https://claude.ai/artifact/H8t1Ep7UbonszCB2kbk4Xn (source `archive/session-workfiles/flow2/moving-money-1.html`). Six questions waiting: where Move money lives, what can be the source, money into a category (this week vs weekly amount), emptying a goal, what the confirmation says about dates, how moves show in the month view.
 
 ### Parked for the flow stage (after the visualisation queue; Tarun confirmed "we will work on the flow later")
 - Savings tab: add a goal (done, O-14), show completed goals (V4-4).
