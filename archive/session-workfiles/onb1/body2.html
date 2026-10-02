@@ -49,18 +49,18 @@
 </section>
 
 <section>
-  <div class="sec-h"><span class="k">E</span><h2>A weekly amount for each, as a slider</h2></div>
-  <p class="q">The grid is the whole weekly budget. Each category you give money to is coloured into it from the bottom. A slider cannot go past what is left, and when nothing is left, it says so. The selected row shows its slider; the others are one tap away.</p>
-  <div class="gal"><div class="opt"><div class="row three" id="secE"></div></div></div>
+  <div class="sec-h"><span class="k">E</span><h2>Share the weekly budget: preset, equal or manual</h2></div>
+  <p class="q">Three ways to split the weekly budget, picked at the top. <b>Preset</b> splits it by a recommended split (or the one you set last time). <b>Equal</b> gives every category the same. <b>Manual</b> is a slider per category, or tap the amount to type it. A <b>Buffer</b> category is always there at the top of the grid in grey: it is whatever you have not given away, so a slider can never go past the budget.</p>
+  <div class="gal"><div class="opt"><div class="row three" id="secE"></div></div><div class="opt"><div class="row three" id="secE2"></div></div></div>
   <div class="notes" id="noteE"></div>
 </section>
 
 <section>
-  <div class="sec-h"><span class="k">E2</span><h2>Try the sliders</h2></div>
-  <p class="q">Move any slider. The grid fills in that category's colour, and the others cannot take more than what is left.</p>
+  <div class="sec-h"><span class="k">E2</span><h2>Try it</h2></div>
+  <p class="q">Switch between Preset, Equal and Manual. Drag a slider, or type an amount in the box: it moves to Manual, the grid fills in that colour, and the buffer takes what is left.</p>
   <div class="demo">
     <div id="demo"></div>
-    <div class="ctl"><div class="grp"><div class="lbl">Student</div><div class="chips" id="cs"></div></div><div class="grp"><div class="lbl">Weekly amounts</div><div id="sl" style="display:flex;flex-direction:column;gap:8px"></div></div><div class="small" id="dnote"></div></div>
+    <div class="ctl"><div class="grp"><div class="lbl">How to split</div><div class="chips" id="ms"></div></div><div class="grp"><div class="lbl">Student</div><div class="chips" id="cs"></div></div><div class="grp"><div class="lbl">Weekly amounts</div><div id="sl" style="display:flex;flex-direction:column;gap:8px"></div></div><div class="small" id="dnote"></div></div>
   </div>
 </section>
 
@@ -109,6 +109,8 @@
     <div class="dq"><h3>8. Savings and goals: how often</h3><ol><li class="s">The savings amount is set aside each month, so every goal can show a date (ETA).</li><li>A one-time amount now; dates only appear once savings repeat.</li></ol></div>
     <div class="dq"><h3>9. Goals in setup</h3><ol><li class="s">Each goal asks name, amount and by when; the date is optional and so is having a goal at all. Goals can be added later in Savings.</li><li>At least one goal required.</li></ol></div>
     <div class="dq"><h3>10. "No budget" path</h3><ol><li class="s">Savings split, then step 6; Trickle just tracks spending, then offers a weekly budget after four weeks.</li><li>Savings and goals only, with no later offer.</li></ol></div>
+    <div class="dq"><h3>11b. The buffer</h3><ol><li class="s">Always there, grey, and it is whatever is left after the categories (starts at about 10%). It is changed by changing the others.</li><li>A buffer you set yourself with its own slider, with a minimum.</li></ol></div>
+    <div class="dq"><h3>11c. What "Preset" means</h3><ol><li class="s">A recommended split on first setup, and the split you used last time after that.</li><li>Only your own saved split.</li></ol></div>
     <div class="dq"><h3>11. Add a goal</h3><ol><li class="s">At the bottom, beside Finish, in thumb reach; a large card when there are no goals yet.</li><li>A dashed row at the end of the goal list.</li><li>A floating round button.</li></ol></div>
     <div class="dq"><h3>12. New income</h3><ol><li class="s">A prompt on Home with no amount in it; the split, sliders and goals each start from last time. "Later" asks again at next open.</li><li>Auto-apply last time's split and only tell you.</li></ol></div>
     <div class="dq"><h3>13. When money lands mid-week</h3><ol><li class="s">The new budget starts at once, shared over the weeks left in the month.</li><li>It starts at the next Monday.</li></ol></div>
@@ -149,7 +151,7 @@ const perm=()=>{let s=step(3)+T(35,140,'What Trickle asks for',26,{w:700})+T(35,
 const ST={
  V:{n:'Vaishak',bal:3000,pct:10,wk:600,cats:[['Canteen & mess',400],['Bus & metro',150]],goals:[['Phone',6000,300,20]]},
  Y:{n:'Yash',bal:9000,pct:20,wk:1700,cats:[['Canteen & mess',450],['Chai & coffee',150],['Snacks',150],['Bus & metro',200],['Mobile recharge',100],['Outings',300],['Stationery',100]],goals:[['Laptop',30000,1200,26],['Trip',6000,600,8]]},
- H:{n:'Harsh',bal:12000,pct:25,wk:2100,cats:[['Canteen & mess',300],['Chai & coffee',100],['Snacks',120],['Groceries',180],['Eating out',200],['Food delivery',100],['Petrol',220],['Bike upkeep',60],['Mobile recharge',90],['Wi-Fi & data',60],['Laundry',50],['Books',100],['Printouts',40],['Movies',100],['Games',50],['Outings',150],['Clothes',120],['Gifts',60]],goals:[['Bike',60000,1500,40],['Laptop',40000,1000,38],['Trip',10000,500,null]]}
+ H:{n:'Harsh',bal:12000,pct:25,wk:2100,cats:[['Canteen & mess',300],['Chai & coffee',100],['Snacks',120],['Groceries',180],['Eating out',200],['Food delivery',100],['Petrol',120],['Bike upkeep',60],['Mobile recharge',90],['Wi-Fi & data',60],['Laundry',50],['Books',100],['Printouts',40],['Movies',100],['Games',50],['Outings',150],['Clothes',120],['Gifts',60]],goals:[['Bike',60000,1500,40],['Laptop',40000,1000,38],['Trip',10000,500,null]]}
 };
 const sv=s=>Math.round(s.bal*s.pct/100);
 
@@ -169,11 +171,11 @@ const split=(k,savOnly)=>{const s=ST[k],a=sv(s),b=s.bal-a;
 const FIFTY=[['Food',['Canteen & mess','Chai & coffee','Snacks','Groceries','Eating out','Food delivery','Juice & shakes']],['Getting around',['Bus & metro','Auto & cab','Petrol','Bike upkeep','Parking','Train & bus tickets']],['Phone & home',['Mobile recharge','Wi-Fi & data','Rent','Hostel fee','Electricity','Laundry','Toiletries']],['College',['College fees','Books','Stationery','Printouts','Online courses','Exam fees','Project costs']],['Fun',['Movies','Games','Streaming','Music','Outings','Parties','Hobbies','Sports']],['Shopping',['Clothes','Shoes','Accessories','Gadgets','Gifts','Festivals']],['Health & self',['Medicines','Doctor','Gym','Haircut & salon','Skincare']],['Money & other',['Loan or EMI','Insurance','Donations','Pets']]];
 const FLAT=FIFTY.flatMap(g=>g[1]);
 const REC=['Canteen & mess','Chai & coffee','Snacks','Bus & metro','Auto & cab','Mobile recharge','Outings','Stationery'];
-const picker=k=>{const s=ST[k],sel=s.cats.map(c=>c[0]);
+const BUF0='#9aa4b0';const picker=k=>{const s=ST[k],sel=s.cats.map(c=>c[0]);
   let o=step(4)+T(35,134,'What do you spend on?',23,{w:700})+T(35,162,sel.length+' picked of 50',15,{f:MUT});
   o+=R(35,180,230,40,20,'none',`stroke="${EDGE}" stroke-width="1.5"`)+T(55,206,'Search',15,{f:'#5f6772'})+R(275,180,80,40,20,GRN)+T(315,206,'+ Own',14.5,{a:'middle',w:700,f:'#04231b'});
   const order=sel.concat(REC.filter(r=>!sel.includes(r))).concat(FLAT.filter(f=>!sel.includes(f)&&!REC.includes(f)));
-  let x=35,y=246;order.forEach(n=>{const w=Math.round(30+n.length*7.9);if(x+w>355){x=35;y+=44}if(y>600)return;const on=sel.includes(n),c=on?catCol(sel.indexOf(n)):null;
+  o+=R(35,246,134,36,18,BUF0,'opacity=".2"')+R(35,246,134,36,18,'none',`stroke="${BUF}" stroke-width="1.5"`)+T(102,270,'Buffer · always',14,{a:'middle',w:700});let x=177,y=246;order.forEach(n=>{const w=Math.round(30+n.length*7.9);if(x+w>355){x=35;y+=44}if(y>600)return;const on=sel.includes(n),c=on?catCol(sel.indexOf(n)):null;
     o+=R(x,y,w,36,18,on?c:'none',on?'opacity=".22"':`stroke="${EDGE}" stroke-width="1.5"`);if(on)o+=R(x,y,w,36,18,'none',`stroke="${c}" stroke-width="1.5"`);o+=T(x+w/2,y+24,n,14,{a:'middle',w:on?700:500,f:on?INK:MUT});x+=w+8});
   return frame(o+T(195,650,'See all 50',15.5,{a:'middle',f:GRN,w:700})+btn(706,'Next'),s.n+' pick categories')};
 
@@ -184,20 +186,26 @@ function gridSvg(x0,y0,box,gap,parts,total,colorAt,selI){ /* parts: [{amt,color}
     s+=R(x0+col*(box+gap),y0+row*(box+gap),box,box,5,f,'')}
   return s}
 const chip=(x,y,txt)=>R(x,y,128,34,17,'#262c33')+T(x+64,y+23,txt,16.5,{a:'middle',w:700});
-function amountsSvg(s,vals,sel,label){
-  const tot=vals.reduce((a,b)=>a+b,0),left=s.wk-tot,box=s.wk/100;
-  let o=step(4)+T(35,130,'Share out your week',23,{w:700});
-  o+=gridSvg(60,148,22,3.5,s.cats.map((c,i)=>({amt:vals[i],color:catCol(i)})),s.wk,0,sel);
-  o+=chip(35,414,'1 box = '+money(Math.round(box)))+T(355,437,left>0?money(left)+' spare':'Nothing spare',16,{a:'end',w:700,f:left>0?GRN:AMB});
-  const i=sel,cap=vals[i]+left,fr=cap?vals[i]/cap:0;
-  o+=R(35,464,320,92,16,DIM)+`<circle cx="55" cy="488" r="6" fill="${catCol(i)}"/>`+T(70,494,s.cats[i][0],16.5,{w:700})+T(341,494,money(vals[i]),18,{a:'end',w:700});
-  o+=R(55,522,280,8,4,'#2c333b')+R(55,522,Math.max(8,280*fr),8,4,catCol(i))+`<circle cx="${55+280*fr}" cy="526" r="12" fill="#fff"/>`;
-  o+=T(55,548,left>0?'Up to '+money(cap)+' for this one':'Nothing left to give',12.5,{f:left>0?MUT:AMB});
-  let y=578,shown=0;s.cats.forEach((c,j)=>{if(j===i||shown>=3)return;shown++;o+=`<circle cx="45" cy="${y+8}" r="5" fill="${catCol(j)}"/>`+T(60,y+13,c[0],14.5,{f:INK})+T(355,y+13,money(vals[j]),14.5,{a:'end',w:600});y+=28});
-  const more=s.cats.length-1-shown;if(more>0)o+=T(35,y+13,'+ '+more+' more, tap to open',13,{f:MUT});
-  return frame(o+btn(706,'Next'),s.n+' weekly sliders')}
-const amounts=(k,sel)=>{const s=ST[k];return amountsSvg(s,s.cats.map(c=>c[1]),sel,'')};
-
+const BUF='#9aa4b0';
+const alloc=(s,mode)=>{const n=s.cats.length,sum=s.cats.reduce((a,c)=>a+c[1],0),r5=x=>Math.round(x/5)*5;if(mode==='equal')return s.cats.map(()=>r5(.9*s.wk/n));if(mode==='preset')return s.cats.map(c=>r5(c[1]/sum*.9*s.wk));return s.cats.map(c=>c[1])};
+function amountsSvg(s,vals,sel,mode,typing){
+  const tot=vals.reduce((a,b)=>a+b,0),left=s.wk-tot,box=s.wk/100,pc=v=>Math.round(v/s.wk*100)+'%';
+  let o=step(4)+T(35,124,'Share out your week',20,{w:700});
+  [['preset','Preset'],['equal','Equal'],['manual','Manual']].forEach((m,i)=>{const on=m[0]===mode,x=35+i*108;o+=R(x,136,104,34,17,on?INK:'none',on?'':`stroke="${EDGE}" stroke-width="1.5"`)+T(x+52,158,m[1],14.5,{a:'middle',w:700,f:on?'#111':MUT})});
+  o+=gridSvg(81,182,20,3,s.cats.map((c,i)=>({amt:vals[i],color:catCol(i)})).concat([{amt:left,color:BUF}]),s.wk,0,sel);
+  o+=chip(35,422,'1 box = '+money(Math.round(box)))+T(355,445,'Buffer '+money(left),16,{a:'end',w:700,f:left>0?INK:AMB});
+  if(mode==='manual'){const i=sel,cap=vals[i]+left,fr=cap?vals[i]/cap:0;
+    o+=R(35,470,320,88,16,DIM)+`<circle cx="55" cy="494" r="6" fill="${catCol(i)}"/>`+T(70,500,s.cats[i][0],16.5,{w:700});
+    o+=typing?R(255,478,88,30,8,'none',`stroke="${GRN}" stroke-width="2"`)+T(266,499,'₹ '+vals[i]+'|',16.5,{w:700}):T(341,500,money(vals[i]),18,{a:'end',w:700});
+    o+=R(55,526,280,8,4,'#2c333b')+R(55,526,Math.max(8,280*fr),8,4,catCol(i))+`<circle cx="${55+280*fr}" cy="530" r="12" fill="#fff"/>`;
+    o+=T(55,552,typing?'Type an amount, or drag the slider':(left>0?'Up to '+money(cap)+' for this one':'Buffer is empty. Lower another to free some.'),12.5,{f:left>0||typing?MUT:AMB});
+    let y=572,shown=0;s.cats.forEach((c,j)=>{if(j===i||shown>=2)return;shown++;o+=`<circle cx="45" cy="${y+8}" r="5" fill="${catCol(j)}"/>`+T(60,y+13,c[0],14.5)+T(355,y+13,money(vals[j]),14.5,{a:'end',w:600});y+=28});
+    const more=s.cats.length-1-shown;if(more>0)o+=T(35,y+13,'+ '+more+' more, tap to open',13,{f:MUT})}
+  else{let y=476;s.cats.slice(0,5).forEach((c,j)=>{o+=`<circle cx="45" cy="${y+8}" r="5" fill="${catCol(j)}"/>`+T(60,y+13,c[0],14.5)+T(285,y+13,pc(vals[j]),13.5,{a:'end',f:MUT})+T(355,y+13,money(vals[j]),14.5,{a:'end',w:600});y+=30});
+    const more=s.cats.length-5;if(more>0)o+=T(35,y+13,'+ '+more+' more',13,{f:MUT})}
+  o+=`<line x1="35" y1="650" x2="355" y2="650" stroke="${EDGE}"/><circle cx="45" cy="668" r="5" fill="${BUF}"/>`+T(60,673,'Buffer',14.5,{w:700})+T(285,673,pc(left),13.5,{a:'end',f:MUT})+T(355,673,money(left),14.5,{a:'end',w:700});
+  return frame(o+btn(706,'Next'),s.n+' weekly amounts, '+mode)}
+const amounts=(k,sel,mode,typing)=>{const s=ST[k];return amountsSvg(s,alloc(s,mode||'manual'),sel,mode||'manual',typing)};
 const own=()=>frame(picker('Y').replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'').replace(/<rect x="1" y="1"[^>]*\/>/,'').replace(/<rect x="150"[^>]*\/>/,'')+R(1,430,388,413,36,'#14181b')+R(1,430,388,2,0,EDGE)+T(35,480,'Create your own',22,{w:700})+R(35,504,320,48,12,'none',`stroke="${GRN}" stroke-width="1.5"`)+T(52,535,'Metro pass',17)+T(35,590,'Starting weekly amount',14,{f:MUT})+R(35,602,320,48,12,'none',`stroke="${EDGE}" stroke-width="1.5"`)+T(52,633,'₹ 120',17)+btn(706,'Add'),'Create your own');
 
 const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -230,8 +238,9 @@ document.getElementById('secB').innerHTML=[fg(method(0),'Pick categories','goes 
 document.getElementById('noteB').innerHTML=`<div class="note"><b>Swapped</b>This question now comes before the balance split.</div><div class="note"><b>Two equal cards</b>Neither is a small link under the other.</div>`;
 document.getElementById('secC').innerHTML=['V','Y','H'].map(k=>fg(split(k),ST[k].n,'balance '+money(ST[k].bal))).join('');
 document.getElementById('secD').innerHTML=['V','Y','H'].map(k=>fg(picker(k),ST[k].n,ST[k].cats.length+' picked')).join('');
-document.getElementById('secE').innerHTML=[fg(amounts('V',0),'Vaishak','₹'+(600-550)+' spare'),fg(amounts('Y',5),'Yash','Outings selected'),fg(amounts('H',6),'Harsh','nothing spare, Petrol selected')].join('');
-document.getElementById('noteE').innerHTML=`<div class="note"><b>The limit is the grid</b>A slider tops out at what is left, so you can never plan more than the budget, and the grid shows it filling.</div><div class="note"><b>Same grid, same scale chip</b>The "1 box = ₹X" chip is the large one, per V3-11, with what is spare beside it.</div><div class="note"><b>18 categories</b>The picked one has the slider; the rest are a list under it, and a tap on one opens its slider.</div>`;
+document.getElementById('secE2').innerHTML=[fg(amounts('Y',5,'manual',true),'Yash · Manual, typing','tap the amount and type it'),fg(amounts('H',0,'equal'),'Harsh · Equal','18 categories, same share each'),fg(amounts('V',0,'preset'),'Vaishak · Preset','recommended split')].join('');
+document.getElementById('secE').innerHTML=[fg(amounts('Y',5,'preset'),'Yash · Preset','a recommended split'),fg(amounts('Y',5,'equal'),'Yash · Equal','the same for every category'),fg(amounts('Y',5,'manual'),'Yash · Manual','slider on the picked one')].join('');
+document.getElementById('noteE').innerHTML=`<div class="note"><b>Buffer is always there</b>It is the grey top of the grid, pinned at the bottom of the list. It is what remains after the others, so it grows when you lower a category and shrinks when you raise one. It cannot be removed.</div><div class="note"><b>Preset and Equal leave 10%</b>Both keep about a tenth of the week as the buffer to start, then you can switch to Manual to move anything.</div><div class="note"><b>Same grid, same scale chip</b>The "1 box = ₹X" chip is the large one, per V3-11, with what is spare beside it.</div><div class="note"><b>Many categories</b>Equal gives Harsh's 18 about ₹105 each. In Manual the picked one has the slider and the rest are a list under it.</div>`;
 document.getElementById('secF').innerHTML=fg(own(),'Create your own','sheet over the picker');
 document.getElementById('secG').innerHTML=[fg(split('Y',true),'Yash','no-budget: put aside'),fg(goals('Y',true),'Yash','then goals')].join('');
 document.getElementById('noteG').innerHTML=`<div class="note"><b>No categories</b>The balance is split into "put aside" and "stays free". Nothing is assigned.</div><div class="note"><b>Straight to goals</b>This is the focus: savings and goals fill the rest of onboarding.</div>`;
@@ -248,12 +257,16 @@ document.getElementById('noteI').innerHTML=`<div class="note"><b>Same three step
 document.getElementById('fifty').innerHTML=FIFTY.map(g=>`<p style="margin-top:12px"><b>${g[0]}</b> · `+g[1].map(n=>REC.includes(n)?`<b>${esc(n)}</b>`:esc(n)).join(' · ')+`</p>`).join('')+`<p class="small" style="margin-top:12px">Total: ${FLAT.length}</p>`;
 
 /* live demo */
-const dem={k:'Y',v:null,sel:0};
-const demo=document.getElementById('demo'),sl=document.getElementById('sl'),dn=document.getElementById('dnote'),cs=document.getElementById('cs');
-function load(k){dem.k=k;dem.v=ST[k].cats.map(c=>c[1]);dem.sel=0;build();draw()}
-function draw(){const s=ST[dem.k];demo.innerHTML=amountsSvg(s,dem.v,dem.sel,'');const tot=dem.v.reduce((a,b)=>a+b,0);dn.textContent=money(tot)+' of '+money(s.wk)+' given out. '+(tot>=s.wk?'Nothing left to give.':money(s.wk-tot)+' spare.')}
-function build(){const s=ST[dem.k];sl.innerHTML=s.cats.map((c,i)=>`<label style="display:grid;grid-template-columns:130px 1fr 60px;gap:8px;align-items:center;font-size:14px"><span>${esc(c[0])}</span><input type="range" min="0" max="${s.wk}" step="10" value="${dem.v[i]}" data-i="${i}" aria-label="${esc(c[0])} weekly amount"><b data-o="${i}">${money(dem.v[i])}</b></label>`).join('')}
-sl.addEventListener('input',e=>{const t=e.target;if(t.type!=='range')return;const s=ST[dem.k],i=+t.dataset.i;const others=dem.v.reduce((a,b,j)=>j===i?a:a+b,0);const cap=s.wk-others;let v=Math.min(+t.value,cap);dem.v[i]=v;t.value=v;sl.querySelector('[data-o="'+i+'"]').textContent=money(v);dem.sel=i;draw()});
+const dem={k:'Y',m:'preset',v:null,sel:0};
+const demo=document.getElementById('demo'),sl=document.getElementById('sl'),dn=document.getElementById('dnote'),cs=document.getElementById('cs'),ms=document.getElementById('ms');
+function load(k){dem.k=k;dem.sel=0;setMode(dem.m)}
+function setMode(m){dem.m=m;dem.v=alloc(ST[dem.k],m);[...ms.children].forEach(c=>c.setAttribute('aria-pressed',c.dataset.m===m));build();draw()}
+function draw(){const s=ST[dem.k];demo.innerHTML=amountsSvg(s,dem.v,dem.sel,dem.m,false);const tot=dem.v.reduce((a,b)=>a+b,0);dn.textContent=money(tot)+' given out, '+money(s.wk-tot)+' in the buffer.'}
+function build(){const s=ST[dem.k];sl.innerHTML=s.cats.map((c,i)=>`<label style="display:grid;grid-template-columns:120px 1fr 78px;gap:8px;align-items:center;font-size:14px"><span>${esc(c[0])}</span><input type="range" min="0" max="${s.wk}" step="5" value="${dem.v[i]}" data-i="${i}" aria-label="${esc(c[0])} weekly amount"><input type="number" min="0" step="5" value="${dem.v[i]}" data-n="${i}" aria-label="${esc(c[0])} amount in rupees" style="width:78px;font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)"></label>`).join('')}
+function edit(i,val){const s=ST[dem.k];if(dem.m!=='manual'){dem.m='manual';[...ms.children].forEach(c=>c.setAttribute('aria-pressed',c.dataset.m==='manual'))}const others=dem.v.reduce((a,b,j)=>j===i?a:a+b,0);const v=Math.max(0,Math.min(+val||0,s.wk-others));dem.v[i]=v;sl.querySelector('[data-i="'+i+'"]').value=v;sl.querySelector('[data-n="'+i+'"]').value=v;dem.sel=i;draw()}
+sl.addEventListener('input',e=>{const t=e.target;if(t.dataset.i!==undefined)edit(+t.dataset.i,t.value);else if(t.dataset.n!==undefined)edit(+t.dataset.n,t.value)});
+ms.innerHTML=[['preset','Preset'],['equal','Equal'],['manual','Manual']].map(m=>`<button class="chip" type="button" data-m="${m[0]}" aria-pressed="false">${m[1]}</button>`).join('');
+ms.onclick=e=>{const b=e.target.closest('button');if(b)setMode(b.dataset.m)};
 cs.innerHTML=['V','Y','H'].map(k=>`<button class="chip" type="button" data-k="${k}" aria-pressed="${k===dem.k}">${ST[k].n}</button>`).join('');
 cs.onclick=e=>{const b=e.target.closest('button');if(!b)return;[...cs.children].forEach(c=>c.setAttribute('aria-pressed',c===b));load(b.dataset.k)};
 load('Y');
