@@ -62,6 +62,9 @@ References he sent: iOS year-progress waffle (green filled grid, "299d left · 1
 | V4-9 | The **main savings visualisation is a segmented ring**. With two goals the ring is **split into two sections sized by their amounts**, and each section is **filled in its own shade of green** by how much is saved. |
 | V4-10 | **"By day" is removed.** Statistics show **months only**, with a **toggle to move through the months** and see each one. |
 | V4-11 | Also show the **most saved months**. **Every visualisation is progressive**: one per screen, the next reached by scrolling. |
+| V4-12 | **The day-wise visualisation comes back** (supersedes the "By day removed" part of V4-10). A goal's statistics page runs top to bottom: the **month stepper and all month boxes**, then **below them a day-by-day visualisation for the selected month**, where you **move through the months and every day is shown** (the GitHub-style weeks-by-weekday grid he sent, green added / amber taken out, glowing by amount). |
+| V4-13 | **Most saved months are visualised, not written**: the separate "Most saved months" screen and text are gone. The biggest months show it through the glow of their boxes. |
+Note: V4-12 puts two visualisations on one scrolling page. Kept to the one-visualisation-per-screen rule by having the day grid sit a scroll below the months (each is alone on screen). Board's "today" is now 28 October 2026 so the current month has days to show.
 Open: half ring (the earlier decision) or a full segmented ring (like his reference of a donut split into sections) — both drawn. Sections are sized by **target** amount (my reading of "based on the amounts").
 Board: https://claude.ai/artifact/X9aNwLv6pGGZb5sFcxiXEm (source archive/session-workfiles/viz4/viz4-savings-goals.html).
 Interpretation to confirm: the top gauge is all savings together, goals stacked below it; "fill from the bottom" on a half gauge means filling up from the arc's lower ends, or a half-height grid (two forms drawn).
@@ -75,7 +78,7 @@ Interpretation to confirm: the top gauge is all savings together, goals stacked 
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
 3. Income split (spending vs savings) — DONE (V3-1…V3-11)
-4. Savings goal (how much, by when, actually saved) — IN PROGRESS (V4-1…V4-11 given); also: add goal, pay into a goal, completed goals (parked requirement above)
+4. Savings goal (how much, by when, actually saved) — IN PROGRESS (V4-1…V4-13 given); also: add goal, pay into a goal, completed goals (parked requirement above)
 5. Unspent → saved
 6. Small / repeat purchases
 7. Time patterns (e.g. nights)
