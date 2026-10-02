@@ -93,6 +93,7 @@ Interpretation to confirm: the top gauge is all savings together, goals stacked 
 | V5-7 | **Amber, not red**, for the unspent boxes (removes the red exception; the no-red rule stands). |
 | V5-8 | **Show how much was left, in rupees, in step 1 itself** (overrides the earlier default of no ₹ on step 1); the scale chip comes with it. |
 | V5-9 | A week with **nothing left or overspent** shows **boxes filled from the top, not the bottom**, with an **alert: "Let's do better this week"** and a **reminder of the savings goals**. |
+| V5-10 | **The overspend amount is shown in emphasis**: large, bold amber ("₹300 over") under the grid, with "taken from next week" below it; on a week with nothing left the same slot reads "Nothing left". |
 Board: https://claude.ai/artifact/N3Lg6rmjweszAX6owzt5Eu (source archive/session-workfiles/viz5/viz5-weekly-savings.html).
 Defaults, not explicitly answered: default selection is all goals; boxes filled from the top = how far over (a week with exactly nothing left has no boxes from the top, just the alert); the alert's goal reminder is text rows with ETAs (no visualisation next to goals, V4-8); the next-week result is a plain list of categories and amounts.
 

@@ -264,14 +264,16 @@ function popScreen(st){
   s+=scaleChip(35,160,`1 box = ${fmt(st.box)}`);
   if(st.over){
     const none=st.left===0;
-    s+=gridSvg(topFills(st.overN,AMB),1,35,214);
-    s+=T(35,572,"Let's do better this week",23,{w:700});
-    s+=T(35,600,none?'Nothing was left over.':`${fmt(-st.left)} over, taken from next week.`,16,{f:MUT});
-    s+=`<rect x="35" y="620" width="320" height="${st.goals.length?36+Math.min(3,st.goals.length)*30+4:60}" rx="14" fill="#14181d" stroke="${EDGE}"/>`;
-    if(st.goals.length){s+=T(52,646,'Your goals are waiting',16,{w:700});
-      st.goals.slice(0,3).forEach((g,i)=>{const y=672+i*30;s+=`<circle cx="60" cy="${y-5}" r="6" fill="${g.color}"/>${T(76,y,cut(g.name,16),16.5,{w:600})}${T(341,y,`ETA ${mon(g.eta)}`,15,{a:'end',f:MUT})}`})}
-    else s+=T(52,652,'Savings are waiting for a goal.',16,{f:MUT});
-    s+=btn(720,'Okay, new week','done',true);
+    s+=gridSvg(topFills(st.overN,AMB),1,35,206);
+    s+=T(35,572,none?'Nothing left':`${fmt(-st.left)} over`,34,{w:700,f:AMB});
+    s+=T(35,594,none?'this week used all of it':'taken from next week',15.5,{f:MUT});
+    s+=T(35,630,"Let's do better this week",20,{w:700});
+    const ng=Math.min(3,st.goals.length),ch=st.goals.length?36+ng*28+8:56;
+    s+=`<rect x="35" y="644" width="320" height="${ch}" rx="14" fill="#14181d" stroke="${EDGE}"/>`;
+    if(st.goals.length){s+=T(52,670,'Your goals are waiting',15.5,{w:700});
+      st.goals.slice(0,3).forEach((g,i)=>{const y=696+i*28;s+=`<circle cx="60" cy="${y-5}" r="6" fill="${g.color}"/>${T(76,y,cut(g.name,16),16,{w:600})}${T(341,y,`ETA ${mon(g.eta)}`,15,{a:'end',f:MUT})}`})}
+    else s+=T(52,678,'Savings are waiting for a goal.',16,{f:MUT});
+    s+=btn(644+ch+12,'Okay, new week','done',true);
     return frame(s,`${st.short} end of week, ${none?'nothing left':'overspent'}, filled from the top`)}
   const fills=new Array(100).fill(null);for(let i=0;i<st.n;i++)fills[i]=AMB;
   s+=gridSvg(fills,1,35,214);
