@@ -88,6 +88,7 @@ Interpretation to confirm: the top gauge is all savings together, goals stacked 
 | V5-2 | The pop-up **shows a grid with red boxes that turn green** (the unspent money moving into savings). |
 | V5-3 | He can **choose which goals the money goes into**. |
 | V5-4 | It then **shows the updated savings ring** (the full segmented ring, V4-17). |
+Board: https://claude.ai/artifact/N3Lg6rmjweszAX6owzt5Eu (source archive/session-workfiles/viz5/viz5-weekly-savings.html).
 Flag for Tarun: **red breaks the no-red rule** (V1-4, principle 1). Drawn as he asked, treated as an explicit exception for this one moment; to confirm. Defaults drawn, not decided: the pop-up shows words, with ₹ and the scale chip only on the choose step (Home has no ₹, V1-5); default selection is all goals, split evenly; a week with nothing left over gets a quiet card, no red; no "skip" button.
 
 ## Visualisation queue (one at a time)
@@ -95,7 +96,7 @@ Flag for Tarun: **red breaks the no-red rule** (V1-4, principle 1). Drawn as he 
 2. Pay / friction: amount crumbling away — DONE
 3. Income split (spending vs savings) — DONE (V3-1…V3-11)
 4. Savings goal (how much, by when, actually saved) — DONE (V4-1…V4-21); also: add goal, pay into a goal, completed goals (parked requirement above)
-5. Unspent → saved — IN PROGRESS (V5-1…V5-4 given)
+5. Unspent → saved — IN PROGRESS (V5-1…V5-4 given; board drawn)
 6. Small / repeat purchases
 7. Time patterns (e.g. nights)
 8. Subscriptions coming up (Fixed group)
