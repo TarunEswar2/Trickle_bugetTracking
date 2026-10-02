@@ -38,7 +38,8 @@ v14 so far:
 | Visualisation 5 — unspent → saved | Decided (V5-1 … V5-10): weekly Home pop-up, amber → green, goals or next week's budget, top-filled overspent weeks |
 | Visualisation 6 — repeat purchases | Decided (V6-1, V6-2, V6-4, V6-5): habit list with ×counts, calendar hotspots by day / week / month, Times / ₹ |
 | Visualisation 7 — time patterns | Decided (V7-1, V7-2, X-1): all spending by time of day in Insights, hotspot grids, plain sentence |
-| Visualisation 8 — subscriptions coming up | **Next** |
+| Visualisation 8 — fixed bills coming up | Decided (V8-1…V8-4): Fixed calendar in Spending, glow = status, list with amounts |
+| Visualisation 9 — this week vs last | **Next** |
 | Onboarding, per-tab screens, identity, v14 build, user tests | Not started |
 
 ## How Tarun wants to work (this matters more than anything else here)
@@ -100,18 +101,16 @@ green→amber transition, v7's range of data visualisations, sounds/motion from 
 his own gradients in Figma.
 
 ## The exact next step
-**Visualisation 8 — subscriptions coming up** (the Fixed group from V1-7; Tarun: "telling someone a subscription will take money in 2 days is important"; Nishad's forgotten ₹3,000/month Coursera autopay).
+**Visualisation 9 — this week vs last.** Existing precedent to reuse or beat: V1-14/V1-15 (then and now side by side, the earlier one faded) on the category screen; v12's "ghost of last week" idea (no red).
 
-1. Ask Tarun for any inspiration and what he wants shown: a timeline of what is due soon? the Fixed group on the Spending tab? a heads-up on Home?
-2. Draw 3–4 options across the pool (Vaishak none, Harsh three fixed bills incl. bike EMI and gym, Nishad subscriptions, Yash a phone plan), recommend one, log as "Viz 8", mark DONE.
+1. Ask Tarun where it lives and what is compared (all spending, or by category).
+2. Draw 3–4 options across the pool incl. a first-week student with no last week, recommend one, log as "Viz 9", mark DONE.
 
-Remaining visualisations after 8 (3 more): 9 this week vs last, 10 transaction history, 11 exact amounts on tap (progressive-disclosure rules).
+Remaining after 9 (2 more): 10 transaction history, 11 exact amounts on tap (progressive-disclosure rules).
 
-After the queue: onboarding (`docs/claude/build_plan.md`, `docs/claude/screens_to_design.md`), grey wireframes per tab with one visualisation per screen, the flows (parked list below), identity, the v14 build, then real user tests (never run).
+After the queue: onboarding, grey wireframes per tab, the flows (parked list below), identity, the v14 build, real user tests.
 
-Carry-overs: V3-11 scale chip on every grid screen (the Viz 1 board still has the old small line; Viz 1's rings and detail are in `viz1b`); cross-cutting X-1 plain sentence under hotspots. Parked flows: add a goal, pay toward a goal, pay out of savings by choosing a goal like a category, celebration triggers, weekly pop-up timing. Open points Tarun did not answer are logged as defaults in the decisions file.
-
-Boards (claude.ai artifacts, Tarun's account): Each board's link is next to its decisions in `docs/claude/v14_decisions.md`; sources under `archive/session-workfiles/viz2` to `viz7`, plus `viz1b`.
+Carry-overs: V3-11 scale chip on every grid screen; X-1 plain sentence under hotspots; parked flows: add a goal, pay toward a goal, pay from savings, celebration triggers, weekly pop-up timing, Home heads-up for fixed bills. Unanswered points are logged as defaults in the decisions file.
 
 ## Read next
 1. `docs/claude/v14_decisions.md` — decision log and queue (authoritative).
