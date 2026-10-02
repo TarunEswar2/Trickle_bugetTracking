@@ -1,0 +1,304 @@
+<title>Trickle v14 — History</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a design board in the Viz 1 family. Sections A-F; each is a question, a gallery of dark phone
+   frames (rows = options, columns = students or moments), then what the drawing showed. Same tokens as Viz 1. */
+:root{
+  --bg:#f0f1ec; --surface:#fafaf7; --ink:#14181b; --ink2:#444c54; --muted:#727a83; --line:#d6d9d1;
+  --accent:#0d7a64; --accent-soft:#d9ece5; --amber:#a9680f;
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px;padding-block:40px 80px}
+@media (max-width:600px){.wrap{padding-inline:16px;padding-block:24px 56px}}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.12;margin:0}
+h1{font-size:clamp(30px,5vw,50px);font-weight:700;letter-spacing:-.02em}
+h2{font-size:clamp(23px,3vw,31px);font-weight:700;letter-spacing:-.01em}
+h3{font-size:18px;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lead{font-size:18px;color:var(--ink2);max-width:62ch}
+header.top{display:flex;flex-direction:column;gap:16px;padding-bottom:28px}
+section{display:flex;flex-direction:column;gap:18px;padding-block:40px;border-top:1px solid var(--line)}
+.sec-h{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.sec-h .k{font-family:var(--display);font-weight:700;font-size:clamp(23px,3vw,31px);color:var(--accent)}
+.q{color:var(--ink2)}
+ul.plain{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.logged{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.logged div{border-top:2px solid var(--ink);padding-top:10px}
+.logged b{display:block;font-family:var(--display);font-size:17px;margin-bottom:4px}
+.logged span{color:var(--ink2);font-size:15px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right}
+.opt{display:flex;flex-direction:column;gap:10px}
+.opt>h4{margin:0;font-size:15.5px;font-weight:600;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.opt>h4 b{font-family:var(--display);background:var(--ink);color:var(--bg);border-radius:5px;padding:1px 7px;font-size:13.5px}
+.opt>h4 span{color:var(--muted);font-weight:400}
+.gal{display:flex;flex-direction:column;gap:26px}
+.row{display:grid;grid-template-columns:repeat(6,minmax(170px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.row.four{grid-template-columns:repeat(4,minmax(200px,1fr))}
+.row.three{grid-template-columns:repeat(3,minmax(200px,300px))}
+.fg{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fg figcaption{font-size:13px;color:var(--muted);line-height:1.3}
+.fg figcaption b{color:var(--ink);font-weight:600}
+svg.ph{width:100%;height:auto;display:block;font-family:var(--body)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px 28px}
+.note{border-top:1px solid var(--line);padding-top:10px;font-size:15px;color:var(--ink2)}
+.note b{display:block;color:var(--ink);font-family:var(--display);font-size:16px;margin-bottom:3px}
+.demo{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:700px){.demo{grid-template-columns:minmax(0,1fr)}}
+.ctl{display:flex;flex-direction:column;gap:16px}
+.ctl .grp{display:flex;flex-direction:column;gap:7px}
+.ctl .lbl{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font:inherit;font-size:14.5px;font-weight:600;white-space:nowrap;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer}
+.chip:hover{border-color:var(--ink2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn{font:inherit;font-size:15px;font-weight:700;padding:10px 18px;border-radius:10px;border:0;background:var(--accent);color:#04231b;cursor:pointer;align-self:flex-start}
+.chip:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;max-width:420px;accent-color:var(--accent)}
+.small{font-size:13.5px;color:var(--muted)}
+.decide{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px}
+.dq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.dq h3{font-size:17px}
+.dq ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:5px;font-size:15px;color:var(--ink2);list-style:upper-alpha}
+.dq li.s{color:var(--ink)}
+.dq li.s::after{content:" suggested";font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-left:4px}
+
+svg.ph rect.bx{transition:fill .6s ease,transform .6s ease}
+@media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
+
+.lg{animation:lgin .9s ease .7s both}
+@keyframes lgin{from{opacity:0}to{opacity:1}}
+.static .lg{animation:none}
+@media (prefers-reduced-motion: reduce){.lg{animation:none}}
+
+svg.ph [data-open]{cursor:pointer}
+svg.ph [data-open]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+.lg.now{animation:none}
+
+svg.ph [data-go]{cursor:pointer}
+svg.ph [data-go]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+
+svg.ph [data-go]{cursor:pointer}
+.sw2{display:flex;gap:8px;flex-wrap:wrap}
+
+svg.ph rect.bx{transition:fill 1.3s ease}
+@media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
+
+svg.ph [data-go]{cursor:pointer}
+
+.sw3{display:flex;gap:8px;flex-wrap:wrap}
+
+
+
+
+</style>
+
+<div id="defs"></div>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Trickle v14 · Visualisation 10 of 11 · 2 Oct 2026</div>
+  <h1>History</h1>
+  <p class="lead">The last screen of the Spending tab. Every purchase in a list grouped by day. Filter chips on top for a category and a day range. Each row is a name, an amount and a time, with a dot in its category colour. Tap a row for the rest. Drawn for all six students, with filters and the empty states. Options only. You decide.</p>
+</header>
+
+<section style="border-top:0;padding-top:0">
+  <div class="sec-h"><h2>Already decided</h2></div>
+  <div class="logged">
+    <div><b>V10-1 · The list</b><span>Grouped by day: Today, Yesterday, then the date.</span></div>
+    <div><b>V10-2 · Finding</b><span>Filter chips for a category and a day range.</span></div>
+    <div><b>V10-3 · A row</b><span>Name, amount, time, and a category colour dot. The rest is one tap in.</span></div>
+    <div><b>Carried over</b><span>Category colours are the ring colours (V1-12). Amounts live on the tap layer where they can. No red.</span></div>
+  </div>
+  <p class="small">Drawn as defaults, not decided: it is the last screen of the Spending tab; a day header carries the day's total; ranges are Today, 7 days, 30 days, All. Today on this board is Thursday 29 October 2026, about 7:40 pm. All purchases are made up.</p>
+</section>
+
+<section>
+  <div class="sec-h"><h2>The pool</h2><span class="q">How many purchases each student has in the last 30 days (Gautham-type has 7 days).</span></div>
+  <div class="tw"><table>
+    <tr><th>Student</th><th class="n">Purchases</th><th>Categories</th></tr>
+    <tbody id="pool"></tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">A</span><h2>The history screen</h2></div>
+  <p class="q">All categories, the last 7 days, for every student. A day header with its total, then that day's purchases newest first.</p>
+  <div class="gal" id="secA"></div>
+  <div class="notes" id="noteA"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">B</span><h2>Filtering</h2></div>
+  <p class="q">A category and a range. Tarun-type's Coffee &amp; snacks over 30 days. Yash-type's Quick-commerce. Nishad-type's Travel over the whole month. Then a combination with nothing in it.</p>
+  <div class="gal" id="secB"></div>
+  <div class="notes" id="noteB"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">C</span><h2>Tap a purchase</h2></div>
+  <p class="q">The detail: the amount, the category, when, how it was paid, and which habit it belongs to. Editing the category is a later flow.</p>
+  <div class="gal" id="secC"></div>
+  <div class="notes" id="noteC"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">D</span><h2>Try it</h2></div>
+  <p class="q">Pick a student, tap a category chip and a range chip, then tap a purchase.</p>
+  <div class="demo">
+    <div id="demo"></div>
+    <div class="ctl">
+      <div class="grp"><span class="lbl">Student</span><div class="chips" id="cs"></div></div>
+      <span class="small" id="dnote">Tap a chip or a purchase.</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>Decisions for Tarun</h2></div>
+  <div class="decide">
+    <div class="dq"><h3>1. A day's total in its header</h3><ol><li class="s">Yes, small and muted on the right.</li><li>No total, only the day.</li></ol></div>
+    <div class="dq"><h3>2. The ranges</h3><ol><li class="s">Today, 7 days, 30 days, All. Opens on 7 days.</li><li>Today, This week, This month, All.</li></ol></div>
+    <div class="dq"><h3>3. Category chips</h3><ol><li class="s">All, then the categories in ring colours, with the rest behind "More".</li><li>Only the five biggest and "Others".</li></ol></div>
+    <div class="dq"><h3>4. What a tap shows</h3><ol><li class="s">Category, when, how it was paid, and the habit it belongs to.</li><li>Only the category and when.</li></ol></div>
+    <div class="dq"><h3>5. Long histories</h3><ol><li class="s">Load older days as you scroll, with the range chip to jump.</li><li>A "Show older" button at the end.</li></ol></div>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+const PBG='#0b0d10',EDGE='#2b3038',INK='#f2f4f5',MUT='#8f97a1',GRN='#62dcb4';
+const CATC=['#5aa9ff','#b48cff','#ff7eb6','#f2d65b','#4fd1e6'],OTHC='#f6b27c';
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const fmt=n=>'₹'+Math.round(Math.abs(n)).toLocaleString('en-IN');
+const T=(x,y,s,sz,o={})=>`<text x="${x}" y="${y}" font-size="${sz}" font-weight="${o.w||400}" fill="${o.f||INK}" text-anchor="${o.a||'start'}" ${o.ls?`letter-spacing="${o.ls}"`:''}>${esc(s)}</text>`;
+const cut=(s,n)=>s.length>n?s.slice(0,n-1)+'…':s;
+const rnd=n=>{const x=Math.sin(n*12.9898)*43758.5453;return x-Math.floor(x)};
+const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],DN=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],DAYN=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const addDays=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);
+const dow=d=>(d.getDay()+6)%7;
+const TODAY=new Date(2026,9,29),NOWH=19,NOWM=40;
+const CATB={'Vaishak-type':[['Food',2400],['Other',300]],'Gautham-type':[['Food & drinks',2600],['Travel',300],['Other',100]],'Tarun-type':[['Coffee & snacks',1600],['Food',2000],['Travel',700],['Other',400]],'Yash-type':[['Quick-commerce',4000],['Food',900],['Travel',500],['Fun',400],['Study',300],['Phone',200],['Other',100]],'Nishad-type':[['Food & beverages',6000],['Travel',2000],['Fun',1500],['Study',1200],['Gifts',800],['Snacks',700],['Haircut',700],['Phone',600],['Misc',600],['Stationery',500],['Clothes',500],['Books',400]],'Harsh-type':[['Mess & meals',2400],['Eating out',1600],['Fuel',400],['Gifts',300],['Fun',300],['Study',200],['Snacks',100],['Printouts',100],['Haircut',100],['Coffee',100],['Books',100],['Repairs',100],['Medical',100],['Charity',100],['Laundry',75],['Stationery',75],['Parking',75],['Misc',75]]};
+const catRank=(st,cat)=>[...CATB[st]].sort((a,b)=>b[1]-a[1]).findIndex(c=>c[0]===cat);
+const catColor=(st,cat)=>{const r=catRank(st,cat);return r>=0&&r<5?CATC[r]:OTHC};
+/* [name, category, avg rupees, usual hours] */
+const P={
+ 'Vaishak-type':{days:30,per:1.6,pool:[['Mess','Food',70,[13]],['Tea stall','Food',20,[16]],['Canteen','Food',60,[13,20]],['Swiggy','Food',189,[20]],['Stationery','Other',120,[15]]]},
+ 'Gautham-type':{days:7,per:3,pool:[['Canteen lunch','Food & drinks',41,[13]],['Juice shop','Food & drinks',40,[17]],['Auto','Travel',60,[9]],['Bookshop','Other',150,[16]]]},
+ 'Tarun-type':{days:30,per:3.3,pool:[['Chai','Coffee & snacks',22,[16]],['Coffee','Coffee & snacks',60,[9]],['Canteen lunch','Food',80,[13]],['Samosa + chai','Coffee & snacks',45,[17]],['Auto','Travel',70,[9,18]],['Stationery','Other',90,[15]]]},
+ 'Yash-type':{days:30,per:2.8,pool:[['Zepto','Quick-commerce',260,[22,23]],['Blinkit','Quick-commerce',240,[22]],['Instamart','Quick-commerce',190,[23]],['Swiggy','Food',180,[20]],['Chai','Food',20,[16]],['Metro card','Travel',100,[9]],['Cinema','Fun',320,[19]]]},
+ 'Nishad-type':{days:30,per:2.6,pool:[['Corner shop','Snacks',35,[16,22]],['Cafe','Food & beverages',150,[9,10]],['Zomato','Food & beverages',410,[20]],['Auto','Travel',80,[9,18]],['Juice bar','Food & beverages',90,[18]],['Stationery','Stationery',120,[15]],['Pharmacy','Misc',200,[19]],['Bookstore','Study',450,[16]]]},
+ 'Harsh-type':{days:30,per:3,pool:[['Mess','Mess & meals',80,[13,20]],['Tea','Snacks',15,[16]],['Cafe','Eating out',240,[15]],['Fuel','Fuel',230,[9]],['Pizza place','Eating out',380,[21]],['Coffee','Coffee',70,[9]],['Dinner with friends','Eating out',1800,[21]]]}
+};
+function makeTx(name,si){const c=P[name],tx=[];
+  for(let off=0;off<c.days;off++){const dt=addDays(TODAY,-off),n0=c.per*(dow(dt)>=5?1.2:1),n=Math.floor(n0)+(rnd(si*977+off*13)<n0-Math.floor(n0)?1:0);
+    for(let k=0;k<n;k++){const it=c.pool[Math.floor(rnd(si*131+off*7+k*3)*c.pool.length)],hr=it[3][Math.floor(rnd(si*17+off*5+k)*it[3].length)],mi=Math.floor(rnd(si*29+off*3+k*7)*60);
+      if(off===0&&(hr>NOWH||(hr===NOWH&&mi>NOWM)))continue;
+      let a=it[2]*(.7+.6*rnd(si*53+off*5+k));a=Math.max(10,a>100?Math.round(a/5)*5:Math.round(a/(a>40?5:1))*(a>40?5:1));
+      tx.push({name:it[0],cat:it[1],amt:a,dt,hr,mi,off,upi:rnd(si*61+off*11+k)<.8,id:tx.length})}}
+  tx.sort((a,b)=>a.off-b.off||(b.hr*60+b.mi)-(a.hr*60+a.mi));return tx}
+const S=Object.keys(P).map((name,i)=>({short:name,tx:makeTx(name,i+1)}));
+S.forEach(st=>{st.cats=[...CATB[st.short]].sort((a,b)=>b[1]-a[1]).map(c=>c[0]);
+  st.counts={};st.tx.forEach(t=>{st.counts[t.name]=(st.counts[t.name]||0)+1})});
+const time=(h,m)=>`${h%12===0?12:h%12}:${String(m).padStart(2,'0')} ${h<12?'am':'pm'}`;
+const dayLabel=off=>off===0?'Today':off===1?'Yesterday':`${DN[dow(addDays(TODAY,-off))]} ${addDays(TODAY,-off).getDate()} ${MN[addDays(TODAY,-off).getMonth()]}`;
+const RNG=[['today','Today',0],['7','7 days',6],['30','30 days',29],['all','All',9999]];
+
+const TABS=['Home','Income','Spending','Savings','Insights'];
+const tabbar=a=>{let tb=`<line x1="0" y1="770" x2="390" y2="770" stroke="${EDGE}"/>`;TABS.forEach((t,i)=>{const x=39+78*i;tb+=T(x,808,t,14,{a:'middle',f:i===a?INK:MUT,w:i===a?700:400});if(i===a)tb+=`<rect x="${x-14}" y="782" width="28" height="4" rx="2" fill="${GRN}"/>`});return tb};
+const frame=(inner,label)=>`<svg class="ph" viewBox="0 0 390 844" role="img" aria-label="${esc(label)}"><rect x="1" y="1" width="388" height="842" rx="46" fill="${PBG}" stroke="${EDGE}" stroke-width="2"/>${inner}<rect x="150" y="16" width="90" height="24" rx="12" fill="#000"/>${tabbar(2)}</svg>`;
+
+function chips(st,o){
+  let s='',x=35;
+  const ordered=o.cat?[o.cat,...st.cats.filter(c=>c!==o.cat)]:st.cats;
+  const all=[['All',null,null],...ordered.map(c=>[c,c,catColor(st.short,c)])];
+  const clip=`<clipPath id="cc${o.uid}"><rect x="35" y="150" width="320" height="40"/></clipPath>`;
+  s+=`<defs>${clip}</defs><g clip-path="url(#cc${o.uid})">`;
+  for(const [label,key,col] of all){const w=Math.round(label.length*8.2+(col?44:32)),on=(o.cat||null)===key;
+    if(x+w>345&&x>35){s+=`<g data-cat="more" role="button" tabindex="0"><rect x="${x}" y="156" width="${w-6<80?80:w}" height="32" rx="16" fill="#14181d" stroke="${EDGE}"/>${T(x+14,177,'More ›',15,{f:MUT,w:600})}</g>`;break}
+    s+=`<g data-cat="${esc(key||'')}" role="button" tabindex="0"><rect x="${x}" y="156" width="${w}" height="32" rx="16" fill="${on?(col||INK):'#14181d'}" ${on?'':`stroke="${EDGE}"`} ${on&&col?'fill-opacity=".9"':''}/>${col?`<circle cx="${x+15}" cy="172" r="5" fill="${on?'#0b0d10':col}"/>`:''}${T(x+(col?26:15),177,label,14.5,{w:on?700:500,f:on?(col||INK)===INK?'#0b0d10':'#0b0d10':INK})}</g>`;x+=w+8}
+  s+='</g>';
+  let rx=35;RNG.forEach(([k,l])=>{const w=Math.round(l.length*8.4+26),on=(o.rng||'7')===k;
+    s+=`<g data-rng="${k}" role="button" tabindex="0"><rect x="${rx}" y="198" width="${w}" height="30" rx="15" fill="${on?INK:'#14181d'}" ${on?'':`stroke="${EDGE}"`}/>${T(rx+w/2,218,l,14,{a:'middle',w:on?700:500,f:on?'#0b0d10':MUT})}</g>`;rx+=w+8});
+  return s}
+let UID=0;
+function history(st,o){
+  o=Object.assign({cat:null,rng:'7'},o);const uid=UID++;o.uid=uid;
+  let s=T(35,76,'Spending',17,{f:MUT})+T(35,112,'History',30,{w:700});
+  s+=chips(st,o);
+  const lim=RNG.find(r=>r[0]===o.rng)[2];
+  const list=st.tx.filter(t=>t.off<=lim&&(!o.cat||t.cat===o.cat));
+  if(!list.length){
+    s+=`<rect x="35" y="262" width="320" height="130" rx="16" fill="none" stroke="#2b3038" stroke-dasharray="4 5"/>`+T(195,318,'Nothing for this filter',20,{a:'middle',w:700})+T(195,346,o.rng==='all'?'No purchases here yet.':'Try a longer range.',16,{a:'middle',f:MUT});
+    return {svg:frame(s,`${st.short} history, nothing for this filter`),rows:[]}}
+  let y=262,lastOff=-1,rows=[];
+  for(const t of list){
+    if(t.off!==lastOff){if(y>726)break;const total=list.filter(x=>x.off===t.off).reduce((a,x)=>a+x.amt,0);
+      s+=T(35,y+14,dayLabel(t.off),14.5,{f:MUT,w:700})+T(355,y+14,fmt(total),14.5,{a:'end',f:'#6f7a86'});y+=26;lastOff=t.off}
+    if(y>732)break;
+    const col=catColor(st.short,t.cat);
+    s+=`<g data-tx="${t.id}" role="button" tabindex="0" aria-label="${esc(t.name)} ${fmt(t.amt)}"><rect x="35" y="${y-2}" width="320" height="50" rx="12" fill="#12161b" stroke="${EDGE}"/><circle cx="55" cy="${y+23}" r="6.5" fill="${col}"/>${T(72,y+21,cut(t.name,20),17.5,{w:600})}${T(72,y+40,time(t.hr,t.mi),13.5,{f:MUT})}${T(342,y+30,fmt(t.amt),18,{a:'end',w:700})}</g>`;
+    rows.push(t.id);y+=56}
+  return {svg:frame(s,`${st.short} history, ${o.cat||'all categories'}, ${o.rng}`),rows}}
+
+function detail(st,id){
+  const t=st.tx.find(x=>x.id===id),col=catColor(st.short,t.cat);
+  let s=T(35,76,'‹ History',17,{f:MUT}).replace('<text','<text data-go="back" role="button" tabindex="0" style="cursor:pointer"');
+  s+=T(35,118,cut(t.name,18),30,{w:700})+T(35,166,fmt(t.amt),42,{w:700});
+  const rows=[['Category',null,t.cat,col],['When',null,`${DAYN[dow(t.dt)]} ${t.dt.getDate()} ${MN[t.dt.getMonth()]}, ${time(t.hr,t.mi)}`],['Paid by',null,t.upi?'UPI, linked account':'Added by hand']];
+  rows.forEach((r,i)=>{const y=222+i*62;s+=`<line x1="35" y1="${y-24}" x2="355" y2="${y-24}" stroke="${EDGE}"/>${T(35,y,r[0].toUpperCase(),12.5,{f:MUT,w:700,ls:'1.4'})}${r[3]?`<rect x="35" y="${y+12}" width="14" height="14" rx="4" fill="${r[3]}"/>`:''}${T(r[3]?58:35,y+26,r[2],19,{w:500})}`});
+  const cnt=st.counts[t.name];
+  if(cnt>=3)s+=`<g data-go="habit" role="button" tabindex="0"><rect x="35" y="430" width="320" height="56" rx="14" fill="#14181d" stroke="${EDGE}"/>${T(52,455,'Part of a habit',13.5,{f:MUT,w:600})}${T(52,476,`${t.name} ×${cnt} in 30 days`,17,{w:600})}${T(349,466,'›',22,{a:'end',f:MUT})}</g>`;
+  s+=`<rect x="35" y="${cnt>=3?506:430}" width="320" height="48" rx="14" fill="none" stroke="${EDGE}" stroke-dasharray="4 5"/>${T(195,cnt>=3?536:460,'Change category',16.5,{a:'middle',f:'#5f6772'})}`;
+  return frame(s,`${st.short} ${t.name} ${fmt(t.amt)}`)}
+
+const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c)}</figcaption></figure>`;
+document.getElementById('pool').innerHTML=S.map(st=>`<tr><td>${st.short}</td><td class="n">${st.tx.length}</td><td>${st.cats.length} categories</td></tr>`).join('');
+document.getElementById('secA').innerHTML=`<div class="opt"><div class="row">`+S.map(st=>fg(history(st).svg,st.short,`${st.tx.filter(t=>t.off<=6).length} purchases in 7 days`)).join('')+`</div></div>`;
+document.getElementById('noteA').innerHTML=`
+<div class="note"><b>A day is the unit</b>Today, Yesterday, then dates. Each header carries the day's total, small and muted, so a heavy day stands out without a chart.</div>
+<div class="note"><b>A row is three things</b>Name, time, amount, with the category dot. Harsh-type's dinner with friends is one line, ₹1,800, like a chai.</div>
+<div class="note"><b>Newest first</b>The list starts at what you did most recently. Scrolling goes back in time.</div>`;
+const fil=[[S[2],'Coffee & snacks','30'],[S[3],'Quick-commerce','30'],[S[4],'Travel','all'],[S[0],'Other','today']];
+document.getElementById('secB').innerHTML=`<div class="opt"><div class="row four">`+fil.map(([st,c,r])=>fg(history(st,{cat:c,rng:r}).svg,st.short,`${c}, ${RNG.find(x=>x[0]===r)[1]}`)).join('')+`</div></div>`;
+document.getElementById('noteB').innerHTML=`
+<div class="note"><b>Category chips are ring colours</b>The active chip fills with the category's colour and its dot flips to dark. "More" opens the rest for students with many categories.</div>
+<div class="note"><b>The range is a second row</b>Today, 7 days, 30 days and All. The dark one is the one in force.</div>
+<div class="note"><b>Empty is calm</b>A filter with nothing says "Nothing for this filter" and suggests a longer range.</div>`;
+const pk=[[S[2],0],[S[3],0],[S[4],0],[S[5],0]];
+document.getElementById('secC').innerHTML=`<div class="opt"><div class="row four">`+pk.map(([st,i])=>fg(detail(st,st.tx[i].id),st.short,`${st.tx[i].name}`)).join('')+`</div></div>`;
+document.getElementById('noteC').innerHTML=`
+<div class="note"><b>The tap layer</b>The amount in large type, the category in its colour, the exact time, and how it was paid: UPI from the linked account or added by hand.</div>
+<div class="note"><b>Linked to habits</b>If the purchase belongs to a repeat, a row says so and leads to that habit's calendar.</div>
+<div class="note"><b>Editing waits</b>"Change category" is a dashed placeholder. It is part of the flows we do later.</div>`;
+
+const dem={s:2,cat:null,rng:'7',tx:null};
+const demo=document.getElementById('demo'),dn=document.getElementById('dnote');
+function draw(){const st=S[dem.s];demo.innerHTML=dem.tx==null?history(st,{cat:dem.cat,rng:dem.rng}).svg:detail(st,dem.tx);dn.textContent=dem.tx==null?'Tap a category chip, a range, or a purchase.':'Tap ‹ History to go back.'}
+demo.addEventListener('click',e=>{
+  const c=e.target.closest('[data-cat]');if(c){const k=c.dataset.cat;if(k!=='more'){dem.cat=k||null;draw()}return}
+  const r=e.target.closest('[data-rng]');if(r){dem.rng=r.dataset.rng;draw();return}
+  const t=e.target.closest('[data-tx]');if(t){dem.tx=+t.dataset.tx;draw();return}
+  const g=e.target.closest('[data-go]');if(g&&g.dataset.go==='back'){dem.tx=null;draw()}});
+demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-cat],[data-rng],[data-tx],[data-go]');if(t){e.preventDefault();t.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
+const el=document.getElementById('cs');
+el.innerHTML=S.map((s,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${i===dem.s}">${s.short.replace('-type','')}</button>`).join('');
+el.onclick=e=>{const b=e.target.closest('button');if(!b)return;dem.s=+b.dataset.i;dem.cat=null;dem.rng='7';dem.tx=null;[...el.children].forEach((c,i)=>c.setAttribute('aria-pressed',i===dem.s));draw()};
+draw();
+})();
+</script>
