@@ -75,7 +75,7 @@
 
 <script>
 (function(){
-const PBG='#0b0d10',EDGE='#2b3038',DIM='#1b2026',INK='#f2f4f5',MUT='#8f97a1',GRN='#62dcb4',AMB='#e3a43f',ORG='#f08a3c';
+const BUF='#9aa4b0';const PBG='#0b0d10',EDGE='#2b3038',DIM='#1b2026',INK='#f2f4f5',MUT='#8f97a1',GRN='#62dcb4',AMB='#e3a43f',ORG='#f08a3c';
 const COL=['#5aa9ff','#b48cff','#ff7eb6','#f2d65b','#4fd1e6'],REST='#f6b27c',GG=['#62dcb4','#3fae8c','#9be8cf'];
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 const T=(x,y,s,sz,o={})=>`<text x="${x}" y="${y}" font-size="${sz}" font-weight="${o.w||400}" fill="${o.f||INK}" text-anchor="${o.a||'start'}">${esc(s)}</text>`;
@@ -134,13 +134,18 @@ document.getElementById('secC').innerHTML=[fg(payGoal('Phone',GG[0],6000,2400,18
 document.getElementById('noteC').innerHTML=`<div class="note"><b>Same picture, different colour</b>A category pays out of orange or its own colour; a goal pays out of green and leaves amber, because amber already means savings going out (V4-6).</div><div class="note"><b>One line says where from</b>"Taken from your savings" is the only extra, so the screen stays the same shape as a category's.</div><div class="note"><b>The scale is the goal's</b>The grid is the whole goal, so 1 box is a hundredth of the target, not of a week.</div>`;
 
 /* pay screen in every case */
-function overPay(title,sub,col,ghostN,amber,big,words,openBreak,warn){let o=T(35,76,'Paying'+(sub==='goal'?' from savings':''),17,{f:MUT})+T(35,112,title,28,{w:600})+T(35,144,sub==='goal'?'A goal you saved for':'This week',17,{f:MUT});
+function breakVis(parts,sel){const tot=parts.reduce((a,p)=>a+p[1],0),N=25;let n=parts.map(p=>p[1]/tot*N),b=n.map(Math.floor),rem=N-b.reduce((a,x)=>a+x,0);n.map((x,i)=>[x-Math.floor(x),i]).sort((a,c)=>c[0]-a[0]).slice(0,rem).forEach(([f,i])=>b[i]++);
+  let o=R(35,580,320,114,16,DIM)+T(55,603,'Where it comes from',13,{f:MUT,w:600});let k=0,x0=51;const bw=10.2,gap=1.5;const segs=[];
+  parts.forEach((p,i)=>{const st=k;for(let j=0;j<b[i];j++){o+=R(x0+k*(bw+gap),614,bw,26,3,p[2],sel===i?'stroke="#fff" stroke-width="1.5"':(sel!=null?'opacity=".45"':''));k++}segs.push([st,k])});
+  let lx=51;parts.forEach((p,i)=>{if(!b[i])return;o+=`<circle cx="${lx+5}" cy="670" r="5" fill="${p[2]}"/>`+T(lx+14,662,p[0],12.5,{f:sel===i?INK:MUT,w:sel===i?700:400});lx+=14+p[0].length*7+14});
+  o+=sel!=null?T(55,686,parts[sel][0]+'  ₹'+parts[sel][1].toLocaleString('en-IN'),14,{w:700}):T(55,686,'Tap a colour for the amount',12.5,{f:MUT});return o}
+function overPay(title,sub,col,ghostN,amber,big,words,openBreak,warn,sel){let o=T(35,76,'Paying'+(sub==='goal'?' from savings':''),17,{f:MUT})+T(35,112,title,28,{w:600})+T(35,144,sub==='goal'?'A goal you saved for':'This week',17,{f:MUT});
   o+=grid(70,176,22,3.5,0,ghostN,col,AMB);
   if(amber)o+=`<line x1="70" y1="${176+9*25.5+22+7}" x2="${70+10*25.5-3.5}" y2="${176+9*25.5+22+7}" stroke="${AMB}" stroke-width="2.5"/>`;
   o+=chip(35,458,sub==='goal'?'1 box = ₹60':'1 box = ₹4');
   if(big)o+=T(35,528,big,26,{w:700,f:AMB});
-  if(words){const ws=words.split(' ');let l1='',l2='';ws.forEach(w=>{if((l1+' '+w).trim().length<=34&&!l2)l1=(l1+' '+w).trim();else l2=(l2+' '+w).trim()});o+=T(35,552,l1,15,{f:MUT});if(l2)o+=T(35,573,l2,15,{f:MUT})}
-  if(openBreak){o+=R(35,590,320,110,16,DIM)+T(55,614,'Where it comes from',13,{f:MUT,w:600});openBreak.forEach((r,i)=>{o+=T(55,637+i*20,r[0],14)+T(341,637+i*20,r[1],14,{a:'end',w:600})})}
+  if(words){const ws=words.split(' ');let l1='',l2='';ws.forEach(w=>{if((l1+' '+w).trim().length<=42&&!l2)l1=(l1+' '+w).trim();else l2=(l2+' '+w).trim()});o+=T(35,552,l1,15,{f:MUT});if(l2)o+=T(35,573,l2,15,{f:MUT})}
+  if(openBreak){o+=breakVis(openBreak,sel)}
   else if(amber)o+=T(35,616,'Where it comes from  ›',15,{f:GRN,w:700});
   if(warn)o+=R(35,574,320,66,14,'none',`stroke="${AMB}" stroke-width="1.5"`)+T(52,602,warn[0],14.5,{w:700,f:AMB})+T(52,624,warn[1],13.5,{f:MUT});
   return frame(o+btn2('Back','Pay '+title.split(' ')[0]),'Pay screen '+title)}
@@ -149,12 +154,12 @@ const okPay=()=>{let o=T(35,76,'Paying',17,{f:MUT})+T(35,112,'₹500 · Travel',
   return frame(o+btn2('Back','Pay ₹500'),'Low account balance')};
 document.getElementById('secD').innerHTML=[
  fg(overPay('₹120 · Outings','week',REST,100,true,'₹30 over.','Taken from your buffer.'),'1 · Over, buffer covers','Outings had ₹90'),
- fg(overPay('₹312 · Outings','week',REST,100,true,'₹222 over.','Your buffer is used up. The rest comes equally from your other categories.'),'2 · Over, buffer is not enough','then the other categories'),
- fg(overPay('₹312 · Outings','week',REST,100,true,'₹222 over.','Your buffer is used up. The rest comes equally from your other categories.',[['Outings','₹90'],['Buffer','₹175'],['Other categories','₹47'],['Savings','₹0']]),'3 · The split, opened','tap "Where it comes from"'),
- fg(overPay('₹800 · Outings','week',REST,100,true,'₹710 over.','Everything else is used up. Part comes out of savings.',[['Outings','₹90'],['Buffer','₹175'],['Other categories','₹420'],['Savings','₹115']]),'4 · Over, all the way to savings','amber words, no red'),
- fg(overPay('₹4,500 · Trip','goal',GG[1],70,true,'₹300 short.','Trip has ₹4,200 saved. The rest comes from your buffer first.',[['Trip','₹4,200'],['Buffer','₹175'],['Other categories','₹125'],['Savings','₹0']]),'5 · A goal with too little saved','same order, in its own grid'),
+ fg(overPay('₹312 · Outings','week',REST,100,true,'₹222 over.','Buffer used up. The rest comes from your other categories.'),'2 · Over, buffer is not enough','then the other categories'),
+ fg(overPay('₹312 · Outings','week',REST,100,true,'₹222 over.','Buffer used up. The rest comes from your other categories.',[['Outings',90,REST],['Buffer',175,BUF],['Others',47,'#cdb8ff'],['Savings',0,AMB]],null,1),'3 · The split, opened','tap "Where it comes from"'),
+ fg(overPay('₹800 · Outings','week',REST,100,true,'₹710 over.','The rest is used up, so savings cover it.',[['Outings',90,REST],['Buffer',175,BUF],['Others',420,'#cdb8ff'],['Savings',115,AMB]]),'4 · Over, all the way to savings','amber words, no red'),
+ fg(overPay('₹4,500 · Trip','goal',GG[1],70,true,'₹300 short.','Trip has ₹4,200 saved. The rest comes from your buffer first.',[['Trip',4200,GG[1]],['Buffer',175,BUF],['Others',125,'#cdb8ff'],['Savings',0,AMB]]),'5 · A goal with too little saved','same order, in its own grid'),
  fg(okPay(),'6 · Low account balance','a warning, not a block')].join('');
-document.getElementById('noteD').innerHTML=`<div class="note"><b>One screen for all of it</b>There is no separate "offer" step. The pay screen says it in words and opens the split on a tap.</div><div class="note"><b>The order is O-23</b>Buffer, then the other categories equally, then savings. A goal that is short follows the same order.</div><div class="note"><b>Words first, amount large</b>"₹222 over." is the one big figure, in amber (V5-10); the rest is a tap away.</div><div class="note"><b>Never blocked by Trickle</b>The budget is a plan, so Trickle warns but does not stop you. Only the bank can fail a payment.</div>`;
+document.getElementById('noteD').innerHTML=`<div class="note"><b>The split is a picture</b>A strip of 25 boxes is the payment, coloured by where each part comes from: the category, the buffer, the other categories, savings. Tap a colour for its amount (V11). The amounts stay off the strip.</div><div class="note"><b>The order is O-23</b>Buffer, then the other categories equally, then savings. A goal that is short follows the same order.</div><div class="note"><b>Words first, amount large</b>"₹222 over." is the one big figure, in amber (V5-10); the rest is a tap away.</div><div class="note"><b>Never blocked by Trickle</b>The budget is a plan, so Trickle warns but does not stop you. Only the bank can fail a payment.</div>`;
 
 /* confirmation */
 function conf(kind){const ok=kind.startsWith('ok'),COLR=ok?GRN:AMB;
