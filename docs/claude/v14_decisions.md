@@ -97,13 +97,21 @@ Interpretation to confirm: the top gauge is all savings together, goals stacked 
 Board: https://claude.ai/artifact/N3Lg6rmjweszAX6owzt5Eu (source archive/session-workfiles/viz5/viz5-weekly-savings.html).
 Viz 5 closed by Tarun ("done next"). The defaults below stand as drawn: default selection is all goals; boxes filled from the top = how far over (a week with exactly nothing left has no boxes from the top, just the alert); the alert's goal reminder is text rows with ETAs (no visualisation next to goals, V4-8); the next-week result is a plain list of categories and amounts.
 
+### Viz 6 — Small / repeat purchases (Tarun, 2 Oct; options board in progress)
+| # | Decision |
+|---|---|
+| V6-1 | What counts: **the same place or kind, 3 or more times in 30 days, any amount** (the v9 definition). |
+| V6-2 | It is **a view inside the Spending tab**, reached by scrolling (one visualisation per screen). |
+| V6-3 | The unit is **a box that fills with each repeat**: one box per habit, lighting a little more every time, so five coffees read as one growing habit. |
+Defaults, drawn but not decided: a full box = a purchase every day for 30 days (each repeat fills 1/30); box colour = the habit's category colour (V1-12); names under the boxes and no numbers; habits sorted by most repeats; tap a box for a full-screen detail (times, rupees, usual time); fewer than 3 repeats shows an empty state; the scale chip says "Full box = every day".
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
 3. Income split (spending vs savings) — DONE (V3-1…V3-11)
 4. Savings goal (how much, by when, actually saved) — DONE (V4-1…V4-21); also: add goal, pay into a goal, completed goals (parked requirement above)
 5. Unspent → saved — DONE (V5-1…V5-10)
-6. Small / repeat purchases — NEXT
+6. Small / repeat purchases — IN PROGRESS (V6-1…V6-3 given)
 7. Time patterns (e.g. nights)
 8. Subscriptions coming up (Fixed group)
 9. This week vs last
