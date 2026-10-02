@@ -32,4 +32,4 @@ The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 - `references/inspiration/` — images Tarun supplied as visual references.
 
 ## Next up
-Visualisation 6: small / repeat purchases (principle 7; research: coffee ×5, Nishad's refreshments, Yash's quick-commerce add-ons). Viz 1–5 are decided.
+Visualisation 7: time patterns (e.g. spending more at night). Viz 1–6 are decided. Remaining after 7: subscriptions coming up, this week vs last, transaction history, exact amounts on tap.
