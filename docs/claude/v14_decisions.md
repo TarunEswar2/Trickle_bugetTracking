@@ -114,7 +114,7 @@ Viz 6 closed by Tarun ("done"). The defaults below stand as drawn: three scales 
 | V7-1 | It shows **all spending by time of day** (one hotspot view of everything, by hour and weekday), so "you spend more at night" shows across all categories, not one habit. |
 | V7-2 | It lives in the **Insights tab**. |
 Board: https://claude.ai/artifact/FdbjxsRYHqwkQ5hgxcCBzV (source archive/session-workfiles/viz7/viz7-when-you-spend.html).
-Defaults, drawn but not decided: the same hotspot grids as Viz 6 (Day = hours of a typical day, Week = weekday by time of day, Month = the last 30 days) with a Times / ₹ switch and spending-orange glow; opens on Day; a calm sentence in words at the top ("A fair bit happens after 9 pm"), no scolding; a new user with few days gets a "fills in as you go" note.
+Viz 7 closed by Tarun ("done with viz 7"). The defaults below stand as drawn: the same hotspot grids as Viz 6 (Day = hours of a typical day, Week = weekday by time of day, Month = the last 30 days) with a Times / ₹ switch and spending-orange glow; opens on Day; a calm sentence in words at the top ("A fair bit happens after 9 pm"), no scolding; a new user with few days gets a "fills in as you go" note.
 
 ### Cross-cutting (Tarun, 2 Oct) — plain-language sentence under hotspots
 | # | Decision |
@@ -129,8 +129,8 @@ Drawn as: Day, "You spend most around 4 to 6 pm, and again around 10 pm."; Week,
 4. Savings goal (how much, by when, actually saved) — DONE (V4-1…V4-21); also: add goal, pay into a goal, completed goals (parked requirement above)
 5. Unspent → saved — DONE (V5-1…V5-10)
 6. Small / repeat purchases — DONE (V6-1, V6-2, V6-4, V6-5; V6-3 withdrawn)
-7. Time patterns (e.g. nights) — IN PROGRESS (V7-1, V7-2 given)
-8. Subscriptions coming up (Fixed group)
+7. Time patterns (e.g. nights) — DONE (V7-1, V7-2, X-1)
+8. Subscriptions coming up (Fixed group) — NEXT
 9. This week vs last
 10. Transaction history
 11. Exact amounts on tap (progressive disclosure rules)

@@ -32,4 +32,4 @@ The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 - `references/inspiration/` — images Tarun supplied as visual references.
 
 ## Next up
-Visualisation 7: time patterns (e.g. spending more at night). Viz 1–6 are decided. Remaining after 7: subscriptions coming up, this week vs last, transaction history, exact amounts on tap.
+Visualisation 8: subscriptions coming up (the Fixed group; "a subscription will take money in 2 days"). Viz 1–7 are decided. Then 9 this week vs last, 10 transaction history, 11 exact amounts on tap.
