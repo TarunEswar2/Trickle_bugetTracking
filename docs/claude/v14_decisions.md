@@ -47,11 +47,29 @@ Defaults, not explicitly answered: rings show the biggest five budgets and the r
 
 Earlier defaults, now partly superseded by V1-10: (a) a ring's name appears when you press/tap it; rings show the biggest few and the rest group as "others", tap opens the full list. (b) ~~rings beside the words list~~ — rings are now the Spending tab's main view; the words-only list (V1-3) remains the fallback question for 12–18 categories.
 
+### Viz 4 — Savings goals (Tarun, 2 Oct; options board in progress)
+References he sent: iOS year-progress waffle (green filled grid, "299d left · 18%"), a segmented half-ring gauge ("74%"), a GitHub-style day heatmap in green glow.
+| # | Decision |
+|---|---|
+| V4-1 | Goals fill **from the bottom like Viz 1**, and each goal shows its **ETA at the bottom**. |
+| V4-2 | **No rings** (rings belong to spending). A **half fuel gauge**, with each goal's smaller gauge **stacked below**. The goals are a **collapsible list**. |
+| V4-3 | The **first Savings page shows only this fuel-gauge visualisation**. Tapping a goal goes into **statistics**. |
+| V4-4 | **Goal completion is pushed as an intro-style celebration screen** wherever the completing action happens: shows **how many days it took** and **how much is saved**. Finished goals go into a **Completed** category. |
+| V4-5 | A goal's statistics offer a **day-wise split** option. |
+| V4-6 | **Month view uses amber and green boxes**: **amber = deducted from savings**, **green = added to savings**; **the more a box glows, the more was saved** (or taken). |
+| V4-7 | **Pay out of savings**: when paying, the user can choose a goal like choosing a category. **Screens and flow are for later**; only the data visualisation is for now. |
+Interpretation to confirm: the top gauge is all savings together, goals stacked below it; "fill from the bottom" on a half gauge means filling up from the arc's lower ends, or a half-height grid (two forms drawn).
+
+### Parked for the flow stage (after the visualisation queue; Tarun confirmed "we will work on the flow later")
+- Savings tab: add a goal, make a payment toward a goal, show completed goals (V4-4).
+- Pay from savings by choosing a goal like a category (V4-7).
+- Celebration screen triggers: wherever a goal is completed (pay screen, income arriving, manual top-up).
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
 3. Income split (spending vs savings) — DONE (V3-1…V3-11)
-4. Savings goal (how much, by when, actually saved) — NEXT; also: add goal, pay into a goal, completed goals (parked requirement above)
+4. Savings goal (how much, by when, actually saved) — IN PROGRESS (V4-1…V4-7 given); also: add goal, pay into a goal, completed goals (parked requirement above)
 5. Unspent → saved
 6. Small / repeat purchases
 7. Time patterns (e.g. nights)
