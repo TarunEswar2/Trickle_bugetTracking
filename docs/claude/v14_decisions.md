@@ -58,6 +58,7 @@ References he sent: iOS year-progress waffle (green filled grid, "299d left · 1
 | V4-5 | A goal's statistics offer a **day-wise split** option. |
 | V4-6 | **Month view uses amber and green boxes**: **amber = deducted from savings**, **green = added to savings**; **the more a box glows, the more was saved** (or taken). |
 | V4-7 | **Pay out of savings**: when paying, the user can choose a goal like choosing a category. **Screens and flow are for later**; only the data visualisation is for now. |
+Board: https://claude.ai/artifact/X9aNwLv6pGGZb5sFcxiXEm (source archive/session-workfiles/viz4/viz4-savings-goals.html).
 Interpretation to confirm: the top gauge is all savings together, goals stacked below it; "fill from the bottom" on a half gauge means filling up from the arc's lower ends, or a half-height grid (two forms drawn).
 
 ### Parked for the flow stage (after the visualisation queue; Tarun confirmed "we will work on the flow later")
