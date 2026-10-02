@@ -102,20 +102,22 @@ svg.ph rect.bx{transition:fill 1.3s ease}
 
 <div class="wrap">
 <header class="top">
-  <div class="eyebrow">Trickle v14 · Visualisation 5 of 11 · 2 Oct 2026</div>
+  <div class="eyebrow">Trickle v14 · Visualisation 5 of 11 · updated 2 Oct 2026</div>
   <h1>Weekly savings</h1>
-  <p class="lead">At the end of every week a pop-up appears on Home. It shows the week's grid with the money you didn't spend in red. You choose which goals it goes into, the red boxes turn green, and the savings ring updates. Drawn for all six students, including a week with nothing left. Options only. You decide.</p>
+  <p class="lead">At the end of every week a pop-up appears on Home. It shows the week's grid with what was left, in amber and in rupees. You can move it to savings, choosing the goals, or to next week's budget. A week with nothing left, or overspent, shows boxes filled from the top and a reminder of your goals. Drawn for all six students. Options only. You decide.</p>
 </header>
 
 <section style="border-top:0;padding-top:0">
   <div class="sec-h"><h2>Already decided</h2></div>
   <div class="logged">
-    <div><b>V5-1 · When and where</b><span>The end of every week, as a pop-up screen on Home.</span></div>
-    <div><b>V5-2 · Red to green</b><span>A grid of the week. The unspent boxes are red, then turn green as they go to savings.</span></div>
-    <div><b>V5-3 · Choose goals</b><span>You pick which goals the money goes into.</span></div>
-    <div><b>V5-4 · Updated ring</b><span>The full segmented savings ring shows the result.</span></div>
+    <div><b>V5-1 to V5-4</b><span>End of every week, a pop-up on Home. The unspent boxes turn to green as they go into the goals you choose, then the savings ring updates.</span></div>
+    <div><b>V5-5 · Next week</b><span>A second option: move it to next week's budget. This is the skip.</span></div>
+    <div><b>V5-6 · Equal split</b><span>Into the goals you pick, and into all categories for next week's budget.</span></div>
+    <div><b>V5-7 · Amber</b><span>The unspent boxes are amber, not red.</span></div>
+    <div><b>V5-8 · Rupees in step 1</b><span>How much was left, in rupees, on the first screen, with the scale chip.</span></div>
+    <div><b>V5-9 · A week with none</b><span>Boxes filled from the top, an alert "Let's do better this week", and your goals.</span></div>
   </div>
-  <p class="small">Red is an exception to the no-red rule, drawn because you asked for it. Please confirm below. Today on this board is Sunday 25 October 2026, the end of the week.</p>
+  <p class="small">Today on this board is Sunday 25 October 2026, the end of the week.</p>
 </section>
 
 <section>
@@ -128,28 +130,35 @@ svg.ph rect.bx{transition:fill 1.3s ease}
 
 <section>
   <div class="sec-h"><span class="k">A</span><h2>Step 1: the pop-up on Home</h2></div>
-  <p class="q">The week's grid, the leftover in red, one button. No rupees here, because Home has none. Harsh-type overspent, so he gets a quiet card and no red.</p>
+  <p class="q">The week's grid with what was left in amber, how much in rupees, and two ways out: to savings or to next week's budget. Yash-type spent it all and Harsh-type overspent, so their grids are filled from the top, with the alert and their goals.</p>
   <div class="gal" id="secA"></div>
   <div class="notes" id="noteA"></div>
 </section>
 
 <section>
-  <div class="sec-h"><span class="k">B</span><h2>Step 2: choose where it goes</h2></div>
-  <p class="q">The boxes have turned green, each in the shade of the goal it goes to. Tap goals to include or leave out; the money splits evenly between the ones picked. The ETA of each goal shows how much sooner it gets there. Nishad-type has three goals and two are picked here.</p>
+  <div class="sec-h"><span class="k">B</span><h2>Step 2: choose the goals</h2></div>
+  <p class="q">The amber boxes have turned green, each in the shade of its goal. Tap goals to include or leave out; the money splits equally between those picked, and each row says how much sooner it gets there.</p>
   <div class="gal" id="secB"></div>
   <div class="notes" id="noteB"></div>
 </section>
 
 <section>
   <div class="sec-h"><span class="k">C</span><h2>Step 3: the updated savings ring</h2></div>
-  <p class="q">The full segmented ring from the Savings page. What was just added is the paler green in each section.</p>
+  <p class="q">The full segmented ring. What was just added is the paler green in each section.</p>
   <div class="gal" id="secC"></div>
   <div class="notes" id="noteC"></div>
 </section>
 
 <section>
+  <div class="sec-h"><span class="k">C2</span><h2>Or: move it to next week's budget</h2></div>
+  <p class="q">The skip. The leftover is split equally across all of the student's budget categories, in the category colours. Five coloured and the rest as "others", as everywhere.</p>
+  <div class="gal" id="secC2"></div>
+  <div class="notes" id="noteC2"></div>
+</section>
+
+<section>
   <div class="sec-h"><span class="k">D</span><h2>Try it</h2></div>
-  <p class="q">Pick a student. "Move it to savings" starts step 2, where the red boxes turn green one row at a time. Tap goals to change where it goes, then Move, then Done.</p>
+  <p class="q">Pick a student. "Move it to savings" starts step 2, where the amber boxes turn green one row at a time. Tap goals to change where it goes, then Move, then Done. Or try "Move it to next week's budget". Yash and Harsh show the week with nothing left.</p>
   <div class="demo">
     <div id="demo"></div>
     <div class="ctl">
@@ -161,21 +170,21 @@ svg.ph rect.bx{transition:fill 1.3s ease}
 </section>
 
 <section>
-  <div class="sec-h"><h2>Decisions for Tarun</h2></div>
+  <div class="sec-h"><h2>Still to confirm</h2></div>
   <div class="decide">
-    <div class="dq"><h3>1. Red, just here</h3><ol><li class="s">Keep red for the unspent boxes in this one pop-up, as you asked. Everywhere else stays no-red.</li><li>Use amber for unspent instead, matching the rest of the app.</li></ol></div>
-    <div class="dq"><h3>2. Rupees in the pop-up</h3><ol><li class="s">No ₹ on step 1 (Home has none), ₹ and the scale chip on step 2.</li><li>Show the amount from the start.</li></ol></div>
-    <div class="dq"><h3>3. How it splits</h3><ol><li class="s">Evenly between the goals you pick, all goals picked at first.</li><li>You set an amount per goal.</li></ol></div>
-    <div class="dq"><h3>4. A week with nothing left</h3><ol><li class="s">A quiet card, no red, no action needed.</li><li>No pop-up at all.</li></ol></div>
-    <div class="dq"><h3>5. Skipping</h3><ol><li class="s">No skip button: the pop-up is how the week ends. Leave it and it stays until chosen.</li><li>A small "Not now" that keeps the money in the budget.</li></ol></div>
-    <div class="dq"><h3>6. No goal yet</h3><ol><li class="s">The money is kept as savings and can be given a goal later.</li><li>Ask the student to make a goal first.</li></ol></div>
+    <div class="dq"><h3>1. "Split equally into all categories"</h3><ol><li class="s">Next week's budget: equal across all categories. Savings: equal across the goals you pick.</li><li>Savings also splits across all goals, with no choosing.</li></ol></div>
+    <div class="dq"><h3>2. A week with exactly nothing left</h3><ol><li class="s">The grid shows no boxes from the top, only the alert and your goals.</li><li>Fill one row from the top as a signal.</li></ol></div>
+    <div class="dq"><h3>3. The goal reminder</h3><ol><li class="s">Text rows: each goal's name and ETA.</li><li>Show the savings ring instead.</li></ol></div>
+    <div class="dq"><h3>4. Overspent: whose money?</h3><ol><li class="s">"Taken from next week", as in Viz 1.</li><li>Say nothing about it.</li></ol></div>
   </div>
 </section>
 </div>
 
 <script>
 (function(){
-const PBG='#0b0d10',EDGE='#2b3038',CELL='#2a3039',INK='#f2f4f5',MUT='#8f97a1',GRN='#62dcb4',AMB='#e3a43f',RED='#e5534b',TINT='#d9fbee';
+const PBG='#0b0d10',EDGE='#2b3038',CELL='#2a3039',INK='#f2f4f5',MUT='#8f97a1',GRN='#62dcb4',AMB='#e3a43f',RED='#e3a43f',TINT='#d9fbee';
+const CATC=['#5aa9ff','#b48cff','#ff7eb6','#f2d65b','#4fd1e6'],OTHC='#f6b27c';
+const CATS={'Vaishak-type':[['Food',2400],['Other',300]],'Gautham-type':[['Food & drinks',2600],['Travel',300],['Other',100]],'Tarun-type':[['Coffee & snacks',1600],['Food',2000],['Travel',700],['Other',400]],'Yash-type':[['Quick-commerce',4000],['Food',900],['Travel',500],['Fun',400],['Study',300],['Phone',200],['Other',100]],'Nishad-type':[['Food & beverages',6000],['Travel',2000],['Fun',1500],['Study',1200],['Gifts',800],['Snacks',700],['Haircut',700],['Phone',600],['Misc',600],['Stationery',500],['Clothes',500],['Books',400]],'Harsh-type':[['Mess & meals',2400],['Eating out',1600],['Fuel',400],['Gifts',300],['Fun',300],['Study',200],['Snacks',100],['Printouts',100],['Haircut',100],['Coffee',100],['Books',100],['Repairs',100],['Medical',100],['Charity',100],['Laundry',75],['Stationery',75],['Parking',75],['Misc',75]]};
 const GOALC=['#62dcb4','#2f9c7c','#a6efd6','#79d9b4','#1f7d63'];
 const C=27.5,P=32.5,SZ=320;
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
@@ -201,13 +210,13 @@ const S=[
  {short:'Vaishak-type',goals:[],loose:300,bud:700,left:40},
  {short:'Gautham-type',goals:[mk('Phone',800,2,11,2)],bud:700,left:180},
  {short:'Tarun-type',goals:[mk('Laptop',1000,1,15,3)],bud:1200,left:260},
- {short:'Yash-type',goals:[mk('Motorcycle',2000,9,13,4)],bud:1600,left:90},
+ {short:'Yash-type',goals:[mk('Motorcycle',2000,9,13,4)],bud:1600,left:0},
  {short:'Nishad-type',goals:[mk('Trip',3000,10,3,5),mk('Emergency',3000,15,6,6),mk('Laptop',2000,5,24,7)],bud:3900,left:1350},
  {short:'Harsh-type',goals:[mk('Bike service',1500,8,1,8),mk('Trip',1000,3,11,9)],bud:1600,left:-300}
 ];
 const etaOf=(g,add)=>addDays(TODAY,Math.round(Math.max(0,g.target-g.saved-(add||0))/g.pace*30.4));
 S.forEach(st=>{st.goals.forEach(g=>g.eta=etaOf(g));st.goals.sort((a,b)=>a.eta-b.eta);st.goals.forEach((g,i)=>g.color=GOALC[i%GOALC.length]);
-  st.box=st.bud/100;st.n=Math.max(0,Math.round(st.left/st.box));st.over=st.left<=0;
+  st.box=st.bud/100;st.n=Math.max(0,Math.round(st.left/st.box));st.over=st.left<=0;st.overN=Math.min(100,Math.round(Math.max(0,-st.left)/st.box));
   st.targets=st.goals.length?st.goals.map((g,i)=>({idx:i,name:g.name,color:g.color,g})):[{idx:0,name:'No goal yet',color:GRN,g:null}]});
 const sw=p=>p>=95?'reached':p<5?'just started':p<25?'a good start':p<45?'under half':p<=55?'about half':p<75?'over half':'nearly there';
 const lw=p=>p<10?'a little left':p<25?'a little left':p<45?'under half left':p<=55?'about half left':p<75?'over half left':'most of it left';
@@ -242,26 +251,34 @@ function ringItems(st,sel){const sp=split(st,sel),add={};sp.ts.forEach((t,j)=>{i
 const frame=(inner,label)=>`<svg class="ph" viewBox="0 0 390 844" role="img" aria-label="${esc(label)}"><rect x="1" y="1" width="388" height="842" rx="46" fill="#07090b" stroke="${EDGE}" stroke-width="2"/>${inner}<rect x="150" y="16" width="90" height="24" rx="12" fill="#000"/></svg>`;
 const sheet=()=>`${T(195,44,'Home',15,{a:'middle',f:'#3b424c'})}<rect x="1" y="60" width="388" height="783" rx="30" fill="${PBG}" stroke="${EDGE}" stroke-width="1.5"/><rect x="170" y="70" width="50" height="5" rx="2.5" fill="#2f353d"/>`;
 const scaleChip=(x,y,txt)=>`<rect x="${x}" y="${y}" width="${Math.round(txt.length*12.4+60)}" height="38" rx="12" fill="#17201e" stroke="${GRN}" stroke-opacity=".75" stroke-width="1.6"/><rect x="${x+12}" y="${y+10}" width="18" height="18" rx="5" fill="${GRN}"/>${T(x+40,y+27,txt,21,{w:700})}`;
+function topFills(n,color){const f=new Array(100).fill(null);for(let j=0;j<Math.min(100,n);j++){f[(9-Math.floor(j/10))*10+j%10]=color}return f}
 function gridSvg(fills,k,x,y,withAttr){let g='';for(let i=0;i<100;i++){const r=Math.floor(i/10),c=i%10,col=fills[i];
   g+=`<rect ${withAttr?`class="bx" data-j="${i}" `:''}x="${c*P}" y="${rowTop(r)}" width="${C}" height="${C}" rx="7" style="fill:${col||CELL}"/>`}
   return `<g transform="translate(${x} ${y}) scale(${k})">${g}</g>`}
 const btn=(y,label,go,on)=>`<g ${go?`data-go="${go}" role="button" tabindex="0" style="cursor:pointer"`:''}><rect x="35" y="${y}" width="320" height="56" rx="16" fill="${on===false?'#2a3039':GRN}"/>${T(195,y+35,label,20,{a:'middle',w:700,f:on===false?MUT:'#05281f'})}</g>`;
 
-function popScreen(st,dim){
+const ghostBtn=(y,label,go)=>`<g data-go="${go}" role="button" tabindex="0" style="cursor:pointer"><rect x="35" y="${y}" width="320" height="50" rx="16" fill="none" stroke="#3a424c" stroke-width="1.6"/>${T(195,y+32,label,18,{a:'middle',w:600})}</g>`;
+function popScreen(st){
   let s=sheet();
   s+=T(35,108,'SUNDAY · END OF THE WEEK',13,{f:MUT,w:700,ls:'1.6'})+T(35,146,'Your week',32,{w:700});
+  s+=scaleChip(35,160,`1 box = ${fmt(st.box)}`);
   if(st.over){
-    s+=T(35,176,'This week used all of it.',17,{f:MUT});
-    s+=gridSvg(new Array(100).fill(null),1,35,206);
-    s+=T(35,586,'Nothing left over',28,{w:600})+T(35,616,'A fresh week starts tomorrow.',17,{f:MUT});
-    s+=btn(690,'Okay','',true);
-    return frame(s,`${st.short} end of week, nothing left over`)}
-  s+=T(35,176,'Some of this week was left unspent.',17,{f:MUT});
-  const fills=new Array(100).fill(null);for(let i=0;i<st.n;i++)fills[i]=RED;
-  s+=gridSvg(fills,1,35,206);
-  s+=T(35,586,lw(st.left/st.bud*100),28,{w:600})+T(35,616,'Turn it into savings.',17,{f:MUT});
-  s+=btn(690,'Move it to savings','choose',true);
-  return frame(s,`${st.short} end of week, ${lw(st.left/st.bud*100)}`)}
+    const none=st.left===0;
+    s+=gridSvg(topFills(st.overN,AMB),1,35,214);
+    s+=T(35,572,"Let's do better this week",23,{w:700});
+    s+=T(35,600,none?'Nothing was left over.':`${fmt(-st.left)} over, taken from next week.`,16,{f:MUT});
+    s+=`<rect x="35" y="620" width="320" height="${st.goals.length?36+Math.min(3,st.goals.length)*30+4:60}" rx="14" fill="#14181d" stroke="${EDGE}"/>`;
+    if(st.goals.length){s+=T(52,646,'Your goals are waiting',16,{w:700});
+      st.goals.slice(0,3).forEach((g,i)=>{const y=672+i*30;s+=`<circle cx="60" cy="${y-5}" r="6" fill="${g.color}"/>${T(76,y,cut(g.name,16),16.5,{w:600})}${T(341,y,`ETA ${mon(g.eta)}`,15,{a:'end',f:MUT})}`})}
+    else s+=T(52,652,'Savings are waiting for a goal.',16,{f:MUT});
+    s+=btn(720,'Okay, new week','done',true);
+    return frame(s,`${st.short} end of week, ${none?'nothing left':'overspent'}, filled from the top`)}
+  const fills=new Array(100).fill(null);for(let i=0;i<st.n;i++)fills[i]=AMB;
+  s+=gridSvg(fills,1,35,214);
+  s+=T(35,572,`${fmt(st.left)} left over`,28,{w:700})+T(35,600,lw(st.left/st.bud*100),17,{f:MUT});
+  s+=btn(626,'Move it to savings','choose',true);
+  s+=ghostBtn(696,"Move it to next week's budget",'next');
+  return frame(s,`${st.short} end of week, ${fmt(st.left)} left over`)}
 
 function chooseScreen(st,sel,fillsOverride){
   const sp=split(st,sel),fills=fillsOverride||gridFill(st,sel),withAttr=true;
@@ -279,6 +296,18 @@ function chooseScreen(st,sel,fillsOverride){
   s+=btn(700,sel.length?`Move ${fmt(st.left)}`:'Pick a goal',sel.length?'result':'',sel.length>0);
   return frame(s,`${st.short} choose goals`)}
 
+function nextScreen(st){
+  const cats=CATS[st.short],n=cats.length,sorted=[...cats].sort((a,b)=>b[1]-a[1]),each=lr(Math.round(st.left),new Array(n).fill(1));
+  const share={};sorted.forEach((c,i)=>{share[c[0]]=each[i]});
+  let s=sheet();
+  s+=T(35,108,'DONE',13,{f:MUT,w:700,ls:'1.6'})+T(35,146,"Next week's budget",30,{w:700});
+  s+=T(35,176,`${fmt(st.left)} added`,16,{f:MUT})+T(35,198,`split equally across all ${n} categories`,15.5,{f:MUT});
+  let y=250;
+  sorted.slice(0,5).forEach((c,i)=>{s+=`<rect x="35" y="${y-22}" width="320" height="44" rx="12" fill="#12161b" stroke="${EDGE}"/><rect x="48" y="${y-9}" width="18" height="18" rx="5" fill="${CATC[i]}"/>${T(76,y+6,cut(c[0],20),18,{w:600})}${T(341,y+6,`+${fmt(share[c[0]])}`,18,{a:'end',w:700})}`;y+=52});
+  if(n>5){const rest=sorted.slice(5),sum=rest.reduce((a,c)=>a+share[c[0]],0);
+    s+=`<rect x="35" y="${y-22}" width="320" height="44" rx="12" fill="#12161b" stroke="${EDGE}"/><rect x="48" y="${y-9}" width="18" height="18" rx="5" fill="${OTHC}"/>${T(76,y+6,`${rest.length} others`,18,{w:600})}${T(341,y+6,`+${fmt(sum)}`,18,{a:'end',w:700})}`}
+  s+=btn(700,'Done','done',true);
+  return frame(s,`${st.short} left over added to next week's budget`)}
 function resultScreen(st,sel){
   const sp=split(st,sel);let s=sheet();
   s+=T(35,108,'DONE',13,{f:MUT,w:700,ls:'1.6'})+T(35,146,'Saved',32,{w:700});
@@ -298,24 +327,28 @@ function resultScreen(st,sel){
   return frame(s,`${st.short} updated savings ring`)}
 
 const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c)}</figcaption></figure>`;
-document.getElementById('pool').innerHTML=S.map(st=>`<tr><td>${st.short}</td><td class="n">${fmt(st.bud)}</td><td class="n">${fmt(st.box)}</td><td class="n">${st.over?'overspent':fmt(st.left)}</td><td class="n">${st.over?'0':st.n}</td><td>${st.goals.length?st.goals.map(g=>g.name).join(', '):'none yet'}</td></tr>`).join('');
+document.getElementById('pool').innerHTML=S.map(st=>`<tr><td>${st.short}</td><td class="n">${fmt(st.bud)}</td><td class="n">${fmt(st.box)}</td><td class="n">${st.left<0?fmt(-st.left)+' over':st.left===0?'nothing':fmt(st.left)}</td><td class="n">${st.left<0?st.overN+' from the top':st.left===0?'0':st.n}</td><td>${st.goals.length?st.goals.map(g=>g.name).join(', '):'none yet'}</td></tr>`).join('');
 const allSel=st=>st.targets.map((_,i)=>i);
 const secSel=st=>st===S[4]?[0,1]:allSel(st);
-document.getElementById('secA').innerHTML=`<div class="opt"><div class="row">`+S.map(st=>fg(popScreen(st),st.short,st.over?'overspent, no red':`${st.n} boxes left over`)).join('')+`</div></div>`;
+document.getElementById('secA').innerHTML=`<div class="opt"><div class="row">`+S.map(st=>fg(popScreen(st),st.short,st.left<0?`${fmt(-st.left)} over, ${st.overN} boxes from the top`:st.left===0?'nothing left, no boxes':`${fmt(st.left)} left, ${st.n} boxes`)).join('')+`</div></div>`;
 document.getElementById('noteA').innerHTML=`
-<div class="note"><b>One button, no ₹</b>The pop-up is the week's grid with the leftover in red and a single action. The amount waits for the next step, since Home carries no ₹.</div>
-<div class="note"><b>2 to 35 boxes</b>Vaishak has 6 boxes left and Nishad 35. A small leftover is still a visible row of red, so no week looks empty by comparison.</div>
-<div class="note"><b>Overspent weeks</b>Harsh-type overspent, so there is nothing red to show. A quiet card says nothing was left and a fresh week starts tomorrow.</div>`;
-const withMoney=S.filter(st=>!st.over);
+<div class="note"><b>Amber, in rupees</b>The leftover is amber boxes from the bottom, with the amount in words and rupees under the grid and the scale chip above it. Two buttons: to savings, or to next week's budget.</div>
+<div class="note"><b>From the top means "gone"</b>When there is nothing left the grid is read from the top, so an empty week doesn't look like a saved one. Harsh-type, ₹300 over, has 19 amber boxes from the top. Yash-type has none, only the alert.</div>
+<div class="note"><b>The reminder</b>"Let's do better this week", then each goal and its ETA as text. It is a nudge back to what the money was for, with no red and no blame.</div>`;
+const withMoney=S.filter(st=>st.left>0);
 document.getElementById('secB').innerHTML=`<div class="opt"><div class="row">`+withMoney.map(st=>fg(chooseScreen(st,secSel(st)),st.short,st===S[4]?'3 goals, 2 picked':st.goals.length?`${st.goals.length} goal`:'no goal yet')).join('')+`</div></div>`;
 document.getElementById('noteB').innerHTML=`
-<div class="note"><b>Red turns green</b>Each box takes the shade of the goal it goes to, the same greens as on the Savings ring. Nishad's boxes are two shades because two goals are picked.</div>
-<div class="note"><b>You choose</b>Tap a goal to include or leave it out. The money splits evenly between the ones picked, and each row says how much it adds and how many weeks sooner the goal arrives.</div>
-<div class="note"><b>No goal yet</b>Vaishak-type has none, so the money is kept as savings with no goal yet, and he can give it a goal later.</div>`;
+<div class="note"><b>Amber turns green</b>Each box takes the shade of the goal it goes to, the same greens as on the Savings ring.</div>
+<div class="note"><b>Equal split</b>Between the goals you pick. Nishad's two picked goals get ₹675 each, and he can pick all three.</div>
+<div class="note"><b>No goal yet</b>Vaishak-type has none, so it is kept as savings and given a goal later.</div>`;
 document.getElementById('secC').innerHTML=`<div class="opt"><div class="row">`+withMoney.map(st=>fg(resultScreen(st,secSel(st)),st.short,st.goals.length?'ring after':'first savings')).join('')+`</div></div>`;
 document.getElementById('noteC').innerHTML=`
-<div class="note"><b>What changed is paler</b>In each goal's section the old fill keeps its green and the new boxes are a paler tint, so you see what this week added.</div>
-<div class="note"><b>The ETA moves</b>Each row says the goal's new ETA. A week's leftover pulls a goal closer by a few weeks, which is the point: not spending is saving.</div>`;
+<div class="note"><b>What changed is paler</b>In each goal's section the old fill keeps its green and the new boxes are a paler tint.</div>
+<div class="note"><b>The ETA moves</b>Each row shows the new ETA. A week's leftover pulls a goal closer, which is the point.</div>`;
+document.getElementById('secC2').innerHTML=`<div class="opt"><div class="row">`+withMoney.map(st=>fg(nextScreen(st),st.short,`${CATS[st.short].length} categories`)).join('')+`</div></div>`;
+document.getElementById('noteC2').innerHTML=`
+<div class="note"><b>Equal across all categories</b>₹1,350 over Nishad's 12 categories is ₹112 or ₹113 each. The five biggest budgets show with their colour, the other seven are added together.</div>
+<div class="note"><b>Small leftovers</b>Vaishak-type has ₹40 for 2 categories, ₹20 each. Tiny amounts still split, and still read as a list.</div>`;
 
 /* ---------- demo ---------- */
 const dem={s:4,step:'pop',sel:null};
@@ -330,12 +363,14 @@ function draw(anim){const st=S[dem.s];
     if(anim==='from-red'){const red=new Array(100).fill(null);for(let i=0;i<st.n;i++)red[i]=RED;demo.innerHTML=chooseScreen(st,dem.sel,red);animateTo(target)}
     else{const rects=demo.querySelectorAll('rect.bx');const prev=[...rects].map(r=>r.style.fill);demo.innerHTML=chooseScreen(st,dem.sel,null);
       if(anim==='recolour'&&prev.length===100){const nr=demo.querySelectorAll('rect.bx');nr.forEach((r,i)=>{r.style.transition='none';r.style.fill=prev[i]});animateTo(target)}}}
+  else if(dem.step==='next')demo.innerHTML=nextScreen(st);
   else demo.innerHTML=resultScreen(st,dem.sel);
-  dn.textContent=st.over&&dem.step==='pop'?'An overspent week: a quiet card, nothing to move.':dem.step==='pop'?'Tap "Move it to savings".':dem.step==='choose'?'Tap goals to include or leave out. The boxes recolour.':'The updated ring. Tap Done to start again.'}
+  dn.textContent=st.over&&dem.step==='pop'?'No leftover: the boxes fill from the top and an alert reminds you of your goals.':dem.step==='pop'?'Tap "Move it to savings" or "Move it to next week\'s budget".':dem.step==='choose'?'Tap goals to include or leave out. The boxes recolour.':'The updated ring. Tap Done to start again.'}
 demo.addEventListener('click',e=>{const st=S[dem.s];
   const pk=e.target.closest('[data-pick]');if(pk){const i=+pk.dataset.pick;const a=dem.sel.indexOf(i);if(a>=0)dem.sel.splice(a,1);else dem.sel.push(i);dem.sel.sort();draw('recolour');return}
   const g=e.target.closest('[data-go]');if(!g)return;const k=g.dataset.go;
   if(k==='choose'){dem.step='choose';dem.sel=allSel(st);draw('from-red')}
+  else if(k==='next'){dem.step='next';draw()}
   else if(k==='result'){dem.step='result';draw()}
   else if(k==='done'){dem.step='pop';draw()}});
 demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-go],[data-pick]');if(t){e.preventDefault();t.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
