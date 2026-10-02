@@ -102,7 +102,7 @@ svg.ph [data-go]{cursor:pointer}
 <header class="top">
   <div class="eyebrow">Trickle v14 · Visualisation 4 of 11 · updated 2 Oct 2026</div>
   <h1>Savings goals</h1>
-  <p class="lead">The Savings page is one segmented ring. Each goal is its own section, sized by its amount and filled in its own green by how much is saved. Below it the goals are plain text rows, each with its ETA. Tap a goal for its months, step through them with the arrows, and scroll down for every day of the month. Options only. You decide.</p>
+  <p class="lead">The Savings page is one segmented ring. Each goal is its own section, sized by its amount and filled in its own green by how much is saved. Below it the goals are plain text rows, each with its ETA. Tap a goal, then switch between By month (with a stepper) and By day (week columns). Options only. You decide.</p>
 </header>
 
 <section style="border-top:0;padding-top:0">
@@ -111,7 +111,7 @@ svg.ph [data-go]{cursor:pointer}
     <div><b>V4-1 to V4-3</b><span>Fills like Viz 1. An ETA for every goal. Goals are a collapsible list. The first Savings page is only the gauge; a tapped goal opens its statistics.</span></div>
     <div><b>V4-8 · Text rows</b><span>No visualisation next to a goal. A row is its name, how far along and its ETA.</span></div>
     <div><b>V4-9 · Segmented ring</b><span>One ring, split into a section per goal by its amount, each section filled in its own green by amount saved.</span></div>
-    <div><b>V4-10 and V4-12 · Months, then days</b><span>Green (added) and amber (taken out) glowing boxes, with a stepper through the months. The day-by-day grid is back, below the months, for the selected month.</span></div>
+    <div><b>V4-10, V4-12 and V4-14 · Months and days</b><span>A By month | By day toggle. Months have a stepper. Days run as week columns, no month stepper. Green added, amber taken out, glowing by amount.</span></div>
     <div><b>V4-13 · Most saved</b><span>Shown by glow and a halo on the biggest months, not written.</span></div>
     <div><b>V4-4, V4-6, V4-7</b><span>Celebration screen, glow rule for the boxes, pay from savings (flow later).</span></div>
   </div>
@@ -135,7 +135,7 @@ svg.ph [data-go]{cursor:pointer}
 
 <section>
   <div class="sec-h"><span class="k">B</span><h2>Inside a goal: months, then days</h2></div>
-  <p class="q">Screen 1: the month stepper and every month box, the selected month outlined in white, its amount written under. Screen 2, a scroll below: a day-by-day grid for that month, with the same stepper so you can move through the months and see every day. Stepping past the first or last box moves the window, so a 15-month goal is fully reachable.</p>
+  <p class="q">A By month | By day toggle. By month: the stepper and every month box, the selected month outlined in white, its amount written under. By day: the last twelve weeks as week columns, every day a box, no month stepper. Stepping past the first or last month box moves the window, so a 15-month goal is fully reachable.</p>
   <div class="gal" id="secB"></div>
   <div class="notes" id="noteB"></div>
 </section>
@@ -149,7 +149,7 @@ svg.ph [data-go]{cursor:pointer}
 
 <section>
   <div class="sec-h"><span class="k">D</span><h2>Try it</h2></div>
-  <p class="q">Pick a student and a ring form. Tap Goals to collapse the list, a goal for its months, the arrows or a box to change month, "Day by day" to scroll to the days and tap a day. "Finish this goal" plays the celebration and moves the goal to Completed.</p>
+  <p class="q">Pick a student and a ring form. Tap Goals to collapse the list, a goal, then By month (arrows or a box) or By day (tap a day). "Finish this goal" plays the celebration and moves the goal to Completed.</p>
   <div class="demo">
     <div id="demo"></div>
     <div class="ctl">
@@ -168,7 +168,7 @@ svg.ph [data-go]{cursor:pointer}
     <div class="dq"><h3>2. How are the sections sized?</h3><ol><li class="s">By each goal's target amount, so a ₹30,000 goal gets twice the arc of a ₹15,000 one.</li><li>All sections equal, whatever the amount.</li></ol></div>
     <div class="dq"><h3>3. Months: what does the toggle do?</h3><ol><li class="s">Moves a white outline through the month boxes and writes that month's amount below.</li><li>Shows one month at a time, full screen.</li></ol></div>
     <div class="dq"><h3>4. Most saved months</h3><ol><li class="s">A bright halo on the three biggest month boxes, no text.</li><li>Halo on one only, the single biggest.</li><li>Nothing extra: the glow alone shows it.</li></ol></div>
-    <div class="dq"><h3>5. Day grid scale</h3><ol><li class="s">Glow scaled to the goal's biggest day ever, so months compare.</li><li>Scaled to each month's own biggest day.</li></ol></div>
+    <div class="dq"><h3>5. How far back do the days go?</h3><ol><li class="s">Last twelve weeks, fixed.</li><li>Scroll sideways to go further back.</li></ol></div>
     <div class="dq"><h3>6. A goal row</h3><ol><li class="s">Name, a colour dot that matches its ring section, then "how far · ETA".</li><li>No colour dot; the order matches the ring instead.</li></ol></div>
   </div>
 </section>
@@ -305,31 +305,42 @@ function dayData(g,idx){
     if(rnd(seed+4)<.5){const dp=Math.round(Math.abs(net)*.4/10)*10;arr[pick(6)]+=dp;arr[pick(8)]-=dp}
   }
   return arr}
-function dayCalendar(g,sel,dsel){
-  const arr=dayData(g,sel),d=monthDate(g,sel),dim=arr.length,firstDow=(new Date(d.getFullYear(),d.getMonth(),1).getDay()+6)%7;
-  const mx=Math.max(1,...g.nets.map((_,i)=>Math.max(...dayData(g,i).map(v=>v==null?0:Math.abs(v)))));
-  const BW=44,GP=5,x0=66,y0=250;let s='';
-  ['M','T','W','T','F','S','S'].forEach((l,r)=>{s+=T(44,y0+r*(BW+GP)+BW/2+5,l,13.5,{f:MUT,a:'middle'})});
-  for(let i=0;i<dim;i++){const col=Math.floor((i+firstDow)/7),row=(i+firstDow)%7,x=x0+col*(BW+GP),y=y0+row*(BW+GP),v=arr[i],dn=i+1;
-    if(v==null){s+=`<rect x="${x}" y="${y}" width="${BW}" height="${BW}" rx="9" fill="none" stroke="#2a3038" stroke-dasharray="3 4"/>${T(x+7,y+17,String(dn),12.5,{f:'#3b424c'})}`;continue}
-    if(v===0){s+=`<g data-d="${i}" role="button" tabindex="0" aria-label="${dn}"><rect x="${x}" y="${y}" width="${BW}" height="${BW}" rx="9" fill="#1b2026" ${dsel===i?'stroke="#fff" stroke-width="2.5"':''}/>${T(x+7,y+17,String(dn),12.5,{f:'#5a626d'})}</g>`;continue}
-    const k=Math.abs(v)/mx,col2=v<0?AMB:GRN;
-    if(k>.45)s+=`<rect x="${x+3}" y="${y+3}" width="${BW-6}" height="${BW-6}" rx="9" fill="${col2}" opacity="${(k*.85).toFixed(2)}" filter="url(#glow)"/>`;
-    s+=`<g data-d="${i}" role="button" tabindex="0" aria-label="${dn}"><rect x="${x}" y="${y}" width="${BW}" height="${BW}" rx="9" fill="${col2}" opacity="${(.25+.75*k).toFixed(2)}" ${dsel===i?'stroke="#fff" stroke-width="2.5"':''}/>${T(x+7,y+17,String(dn),12.5,{f:k>.55?'#06231b':INK,w:600})}</g>`}
-  return {svg:s,arr,d}}
-function dayScreen(st,gi,sel,dsel){
-  const g=st.goals[gi];if(sel==null)sel=g.nets.length-1;
+function dayWeeks(g,dsel){
+  const cache={},get=idx=>cache[idx]||(cache[idx]=dayData(g,idx));
+  let mx=1;for(let i=0;i<g.nets.length;i++)get(i).forEach(v=>{if(v!=null)mx=Math.max(mx,Math.abs(v))});
+  const start=addDays(TODAY,-83),firstDow=(start.getDay()+6)%7,series=[];
+  for(let d=0;d<84;d++){const dt=addDays(start,d),ago=(TODAY.getFullYear()*12+TODAY.getMonth())-(dt.getFullYear()*12+dt.getMonth()),idx=g.nets.length-1-ago;
+    series.push(idx<0?null:get(idx)[dt.getDate()-1])}
+  let s='';const BX=52,BY=282,SQ=19,PIT=24;
+  s+=T(35,BY+PIT*0+14,'M',12.5,{f:MUT})+T(35,BY+PIT*2+14,'W',12.5,{f:MUT})+T(35,BY+PIT*4+14,'F',12.5,{f:MUT});
+  let lastMon=-1;
+  for(let d=0;d<84;d++){const dt=addDays(start,d),dow=(dt.getDay()+6)%7,wk=Math.floor((d+firstDow)/7),x=BX+wk*PIT,y=BY+dow*PIT,v=series[d];
+    if(dow===0&&dt.getMonth()!==lastMon&&dt.getDate()<=7){s+=T(x,BY-10,MN[dt.getMonth()],12.5,{f:MUT});lastMon=dt.getMonth()}
+    if(v==null){s+=`<rect x="${x}" y="${y}" width="${SQ}" height="${SQ}" rx="5" fill="none" stroke="#2a3038"/>`;continue}
+    const sel=dsel===d?' stroke="#fff" stroke-width="2"':'';
+    if(v===0){s+=`<g data-d="${d}" role="button" tabindex="0" aria-label="${dt.getDate()}"><rect x="${x}" y="${y}" width="${SQ}" height="${SQ}" rx="5" fill="#1b2026"${sel}/></g>`;continue}
+    const k=Math.abs(v)/mx,col=v<0?AMB:GRN;
+    if(k>.45)s+=`<rect x="${x}" y="${y}" width="${SQ}" height="${SQ}" rx="5" fill="${col}" opacity="${(k*.85).toFixed(2)}" filter="url(#glow)"/>`;
+    s+=`<g data-d="${d}" role="button" tabindex="0" aria-label="${dt.getDate()}"><rect x="${x}" y="${y}" width="${SQ}" height="${SQ}" rx="5" fill="${col}" opacity="${(.25+.75*k).toFixed(2)}"${sel}/></g>`}
+  return {svg:s,series,start}}
+function stats1(st,gi,o){
+  o=Object.assign({view:'month',sel:null,dsel:null},o);const g=st.goals[gi];const sel=o.sel==null?g.nets.length-1:o.sel;
   let s=T(35,76,'‹ Savings',17,{f:MUT}).replace('<text','<text data-go="back" role="button" tabindex="0" style="cursor:pointer"');
   s+=`<circle cx="42" cy="101" r="7" fill="${g.color}"/>`+T(58,112,cut(g.name,18),30,{w:600});
-  s+=T(35,150,'Day by day',20,{w:700})+T(35,176,'Every day of the month, same colours',16.5,{f:MUT});
-  s+=stepper(g,sel,190);
-  const cal=dayCalendar(g,sel,dsel);s+=cal.svg;
-  s+=keyRow(612);
-  let line='Tap a day for its amount';
-  if(dsel!=null&&cal.arr[dsel]!=null){const v=cal.arr[dsel];line=`${dsel+1} ${MN[cal.d.getMonth()]}: ${v===0?'nothing moved':(v<0?'took out ':'added ')+fmt(v)}`}
-  s+=T(35,654,line,dsel!=null?22:17,{w:dsel!=null?600:400,f:dsel!=null?INK:MUT});
-  s+=`<g data-go="stats" role="button" tabindex="0" aria-label="Months"><rect x="35" y="684" width="320" height="52" rx="14" fill="#14181d" stroke="${EDGE}"/>${T(52,716,'Months',17.5,{w:600})}${T(349,716,'↑',20,{a:'end',f:MUT})}</g>`;
-  return frame(s,`${st.short} ${g.name} day by day, ${MN[cal.d.getMonth()]}`,3)}
+  s+=T(35,150,`ETA ${mon(g.eta)}`,20,{w:700})+T(35,176,`${fmt(g.saved)} of ${fmt(g.target)} saved`,16.5,{f:MUT});
+  s+=`<rect x="35" y="196" width="320" height="38" rx="12" fill="#14181d" stroke="${EDGE}"/>`;
+  [['month','By month'],['day','By day']].forEach(([k,l],i)=>{const x=38+i*158;s+=`<g data-view="${k}" role="button" tabindex="0">${o.view===k?`<rect x="${x}" y="199" width="156" height="32" rx="10" fill="#26302d"/>`:''}${T(x+78,221,l,16.5,{a:'middle',w:o.view===k?700:500,f:o.view===k?INK:MUT})}</g>`});
+  if(o.view==='month'){
+    const d=monthDate(g,sel),v=g.nets[sel];
+    s+=stepper(g,sel,250)+monthBoxes(g,sel,314)+keyRow(572);
+    s+=T(35,616,`${MN[d.getMonth()]}: ${v<0?'took out ':'added '}${fmt(v)}`,22,{w:600});
+    return frame(s,`${st.short} ${g.name} by month, ${MN[d.getMonth()]}`,3)}
+  const w=dayWeeks(g,o.dsel);s+=w.svg+keyRow(500);
+  let line='Tap a day for its amount',big=false;
+  if(o.dsel!=null){const v=w.series[o.dsel],dt=addDays(w.start,o.dsel);if(v!=null){big=true;line=`${dt.getDate()} ${MN[dt.getMonth()]}: ${v===0?'nothing moved':(v<0?'took out ':'added ')+fmt(v)}`}}
+  s+=T(35,544,line,big?22:17,{w:big?600:400,f:big?INK:MUT});
+  s+=T(35,580,`Last twelve weeks · started ${mon(addDays(TODAY,-g.startDays))}`,15,{f:MUT});
+  return frame(s,`${st.short} ${g.name} by day`,3)}
 
 /* ---------- celebration and completed ---------- */
 function celebrate(name,days,amount){
@@ -362,15 +373,15 @@ document.getElementById('noteA').innerHTML=`
 <div class="note"><b>B · full ring</b>Closer to your donut reference and easier to split into many sections, but it is a ring, the form you set aside for spending.</div>`;
 
 const wg=S.filter(s=>s.goals.length);
-document.getElementById('secB').innerHTML=`<div class="opt"><h4><b>Screen 1</b>the months <span>stepper and every month box; the biggest months carry a bright halo</span></h4><div class="row">`
- +wg.map(st=>fg(stats1(st,0),st.short,`${st.goals[0].name}, ${st.goals[0].nets.length} month${st.goals[0].nets.length>1?'s':''}`)).join('')+fg(stats1(S[4],1,3),'Nishad-type','Emergency, 15 months, window shifted')+`</div></div>`
- +`<div class="opt"><h4><b>Screen 2</b>day by day, a scroll down <span>every day of the selected month, same stepper</span></h4><div class="row">`
- +wg.map(st=>fg(dayScreen(st,0),st.short,`${st.goals[0].name}, ${MN[monthDate(st.goals[0],st.goals[0].nets.length-1).getMonth()]}`)).join('')+fg(dayScreen(S[4],1,3),'Nishad-type','Emergency, a month earlier')+`</div></div>`;
+document.getElementById('secB').innerHTML=`<div class="opt"><h4><b>By month</b>stepper and every month box <span>the biggest months carry a bright halo</span></h4><div class="row">`
+ +wg.map(st=>fg(stats1(st,0),st.short,`${st.goals[0].name}, ${st.goals[0].nets.length} month${st.goals[0].nets.length>1?'s':''}`)).join('')+fg(stats1(S[4],1,{sel:3}),'Nishad-type','Emergency, 15 months, window shifted')+`</div></div>`
+ +`<div class="opt"><h4><b>By day</b>weeks as columns, Monday to Sunday down <span>last twelve weeks, no month stepper</span></h4><div class="row">`
+ +wg.map(st=>fg(stats1(st,0,{view:'day'}),st.short,st.goals[0].name)).join('')+fg(stats1(S[4],1,{view:'day'}),'Nishad-type','Emergency')+`</div></div>`;
 document.getElementById('noteB').innerHTML=`
-<div class="note"><b>One page, two screens</b>The page scrolls. Screen 1 is only the months. Scroll down and screen 2 is only the days of the month you stopped on. Each is alone on its screen.</div>
-<div class="note"><b>The stepper is shared</b>‹ › moves through the months on both screens. Pick a month on screen 1, scroll, and the days are that month's. Move it on screen 2 and the month boxes follow when you go back up.</div>
-<div class="note"><b>Most saved, seen not read</b>The three biggest months have a bright halo round their glowing box, so you find the peaks by looking. There is no list and no text for them.</div>
-<div class="note"><b>Days are weeks by weekday</b>Columns are weeks, rows Monday to Sunday, like your reference, with the date in each box. Dashed boxes are days before the goal began or not yet come. Dark boxes are days nothing moved.</div>`;
+<div class="note"><b>The earlier toggle</b>By month and By day sit side by side under the goal's ETA, as before. One visualisation shows at a time.</div>
+<div class="note"><b>By month keeps its stepper</b>‹ › moves a white outline through the months and writes that month's amount below. The three biggest months carry a bright halo, so the most saved are seen, not read.</div>
+<div class="note"><b>By day has no month toggle</b>The days run as week columns across the last twelve weeks, with month names on top, like your reference. Each day is a box; tap one for its amount. Dashed boxes are days before the goal began.</div>
+<div class="note"><b>Limit</b>Twelve weeks is as far back as the days go on this screen. The months go back as far as the goal does.</div>`;
 
 document.getElementById('secC').innerHTML=`<div class="opt"><div class="row">`
  +fg(celebrate('Phone',94,16000),'Nishad-type','Phone, 94 days')+fg(celebrate('Helmet',42,3200),'Harsh-type','Helmet, 42 days')+fg(celebrate('Trip',211,15000),'Yash-type','Trip, 211 days')
@@ -382,31 +393,29 @@ document.getElementById('noteC').innerHTML=`
 /* ---------- demo ---------- */
 const copyS=()=>S.map(s=>({...s,goals:s.goals.map(g=>({...g})),done:s.done.map(d=>({...d}))}));
 let DS=copyS();
-const dem={s:4,form:'half',view:'savings',gi:0,sel:null,dsel:null,goalsOpen:true,celeb:null};
+const dem={s:4,form:'half',view:'savings',gi:0,stat:'month',sel:null,dsel:null,goalsOpen:true,celeb:null};
 const demo=document.getElementById('demo'),dn=document.getElementById('dnote');
 function draw(){const st=DS[dem.s];let h;
   if(dem.view==='savings')h=savingsScreen(st,dem.form,{goalsOpen:dem.goalsOpen});
-  else if(dem.view==='stats')h=stats1(st,dem.gi,dem.sel);
-  else if(dem.view==='days')h=dayScreen(st,dem.gi,dem.sel,dem.dsel);
+  else if(dem.view==='stats')h=stats1(st,dem.gi,{view:dem.stat,sel:dem.sel,dsel:dem.dsel});
   else if(dem.view==='celebrate')h=celebrate(dem.celeb.name,dem.celeb.days,dem.celeb.amount);
   else h=doneScreen(st);
   demo.innerHTML=h;
-  document.getElementById('fin').disabled=!(dem.view==='stats'||dem.view==='days');
-  dn.textContent=dem.view==='savings'?(st.goals.length?'Tap a goal to open its months.':`${st.short} has no goal yet. Making one is for the flow stage.`):dem.view==='stats'?'Use the arrows or tap a box to change month. "Day by day" scrolls down to its days.':dem.view==='days'?'Use the arrows to move through the months and tap a day. "Months" scrolls back up.':dem.view==='celebrate'?'Done returns to Savings with the goal moved to Completed.':'Completed goals.'}
+  document.getElementById('fin').disabled=dem.view!=='stats';
+  dn.textContent=dem.view==='savings'?(st.goals.length?'Tap a goal to open its months.':`${st.short} has no goal yet. Making one is for the flow stage.`):dem.view==='stats'?(dem.stat==='month'?'Use the arrows or tap a box to change month, or switch to By day.':'Tap a day for its amount, or switch back to By month.'):dem.view==='celebrate'?'Done returns to Savings with the goal moved to Completed.':'Completed goals.'}
 function act(k){
   if(k==='back'){dem.view='savings';dem.sel=null}
   else if(k==='goals')dem.goalsOpen=!dem.goalsOpen;
   else if(k==='done')dem.view='done';
-  else if(k==='days'){dem.view='days';dem.dsel=null}
-  else if(k==='stats')dem.view='stats';
-  else if(k&&k.startsWith('goal:')){dem.gi=+k.slice(5);dem.view='stats';dem.sel=null;dem.dsel=null}
+      else if(k&&k.startsWith('goal:')){dem.gi=+k.slice(5);dem.view='stats';dem.stat='month';dem.sel=null;dem.dsel=null}
   draw()}
 demo.addEventListener('click',e=>{
   const st=e.target.closest('[data-step]');if(st){const g=DS[dem.s].goals[dem.gi],cur=dem.sel==null?g.nets.length-1:dem.sel;dem.sel=clamp(cur+ +st.dataset.step,0,g.nets.length-1);dem.dsel=null;draw();return}
   const dd=e.target.closest('[data-d]');if(dd){dem.dsel=+dd.dataset.d;draw();return}
+  const vw=e.target.closest('[data-view]');if(vw){dem.stat=vw.dataset.view;dem.dsel=null;draw();return}
   const m=e.target.closest('[data-m]');if(m){dem.sel=+m.dataset.m;dem.dsel=null;draw();return}
   const t=e.target.closest('[data-go]');if(t)act(t.dataset.go)});
-demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-go],[data-m],[data-d],[data-step]');if(t){e.preventDefault();t.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
+demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-go],[data-m],[data-d],[data-view],[data-step]');if(t){e.preventDefault();t.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
 document.getElementById('fin').onclick=()=>{const st=DS[dem.s],g=st.goals[dem.gi];if(!g)return;
   dem.celeb={name:g.name,days:Math.max(1,g.startDays),amount:g.target};st.goals.splice(dem.gi,1);st.done.unshift({name:g.name,days:dem.celeb.days,amount:g.target,date:mon(TODAY)});dem.view='celebrate';draw()};
 document.getElementById('rst').onclick=()=>{DS=copyS();dem.view='savings';dem.sel=null;draw()};
