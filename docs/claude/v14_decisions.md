@@ -160,6 +160,17 @@ Not chosen by Tarun, listed in the table as what the drawn boards do (to confirm
 Three kinds of tap outcome, as drawn: a spot, box or day gives **a line under the picture**; a category, habit, goal or purchase opens **its own full screen**; the weekly pop-up is **a pop-up on Home**.
 Board: https://claude.ai/artifact/RsXokgbfEjVoyKyb3pX7Zc (source `archive/session-workfiles/viz11/viz11-amounts-on-tap.html`). Still to confirm on the board: marks rule, Savings page amounts, over/nothing-left words first, rows that carry amounts, where the rules live.
 
+## Onboarding (Tarun, 2 Oct; board 1 published)
+Board: https://claude.ai/artifact/16Z1Z4yx1VDWk3AT7rYP6j (source `archive/session-workfiles/onb1/onboarding-1.html`).
+| # | Decision |
+|---|---|
+| O-1 | Order: **title screen → PIN setting → UPI linkage and manual tracking → app permissions → budget setting.** |
+| O-2 | Budget step opens with **whatever balance the account has; the user first splits it into savings and budget.** |
+| O-3 | Two ways to set the budget: **"I have no particular budget in mind"**, or **choose categories and assign each an individual budget.** |
+| O-4 | People may not know how much to spend, so the input is **how much they are comfortable spending every week, per category.** |
+| O-5 | **A list of 50 categories** to pick from; **a recommended set is already chosen**; the user can **create their own.** |
+Drawn as first drafts, NOT decided (nine questions on the board): title screen content; 4-digit PIN; link/manual as two equal cards with Excel/CSV import as a small placeholder line; permissions = notifications + fingerprint/face only (no SMS, per hard rule); savings split as a slider with quick stops 0/10/20/30%, starting share 0; "no budget" path = track four weeks then offer a weekly budget; recommended eight (Canteen & mess, Chai & coffee, Snacks, Bus & metro, Auto & cab, Mobile recharge, Outings, Stationery); going over the weekly budget = amber words, can continue. The 50 names are a draft list (8 groups); fixed bills/subscriptions live in the Fixed group (V8), not the list.
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE

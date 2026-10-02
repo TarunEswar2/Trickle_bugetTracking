@@ -103,7 +103,7 @@ green→amber transition, v7's range of data visualisations, sounds/motion from 
 his own gradients in Figma.
 
 ## The exact next step
-**The visualisation queue (Viz 1–11) is complete.** Tarun said he will come back for **flows** — start with the parked flows listed below, one decision at a time. Viz 11 board: https://claude.ai/artifact/RsXokgbfEjVoyKyb3pX7Zc; its five "still to confirm" points are logged as defaults, unanswered.
+**Onboarding, board 1 is published** (https://claude.ai/artifact/16Z1Z4yx1VDWk3AT7rYP6j). O-1…O-5 are logged; the nine questions on the board are unanswered, so log his answers as O-6… and redraw what changes. Viz 1–11 are complete. Flows (parked list below) wait until Tarun comes back for them.
 
 After the queue (Tarun's v14 order): onboarding (`docs/claude/build_plan.md`, `docs/claude/screens_to_design.md`), grey wireframes per tab with one visualisation per screen, the flows (parked list below), identity, the v14 build, then real user tests (never run).
 

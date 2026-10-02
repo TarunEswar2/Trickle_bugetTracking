@@ -32,4 +32,4 @@ The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 - `references/inspiration/` — images Tarun supplied as visual references.
 
 ## Next up
-The visualisation queue (Viz 1–11) is complete. Tarun will return for **flows** (see the parked flows in `docs/claude/v14_decisions.md`). Then onboarding, per-tab wireframes, identity, the v14 build, user tests. Viz 11's five unanswered points are logged as defaults; re-offer them if they come up.
+Viz 1–11 are complete. **Onboarding is in progress**: O-1…O-5 logged, board 1 published, nine questions waiting for Tarun's answers (see the Onboarding block in `docs/claude/v14_decisions.md`). Flows (parked list) come later when Tarun returns. Then per-tab wireframes, identity, the v14 build, user tests.
