@@ -79,8 +79,15 @@
 <section>
   <div class="sec-h"><span class="k">H</span><h2>Step 6: savings and goals</h2></div>
   <p class="q">The same grid, now showing the savings amount. Each goal asks what it is for, how much, and by when. A share by slider in its own green shows whether that pace meets the date. Drawn from both paths.</p>
-  <div class="gal"><div class="opt"><div class="row four" id="secH"></div></div></div>
+  <div class="gal"><div class="opt"><div class="row" id="secH"></div></div></div>
   <div class="notes" id="noteH"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">I</span><h2>When new income arrives</h2></div>
+  <p class="q">Whenever money lands, Trickle asks you to split it the same way as at setup: savings or budget, the weekly sliders, then goals. Each screen starts from what you chose last time. Drawn for Yash, with an income of ₹9,000. Home itself shows no ₹ (V11-3), so the prompt does not name the amount; the amount appears on the split screen.</p>
+  <div class="gal"><div class="opt"><div class="row four" id="secI"></div></div></div>
+  <div class="notes" id="noteI"></div>
 </section>
 
 <section>
@@ -102,7 +109,10 @@
     <div class="dq"><h3>8. Savings and goals: how often</h3><ol><li class="s">The savings amount is set aside each month, so every goal can show a date (ETA).</li><li>A one-time amount now; dates only appear once savings repeat.</li></ol></div>
     <div class="dq"><h3>9. Goals in setup</h3><ol><li class="s">Each goal asks name, amount and by when; the date is optional and so is having a goal at all. Goals can be added later in Savings.</li><li>At least one goal required.</li></ol></div>
     <div class="dq"><h3>10. "No budget" path</h3><ol><li class="s">Savings split, then step 6; Trickle just tracks spending, then offers a weekly budget after four weeks.</li><li>Savings and goals only, with no later offer.</li></ol></div>
-    <div class="dq"><h3>11. The 50 names and the recommended eight</h3><ol><li class="s">As in the list: Canteen &amp; mess, Chai &amp; coffee, Snacks, Bus &amp; metro, Auto &amp; cab, Mobile recharge, Outings, Stationery.</li><li>Tell me which to swap.</li></ol></div>
+    <div class="dq"><h3>11. Add a goal</h3><ol><li class="s">At the bottom, beside Finish, in thumb reach; a large card when there are no goals yet.</li><li>A dashed row at the end of the goal list.</li><li>A floating round button.</li></ol></div>
+    <div class="dq"><h3>12. New income</h3><ol><li class="s">A prompt on Home with no amount in it; the split, sliders and goals each start from last time. "Later" asks again at next open.</li><li>Auto-apply last time's split and only tell you.</li></ol></div>
+    <div class="dq"><h3>13. When money lands mid-week</h3><ol><li class="s">The new budget starts at once, shared over the weeks left in the month.</li><li>It starts at the next Monday.</li></ol></div>
+    <div class="dq"><h3>14. The 50 names and the recommended eight</h3><ol><li class="s">As in the list: Canteen &amp; mess, Chai &amp; coffee, Snacks, Bus &amp; metro, Auto &amp; cab, Mobile recharge, Outings, Stationery.</li><li>Tell me which to swap.</li></ol></div>
   </div>
 </section>
 </div>
@@ -118,7 +128,7 @@ const frame=(inner,label)=>`<svg class="ph" viewBox="0 0 390 844" role="img" ari
 const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c||'')}</figcaption></figure>`;
 const money=n=>'₹'+n.toLocaleString('en-IN');
 const btn=(y,label,pri=true)=>pri?R(35,y,320,54,16,GRN)+T(195,y+34,label,17,{a:'middle',w:700,f:'#04231b'}):R(35,y,320,54,16,'none',`stroke="${EDGE}" stroke-width="1.5"`)+T(195,y+34,label,17,{a:'middle',w:600,f:INK});
-const step=i=>{let s='';for(let k=0;k<6;k++)s+=R(35+k*54.4,58,48,4,2,k<=i?GRN:DIM);return s+T(35,92,'Step '+(i+1)+' of 6',13,{f:MUT,w:600})};
+let MODE=null;const step=i=>{if(MODE)return T(35,92,MODE,13,{f:MUT,w:600});let s='';for(let k=0;k<6;k++)s+=R(35+k*54.4,58,48,4,2,k<=i?GRN:DIM);return s+T(35,92,'Step '+(i+1)+' of 6',13,{f:MUT,w:600})};
 const catCol=i=>i<5?COL[i]:REST;
 
 const title=()=>{let s='';for(let r=0;r<8;r++)for(let c=0;c<8;c++){const x=125+c*18,y=180+r*18,f=(7-r)<4+Math.floor(c/3)?GRN:DIM;s+=R(x,y,15,15,4,f,f===GRN?`opacity="${(.5+.5*((7-r)/7)).toFixed(2)}"`:'')}
@@ -195,20 +205,23 @@ const eta=m=>{const t=9+m;return MN[t%12]+' '+(2026+Math.floor(t/12))};
 function goalsSvg(s,sel,vals,noBudget){
   const a=sv(s),tot=vals.reduce((x,y)=>x+y,0),left=a-tot,box=a/100;
   let o=step(5)+T(35,130,noBudget?'Savings and goals':'Where savings go',23,{w:700});
-  o+=gridSvg(60,148,22,3.5,s.goals.map((g,i)=>({amt:vals[i],color:GG[i]})),a,0,sel);
-  o+=chip(35,414,'1 box = '+money(Math.round(box)))+T(355,437,left>0?money(left)+' not given':'All given',16,{a:'end',w:700,f:left>0?MUT:GRN});
-  let y=464;s.goals.forEach((g,i)=>{const on=i===sel,m=vals[i]?Math.ceil(g[1]/vals[i]):0,late=g[3]&&m>g[3]?m-g[3]:0,h=on?126:44;
+  o+=gridSvg(80,146,18,3,s.goals.map((g,i)=>({amt:vals[i],color:GG[i]})),a,0,sel);
+  o+=chip(35,368,'1 box = '+money(Math.round(box)))+T(355,391,left>0?money(left)+' not given':'All given',16,{a:'end',w:700,f:left>0?MUT:GRN});
+  let y=420;s.goals.forEach((g,i)=>{const on=i===sel,m=vals[i]?Math.ceil(g[1]/vals[i]):0,late=g[3]&&m>g[3]?m-g[3]:0,h=on?126:44;
     o+=R(35,y,320,h,14,DIM,on?`stroke="${GG[i]}" stroke-width="1.5"`:'')+`<circle cx="53" cy="${y+24}" r="6" fill="${GG[i]}"/>`+T(68,y+29,g[0],16.5,{w:700})+T(341,y+29,m?(g[3]?'by '+eta(g[3]):'no date'):'no pace set',14.5,{a:'end',f:MUT});
     if(on){const cap=vals[i]+left,fr=cap?vals[i]/cap:0;o+=R(55,y+60,280,8,4,'#2c333b')+R(55,y+60,Math.max(8,280*fr),8,4,GG[i])+`<circle cx="${55+280*fr}" cy="${y+64}" r="12" fill="#fff"/>`+T(55,y+92,money(vals[i])+' a month toward '+money(g[1]),13,{f:MUT})+(late?T(55,y+112,'Ready '+eta(m)+', '+late+(late>1?' months':' month')+' late',13,{f:AMB,w:600}):T(55,y+112,g[3]?'Ready '+eta(m)+', in time':'Ready '+eta(m),13,{f:GRN}))}
     y+=h+8});
-  o+=T(355,130,'+ Goal',15.5,{a:'end',f:GRN,w:700});
-  return frame(o+btn(706,'Finish'),s.n+' savings and goals')}
+    const bar=R(35,706,150,54,16,'none',`stroke="${GRN}" stroke-width="2"`)+T(110,739,'+ Add a goal',16,{a:'middle',w:700,f:GRN})+R(195,706,160,54,16,GRN)+T(275,739,'Finish',17,{a:'middle',w:700,f:'#04231b'});
+  return frame(o+bar,s.n+' savings and goals')}
 const addGoal=()=>{let o=goalsSvg(ST.Y,0,ST.Y.goals.map(g=>g[2]),false).replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'').replace(/<rect x="1" y="1"[^>]*\/>/,'').replace(/<rect x="150"[^>]*\/>/,'');
-  o+=R(1,300,388,543,36,'#14181b')+R(1,300,388,2,0,EDGE)+T(35,350,'Add a goal',22,{w:700});
+  o+=R(1,280,388,563,36,'#14181b')+R(1,280,388,2,0,EDGE)+T(35,332,'Add a goal',22,{w:700});
   o+=T(35,384,'What for',13,{f:MUT})+R(35,392,320,44,12,'none',`stroke="${GRN}" stroke-width="1.5"`)+T(52,421,'Trip',17);
   o+=T(35,466,'How much',13,{f:MUT})+R(35,474,320,44,12,'none',`stroke="${EDGE}" stroke-width="1.5"`)+T(52,503,'₹ 6,000',17);
   o+=T(35,548,'By when',13,{f:MUT});[['6 months',0],['1 year',1],['2 years',0],['Pick a month',0],['No date',0]].forEach((c,i)=>{const w=Math.round(30+c[0].length*8);if(i===0)window.__x=35;if(i===3)window.__x=35;const x=window.__x,y=i<3?558:604;window.__x+=w+8;o+=R(x,y,w,36,18,c[1]?GRN:'none',c[1]?'opacity=".25"':`stroke="${EDGE}" stroke-width="1.5"`)+(c[1]?R(x,y,w,36,18,'none',`stroke="${GRN}" stroke-width="1.5"`):'')+T(x+w/2,y+24,c[0],13.5,{a:'middle',w:600})});
   o+=T(35,672,'Needs about ₹500 a month to be ready',14,{f:MUT})+T(35,692,'in a year. A date is optional.',14,{f:MUT})+btn(706,'Add goal');return frame(o,'Add a goal')};
+const noGoals=()=>{let o=step(5)+T(35,130,'Savings and goals',23,{w:700});
+  o+=R(35,170,320,300,22,DIM)+T(195,262,'What are you',26,{a:'middle',w:700})+T(195,294,'saving for?',26,{a:'middle',w:700})+T(195,336,'A phone, a trip, a laptop.',16,{a:'middle',f:MUT})+T(195,360,'Give it an amount and a date.',16,{a:'middle',f:MUT})+R(75,396,240,52,26,GRN)+T(195,428,'+ Add a goal',17,{a:'middle',w:700,f:'#04231b'});
+  o+=T(195,520,'Not saving for anything yet? That is fine.',15,{a:'middle',f:MUT})+btn(706,'Skip for now',false);return frame(o,'No goals yet')};
 const goals=(k,nb,sel)=>{const s=ST[k];return goalsSvg(s,sel||0,s.goals.map(g=>g[2]),nb)};
 
 document.getElementById('secA').innerHTML=[fg(title(),'1 · Title'),fg(pin('Set a PIN','4 digits to open Trickle.',3),'2 · Set PIN'),fg(pin('Confirm your PIN','Enter it once more.',2),'2 · Confirm PIN'),fg(pin('Confirm your PIN','Enter it once more.',0,'Those did not match. Try again.'),'2 · If it differs'),fg(link(),'3 · Link or manual'),fg(perm(),'4 · Permissions')].join('');
@@ -222,8 +235,16 @@ document.getElementById('noteE').innerHTML=`<div class="note"><b>The limit is th
 document.getElementById('secF').innerHTML=fg(own(),'Create your own','sheet over the picker');
 document.getElementById('secG').innerHTML=[fg(split('Y',true),'Yash','no-budget: put aside'),fg(goals('Y',true),'Yash','then goals')].join('');
 document.getElementById('noteG').innerHTML=`<div class="note"><b>No categories</b>The balance is split into "put aside" and "stays free". Nothing is assigned.</div><div class="note"><b>Straight to goals</b>This is the focus: savings and goals fill the rest of onboarding.</div>`;
-document.getElementById('secH').innerHTML=['V','Y','H'].map(k=>fg(goals(k,false,k==='V'?0:1),ST[k].n,ST[k].goals.length+(ST[k].goals.length>1?' goals':' goal'))).join('')+fg(addGoal(),'Add a goal','name, amount, by when');
+document.getElementById('secH').innerHTML=['V','Y','H'].map(k=>fg(goals(k,false,k==='V'?0:1),ST[k].n,ST[k].goals.length+(ST[k].goals.length>1?' goals':' goal'))).join('')+fg(addGoal(),'Add a goal','name, amount, by when')+fg(noGoals(),'No goals yet','a big, obvious start');
 document.getElementById('noteH').innerHTML=`<div class="note"><b>Same grid as everything else</b>100 boxes, filled from the bottom, the savings amount in the green family (V4), with the scale chip.</div><div class="note"><b>A date you choose, and one it shows</b>Each goal asks by when. The row says "by Dec 2028", and the slider's pace says when it will really be ready: in time, or in amber "2 months late". The date is optional: Harsh's Trip has none.</div><div class="note"><b>Skippable</b>You can finish without a goal and add one in Savings later.</div>`;
+const homeNew=()=>{let o=T(35,76,'Home',17,{f:MUT})+T(35,112,'This week',30,{w:700});
+  for(let r=0;r<10;r++)for(let c=0;c<10;c++)o+=R(60+c*27,160+r*27,24,24,5,r>3?'#3a2a1c':DIM);
+  ['Home','Income','Spending','Savings','Insights'].forEach((t,i)=>{o+=T(39+78*i,808,t,14,{a:'middle',f:i===0?INK:MUT,w:i===0?700:400})});
+  o+=R(0,0,390,844,46,'#000','opacity=".6"')+R(1,440,388,403,36,'#14181b')+R(1,440,388,2,0,EDGE)+T(35,500,'New money came in',24,{w:700})+T(35,534,'Split it the way you set Trickle up.',16,{f:MUT})+T(35,558,'It takes a minute.',16,{f:MUT})+btn(620,'Split it')+btn(686,'Later',false);return frame(o,'New income prompt')};
+const inc=(fn,label)=>{MODE=label;const r=fn();MODE=null;return r};
+const splitInc=()=>{MODE='New money · 1 of 3';let r=split('Y').replace('Your balance','New money').replace('How much goes to savings?','How much of it goes to savings?');MODE=null;return r};
+document.getElementById('secI').innerHTML=[fg(homeNew(),'1 · Prompt on Home','no ₹ on Home'),fg(splitInc(),'2 · Split it','starts where you left it'),fg(inc(()=>amounts('Y',5),'New money · 2 of 3'),'3 · Weekly sliders','last time\'s amounts'),fg(inc(()=>goals('Y',false,1),'New money · 3 of 3'),'4 · Goals','shares carry over')].join('');
+document.getElementById('noteI').innerHTML=`<div class="note"><b>Same three steps</b>Split, weekly sliders, goals, exactly as at setup, so there is nothing new to learn.</div><div class="note"><b>Starts from last time</b>The slider sits at your last savings share, the weekly sliders at your last amounts, the goals at their last shares. You change only what changed.</div><div class="note"><b>Not now is allowed</b>"Later" leaves the money unassigned and asks again next time you open Trickle.</div>`;
 document.getElementById('fifty').innerHTML=FIFTY.map(g=>`<p style="margin-top:12px"><b>${g[0]}</b> · `+g[1].map(n=>REC.includes(n)?`<b>${esc(n)}</b>`:esc(n)).join(' · ')+`</p>`).join('')+`<p class="small" style="margin-top:12px">Total: ${FLAT.length}</p>`;
 
 /* live demo */
