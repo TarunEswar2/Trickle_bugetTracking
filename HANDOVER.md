@@ -103,7 +103,7 @@ green→amber transition, v7's range of data visualisations, sounds/motion from 
 his own gradients in Figma.
 
 ## The exact next step
-**Onboarding, board 3 is published** (https://claude.ai/artifact/16Z1Z4yx1VDWk3AT7rYP6j). O-1…O-25 are logged; board 3 replaced boards 1 and 2 and ends with nine delegated defaults for Tarun to confirm, so log his answers as O-26… and redraw what changes. Viz 1–11 are complete. Flows (parked list below) wait until Tarun comes back for them.
+**Onboarding, board 3 is published** (https://claude.ai/artifact/16Z1Z4yx1VDWk3AT7rYP6j). O-1…O-26 are logged; board 3 replaced boards 1 and 2 and ends with nine delegated defaults for Tarun to confirm, so log his answers as O-27… and redraw what changes. Viz 1–11 are complete. Flows (parked list below) wait until Tarun comes back for them.
 
 After the queue (Tarun's v14 order): onboarding (`docs/claude/build_plan.md`, `docs/claude/screens_to_design.md`), grey wireframes per tab with one visualisation per screen, the flows (parked list below), identity, the v14 build, then real user tests (never run).
 
