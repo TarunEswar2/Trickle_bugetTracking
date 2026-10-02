@@ -1,0 +1,304 @@
+<title>Trickle v14 — When You Spend</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a design board in the Viz 1 family. Sections A-F; each is a question, a gallery of dark phone
+   frames (rows = options, columns = students or moments), then what the drawing showed. Same tokens as Viz 1. */
+:root{
+  --bg:#f0f1ec; --surface:#fafaf7; --ink:#14181b; --ink2:#444c54; --muted:#727a83; --line:#d6d9d1;
+  --accent:#0d7a64; --accent-soft:#d9ece5; --amber:#a9680f;
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px;padding-block:40px 80px}
+@media (max-width:600px){.wrap{padding-inline:16px;padding-block:24px 56px}}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.12;margin:0}
+h1{font-size:clamp(30px,5vw,50px);font-weight:700;letter-spacing:-.02em}
+h2{font-size:clamp(23px,3vw,31px);font-weight:700;letter-spacing:-.01em}
+h3{font-size:18px;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lead{font-size:18px;color:var(--ink2);max-width:62ch}
+header.top{display:flex;flex-direction:column;gap:16px;padding-bottom:28px}
+section{display:flex;flex-direction:column;gap:18px;padding-block:40px;border-top:1px solid var(--line)}
+.sec-h{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.sec-h .k{font-family:var(--display);font-weight:700;font-size:clamp(23px,3vw,31px);color:var(--accent)}
+.q{color:var(--ink2)}
+ul.plain{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.logged{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.logged div{border-top:2px solid var(--ink);padding-top:10px}
+.logged b{display:block;font-family:var(--display);font-size:17px;margin-bottom:4px}
+.logged span{color:var(--ink2);font-size:15px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right}
+.opt{display:flex;flex-direction:column;gap:10px}
+.opt>h4{margin:0;font-size:15.5px;font-weight:600;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.opt>h4 b{font-family:var(--display);background:var(--ink);color:var(--bg);border-radius:5px;padding:1px 7px;font-size:13.5px}
+.opt>h4 span{color:var(--muted);font-weight:400}
+.gal{display:flex;flex-direction:column;gap:26px}
+.row{display:grid;grid-template-columns:repeat(6,minmax(170px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.row.four{grid-template-columns:repeat(4,minmax(200px,1fr))}
+.row.three{grid-template-columns:repeat(3,minmax(200px,300px))}
+.fg{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fg figcaption{font-size:13px;color:var(--muted);line-height:1.3}
+.fg figcaption b{color:var(--ink);font-weight:600}
+svg.ph{width:100%;height:auto;display:block;font-family:var(--body)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px 28px}
+.note{border-top:1px solid var(--line);padding-top:10px;font-size:15px;color:var(--ink2)}
+.note b{display:block;color:var(--ink);font-family:var(--display);font-size:16px;margin-bottom:3px}
+.demo{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:700px){.demo{grid-template-columns:minmax(0,1fr)}}
+.ctl{display:flex;flex-direction:column;gap:16px}
+.ctl .grp{display:flex;flex-direction:column;gap:7px}
+.ctl .lbl{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font:inherit;font-size:14.5px;font-weight:600;white-space:nowrap;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer}
+.chip:hover{border-color:var(--ink2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn{font:inherit;font-size:15px;font-weight:700;padding:10px 18px;border-radius:10px;border:0;background:var(--accent);color:#04231b;cursor:pointer;align-self:flex-start}
+.chip:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;max-width:420px;accent-color:var(--accent)}
+.small{font-size:13.5px;color:var(--muted)}
+.decide{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px}
+.dq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.dq h3{font-size:17px}
+.dq ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:5px;font-size:15px;color:var(--ink2);list-style:upper-alpha}
+.dq li.s{color:var(--ink)}
+.dq li.s::after{content:" suggested";font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-left:4px}
+
+svg.ph rect.bx{transition:fill .6s ease,transform .6s ease}
+@media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
+
+.lg{animation:lgin .9s ease .7s both}
+@keyframes lgin{from{opacity:0}to{opacity:1}}
+.static .lg{animation:none}
+@media (prefers-reduced-motion: reduce){.lg{animation:none}}
+
+svg.ph [data-open]{cursor:pointer}
+svg.ph [data-open]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+.lg.now{animation:none}
+
+svg.ph [data-go]{cursor:pointer}
+svg.ph [data-go]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+
+svg.ph [data-go]{cursor:pointer}
+.sw2{display:flex;gap:8px;flex-wrap:wrap}
+
+svg.ph rect.bx{transition:fill 1.3s ease}
+@media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
+
+svg.ph [data-go]{cursor:pointer}
+
+.sw3{display:flex;gap:8px;flex-wrap:wrap}
+
+</style>
+
+<div id="defs"></div>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Trickle v14 · Visualisation 7 of 11 · 2 Oct 2026</div>
+  <h1>When you spend</h1>
+  <p class="lead">A view in the Insights tab. Everything you spend, by time of day, as glowing calendar spots: the hours of a day, the weekdays of a week, the days of a month. A calm sentence at the top says what stands out, such as a lot of spending late at night. Switch to rupees and it glows by how much. Tap a spot for the count and amount. Options only. You decide.</p>
+</header>
+
+<section style="border-top:0;padding-top:0">
+  <div class="sec-h"><h2>Already decided</h2></div>
+  <div class="logged">
+    <div><b>V7-1 · What</b><span>All spending by time of day, so "you spend more at night" shows across every category.</span></div>
+    <div><b>V7-2 · Where</b><span>The Insights tab.</span></div>
+    <div><b>Carried over</b><span>The hotspot grids and the Times | ₹ switch from repeat purchases. No red. Counts and amounts on tap.</span></div>
+  </div>
+  <p class="small">Drawn as defaults, not decided: it opens on Day; "late" means after 9 pm; the sentence names the pattern in words; a student with only a week of data gets a note that it fills in. All figures are made up.</p>
+</section>
+
+<section>
+  <div class="sec-h"><h2>The pool</h2><span class="q">How much each student spends and when. Purchases are over the last 30 days; Gautham-type has only 7 days.</span></div>
+  <div class="tw"><table>
+    <tr><th>Student</th><th class="n">Purchases</th><th class="n">After 9 pm</th><th>Busiest time</th></tr>
+    <tbody id="pool"></tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">A</span><h2>By day: the hours</h2></div>
+  <p class="q">The first view for every student. Which hours of the day the money goes. Yash-type's nights stand out and Tarun-type's afternoons do. Gautham-type is in his first week.</p>
+  <div class="gal" id="secA"></div>
+  <div class="notes" id="noteA"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">B</span><h2>By week and by month</h2></div>
+  <p class="q">The same data by weekday against time of day, then as a calendar of the last 30 days. Four students.</p>
+  <div class="gal" id="secB"></div>
+  <div class="notes" id="noteB"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">C</span><h2>How many, and how much</h2></div>
+  <p class="q">The switch under the grid. By times, Harsh-type's weeks glow with lunches and dinners. By ₹, his big weekend evenings stand out, because one dinner can cost more than a week of mess.</p>
+  <div class="gal" id="secC"></div>
+  <div class="notes" id="noteC"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">D</span><h2>Try it</h2></div>
+  <p class="q">Pick a student, switch Day, Week or Month, switch Times or ₹, and tap a spot.</p>
+  <div class="demo">
+    <div id="demo"></div>
+    <div class="ctl">
+      <div class="grp"><span class="lbl">Student</span><div class="chips" id="cs"></div></div>
+      <span class="small" id="dnote">Tap a spot for its count and amount.</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>Decisions for Tarun</h2></div>
+  <div class="decide">
+    <div class="dq"><h3>1. Which scale opens first</h3><ol><li class="s">Day, because time of day is the point.</li><li>Week.</li><li>Month.</li></ol></div>
+    <div class="dq"><h3>2. What counts as late</h3><ol><li class="s">After 9 pm, until 5 am.</li><li>After 10 pm.</li><li>After midnight.</li></ol></div>
+    <div class="dq"><h3>3. The sentence at the top</h3><ol><li class="s">Names the pattern in words, with no scolding: "A fair bit happens after 9 pm."</li><li>Names it with a share: "About 1 in 4 purchases is after 9 pm."</li><li>No sentence, only the grid.</li></ol></div>
+    <div class="dq"><h3>4. Narrow it to one category</h3><ol><li class="s">Not in this view. All spending only; a habit's own view is in Spending.</li><li>A category filter above the grid.</li></ol></div>
+    <div class="dq"><h3>5. A new student with few days</h3><ol><li class="s">Draw what exists and say "fills in as you go".</li><li>Hide the view until two weeks of data.</li></ol></div>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+const PBG='#0b0d10',EDGE='#2b3038',DIM='#1b2026',INK='#f2f4f5',MUT='#8f97a1',GRN='#62dcb4',ORG='#f08a3c';
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const fmt=n=>'₹'+Math.round(Math.abs(n)).toLocaleString('en-IN');
+const T=(x,y,s,sz,o={})=>`<text x="${x}" y="${y}" font-size="${sz}" font-weight="${o.w||400}" fill="${o.f||INK}" text-anchor="${o.a||'start'}" ${o.ls?`letter-spacing="${o.ls}"`:''}>${esc(s)}</text>`;
+const rnd=n=>{const x=Math.sin(n*12.9898)*43758.5453;return x-Math.floor(x)};
+document.getElementById('defs').innerHTML=`<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4"/></filter></defs></svg>`;
+const TODAY=new Date(2026,9,2),DAY=86400000;
+const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],DN=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const addDays=(d,n)=>new Date(d.getTime()+n*DAY);
+const dow=d=>(d.getDay()+6)%7;
+
+/* every purchase for a student: per-day count, an hour profile, and amounts */
+const P={
+ 'Vaishak-type':{days:30,per:1.6,wk:.8,avg:60,w:{9:1,13:6,16:3,20:3,22:1}},
+ 'Gautham-type':{days:7,per:3,wk:1,avg:90,w:{9:1,13:4,17:3,20:3}},
+ 'Tarun-type':{days:30,per:3.3,wk:.7,avg:70,w:{9:3,13:4,16:6,17:3,20:3,22:2}},
+ 'Yash-type':{days:30,per:2.8,wk:1.2,avg:150,w:{9:1,16:2,19:3,20:2,22:5,23:6,0:5,1:2},big:[22,23,0]},
+ 'Nishad-type':{days:30,per:2.6,wk:1.5,avg:180,w:{9:2,13:3,17:3,18:3,20:3,21:4,22:3,23:1}},
+ 'Harsh-type':{days:30,per:3,wk:1.3,avg:110,w:{9:1,13:5,14:3,15:2,20:3,21:4,22:2},wkBig:true}
+};
+function makeAll(name,si){const c=P[name],ev=[],hs=Object.keys(c.w).map(Number),ws=hs.map(h=>c.w[h]),tot=ws.reduce((a,b)=>a+b,0);
+  for(let off=c.days-1;off>=0;off--){const dt=addDays(TODAY,-off),d=dow(dt),wk=d>=5,n0=c.per*(wk?c.wk:1),n=Math.floor(n0)+(rnd(si*977+off*13)<n0-Math.floor(n0)?1:0);
+    for(let k=0;k<n;k++){let r=rnd(si*131+off*7+k*3)*tot,hr=hs[0];for(let i=0;i<hs.length;i++){r-=ws[i];if(r<=0){hr=hs[i];break}}
+      let a=c.avg*(.25+1.6*rnd(si*53+off*5+k));if(c.big&&c.big.includes(hr))a*=1.7;if(c.wkBig&&wk&&hr>=20)a*=3.2;
+      ev.push({off,dt,d,hour:hr,amt:Math.max(10,Math.round(a/5)*5)})}}
+  return ev}
+const S=Object.keys(P).map((name,i)=>({short:name,ev:makeAll(name,i+1)}));
+const blockOf=h=>Math.floor(h/6),BLK=['Night','Morning','Afternoon','Evening'],BLKH=['12–5 am','6–11 am','12–5 pm','6–11 pm'];
+const hourLabel=h=>{const a=h%12===0?12:h%12;return `${a} ${h<12?'am':'pm'}`};
+const late=h=>h>=21||h<5;
+function aggregate(evs){
+  const hour=Array.from({length:24},()=>({n:0,s:0})),wk=Array.from({length:7},()=>Array.from({length:4},()=>({n:0,s:0}))),day=Array.from({length:30},()=>({n:0,s:0}));
+  evs.forEach(e=>{hour[e.hour].n++;hour[e.hour].s+=e.amt;const b=wk[e.d][blockOf(e.hour)];b.n++;b.s+=e.amt;const dd=day[29-e.off];dd.n++;dd.s+=e.amt});
+  return {hour,wk,day}}
+const unit=n=>n===1?'purchase':'purchases';
+S.forEach(st=>{st.ag=aggregate(st.ev);st.late=st.ev.filter(e=>late(e.hour)).length/st.ev.length;
+  const bt=[0,0,0,0];st.ev.forEach(e=>{bt[blockOf(e.hour)]++});st.peak=bt.indexOf(Math.max(...bt))});
+const share=p=>p>=.55?'most':p>=.4?'nearly half':p>=.28?'about a third':p>=.18?'about a quarter':p>=.08?'a little':'hardly any';
+function sentence(st){const l=st.late;
+  if(l>=.28)return 'A lot of it is late at night.';
+  if(l>=.15)return 'A fair bit happens after 9 pm.';
+  return `Most of it is in the ${BLK[st.peak].toLowerCase()}.`}
+function sub(st){return st.short==='Gautham-type'?'Only a week so far. This fills in as you go.':`After 9 pm: ${share(st.late)} of purchases.`}
+
+const TABS=['Home','Income','Spending','Savings','Insights'];
+const tabbar=a=>{let tb=`<line x1="0" y1="770" x2="390" y2="770" stroke="${EDGE}"/>`;TABS.forEach((t,i)=>{const x=39+78*i;tb+=T(x,808,t,14,{a:'middle',f:i===a?INK:MUT,w:i===a?700:400});if(i===a)tb+=`<rect x="${x-14}" y="782" width="28" height="4" rx="2" fill="${GRN}"/>`});return tb};
+const frame=(inner,label)=>`<svg class="ph" viewBox="0 0 390 844" role="img" aria-label="${esc(label)}"><rect x="1" y="1" width="388" height="842" rx="46" fill="${PBG}" stroke="${EDGE}" stroke-width="2"/>${inner}<rect x="150" y="16" width="90" height="24" rx="12" fill="#000"/>${tabbar(4)}</svg>`;
+function spot(x,y,w,h,v,max,sel,attr,label,dark){
+  const k=max>0?v/max:0;let s='';
+  if(v<=0)s+=`<g ${attr}><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="${DIM}" ${sel?'stroke="#fff" stroke-width="2.5"':''}/>${label?T(x+6,y+15,label,11.5,{f:'#4a525d'}):''}</g>`;
+  else{if(k>.5)s+=`<rect x="${x+2}" y="${y+2}" width="${w-4}" height="${h-4}" rx="9" fill="${ORG}" opacity="${(k*.85).toFixed(2)}" filter="url(#glow)"/>`;
+    s+=`<g ${attr}><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="${ORG}" opacity="${(.2+.8*Math.pow(k,.8)).toFixed(2)}" ${sel?'stroke="#fff" stroke-width="2.5"':''}/>${label?T(x+6,y+15,label,11.5,{f:k>.55?'#2a1604':INK,w:600}):''}</g>`}
+  return s}
+function grid(st,scale,metric,sel){
+  const ag=st.ag,val=c=>metric==='amt'?c.s:c.n;let s='',max=1,info=null;
+  if(scale==='day'){
+    ag.hour.forEach(c=>{max=Math.max(max,val(c))});
+    BLK.forEach((b,r)=>{s+=T(35,284+r*58+18,b,11.5,{f:MUT});s+=T(35,284+r*58+34,BLKH[r],11,{f:'#5a626d'})});
+    for(let r=0;r<4;r++)for(let c=0;c<6;c++){const hr=r*6+c,x=96+c*43,y=270+r*58;
+      s+=spot(x,y,38,52,val(ag.hour[hr]),max,sel===hr,`data-c="${hr}" role="button" tabindex="0" aria-label="${hourLabel(hr)}"`,String(hr%12===0?12:hr%12))}
+    if(sel!=null){const c=ag.hour[sel];info=`${hourLabel(sel)}: ${c.n} ${unit(c.n)}, ${fmt(c.s)}`}
+  }else if(scale==='week'){
+    ag.wk.forEach(r=>r.forEach(c=>{max=Math.max(max,val(c))}));
+    DN.forEach((d,c)=>{s+=T(96+c*37+13,258,d[0],13,{a:'middle',f:MUT,w:600})});
+    BLK.forEach((b,r)=>{s+=T(35,270+r*58+30,b,11.5,{f:MUT})});
+    for(let r=0;r<4;r++)for(let c=0;c<7;c++){const x=96+c*37,y=270+r*58;
+      s+=spot(x,y,32,52,val(ag.wk[c][r]),max,sel===r*7+c,`data-c="${r*7+c}" role="button" tabindex="0" aria-label="${DN[c]} ${BLK[r]}"`,'')}
+    if(sel!=null){const r=Math.floor(sel/7),c=sel%7,cell=ag.wk[c][r];info=`${DN[c]} ${BLK[r].toLowerCase()}s: ${cell.n} ${unit(cell.n)}, ${fmt(cell.s)}`}
+  }else{
+    ag.day.forEach(c=>{max=Math.max(max,val(c))});
+    const start=addDays(TODAY,-29),fd=dow(start);
+    DN.forEach((d,c)=>{s+=T(35+c*46+20,258,d[0],13,{a:'middle',f:MUT,w:600})});
+    for(let i=0;i<30;i++){const dt=addDays(start,i),col=dow(dt),row=Math.floor((i+fd)/7),x=35+col*46,y=270+row*46;
+      s+=spot(x,y,40,40,val(ag.day[i]),max,sel===i,`data-c="${i}" role="button" tabindex="0" aria-label="${dt.getDate()} ${MN[dt.getMonth()]}"`,String(dt.getDate()))}
+    if(sel!=null){const dt=addDays(start,sel),c=ag.day[sel];info=`${DN[dow(dt)]} ${dt.getDate()} ${MN[dt.getMonth()]}: ${c.n} ${unit(c.n)}, ${fmt(c.s)}`}
+  }
+  return {svg:s,info}}
+function screen(st,o){
+  o=Object.assign({scale:'day',metric:'times',sel:null},o);
+  let s=T(35,76,'Insights',17,{f:MUT})+T(35,112,'When you spend',30,{w:700});
+  s+=T(35,146,sentence(st),17.5,{w:600})+T(35,170,sub(st),15.5,{f:MUT});
+  s+=`<rect x="35" y="188" width="320" height="38" rx="12" fill="#14181d" stroke="${EDGE}"/>`;
+  [['day','Day'],['week','Week'],['month','Month']].forEach(([k,l],i)=>{const x=38+i*106;s+=`<g data-scale="${k}" role="button" tabindex="0">${o.scale===k?`<rect x="${x}" y="191" width="104" height="32" rx="10" fill="#2a2018"/>`:''}${T(x+52,213,l,16.5,{a:'middle',w:o.scale===k?700:500,f:o.scale===k?ORG:MUT})}</g>`});
+  const g=grid(st,o.scale,o.metric,o.sel);s+=g.svg.replace(/(\d+)(?=\D*$)/,'$1');
+  const ky=Math.max(o.scale==='week'?514:o.scale==='day'?520:Math.ceil((30+dow(addDays(TODAY,-29)))/7)*46+280,520);
+  [.12,.3,.5,.75,1].forEach((k,i)=>{s+=`<rect x="${35+i*20}" y="${ky}" width="16" height="16" rx="4" fill="${ORG}" opacity="${k}"/>`});
+  s+=T(142,ky+13,'less → more',14,{f:MUT});
+  s+=`<rect x="236" y="${ky-6}" width="119" height="30" rx="10" fill="#14181d" stroke="${EDGE}"/>`;
+  [['times','Times'],['amt','₹']].forEach(([k,l],i)=>{const x=239+i*58;s+=`<g data-metric="${k}" role="button" tabindex="0">${o.metric===k?`<rect x="${x}" y="${ky-3}" width="56" height="24" rx="8" fill="#2a2018"/>`:''}${T(x+28,ky+14,l,14.5,{a:'middle',w:o.metric===k?700:500,f:o.metric===k?ORG:MUT})}</g>`});
+  const iy=ky+58;
+  if(g.info)s+=T(35,iy,g.info,21,{w:700});else s+=T(35,iy,'Tap a spot for how many and how much.',15.5,{f:'#5f6772'});
+  return frame(s,`${st.short} when you spend, by ${o.scale}`)}
+
+const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c)}</figcaption></figure>`;
+document.getElementById('pool').innerHTML=S.map(st=>`<tr><td>${st.short}</td><td class="n">${st.ev.length}</td><td class="n">${Math.round(st.late*100)}%</td><td>${BLK[st.peak].toLowerCase()}s</td></tr>`).join('');
+document.getElementById('secA').innerHTML=`<div class="opt"><div class="row">`+S.map(st=>fg(screen(st),st.short,sentence(st))).join('')+`</div></div>`;
+document.getElementById('noteA').innerHTML=`
+<div class="note"><b>Nights are a row</b>Yash-type's bright spots sit in the bottom-right of the Night and Evening rows, 10 pm to 1 am. It reads as "late" before you read the sentence.</div>
+<div class="note"><b>Words at the top</b>"A lot of it is late at night" and "After 9 pm: about a third of purchases". A pattern, not a total, and no red.</div>
+<div class="note"><b>Different rhythms</b>Tarun-type is afternoons and lunch, Harsh-type lunch and dinner, Nishad-type evenings. The same grid tells them apart.</div>
+<div class="note"><b>A new student</b>Gautham-type has seven days, so his grid is sparse and the line under the sentence says it fills in as he goes.</div>`;
+const four=[S[2],S[3],S[4],S[5]];
+document.getElementById('secB').innerHTML=[['week','Week','weekday against time of day'],['month','Month','the last 30 days']].map(([k,n,d])=>`<div class="opt"><h4><b>${n}</b>${d}</h4><div class="row four">`+four.map(st=>fg(screen(st,{scale:k}),st.short,sentence(st))).join('')+`</div></div>`).join('');
+document.getElementById('noteB').innerHTML=`
+<div class="note"><b>Week</b>Harsh-type's weekend evenings are the hottest block of his week; Yash-type's late nights run through every weekday and into the weekend.</div>
+<div class="note"><b>Month</b>Which days were heavy. It shows bursts that a typical day hides, such as a weekend of outings.</div>`;
+document.getElementById('secC').innerHTML=`<div class="opt"><div class="row four">`+[[S[5],'week','times'],[S[5],'week','amt'],[S[3],'day','times'],[S[3],'day','amt']].map(([st,sc,m])=>fg(screen(st,{scale:sc,metric:m}),st.short,`${sc} · ${m==='amt'?'₹':'times'}`)).join('')+`</div></div>`;
+document.getElementById('noteC').innerHTML=`
+<div class="note"><b>Same grid, two answers</b>Yash-type by times: the nights from 10 pm to 1 am are all lit. By ₹, 10 and 11 pm take over, where the big orders are. Harsh-type by times is a steady glow of lunches and dinners; by ₹ the weekend evenings stand out more.</div>
+<div class="note"><b>One switch</b>Tapping a spot gives both the count and the amount either way.</div>`;
+const dem={s:3,scale:'day',metric:'times',sel:null};
+const demo=document.getElementById('demo'),dn=document.getElementById('dnote');
+function draw(){demo.innerHTML=screen(S[dem.s],{scale:dem.scale,metric:dem.metric,sel:dem.sel})}
+demo.addEventListener('click',e=>{
+  const c=e.target.closest('[data-c]');if(c){dem.sel=+c.dataset.c;draw();return}
+  const sc=e.target.closest('[data-scale]');if(sc){dem.scale=sc.dataset.scale;dem.sel=null;draw();return}
+  const m=e.target.closest('[data-metric]');if(m){dem.metric=m.dataset.metric;draw()}});
+demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-c],[data-scale],[data-metric]');if(t){e.preventDefault();t.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
+const el=document.getElementById('cs');
+el.innerHTML=S.map((s,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${i===dem.s}">${s.short.replace('-type','')}</button>`).join('');
+el.onclick=e=>{const b=e.target.closest('button');if(!b)return;dem.s=+b.dataset.i;dem.sel=null;[...el.children].forEach((c,i)=>c.setAttribute('aria-pressed',i===dem.s));draw()};
+draw();
+})();
+</script>

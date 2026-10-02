@@ -113,6 +113,7 @@ Viz 6 closed by Tarun ("done"). The defaults below stand as drawn: three scales 
 |---|---|
 | V7-1 | It shows **all spending by time of day** (one hotspot view of everything, by hour and weekday), so "you spend more at night" shows across all categories, not one habit. |
 | V7-2 | It lives in the **Insights tab**. |
+Board: https://claude.ai/artifact/FdbjxsRYHqwkQ5hgxcCBzV (source archive/session-workfiles/viz7/viz7-when-you-spend.html).
 Defaults, drawn but not decided: the same hotspot grids as Viz 6 (Day = hours of a typical day, Week = weekday by time of day, Month = the last 30 days) with a Times / ₹ switch and spending-orange glow; opens on Day; a calm sentence in words at the top ("A fair bit happens after 9 pm"), no scolding; a new user with few days gets a "fills in as you go" note.
 
 ## Visualisation queue (one at a time)
