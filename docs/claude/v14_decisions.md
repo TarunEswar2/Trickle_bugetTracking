@@ -141,6 +141,14 @@ Viz 8 closed by Tarun ("next"). The defaults below stand as drawn: the calendar 
 Board: https://claude.ai/artifact/7HMcsvp68aqLTVr33y37sG (source archive/session-workfiles/viz9/viz9-week-vs-last.html).
 Viz 9 closed by Tarun ("next"). The defaults below stand as drawn: the weeks are compared **at the same point** (e.g. Monday to Thursday); each grid shows money left (V1-1); a plain sentence says more, less or the same, in words, no red (X-1); the by-category list shows the change in rupees on the tap layer, biggest change first, amber for more and green for less (not good or bad, just direction); a student in his first week has no last week and sees only this week with a note.
 
+### Viz 10 — Transaction history (Tarun, 2 Oct; options board in progress)
+| # | Decision |
+|---|---|
+| V10-1 | The history is **a list grouped by day** (Today, Yesterday, Mon 27 Oct…). |
+| V10-2 | You find a purchase with **filter chips: category and a day range**. |
+| V10-3 | Each row says **name, amount, time** (with a category colour dot). Everything else is one tap in. |
+Defaults, drawn but not decided: it is the last screen of the Spending tab (Tarun's Spending tab: budget setting, how much spent, transaction history); a day header carries the day's total; ranges are Today, 7 days, 30 days, All; category chips use the ring colours; tapping a row opens a detail (category, when, how it was paid, and the habit it belongs to); an empty filter says so calmly; editing a transaction is a later flow.
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
@@ -151,7 +159,7 @@ Viz 9 closed by Tarun ("next"). The defaults below stand as drawn: the weeks are
 7. Time patterns (e.g. nights) — DONE (V7-1, V7-2, X-1)
 8. Subscriptions coming up (Fixed group) — DONE (V8-1…V8-4)
 9. This week vs last — DONE (V9-1…V9-3)
-10. Transaction history — NEXT
+10. Transaction history — IN PROGRESS (V10-1…V10-3 given)
 11. Exact amounts on tap (progressive disclosure rules)
 
 ## Parked / superseded
