@@ -35,7 +35,8 @@ v14 so far:
 | Visualisation 2 — pay / friction | Decided (V2-1 … V2-5): paid boxes fade out in order, dashed-outline ghost |
 | Visualisation 3 — income split | Decided (V3-1 … V3-11): one grid, bands, savings at the bottom, gap, drop-down labels, scale chip |
 | Visualisation 4 — savings goals | Decided (V4-1 … V4-21): full segmented ring split by goal, text rows, By month / By day, celebration |
-| Visualisation 5 — unspent → saved | **Next** |
+| Visualisation 5 — unspent → saved | Decided (V5-1 … V5-10): weekly Home pop-up, amber → green, goals or next week's budget, top-filled overspent weeks |
+| Visualisation 6 — small / repeat purchases | **Next** |
 | Onboarding, per-tab screens, identity, v14 build, user tests | Not started |
 
 ## How Tarun wants to work (this matters more than anything else here)
@@ -97,17 +98,15 @@ green→amber transition, v7's range of data visualisations, sounds/motion from 
 his own gradients in Figma.
 
 ## The exact next step
-**Visualisation 5 — unspent → saved** (principle 6: not spending is shown as saving).
+**Visualisation 6 — small / repeat purchases** (principle 7; Tarun: showing small purchases "feels a bit like nagging but builds awareness", tracking repeat purchases is important).
 
-1. Ask Tarun whether he has inspiration images; Viz 2–4 mostly needed none.
-2. Draw 3–4 options on one board across the student pool (income ₹3k–25k, weekly vs monthly money, month 1 vs month 6, an under-spent and an over-spent period). Patterns: `archive/session-workfiles/viz2/`, `viz3/`, `viz4/`.
-3. Recommend one, ask him to choose, log as "Viz 5" in `docs/claude/v14_decisions.md`, mark it DONE.
+1. Ask Tarun what he wants shown and where (Spending tab? Insights? at the pay moment?), and whether he has inspiration.
+2. Evidence to design for: Tarun's coffee ×5 unnoticed, Nishad's untracked refreshments, Yash's quick-commerce add-ons, Harsh's food adding up. v9's definition: the same place or kind 3+ times in 30 days, any amount (`docs/claude/v9_phase2_spec.md`).
+3. Draw 3–4 options across the pool, recommend one, log as "Viz 6", mark DONE.
 
-Carry-overs from earlier visualisations:
-- V3-11: the scale line ("1 box = ₹X") is a prominent chip on every screen that shows it. The Viz 1 board still has the old small line.
-- Parked for the flow stage: add a goal, pay toward a goal, pay out of savings by choosing a goal like a category, celebration triggers (V4-4, V4-7).
+Carry-overs: V3-11 scale chip on every grid screen; Viz 1 board still has the old scale line; parked flows (add goal, pay toward a goal, pay from savings, celebration triggers).
 
-Then continue the queue from item 6 (small / repeat purchases).
+Then continue the queue from item 7 (time patterns, e.g. nights).
 
 ## Read next
 1. `docs/claude/v14_decisions.md` — decision log and queue (authoritative).
