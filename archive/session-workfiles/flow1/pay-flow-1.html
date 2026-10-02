@@ -1,0 +1,277 @@
+<title>Trickle v14 — Pay Flow</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a design board in the Viz 1 family. Sections A-F; each is a question, a gallery of dark phone
+   frames (rows = options, columns = students or moments), then what the drawing showed. Same tokens as Viz 1. */
+:root{
+  --bg:#f0f1ec; --surface:#fafaf7; --ink:#14181b; --ink2:#444c54; --muted:#727a83; --line:#d6d9d1;
+  --accent:#0d7a64; --accent-soft:#d9ece5; --amber:#a9680f;
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px;padding-block:40px 80px}
+@media (max-width:600px){.wrap{padding-inline:16px;padding-block:24px 56px}}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.12;margin:0}
+h1{font-size:clamp(30px,5vw,50px);font-weight:700;letter-spacing:-.02em}
+h2{font-size:clamp(23px,3vw,31px);font-weight:700;letter-spacing:-.01em}
+h3{font-size:18px;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lead{font-size:18px;color:var(--ink2);max-width:62ch}
+header.top{display:flex;flex-direction:column;gap:16px;padding-bottom:28px}
+section{display:flex;flex-direction:column;gap:18px;padding-block:40px;border-top:1px solid var(--line)}
+.sec-h{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.sec-h .k{font-family:var(--display);font-weight:700;font-size:clamp(23px,3vw,31px);color:var(--accent)}
+.q{color:var(--ink2)}
+ul.plain{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.logged{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.logged div{border-top:2px solid var(--ink);padding-top:10px}
+.logged b{display:block;font-family:var(--display);font-size:17px;margin-bottom:4px}
+.logged span{color:var(--ink2);font-size:15px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right}
+.opt{display:flex;flex-direction:column;gap:10px}
+.opt>h4{margin:0;font-size:15.5px;font-weight:600;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.opt>h4 b{font-family:var(--display);background:var(--ink);color:var(--bg);border-radius:5px;padding:1px 7px;font-size:13.5px}
+.opt>h4 span{color:var(--muted);font-weight:400}
+.gal{display:flex;flex-direction:column;gap:26px}
+.row{display:grid;grid-template-columns:repeat(6,minmax(170px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.row.four{grid-template-columns:repeat(4,minmax(200px,1fr))}
+.row.three{grid-template-columns:repeat(3,minmax(200px,300px))}
+.fg{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fg figcaption{font-size:13px;color:var(--muted);line-height:1.3}
+.fg figcaption b{color:var(--ink);font-weight:600}
+svg.ph{width:100%;height:auto;display:block;font-family:var(--body)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px 28px}
+.note{border-top:1px solid var(--line);padding-top:10px;font-size:15px;color:var(--ink2)}
+.note b{display:block;color:var(--ink);font-family:var(--display);font-size:16px;margin-bottom:3px}
+.demo{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:700px){.demo{grid-template-columns:minmax(0,1fr)}}
+.ctl{display:flex;flex-direction:column;gap:16px}
+.ctl .grp{display:flex;flex-direction:column;gap:7px}
+.ctl .lbl{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font:inherit;font-size:14.5px;font-weight:600;white-space:nowrap;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer}
+.chip:hover{border-color:var(--ink2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn{font:inherit;font-size:15px;font-weight:700;padding:10px 18px;border-radius:10px;border:0;background:var(--accent);color:#04231b;cursor:pointer;align-self:flex-start}
+.chip:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;max-width:420px;accent-color:var(--accent)}
+.small{font-size:13.5px;color:var(--muted)}
+.decide{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px}
+.dq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.dq h3{font-size:17px}
+.dq ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:5px;font-size:15px;color:var(--ink2);list-style:upper-alpha}
+.dq li.s{color:var(--ink)}
+.dq li.s::after{content:" suggested";font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-left:4px}
+
+svg.ph rect.bx{transition:fill .6s ease,transform .6s ease}
+@media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
+
+.lg{animation:lgin .9s ease .7s both}
+@keyframes lgin{from{opacity:0}to{opacity:1}}
+.static .lg{animation:none}
+@media (prefers-reduced-motion: reduce){.lg{animation:none}}
+
+svg.ph [data-open]{cursor:pointer}
+svg.ph [data-open]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+.lg.now{animation:none}
+
+svg.ph [data-go]{cursor:pointer}
+svg.ph [data-go]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+
+svg.ph [data-go]{cursor:pointer}
+.sw2{display:flex;gap:8px;flex-wrap:wrap}
+
+svg.ph rect.bx{transition:fill 1.3s ease}
+@media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
+
+svg.ph [data-go]{cursor:pointer}
+
+.sw3{display:flex;gap:8px;flex-wrap:wrap}
+
+
+
+
+
+.rt{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.rt table{min-width:960px;font-size:14px}
+.rt td{white-space:normal;vertical-align:top;min-width:150px}
+.rt td:first-child{min-width:130px;font-weight:600}
+.rt th{white-space:nowrap}
+.ref{display:inline-block;font-size:11.5px;letter-spacing:.04em;background:var(--accent-soft);color:var(--ink);border-radius:5px;padding:0 6px;margin-left:4px;font-weight:600}
+.tap3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.tap3 .box{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface)}
+.tap3 b{font-family:var(--display);display:block;margin-bottom:4px}
+.tap3 span{color:var(--ink2);font-size:15px}
+</style>
+
+<div id="defs"></div>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Trickle v14 · Flows, board 1 · 2 Oct 2026</div>
+  <h1>The pay screen flow</h1>
+  <p class="lead">You choose what a payment is for, and a goal is chosen the way a category is (F-1): spending a goal's saved money to buy or experience the goal. This board draws the whole path, five ways the "what is it for?" list could look, and the awkward moments: not enough saved, going over, and finishing a goal. Drawn across Vaishak (₹3k, 2 categories, 1 goal), Yash (₹9k, 7, 2) and Harsh (₹12k, 18, 3). Options only; you decide.</p>
+</header>
+
+<section style="border-top:0;padding-top:0">
+  <div class="sec-h"><h2>Already decided</h2></div>
+  <div class="logged">
+    <div><b>F-1 · Goals like categories</b><span>Paying toward a goal is spending its money, chosen like a category on the pay screen.</span></div>
+    <div><b>Pay screen (Viz 2)</b><span>Boxes crumble out of the grid before you confirm, leaving a ghost. No red, no shake.</span></div>
+    <div><b>V4-6 · Amber is savings going out</b><span>Amber = taken from savings, green = added.</span></div>
+    <div><b>V4-4 · Celebration</b><span>When a goal is completed: days it took and how much was saved; it moves to Completed.</span></div>
+    <div><b>O-23 · Overspending</b><span>Buffer first, then the other categories equally, then savings.</span></div>
+    <div><b>V1-3, V11 · Words first</b><span>Lists use words (plenty, low); amounts on tap. Home shows no ₹.</span></div>
+  </div>
+  <p class="small">One assumption I drew with, to confirm in question 1: "Pay" is inside Trickle and hands off to your UPI app with the amount filled in, and Trickle records the payment.</p>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">A</span><h2>The path, for a category</h2></div>
+  <p class="q">Tarun-type pays ₹60 for chai. Amount, what it is for, the pay screen where the boxes crumble, then done.</p>
+  <div class="gal"><div class="opt"><div class="row four" id="secA"></div></div></div>
+  <div class="notes" id="noteA"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">B</span><h2>"What is it for?": three layouts</h2></div>
+  <p class="q">Categories and goals in one place. Rows give words, not amounts. A is one list with goals under a "From savings" heading. B is one mixed list where goals are green rows tagged "savings". C is two tabs, Budget and Savings. Each is drawn for the three students.</p>
+  <div class="gal">
+    <div class="opt"><h4><b>A</b>One list, goals under a heading <span>suggested</span></h4><div class="row three" id="secB1"></div></div>
+    <div class="opt"><h4><b>B</b>One mixed list, goals tagged <span></span></h4><div class="row three" id="secB2"></div></div>
+    <div class="opt"><h4><b>C</b>Two tabs: Budget | Savings <span></span></h4><div class="row three" id="secB3"></div></div>
+  </div>
+  <div class="notes" id="noteB"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">C</span><h2>The pay screen for a goal</h2></div>
+  <p class="q">The goal's own grid is the picture: green liquid is what is saved. The payment crumbles out of it and leaves a dashed amber ghost (amber means taken from savings, V4-6). A line under says where the money comes from. Scale chip as always.</p>
+  <div class="gal"><div class="opt"><div class="row three" id="secC"></div></div></div>
+  <div class="notes" id="noteC"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">D</span><h2>The awkward moments</h2></div>
+  <p class="q">Not enough saved, going over a category's budget, finishing a goal, and a goal only partly used. Defaults are mine and marked.</p>
+  <div class="gal"><div class="opt"><div class="row four" id="secD"></div></div></div>
+  <div class="notes" id="noteD"></div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>For you to decide</h2></div>
+  <div class="decide">
+    <div class="dq"><h3>1. What does "Pay" do?</h3><ol><li class="s">Opens your UPI app with the amount filled in, and Trickle records it when it goes through.</li><li>Trickle only checks first; you pay in your UPI app yourself, and Trickle matches the payment.</li><li>Something else: tell me.</li></ol></div>
+    <div class="dq"><h3>2. Order of the steps</h3><ol><li class="s">Amount first, then what it is for.</li><li>What it is for first, then the amount.</li></ol></div>
+    <div class="dq"><h3>3. The "what is it for?" list</h3><ol><li class="s">A: one list, goals under a "From savings" heading.</li><li>B: one mixed list with green goal rows.</li><li>C: two tabs, Budget and Savings.</li></ol></div>
+    <div class="dq"><h3>4. A goal's pay screen</h3><ol><li class="s">The goal's grid in green, the crumble leaving an amber dashed ghost.</li><li>The same orange as a category.</li></ol></div>
+    <div class="dq"><h3>5. Not enough saved for the goal</h3><ol><li class="s">Offer to take the rest from your buffer (the first step of O-23), or choose another goal.</li><li>Block it and say how much is saved.</li><li>Let it go through and reduce savings elsewhere.</li></ol></div>
+    <div class="dq"><h3>6. When is a goal finished?</h3><ol><li class="s">After paying from it, ask "Is Trip done?". Yes completes it and plays the celebration.</li><li>Completes automatically when what is saved is used up.</li><li>Only when you mark it done in Savings.</li></ol></div>
+    <div class="dq"><h3>7. Money left in a finished goal</h3><ol><li class="s">Goes back to your free savings, and you can give it to another goal.</li><li>Stays with the completed goal.</li></ol></div>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+const PBG='#0b0d10',EDGE='#2b3038',DIM='#1b2026',INK='#f2f4f5',MUT='#8f97a1',GRN='#62dcb4',AMB='#e3a43f',ORG='#f08a3c';
+const COL=['#5aa9ff','#b48cff','#ff7eb6','#f2d65b','#4fd1e6'],REST='#f6b27c',GG=['#62dcb4','#3fae8c','#9be8cf'];
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const T=(x,y,s,sz,o={})=>`<text x="${x}" y="${y}" font-size="${sz}" font-weight="${o.w||400}" fill="${o.f||INK}" text-anchor="${o.a||'start'}">${esc(s)}</text>`;
+const R=(x,y,w,h,r,f,o='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${f}" ${o}/>`;
+const frame=(inner,label)=>`<svg class="ph" viewBox="0 0 390 844" role="img" aria-label="${esc(label)}"><rect x="1" y="1" width="388" height="842" rx="46" fill="${PBG}" stroke="${EDGE}" stroke-width="2"/>${inner}<rect x="150" y="16" width="90" height="24" rx="12" fill="#000"/></svg>`;
+const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c||'')}</figcaption></figure>`;
+const money=n=>'₹'+n.toLocaleString('en-IN');
+const btn=(y,label,pri=true)=>pri?R(35,y,320,54,16,GRN)+T(195,y+34,label,17,{a:'middle',w:700,f:'#04231b'}):R(35,y,320,54,16,'none',`stroke="${EDGE}" stroke-width="1.5"`)+T(195,y+34,label,17,{a:'middle',w:600,f:INK});
+const btn2=(l1,l2)=>R(35,706,150,54,16,'none',`stroke="${EDGE}" stroke-width="1.5"`)+T(110,739,l1,16,{a:'middle',w:600})+R(195,706,160,54,16,GRN)+T(275,739,l2,17,{a:'middle',w:700,f:'#04231b'});
+const chip=(x,y,txt)=>R(x,y,128,34,17,'#262c33')+T(x+64,y+23,txt,16.5,{a:'middle',w:700});
+const catCol=i=>i<5?COL[i]:REST;
+const tabs=(a)=>{let o=`<line x1="0" y1="770" x2="390" y2="770" stroke="${EDGE}"/>`;['Home','Income','Spending','Savings','Insights'].forEach((t,i)=>{o+=T(39+78*i,808,t,14,{a:'middle',f:i===a?INK:MUT,w:i===a?700:400})});return o};
+
+/* students: cats with word, goals with how far */
+const ST={
+ V:{n:'Vaishak',cats:[['Food','plenty'],['Travel','some']],goals:[['Phone','40% there']]},
+ Y:{n:'Yash',cats:[['Food','some'],['Travel','plenty'],['Phone & data','plenty'],['College & study','low'],['Chai & coffee','some'],['Snacks','plenty'],['Outings','low']],goals:[['Laptop','35% there'],['Trip','70% there']]},
+ H:{n:'Harsh',cats:[['Food','some'],['Travel','plenty'],['Phone & data','plenty'],['College & study','some'],['Personal care','plenty'],['Other basics','plenty'],['Chai & coffee','low'],['Snacks','some'],['Groceries','plenty'],['Eating out','low'],['Food delivery','empty'],['Petrol','some'],['Bike upkeep','plenty'],['Wi-Fi & data','plenty'],['Laundry','plenty'],['Movies','some'],['Games','plenty'],['Outings','low']],goals:[['Bike','20% there'],['Laptop','45% there'],['Trip','60% there']]}
+};
+/* grid with liquid, ghost */
+function grid(x0,y0,box,gap,liq,ghost,col,gcol){let s='';for(let i=0;i<100;i++){const row=9-Math.floor(i/10),c=i%10,x=x0+c*(box+gap),y=y0+row*(box+gap);
+  if(i<liq)s+=R(x,y,box,box,5,col);else if(i<liq+ghost)s+=`<rect x="${x+.8}" y="${y+.8}" width="${box-1.6}" height="${box-1.6}" rx="5" fill="none" stroke="${gcol}" stroke-width="1.6" stroke-dasharray="4 3"/>`;else s+=R(x,y,box,box,5,DIM)}return s}
+
+/* path for a category */
+const amountScr=()=>{let o=T(35,92,'Pay',13,{f:MUT,w:600})+T(35,140,'How much?',26,{w:700})+R(35,170,320,76,18,'none',`stroke="${GRN}" stroke-width="2"`)+T(55,222,'₹ 60',34,{w:700})+T(35,278,'To',13,{f:MUT})+T(35,302,'Sharma Tea Stall',17,{w:600});
+  ['1','2','3','4','5','6','7','8','9','','0','⌫'].forEach((k,i)=>{const c=i%3,r=Math.floor(i/3),x=195+(c-1)*100,y=450+r*72;if(k)o+=`<circle cx="${x}" cy="${y}" r="28" fill="${DIM}"/>`+T(x,y+8,k,22,{a:'middle',w:500})});
+  return frame(o+btn(706,'Next'),'Amount')};
+const whatScr=(sel)=>{let o=T(35,92,'Paying ₹60',13,{f:MUT,w:600})+T(35,136,'What is it for?',26,{w:700});
+  const rows=[['Food','plenty'],['Travel','some'],['Phone & data','plenty'],['Chai & snacks','some'],['Outings','low']];
+  rows.forEach((r,i)=>{const y=170+i*60,on=r[0]===sel;o+=R(35,y,320,52,14,DIM,on?`stroke="${COL[3]}" stroke-width="2"`:'')+`<circle cx="55" cy="${y+26}" r="6" fill="${catCol(i)}"/>`+T(72,y+32,r[0],16.5,{w:600})+T(341,y+32,r[1],14,{a:'end',f:MUT})});
+  return frame(o+btn(706,'Next'),'What is it for')};
+const payCat=(done)=>{const left=35,paid=15;let o=T(35,76,'Paying',17,{f:MUT})+T(35,112,'₹60 · Chai & snacks',28,{w:600})+T(35,144,'This week',17,{f:MUT});
+  o+=grid(70,176,22,3.5,done?left-paid:left,paid,COL[3],COL[3])+chip(35,458,'1 box = ₹4')+T(35,530,done?'Chai & snacks still has some left.':'Some left after this.',17,{w:600});
+  return frame(o+(done?btn(706,'Done'):btn2('Back','Pay ₹60')),done?'Paid':'Pay screen')};
+document.getElementById('secA').innerHTML=[fg(amountScr(),'1 · How much','amount and who'),fg(whatScr('Chai & snacks'),'2 · What is it for','a category'),fg(payCat(false),'3 · Pay screen','boxes crumble out'),fg(payCat(true),'4 · Paid','the ghost stays')].join('');
+document.getElementById('noteA').innerHTML=`<div class="note"><b>Same pay screen as Viz 2</b>Title "Paying", the amount and category, the grid, one line in words, the scale, then Back and Pay.</div><div class="note"><b>After paying</b>The ghost stays until you move on (V2-3). A plain sentence says what is left, in words.</div><div class="note"><b>Order is a question</b>This draws amount first. Question 2 asks about the other order.</div>`;
+
+/* chooser */
+const WC=w=>({plenty:'plenty',some:'some',low:'low',empty:'empty'}[w]);
+function chooser(k,opt,selTab){const s=ST[k];let o=T(35,92,'Paying ₹60',13,{f:MUT,w:600})+T(35,136,'What is it for?',26,{w:700});
+  let y=160;
+  if(k==='H'||opt){}
+  const catRow=(c,i,yy)=>R(35,yy,320,46,12,DIM)+`<circle cx="53" cy="${yy+23}" r="6" fill="${catCol(i)}"/>`+T(70,yy+29,c[0],15.5,{w:600})+T(341,yy+29,c[1],13.5,{a:'end',f:MUT});
+  const goalRow=(g,i,yy,tag)=>R(35,yy,320,46,12,DIM,`stroke="${GG[i]}" stroke-width="1.2"`)+`<circle cx="53" cy="${yy+23}" r="6" fill="${GG[i]}"/>`+T(70,yy+29,g[0],15.5,{w:600})+T(341,yy+29,tag?'savings · '+g[1]:g[1],13.5,{a:'end',f:GG[i]});
+  if(opt==='C'){const w=156;[['Budget',selTab==='b'],['Savings',selTab==='s']].forEach((t,i)=>{o+=R(35+i*(w+8),156,w,36,18,t[1]?INK:'none',t[1]?'':`stroke="${EDGE}" stroke-width="1.5"`)+T(35+i*(w+8)+w/2,179,t[0],14.5,{a:'middle',w:700,f:t[1]?'#111':MUT})});y=206;if(k==='H'&&selTab==='b'){o+=R(35,202,320,38,19,'none',`stroke="${EDGE}" stroke-width="1.5"`)+T(56,226,'Search',14.5,{f:'#5f6772'});y=252}}
+  else if(k==='H'){o+=R(35,156,320,38,19,'none',`stroke="${EDGE}" stroke-width="1.5"`)+T(56,180,'Search',14.5,{f:'#5f6772'});y=206}
+  const max=Math.floor((690-y)/52);let n=0,more=0;
+  const push=(fn)=>{if(n<max){o+=fn(y);y+=52;n++}else more++};
+  if(opt==='A'){s.cats.forEach((c,i)=>push(yy=>catRow(c,i,yy)));if(n<max){o+=T(35,y+14,'FROM SAVINGS',12,{f:MUT,w:600});y+=24}s.goals.forEach((g,i)=>push(yy=>goalRow(g,i,yy,false)))}
+  else if(opt==='B'){const mix=[];s.cats.forEach((c,i)=>mix.push(['c',c,i]));s.goals.forEach((g,i)=>mix.splice(Math.min(mix.length,2+i*3),0,['g',g,i]));mix.forEach(m=>push(yy=>m[0]==='c'?catRow(m[1],m[2],yy):goalRow(m[1],m[2],yy,true)))}
+  else if(selTab==='s')s.goals.forEach((g,i)=>push(yy=>goalRow(g,i,yy,false)));
+  else s.cats.forEach((c,i)=>push(yy=>catRow(c,i,yy)));
+  if(more)o+=T(35,y+14,'+ '+more+' more, search above',13,{f:MUT});
+  return frame(o,s.n+' what is it for, '+opt)}
+document.getElementById('secB1').innerHTML=['V','Y','H'].map(k=>fg(chooser(k,'A'),ST[k].n,ST[k].cats.length+' categories, '+ST[k].goals.length+(ST[k].goals.length>1?' goals':' goal'))).join('');
+document.getElementById('secB2').innerHTML=['V','Y','H'].map(k=>fg(chooser(k,'B'),ST[k].n,'goals tagged "savings"')).join('');
+document.getElementById('secB3').innerHTML=[fg(chooser('V','C','b'),'Vaishak','Budget tab'),fg(chooser('Y','C','s'),'Yash','Savings tab'),fg(chooser('H','C','b'),'Harsh','Budget tab')].join('');
+document.getElementById('noteB').innerHTML=`<div class="note"><b>A keeps the boundary clear</b>The heading says this one comes out of savings. Long lists scroll above it, so with 18 categories the goals are far down (Harsh), which is the cost.</div><div class="note"><b>B is the most "like a category"</b>Goals sit inside the list, tagged. Fast, but the tag is the only warning that savings are being spent.</div><div class="note"><b>C cuts the length</b>Goals are one tap away in Savings. Costs a tab switch, and a goal is hidden unless you look.</div><div class="note"><b>Harsh needs search</b>Eighteen categories means a search field on every layout; the others fit without.</div>`;
+
+/* goal pay screen */
+function payGoal(name,col,target,saved,paid,sentence,full){const box=target/100,liq=Math.round(saved/box),pb=Math.round(paid/box);
+  let o=T(35,76,'Paying from savings',17,{f:MUT})+T(35,112,money(paid)+' · '+name,28,{w:600})+T(35,144,'A goal you saved for',17,{f:MUT});
+  o+=grid(70,176,22,3.5,liq-Math.min(pb,liq),Math.min(pb,liq),col,AMB)+chip(35,458,'1 box = '+money(Math.round(box)))+T(35,530,sentence[0],17,{w:600})+T(35,556,sentence[1],15,{f:MUT});
+  return frame(o+btn2('Back','Pay '+money(paid)),name+' pay screen')}
+document.getElementById('secC').innerHTML=[fg(payGoal('Phone',GG[0],6000,2400,1800,['Taken from your savings.','Phone keeps some.']),'Vaishak','pays part of Phone'),fg(payGoal('Trip',GG[1],6000,4200,4200,['Uses everything saved for Trip.','Nothing is left in it.']),'Yash','pays everything saved'),fg(payGoal('Laptop',GG[1],40000,18000,6000,['Taken from your savings.','Laptop keeps most.']),'Harsh','pays part of Laptop')].join('');
+document.getElementById('noteC').innerHTML=`<div class="note"><b>Same picture, different colour</b>A category pays out of orange or its own colour; a goal pays out of green and leaves amber, because amber already means savings going out (V4-6).</div><div class="note"><b>One line says where from</b>"Taken from your savings" is the only extra, so the screen stays the same shape as a category's.</div><div class="note"><b>The scale is the goal's</b>The grid is the whole goal, so 1 box is a hundredth of the target, not of a week.</div>`;
+
+/* edge cases */
+const notEnough=()=>{let o=T(35,76,'Paying from savings',17,{f:MUT})+T(35,112,'₹3,000 · Phone',28,{w:600})+T(35,144,'Phone has ₹2,400 saved',17,{f:AMB,w:600});
+  o+=grid(70,176,22,3.5,0,40,GG[0],AMB).replace(/stroke-dasharray="4 3"/g,'stroke-dasharray="4 3"')+chip(35,458,'1 box = ₹60');
+  o+=R(35,512,320,120,18,DIM)+T(55,548,'₹600 more is needed.',17,{w:700})+T(55,574,'Take it from your buffer?',15,{f:MUT})+R(55,590,120,32,16,GRN)+T(115,611,'Use buffer',14,{a:'middle',w:700,f:'#04231b'})+R(185,590,140,32,16,'none',`stroke="${MUT}" stroke-width="1.5"`)+T(255,611,'Another goal',14,{a:'middle',w:600});
+  return frame(o+btn2('Back','Pay'),'Not enough saved')};
+const over=()=>{let o=T(35,76,'Paying',17,{f:MUT})+T(35,112,'₹312 · Outings',28,{w:600})+T(35,144,'This week',17,{f:MUT});
+  o+=grid(70,176,22,3.5,0,100,COL[3],COL[3])+`<line x1="70" y1="${176+9*25.5+22+6}" x2="${70+10*25.5-3.5}" y2="${176+9*25.5+22+6}" stroke="${AMB}" stroke-width="2.5"/>`+chip(35,458,'1 box = ₹4');
+  o+=T(35,530,'₹222 over.',24,{w:700,f:AMB})+T(35,558,'Taken from your buffer.',16,{f:MUT});
+  return frame(o+btn2('Back','Pay ₹312'),'Over a category')};
+const celebrate=()=>{let o='';for(let r=0;r<10;r++)for(let c=0;c<10;c++)o+=R(70+c*25.5,150+r*25.5,22,22,5,GG[1]);
+  o+=T(195,470,'Trip is done',32,{a:'middle',w:700})+T(195,512,'It took 214 days.',18,{a:'middle',f:MUT})+T(195,540,'₹4,200 saved.',18,{a:'middle',f:MUT})+T(195,590,'Moved to Completed.',15,{a:'middle',f:GRN,w:600});
+  return frame(o+btn(706,'Done'),'Goal completed')};
+const isDone=()=>{let o=T(35,76,'Paid',17,{f:MUT})+T(35,112,'₹1,800 from Phone',28,{w:600})+grid(70,176,22,3.5,10,30,GG[0],AMB);
+  o+=R(35,470,320,150,18,DIM)+T(55,512,'Is Phone done?',20,{w:700})+T(55,540,'Yes plays the celebration. No keeps',14.5,{f:MUT})+T(55,562,'it going with what is left.',14.5,{f:MUT})+R(55,580,100,32,16,GRN)+T(105,601,'Yes, done',14,{a:'middle',w:700,f:'#04231b'})+R(165,580,100,32,16,'none',`stroke="${MUT}" stroke-width="1.5"`)+T(215,601,'Not yet',14,{a:'middle',w:600});
+  return frame(o,'Is it done')};
+document.getElementById('secD').innerHTML=[fg(notEnough(),'1 · Not enough saved','default: use the buffer'),fg(over(),'2 · Over a category','follows O-23'),fg(isDone(),'3 · Is it done?','after paying from a goal'),fg(celebrate(),'4 · Finished','the V4-4 celebration')].join('');
+document.getElementById('noteD').innerHTML=`<div class="note"><b>Not enough saved</b>It names the gap in rupees and offers the buffer first (the first step of O-23) or another goal. Nothing is blocked.</div><div class="note"><b>Over a category</b>The O-23 rule in words, amber, large amount, no red. The next step is Pay, same as always.</div><div class="note"><b>Is it done?</b>Paying part of a goal is not the end of it, so it asks. Yes completes and celebrates; Not yet keeps the rest.</div><div class="note"><b>Finished</b>Days it took and how much was saved, then it moves to Completed (V4-4).</div>`;
+})();
+</script>

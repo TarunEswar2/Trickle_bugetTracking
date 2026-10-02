@@ -81,6 +81,8 @@ Interpretation to confirm: the top gauge is all savings together, goals stacked 
 |---|---|
 | F-1 | **"Pay toward a goal" means using the saved money to actually pay for, buy or experience the goal** (e.g. paying for the trip), **not a separate contribution payment.** It is **handled like categories while paying**: on the pay screen the goal is chosen the way a category is. This **merges two parked items** (pay toward a goal + V4-7 pay out of savings) into one flow. Money goes *into* goals through the splits (setup, week-end pop-up, new income), not through a payment flow. |
 
+Pay screen flow board (2 Oct): https://claude.ai/artifact/LhuVGnFaj29oBbg3cYoX3u (source `archive/session-workfiles/flow1/pay-flow-1.html`). Seven questions waiting: what Pay does (hand-off to the UPI app assumed), step order, the chooser layout (A list with a From-savings heading / B mixed / C tabs), the goal pay screen look, not-enough-saved handling, when a goal is finished, money left in a finished goal.
+
 ### Parked for the flow stage (after the visualisation queue; Tarun confirmed "we will work on the flow later")
 - Savings tab: add a goal (done, O-14), show completed goals (V4-4).
 - ~~Make a payment toward a goal~~ and ~~pay from savings by choosing a goal like a category (V4-7)~~ are one flow: **spend a goal's money to pay for it, chosen like a category (F-1)**. Screens still to draw.
