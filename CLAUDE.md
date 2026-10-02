@@ -32,4 +32,4 @@ The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 - `references/inspiration/` — images Tarun supplied as visual references.
 
 ## Next up
-Viz 1–11 are complete. **Onboarding is in progress**: O-1…O-26 logged, board 3 published, nine delegated defaults to confirm waiting for Tarun's answers (see the Onboarding block in `docs/claude/v14_decisions.md`). Flows (parked list) come later when Tarun returns. Then per-tab wireframes, identity, the v14 build, user tests.
+Viz 1–11 and **onboarding are done** (O-1…O-28). Tarun will return for **flows** (the parked list in `docs/claude/v14_decisions.md`: pay toward a goal, pay out of savings, celebration triggers, week-end pop-up timing, Home heads-up for fixed bills, category look-back from the week-vs-last list, editing a transaction's category). Then per-tab grey wireframes, identity, the v14 build, user tests.

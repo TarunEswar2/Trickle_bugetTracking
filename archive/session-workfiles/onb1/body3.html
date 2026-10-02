@@ -4,7 +4,7 @@
 <header class="top">
   <div class="eyebrow">Trickle v14 · Onboarding, board 3 · 2 Oct 2026</div>
   <h1>Onboarding</h1>
-  <p class="lead">Redrawn with your answers and with the gaps filled in. Manual tracking only asks for a balance. Fixed bills sit in the budget screen. "No budget" becomes a few guiding questions. Goals show what to save, with nothing "late". Categories are a few basics plus search. You asked me to sort out whatever was left, so those choices are marked "my default" for you to confirm.</p>
+  <p class="lead">Final board. Your answers and the gaps filled in; everything not changed here is confirmed. Manual tracking only asks for a balance. Fixed bills sit in the budget screen. "No budget" becomes a few guiding questions. Goals show what to save, with nothing "late". Categories are a few basics plus search. You asked me to sort out whatever was left, so those choices are marked "my default" for you to confirm.</p>
 </header>
 
 <section style="border-top:0;padding-top:0">
@@ -50,7 +50,7 @@
 
 <section>
   <div class="sec-h"><span class="k">D</span><h2>Pick categories</h2></div>
-  <p class="q">Only the basics are shown: food, travel and other basic needs, already picked where they apply. Anything else is found with the search. If search finds nothing, one tap creates it. The full list of 50 still lives behind the search; it is never shown all at once.</p>
+  <p class="q">Only the basics are shown: food, travel and other basic needs, already picked where they apply. Search sits directly below them, with "+ Add your own" beside it. If search finds nothing, one tap creates it. The full list of 50 still lives behind the search; it is never shown all at once.</p>
   <div class="gal"><div class="opt"><div class="row" id="secD"></div></div></div>
   <div class="notes" id="noteD"></div>
 </section>
@@ -113,18 +113,18 @@
 </section>
 
 <section>
-  <div class="sec-h"><h2>For you to confirm</h2></div>
-  <p class="q">What you decided is logged. These are the things you asked me to sort out, drawn as my defaults.</p>
-  <div class="decide">
-    <div class="dq"><h3>1. The recommended basics</h3><ol><li class="s">Food, Travel, Phone &amp; data, College &amp; study, Personal care, Other basics.</li><li>Fewer, or different ones: tell me.</li></ol></div>
-    <div class="dq"><h3>2. Balance is not all yours</h3><ol><li class="s">A small "Change" link under the balance so someone can enter the amount that is really for this month.</li><li>No link. The balance is the balance.</li></ol></div>
-    <div class="dq"><h3>3. Where added money can go</h3><ol><li class="s">Three places: new income (starts the split), back into a category, or into the buffer.</li><li>Only income and a category.</li></ol></div>
-    <div class="dq"><h3>4. Forgotten PIN</h3><ol><li class="s">Reset with the phone's own screen lock. Data stays on the phone.</li><li>No reset; reinstall.</li></ol></div>
-    <div class="dq"><h3>5. The first week</h3><ol><li class="s">Prorated by days left, said on the "All set" screen.</li><li>The first week starts at the next Monday.</li></ol></div>
-    <div class="dq"><h3>6. Goals need more than savings</h3><ol><li class="s">A calm screen: "Your goals need ₹X. You set aside ₹Y." with "Save more" or "Change a date".</li><li>The amounts are silently scaled down to fit.</li></ol></div>
-    <div class="dq"><h3>7. Savings in the no-budget path</h3><ol><li class="s">Whatever is left of the balance after the weekly budget and fixed bills.</li><li>Ask separately.</li></ol></div>
-    <div class="dq"><h3>8. Overspending lowers savings</h3><ol><li class="s">When savings are touched, goal amounts shrink in the same proportion and the goal screen shows it.</li><li>Choose which goal gives.</li></ol></div>
-    <div class="dq"><h3>9. Fixed-bill and category colours</h3><ol><li class="s">Fixed bills taupe, buffer grey, the first five categories coloured and the rest peach. Tap a box to read which one.</li><li>Pattern the extras instead of one colour.</li></ol></div>
+  <div class="sec-h"><h2>Confirmed (O-28)</h2></div>
+  <p class="q">You said everything else is fine, so these stand as drawn.</p>
+  <div class="logged">
+    <div><b>Basics</b><span>Food, Travel, Phone &amp; data, College &amp; study, Personal care, Other basics.</span></div>
+    <div><b>Balance</b><span>A "Change" link, for money that is not all for this month.</span></div>
+    <div><b>Added money</b><span>New income, back into a category, or the buffer.</span></div>
+    <div><b>Forgot PIN</b><span>Reset with the phone's own screen lock.</span></div>
+    <div><b>First week</b><span>Prorated by days left.</span></div>
+    <div><b>Goals need more</b><span>A calm "Save more / Change a date" screen.</span></div>
+    <div><b>No-budget savings</b><span>What is left after the weekly budget and fixed bills.</span></div>
+    <div><b>Overspending savings</b><span>Goal amounts shrink in proportion.</span></div>
+    <div><b>Colours</b><span>Taupe fixed bills, grey buffer, five coloured, the rest peach; tap a box to name it.</span></div>
   </div>
 </section>
 </div>
@@ -200,19 +200,22 @@ const FLAT=FIFTY.flatMap(g=>g[1]);
 const REC=['Food','Travel','Phone & data','College & study','Personal care','Other basics'];
 const chipRow=(o,x,y,names,sel,onFn)=>{names.forEach(n=>{const w=Math.round(30+n.length*7.9);if(x+w>355){x=35;y+=44}if(y>600){o.k=(o.k||0)+1;return}const on=sel.includes(n),c=on?catCol(sel.indexOf(n)):null;
   o.s+=R(x,y,w,36,18,on?c:'none',on?'opacity=".22"':`stroke="${EDGE}" stroke-width="1.5"`)+(on?R(x,y,w,36,18,'none',`stroke="${c}" stroke-width="1.5"`):'')+T(x+w/2,y+24,n,14,{a:'middle',w:on?700:500,f:on?INK:MUT});x+=w+8});return [x,y]};
+const basicsBlock=(sel)=>{const B=R(35,274,134,36,18,BUF,'opacity=".2"')+R(35,274,134,36,18,'none',`stroke="${BUF}" stroke-width="1.5"`)+T(102,298,'Buffer · always',14,{a:'middle',w:700});const ctx={s:B};const [x,y]=chipRow(ctx,177,274,REC,sel);return [T(35,262,'RECOMMENDED',12,{f:MUT,w:600})+ctx.s,y+36]};
+const searchRow=(y,q,active)=>R(35,y,180,46,23,'none',`stroke="${active?GRN:EDGE}" stroke-width="${active?2:1.5}"`)+T(56,y+29,q||'Search anything else',q?16:14.5,{f:q?INK:'#5f6772'})+R(225,y,130,46,23,'none',`stroke="${GRN}" stroke-width="1.5"`)+T(290,y+29,'+ Add your own',13.5,{a:'middle',w:700,f:GRN});
 const picker=k=>{const s=ST[k],sel=s.cats.map(c=>c[0]),extras=sel.filter(n=>!REC.includes(n));
   let o=step(4)+T(35,134,'What do you spend on?',23,{w:700})+T(35,162,sel.length+' picked',15,{f:MUT});
-  o+=R(35,180,320,46,23,'none',`stroke="${EDGE}" stroke-width="1.5"`)+T(58,209,'Search for anything else',15,{f:'#5f6772'});
-  o+=T(35,262,'RECOMMENDED',12,{f:MUT,w:600});
-  const B=R(35,274,134,36,18,BUF,'opacity=".2"')+R(35,274,134,36,18,'none',`stroke="${BUF}" stroke-width="1.5"`)+T(102,298,'Buffer · always',14,{a:'middle',w:700});
-  const ctx={s:B};let [x,y]=chipRow(ctx,177,274,REC,sel);
-  if(extras.length){y+=62;ctx.s+=T(35,y-6,'ADDED BY YOU',12,{f:MUT,w:600});chipRow(ctx,35,y,extras,sel)}
-  return frame(o+ctx.s+(ctx.k?T(35,640,'+ '+ctx.k+' more',13.5,{f:MUT}):'')+T(195,672,'Not here? Search, and we will add it.',14.5,{a:'middle',f:'#5f6772'})+btn(706,'Next'),s.n+' pick categories')};
-const searching=(q,res)=>{let o=step(4)+T(35,134,'What do you spend on?',23,{w:700});
-  o+=R(35,160,320,46,23,'none',`stroke="${GRN}" stroke-width="2"`)+T(58,189,q+'|',16);
-  if(res){res.forEach((r,i)=>{const y=226+i*62;o+=R(35,y,320,54,14,DIM)+T(55,y+25,r[0],16.5,{w:700})+T(55,y+44,r[1],12.5,{f:MUT})+`<circle cx="332" cy="${y+27}" r="14" fill="${GRN}"/>`+T(332,y+34,'+',20,{a:'middle',w:700,f:'#04231b'})})}
-  else{o+=R(35,226,320,150,18,DIM)+T(55,268,'No "'+q+'" in the list',17,{w:700})+T(55,296,'We can make it for you.',15,{f:MUT})+R(55,318,250,40,20,GRN)+T(180,344,'Create "'+q+'"',15,{a:'middle',w:700,f:'#04231b'})}
+  const [bb,yEnd]=basicsBlock(sel);o+=bb;let y=yEnd+22;o+=searchRow(y,'',false);y+=46;
+  const ctx={s:''};
+  if(extras.length){y+=44;ctx.s+=T(35,y-8,'ADDED BY YOU',12,{f:MUT,w:600});chipRow(ctx,35,y,extras,sel)}
+  return frame(o+ctx.s+(ctx.k?T(35,650,'+ '+ctx.k+' more',13.5,{f:MUT}):'')+btn(706,'Next'),s.n+' pick categories')};
+const searching=(q,res)=>{const sel=ST.Y.cats.map(c=>c[0]);let o=step(4)+T(35,134,'What do you spend on?',23,{w:700})+T(35,162,sel.length+' picked',15,{f:MUT});
+  const [bb,yEnd]=basicsBlock(sel);o+=bb;let y=yEnd+22;o+=searchRow(y,q+'|',true);y+=66;
+  if(res){res.forEach((r,i)=>{const yy=y+i*62;o+=R(35,yy,320,54,14,DIM)+T(55,yy+25,r[0],16.5,{w:700})+T(55,yy+44,r[1],12.5,{f:MUT})+`<circle cx="332" cy="${yy+27}" r="14" fill="${GRN}"/>`+T(332,yy+34,'+',20,{a:'middle',w:700,f:'#04231b'})})}
+  else{o+=R(35,y,320,150,18,DIM)+T(55,y+42,'No "'+q+'" in the list',17,{w:700})+T(55,y+70,'We can make it for you.',15,{f:MUT})+R(55,y+92,250,40,20,GRN)+T(180,y+118,'Create "'+q+'"',15,{a:'middle',w:700,f:'#04231b'})}
   return frame(o,'Search categories')};
+const addOwn=()=>{const sel=ST.Y.cats.map(c=>c[0]);let o=strip(picker('Y'));o+=R(1,330,388,513,36,'#14181b')+R(1,330,388,2,0,EDGE)+T(35,382,'Add your own category',22,{w:700});
+  o+=inp(35,424,320,'Name','Cricket nets',true)+T(35,512,'It joins your other categories. You set its',14.5,{f:MUT})+T(35,534,'weekly amount in the next step.',14.5,{f:MUT});
+  return frame(o+btn(706,'Add'),'Add your own category')};
 
 /* the grid */
 function gridSvg(x0,y0,box,gap,parts,total){let s='',cum=0;const bounds=parts.map(p=>(cum+=p.amt,Math.round(cum/total*100)));
@@ -315,7 +318,7 @@ $('noteA2').innerHTML=`<div class="note"><b>Manual is one question</b>It asks "H
 $('secB').innerHTML=[fg(method(0),'Pick categories','split, picker, weekly amounts'),fg(method(1),'No particular budget','a few questions, we set it up with you')].join('');
 $('noteB').innerHTML=`<div class="note"><b>Two equal cards</b>The second one promises help, not an empty budget.</div>`;
 $('secC').innerHTML=['V','Y','H'].map(k=>fg(split(k),ST[k].n,'balance '+money(ST[k].bal))).join('');
-$('secD').innerHTML=['V','Y','H'].map(k=>fg(picker(k),ST[k].n,ST[k].cats.length+' picked')).join('')+fg(searching('ga',[['Games','Fun'],['Gadgets','Shopping']]),'Search','"ga" finds Games and Gadgets')+fg(searching('Cricket nets',null),'Search, no match','create it for them');
+$('secD').innerHTML=['V','Y','H'].map(k=>fg(picker(k),ST[k].n,ST[k].cats.length+' picked')).join('')+fg(searching('ga',[['Games','Fun'],['Gadgets','Shopping']]),'Search','"ga" finds Games and Gadgets')+fg(searching('Cricket nets',null),'Search, no match','create it for them')+fg(addOwn(),'Add your own','a name, nothing more');
 $('noteD').innerHTML=`<div class="note"><b>Six basics</b>Food, Travel, Phone &amp; data, College &amp; study, Personal care, Other basics. They are picked for you if they apply.</div><div class="note"><b>Everything else by search</b>Typing "ga" lists the matching categories from the library of 50. A tap adds one.</div><div class="note"><b>Nothing found? Create</b>"Cricket nets" is not in the library, so one tap creates it and puts it in the list.</div>`;
 $('secE').innerHTML=[fg(amounts('Y',0,'equal'),'Yash · Equal','the same for every category'),fg(amounts('Y',0,'manual'),'Yash · Manual','slider on the picked one'),fg(amounts('Y',0,'manual',true),'Yash · Manual, typing','tap the amount and type it')].join('');
 $('secE2').innerHTML=[fg(amounts('H',1,'equal'),'Harsh · Equal','18 categories, same share each'),fg(amounts('V',0,'equal'),'Vaishak · Equal','2 categories, no fixed bills yet'),fg(amounts('H',1,'manual'),'Harsh · Manual','Travel selected, buffer ₹100')].join('');
