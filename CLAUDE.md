@@ -32,4 +32,4 @@ The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 - `references/inspiration/` — images Tarun supplied as visual references.
 
 ## Next up
-Visualisation 11, the last: exact amounts on tap (the progressive-disclosure rules across all screens). Viz 1–10 are decided. Then onboarding, per-tab wireframes, flows, identity, the v14 build, user tests.
+The visualisation queue (Viz 1–11) is complete. Tarun will return for **flows** (see the parked flows in `docs/claude/v14_decisions.md`). Then onboarding, per-tab wireframes, identity, the v14 build, user tests. Viz 11's five unanswered points are logged as defaults; re-offer them if they come up.

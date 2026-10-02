@@ -41,7 +41,7 @@ v14 so far:
 | Visualisation 8 — fixed bills coming up | Decided (V8-1…V8-4): Fixed calendar in Spending, glow = status, list with amounts |
 | Visualisation 9 — this week vs last | Decided (V9-1…V9-3): Insights, two grids side by side with last week faded, by category on tap |
 | Visualisation 10 — transaction history | Decided (V10-1…V10-3): day-grouped list, filter chips, name/amount/time rows |
-| Visualisation 11 — exact amounts on tap | **Next (the last)** |
+| Visualisation 11 — exact amounts on tap | Decided (V11-1 … V11-3); board published, 5 defaults unconfirmed |
 | Onboarding, per-tab screens, identity, v14 build, user tests | Not started |
 
 ## How Tarun wants to work (this matters more than anything else here)
@@ -103,7 +103,7 @@ green→amber transition, v7's range of data visualisations, sounds/motion from 
 his own gradients in Figma.
 
 ## The exact next step
-**Visualisation 11 — exact amounts on tap**, the last in the queue: the progressive-disclosure rules. It consolidates what each screen shows at a glance and what a tap reveals across Viz 1–10. Ask Tarun what form he wants (a rules table? one standard "tap reveals" pattern drawn once? both?), log as "Viz 11", mark DONE.
+**The visualisation queue (Viz 1–11) is complete.** Tarun said he will come back for **flows** — start with the parked flows listed below, one decision at a time. Viz 11 board: https://claude.ai/artifact/RsXokgbfEjVoyKyb3pX7Zc; its five "still to confirm" points are logged as defaults, unanswered.
 
 After the queue (Tarun's v14 order): onboarding (`docs/claude/build_plan.md`, `docs/claude/screens_to_design.md`), grey wireframes per tab with one visualisation per screen, the flows (parked list below), identity, the v14 build, then real user tests (never run).
 

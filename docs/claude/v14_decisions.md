@@ -171,7 +171,7 @@ Board: https://claude.ai/artifact/RsXokgbfEjVoyKyb3pX7Zc (source `archive/sessio
 8. Subscriptions coming up (Fixed group) — DONE (V8-1…V8-4)
 9. This week vs last — DONE (V9-1…V9-3)
 10. Transaction history — DONE (V10-1…V10-3)
-11. Exact amounts on tap (progressive disclosure rules) — IN PROGRESS (V11-1…V11-3 given; board published, 5 points to confirm)
+11. Exact amounts on tap (progressive disclosure rules) — DONE (V11-1…V11-3; the 5 'still to confirm' points stand as the board's defaults, unanswered)
 
 ## Parked / superseded
 - Coin test (V4 vs V1) and name-rows vs families category ideas (claude/v14_stage2b_coins_categories.md) — superseded.
