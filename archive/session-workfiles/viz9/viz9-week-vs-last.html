@@ -1,0 +1,275 @@
+<title>Trickle v14 — Week Against Last</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a design board in the Viz 1 family. Sections A-F; each is a question, a gallery of dark phone
+   frames (rows = options, columns = students or moments), then what the drawing showed. Same tokens as Viz 1. */
+:root{
+  --bg:#f0f1ec; --surface:#fafaf7; --ink:#14181b; --ink2:#444c54; --muted:#727a83; --line:#d6d9d1;
+  --accent:#0d7a64; --accent-soft:#d9ece5; --amber:#a9680f;
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px;padding-block:40px 80px}
+@media (max-width:600px){.wrap{padding-inline:16px;padding-block:24px 56px}}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.12;margin:0}
+h1{font-size:clamp(30px,5vw,50px);font-weight:700;letter-spacing:-.02em}
+h2{font-size:clamp(23px,3vw,31px);font-weight:700;letter-spacing:-.01em}
+h3{font-size:18px;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lead{font-size:18px;color:var(--ink2);max-width:62ch}
+header.top{display:flex;flex-direction:column;gap:16px;padding-bottom:28px}
+section{display:flex;flex-direction:column;gap:18px;padding-block:40px;border-top:1px solid var(--line)}
+.sec-h{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.sec-h .k{font-family:var(--display);font-weight:700;font-size:clamp(23px,3vw,31px);color:var(--accent)}
+.q{color:var(--ink2)}
+ul.plain{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.logged{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.logged div{border-top:2px solid var(--ink);padding-top:10px}
+.logged b{display:block;font-family:var(--display);font-size:17px;margin-bottom:4px}
+.logged span{color:var(--ink2);font-size:15px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right}
+.opt{display:flex;flex-direction:column;gap:10px}
+.opt>h4{margin:0;font-size:15.5px;font-weight:600;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.opt>h4 b{font-family:var(--display);background:var(--ink);color:var(--bg);border-radius:5px;padding:1px 7px;font-size:13.5px}
+.opt>h4 span{color:var(--muted);font-weight:400}
+.gal{display:flex;flex-direction:column;gap:26px}
+.row{display:grid;grid-template-columns:repeat(6,minmax(170px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.row.four{grid-template-columns:repeat(4,minmax(200px,1fr))}
+.row.three{grid-template-columns:repeat(3,minmax(200px,300px))}
+.fg{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fg figcaption{font-size:13px;color:var(--muted);line-height:1.3}
+.fg figcaption b{color:var(--ink);font-weight:600}
+svg.ph{width:100%;height:auto;display:block;font-family:var(--body)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px 28px}
+.note{border-top:1px solid var(--line);padding-top:10px;font-size:15px;color:var(--ink2)}
+.note b{display:block;color:var(--ink);font-family:var(--display);font-size:16px;margin-bottom:3px}
+.demo{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:700px){.demo{grid-template-columns:minmax(0,1fr)}}
+.ctl{display:flex;flex-direction:column;gap:16px}
+.ctl .grp{display:flex;flex-direction:column;gap:7px}
+.ctl .lbl{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font:inherit;font-size:14.5px;font-weight:600;white-space:nowrap;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer}
+.chip:hover{border-color:var(--ink2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn{font:inherit;font-size:15px;font-weight:700;padding:10px 18px;border-radius:10px;border:0;background:var(--accent);color:#04231b;cursor:pointer;align-self:flex-start}
+.chip:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;max-width:420px;accent-color:var(--accent)}
+.small{font-size:13.5px;color:var(--muted)}
+.decide{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px}
+.dq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.dq h3{font-size:17px}
+.dq ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:5px;font-size:15px;color:var(--ink2);list-style:upper-alpha}
+.dq li.s{color:var(--ink)}
+.dq li.s::after{content:" suggested";font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-left:4px}
+
+svg.ph rect.bx{transition:fill .6s ease,transform .6s ease}
+@media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
+
+.lg{animation:lgin .9s ease .7s both}
+@keyframes lgin{from{opacity:0}to{opacity:1}}
+.static .lg{animation:none}
+@media (prefers-reduced-motion: reduce){.lg{animation:none}}
+
+svg.ph [data-open]{cursor:pointer}
+svg.ph [data-open]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+.lg.now{animation:none}
+
+svg.ph [data-go]{cursor:pointer}
+svg.ph [data-go]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+
+svg.ph [data-go]{cursor:pointer}
+.sw2{display:flex;gap:8px;flex-wrap:wrap}
+
+svg.ph rect.bx{transition:fill 1.3s ease}
+@media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
+
+svg.ph [data-go]{cursor:pointer}
+
+.sw3{display:flex;gap:8px;flex-wrap:wrap}
+
+
+
+</style>
+
+<div id="defs"></div>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Trickle v14 · Visualisation 9 of 11 · 2 Oct 2026</div>
+  <h1>This week against last</h1>
+  <p class="lead">In the Insights tab. Two grids side by side: last week, faded, and this week, at the same point in the week. A plain sentence says whether you have spent more, less or about the same. Tap for what changed by category. Drawn for all six students, including one in his first week with no last week. Options only. You decide.</p>
+</header>
+
+<section style="border-top:0;padding-top:0">
+  <div class="sec-h"><h2>Already decided</h2></div>
+  <div class="logged">
+    <div><b>V9-1 · Where</b><span>The Insights tab.</span></div>
+    <div><b>V9-2 · What</b><span>All spending first, then by category on tap.</span></div>
+    <div><b>V9-3 · The form</b><span>Two grids side by side, last week faded.</span></div>
+    <div><b>Carried over</b><span>The same form as the category look-back (V1-14, V1-15). Liquid shows money left. A plain sentence (X-1). No red. The scale chip on any grid (V3-11).</span></div>
+  </div>
+  <p class="small">Drawn as defaults, not decided: the weeks are compared at the same point (here Monday to Thursday); words say more, less or the same; the category list shows rupees and is the tap layer. Today on this board is Thursday 29 October 2026. All figures are made up.</p>
+</section>
+
+<section>
+  <div class="sec-h"><h2>The pool</h2><span class="q">Each student's budget for the week and what they have spent by Thursday, this week and last week.</span></div>
+  <div class="tw"><table>
+    <tr><th>Student</th><th class="n">Week's budget</th><th class="n">1 box</th><th class="n">Spent by Thursday, last week</th><th class="n">This week</th></tr>
+    <tbody id="pool"></tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">A</span><h2>Step 1: the two grids</h2></div>
+  <p class="q">Last week on the left, faded, this week on the right, both at Thursday. The sentence at the top says what changed in words. Gautham-type is in his first week, so there is no last week yet.</p>
+  <div class="gal" id="secA"></div>
+  <div class="notes" id="noteA"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">B</span><h2>Step 2: by category, on tap</h2></div>
+  <p class="q">Tapping "By category" lists what changed most, with the rupees. Amber is more than last week, green is less. Tapping a category goes to its own then-and-now.</p>
+  <div class="gal" id="secB"></div>
+  <div class="notes" id="noteB"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">C</span><h2>Try it</h2></div>
+  <p class="q">Pick a student, then tap By category and back.</p>
+  <div class="demo">
+    <div id="demo"></div>
+    <div class="ctl">
+      <div class="grp"><span class="lbl">Student</span><div class="chips" id="cs"></div></div>
+      <span class="small" id="dnote">Tap By category.</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>Decisions for Tarun</h2></div>
+  <div class="decide">
+    <div class="dq"><h3>1. Same point in the week</h3><ol><li class="s">Compare at the same point: this Thursday against last Thursday.</li><li>Compare this week so far with the whole of last week.</li></ol></div>
+    <div class="dq"><h3>2. The sentence</h3><ol><li class="s">Words only: "A bit more than last week by Thursday."</li><li>Words and a figure: "About ₹380 more."</li></ol></div>
+    <div class="dq"><h3>3. More and less colours</h3><ol><li class="s">Amber for more, green for less, grey for the same, in the tap layer only.</li><li>One neutral colour for all.</li></ol></div>
+    <div class="dq"><h3>4. First week</h3><ol><li class="s">Only this week's grid, with "Next week you'll see it against this one."</li><li>Hide the view until there are two weeks.</li></ol></div>
+    <div class="dq"><h3>5. Rupees on the grids</h3><ol><li class="s">None on the grids, only the scale chip. Rupees are on the category list.</li><li>"₹ left" under each grid.</li></ol></div>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+const PBG='#0b0d10',EDGE='#2b3038',CELL='#2a3039',INK='#f2f4f5',MUT='#8f97a1',GRN='#62dcb4',ORG='#f08a3c',LIQ='#62dcb4';
+const CATC=['#5aa9ff','#b48cff','#ff7eb6','#f2d65b','#4fd1e6'],OTHC='#f6b27c';
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const fmt=n=>'₹'+Math.round(Math.abs(n)).toLocaleString('en-IN');
+const T=(x,y,s,sz,o={})=>`<text x="${x}" y="${y}" font-size="${sz}" font-weight="${o.w||400}" fill="${o.f||INK}" text-anchor="${o.a||'start'}" ${o.ls?`letter-spacing="${o.ls}"`:''}>${esc(s)}</text>`;
+const cut=(s,n)=>s.length>n?s.slice(0,n-1)+'…':s;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const rnd=n=>{const x=Math.sin(n*12.9898)*43758.5453;return x-Math.floor(x)};
+function lr(total,vals){const sum=vals.reduce((a,b)=>a+b,0)||1,ex=vals.map(v=>v/sum*total),fl=ex.map(Math.floor);let left=total-fl.reduce((a,b)=>a+b,0);ex.map((e,i)=>[e-fl[i],i]).sort((a,b)=>b[0]-a[0]).forEach(([,i])=>{if(left>0){fl[i]++;left--}});return fl}
+function wrapText(s,n){const w=s.split(' '),out=[];let cur='';w.forEach(x=>{if((cur+' '+x).trim().length>n){out.push(cur.trim());cur=x}else cur=(cur+' '+x).trim()});if(cur)out.push(cur);return out}
+const C=27.5,P=32.5,SZ=320,rowTop=r=>SZ-C-r*P;
+const CATB={'Vaishak-type':[['Food',2400],['Other',300]],'Gautham-type':[['Food & drinks',2600],['Travel',300],['Other',100]],'Tarun-type':[['Coffee & snacks',1600],['Food',2000],['Travel',700],['Other',400]],'Yash-type':[['Quick-commerce',4000],['Food',900],['Travel',500],['Fun',400],['Study',300],['Phone',200],['Other',100]],'Nishad-type':[['Food & beverages',6000],['Travel',2000],['Fun',1500],['Study',1200],['Gifts',800],['Snacks',700],['Haircut',700],['Phone',600],['Misc',600],['Stationery',500],['Clothes',500],['Books',400]],'Harsh-type':[['Mess & meals',2400],['Eating out',1600],['Fuel',400],['Gifts',300],['Fun',300],['Study',200],['Snacks',100],['Printouts',100],['Haircut',100],['Coffee',100],['Books',100],['Repairs',100],['Medical',100],['Charity',100],['Laundry',75],['Stationery',75],['Parking',75],['Misc',75]]};
+const S=[
+ {short:'Vaishak-type',bud:700,last:300,now:380},
+ {short:'Gautham-type',bud:700,last:null,now:300},
+ {short:'Tarun-type',bud:1200,last:700,now:840},
+ {short:'Yash-type',bud:1600,last:1000,now:1250},
+ {short:'Nishad-type',bud:3900,last:2600,now:2000},
+ {short:'Harsh-type',bud:1600,last:1100,now:1090}
+];
+S.forEach((st,si)=>{st.box=st.bud/100;
+  const sorted=[...CATB[st.short]].sort((a,b)=>b[1]-a[1]);const tot=sorted.reduce((a,c)=>a+c[1],0);
+  const split=(total,seed)=>{const wts=sorted.map((c,i)=>c[1]/tot*(.55+.9*rnd(si*37+seed+i)));return lr(total,wts)};
+  const lastA=st.last==null?null:split(st.last,5),nowA=split(st.now,91);
+  st.cats=sorted.map((c,i)=>({name:c[0],color:i<5?CATC[i]:OTHC,last:lastA?lastA[i]:null,now:nowA[i]}));
+  st.leftNow=st.bud-st.now;st.leftLast=st.last==null?null:st.bud-st.last});
+function judgement(st){if(st.last==null)return null;const d=(st.now-st.last)/st.bud;
+  if(d>=.1)return ['quite a bit more',1];if(d>=.03)return ['a bit more',1];if(d>-.03)return ['about the same',0];if(d>-.1)return ['a bit less',-1];return ['quite a bit less',-1]}
+function sentenceOf(st){const j=judgement(st);if(!j)return 'Your first week. Next week you will see it against this one.';
+  return j[1]===0?'About the same as last week, by Thursday.':`${j[0][0].toUpperCase()+j[0].slice(1)} spent than last week, by Thursday.`}
+const lw=p=>p<10?'nearly empty':p<25?'a little left':p<45?'under half left':p<=55?'about half left':p<75?'over half left':p<95?'most of it left':'full';
+S.forEach(st=>{st.words=lw(st.leftNow/st.bud*100);st.wordsLast=st.last==null?null:lw(st.leftLast/st.bud*100)});
+
+function liquid(L,fill,x0,y0,k,fade){let g='';
+  for(let i=0;i<100;i++){const r=Math.floor(i/10),c=i%10;g+=`<rect x="${c*P}" y="${rowTop(r)}" width="${C}" height="${C}" rx="7" fill="${CELL}"/>`;
+    const fa=clamp(L-i,0,1);if(fa>0)g+=`<rect x="${c*P}" y="${rowTop(r)+C*(1-fa)}" width="${C}" height="${C*fa}" rx="${fa>.99?7:2}" fill="${fill}" fill-opacity="${fade}"/>`}
+  return `<g transform="translate(${x0} ${y0}) scale(${k})">${g}</g>`}
+const TABS=['Home','Income','Spending','Savings','Insights'];
+const tabbar=a=>{let tb=`<line x1="0" y1="770" x2="390" y2="770" stroke="${EDGE}"/>`;TABS.forEach((t,i)=>{const x=39+78*i;tb+=T(x,808,t,14,{a:'middle',f:i===a?INK:MUT,w:i===a?700:400});if(i===a)tb+=`<rect x="${x-14}" y="782" width="28" height="4" rx="2" fill="${GRN}"/>`});return tb};
+const frame=(inner,label)=>`<svg class="ph" viewBox="0 0 390 844" role="img" aria-label="${esc(label)}"><rect x="1" y="1" width="388" height="842" rx="46" fill="${PBG}" stroke="${EDGE}" stroke-width="2"/>${inner}<rect x="150" y="16" width="90" height="24" rx="12" fill="#000"/>${tabbar(4)}</svg>`;
+const scaleChip=(x,y,txt)=>`<rect x="${x}" y="${y}" width="${Math.round(txt.length*12.4+60)}" height="38" rx="12" fill="#17201e" stroke="${GRN}" stroke-opacity=".75" stroke-width="1.6"/><rect x="${x+12}" y="${y+10}" width="18" height="18" rx="5" fill="${GRN}"/>${T(x+40,y+27,txt,21,{w:700})}`;
+
+function overall(st){
+  let s=T(35,76,'Insights',17,{f:MUT})+T(35,112,'This week vs last',28,{w:700})+T(35,140,'At Thursday',16,{f:MUT});
+  const lines=wrapText(sentenceOf(st),31);lines.forEach((l,i)=>{s+=T(35,176+i*23,l,17.5,{w:700})});
+  const cy=176+lines.length*23+14;
+  s+=scaleChip(35,cy,`1 box = ${fmt(st.box)}`);
+  const gy=cy+86;
+  s+=T(35,gy-14,'Last week',15.5,{f:MUT,w:600})+T(214,gy-14,'This week',15.5,{w:700});
+  const k=.46;
+  if(st.last==null){
+    s+=`<rect x="35" y="${gy}" width="147" height="147" rx="12" fill="none" stroke="${EDGE}" stroke-dasharray="4 5"/>${T(108,gy+70,'not yet',16,{a:'middle',f:'#5f6772'})}`;
+  }else s+=liquid(st.leftLast/st.box,LIQ,35,gy,k,.45);
+  s+=liquid(st.leftNow/st.box,LIQ,214,gy,k,1);
+  if(st.last!=null)s+=T(35,gy+176,st.wordsLast,15.5,{f:MUT});
+  s+=T(214,gy+176,st.words,15.5,{w:600});
+  const by=gy+232;
+  s+=`<g data-go="cat" role="button" tabindex="0" aria-label="By category"><rect x="35" y="${by}" width="320" height="46" rx="14" fill="#14181d" stroke="${EDGE}"/>${T(52,by+30,'By category',18,{w:600})}${T(349,by+30,'›',22,{a:'end',f:MUT})}</g>`;
+  s+=T(35,by+76,'Tap for what changed most.',15,{f:'#5f6772'});
+  return frame(s,`${st.short} this week against last`)}
+
+function byCat(st){
+  let s=T(35,76,'‹ This week vs last',17,{f:MUT}).replace('<text','<text data-go="back" role="button" tabindex="0" style="cursor:pointer"');
+  s+=T(35,112,'By category',30,{w:700});
+  if(st.last==null){s+=T(35,150,'Nothing to compare yet.',17,{f:MUT});return frame(s,`${st.short} by category, no last week`)}
+  const d=st.now-st.last;
+  s+=T(35,150,d===0?'The same in all':`${fmt(d)} ${d>0?'more':'less'} in all`,20,{w:700,f:d>0?ORG:d<0?GRN:INK});
+  s+=T(35,174,'Biggest change first',15,{f:MUT});
+  let rows=st.cats.map(c=>({...c,d:c.now-c.last})).sort((a,b)=>Math.abs(b.d)-Math.abs(a.d));
+  const cap=rows.length<=7?rows.length:6;const top=rows.slice(0,cap),rest=rows.slice(cap);
+  if(rest.length)top.push({name:`${rest.length} others`,color:OTHC,now:rest.reduce((a,c)=>a+c.now,0),last:rest.reduce((a,c)=>a+c.last,0),d:rest.reduce((a,c)=>a+c.d,0)});
+  top.forEach((c,i)=>{const y=196+i*64;
+    s+=`<g data-go="catrow" role="button" tabindex="0" aria-label="${esc(c.name)}"><rect x="35" y="${y}" width="320" height="56" rx="12" fill="#12161b" stroke="${EDGE}"/><rect x="48" y="${y+12}" width="16" height="16" rx="4.5" fill="${c.color}"/>${T(74,y+25,cut(c.name,17),18,{w:600})}${T(342,y+25,c.d===0?'same':(c.d>0?'+':'−')+fmt(c.d),18,{a:'end',w:700,f:c.d>0?ORG:c.d<0?GRN:MUT})}${T(48,y+46,`${fmt(c.last)} last week · ${fmt(c.now)} this week`,13.5,{f:MUT})}</g>`});
+  return frame(s,`${st.short} by category`)}
+
+const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c)}</figcaption></figure>`;
+document.getElementById('pool').innerHTML=S.map(st=>`<tr><td>${st.short}</td><td class="n">${fmt(st.bud)}</td><td class="n">${fmt(st.box)}</td><td class="n">${st.last==null?'first week':fmt(st.last)}</td><td class="n">${fmt(st.now)}</td></tr>`).join('');
+document.getElementById('secA').innerHTML=`<div class="opt"><div class="row">`+S.map(st=>fg(overall(st),st.short,st.last==null?'first week':judgement(st)[0])).join('')+`</div></div>`;
+document.getElementById('noteA').innerHTML=`
+<div class="note"><b>Last week is the faded one</b>Same grid, same scale, half strength, on the left. This week is full strength on the right. It is the form you chose for the category look-back, now for everything.</div>
+<div class="note"><b>Same point, so it is fair</b>Both grids are at Thursday. Nishad-type has spent less than last week by Thursday: his right grid has more liquid left than the left one.</div>
+<div class="note"><b>Words, then a tap</b>The sentence at the top says more, less or the same. The grids carry no rupees, only the scale chip. Rupees are on the category list.</div>
+<div class="note"><b>A first week</b>Gautham-type has no last week, so the left grid is a dashed placeholder, and the sentence says next week it will have something to compare with.</div>`;
+document.getElementById('secB').innerHTML=`<div class="opt"><div class="row">`+S.filter(st=>st.last!=null).map(st=>fg(byCat(st),st.short,`${st.now-st.last>0?'+':'−'}${fmt(st.now-st.last)} in all`)).join('')+`</div></div>`;
+document.getElementById('noteB').innerHTML=`
+<div class="note"><b>Biggest change first</b>The category that moved most is on top, with last week and this week's amounts under it. Tarun-type's coffee and snacks lead his list.</div>
+<div class="note"><b>Direction, not judgement</b>Amber means more than last week, green means less. It does not say good or bad, and nothing is red.</div>
+<div class="note"><b>Same colours as the rings</b>The five biggest budgets keep their ring colour and the rest are one "others" row. Tapping a row opens that category's own then-and-now.</div>`;
+const dem={s:4,view:'overall'};
+const demo=document.getElementById('demo'),dn=document.getElementById('dnote');
+function draw(){const st=S[dem.s];demo.innerHTML=dem.view==='overall'?overall(st):byCat(st);dn.textContent=dem.view==='overall'?'Tap By category.':'Tap ‹ This week vs last to go back.'}
+demo.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(!g)return;const k=g.dataset.go;if(k==='cat')dem.view='cat';else if(k==='back')dem.view='overall';draw()});
+demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-go]');if(t){e.preventDefault();t.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
+const el=document.getElementById('cs');
+el.innerHTML=S.map((s,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${i===dem.s}">${s.short.replace('-type','')}</button>`).join('');
+el.onclick=e=>{const b=e.target.closest('button');if(!b)return;dem.s=+b.dataset.i;dem.view='overall';[...el.children].forEach((c,i)=>c.setAttribute('aria-pressed',i===dem.s));draw()};
+draw();
+})();
+</script>

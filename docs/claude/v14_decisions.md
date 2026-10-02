@@ -138,6 +138,7 @@ Viz 8 closed by Tarun ("next"). The defaults below stand as drawn: the calendar 
 | V9-1 | It lives in the **Insights tab**. |
 | V9-2 | It compares **all spending first, then by category on tap**; a category's own then-and-now is its look-back (V1-13..V1-15, already decided). |
 | V9-3 | The form is **two grids side by side, last week faded** (the same form as the category look-back, V1-14/V1-15). |
+Board: https://claude.ai/artifact/7HMcsvp68aqLTVr33y37sG (source archive/session-workfiles/viz9/viz9-week-vs-last.html).
 Defaults, drawn but not decided: the weeks are compared **at the same point** (e.g. Monday to Thursday); each grid shows money left (V1-1); a plain sentence says more, less or the same, in words, no red (X-1); the by-category list shows the change in rupees on the tap layer, biggest change first, amber for more and green for less (not good or bad, just direction); a student in his first week has no last week and sees only this week with a note.
 
 ## Visualisation queue (one at a time)
