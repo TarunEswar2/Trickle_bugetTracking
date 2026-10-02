@@ -32,4 +32,4 @@ The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 - `references/inspiration/` — images Tarun supplied as visual references.
 
 ## Next up
-Viz 1–11 are complete. **Onboarding is in progress**: O-1…O-11 logged, board 2 published, eleven questions waiting for Tarun's answers (see the Onboarding block in `docs/claude/v14_decisions.md`). Flows (parked list) come later when Tarun returns. Then per-tab wireframes, identity, the v14 build, user tests.
+Viz 1–11 are complete. **Onboarding is in progress**: O-1…O-13 logged, board 2 published, eleven questions waiting for Tarun's answers (see the Onboarding block in `docs/claude/v14_decisions.md`). Flows (parked list) come later when Tarun returns. Then per-tab wireframes, identity, the v14 build, user tests.

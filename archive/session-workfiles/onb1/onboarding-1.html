@@ -158,7 +158,7 @@ svg.ph [data-go]{cursor:pointer}
 
 <section>
   <div class="sec-h"><span class="k">C</span><h2>Split the balance (categories path)</h2></div>
-  <p class="q">A slider on one bar. Savings green, budget orange. The weekly figure is the number the sliders will fill.</p>
+  <p class="q">One slider on one bar, nothing else. Savings green, budget orange. The weekly figure is the number the sliders will fill.</p>
   <div class="gal"><div class="opt"><div class="row three" id="secC"></div></div></div>
 </section>
 
@@ -198,8 +198,8 @@ svg.ph [data-go]{cursor:pointer}
 
 <section>
   <div class="sec-h"><span class="k">H</span><h2>Step 6: savings and goals</h2></div>
-  <p class="q">The same grid, now showing the savings amount. Each goal gets a share by slider, in its own green. Each goal row says when it would be reached at that pace. Drawn from both paths.</p>
-  <div class="gal"><div class="opt"><div class="row three" id="secH"></div></div></div>
+  <p class="q">The same grid, now showing the savings amount. Each goal asks what it is for, how much, and by when. A share by slider in its own green shows whether that pace meets the date. Drawn from both paths.</p>
+  <div class="gal"><div class="opt"><div class="row four" id="secH"></div></div></div>
   <div class="notes" id="noteH"></div>
 </section>
 
@@ -216,11 +216,11 @@ svg.ph [data-go]{cursor:pointer}
     <div class="dq"><h3>2. PIN</h3><ol><li class="s">4 digits. A mismatch says "Those did not match. Try again." in amber and returns to the first entry.</li><li>6 digits.</li></ol></div>
     <div class="dq"><h3>3. Linking or manual</h3><ol><li class="s">Two equal cards, UPI first, switchable later; Excel/CSV import as a small placeholder line.</li><li>Manual first.</li></ol></div>
     <div class="dq"><h3>4. Permissions</h3><ol><li class="s">Notifications and fingerprint/face only.</li><li>Also camera for QR.</li></ol></div>
-    <div class="dq"><h3>5. Savings share start</h3><ol><li class="s">Starts at 0 and you move it. The drawn 10 to 25% only shows the labels.</li><li>Starts at 20%.</li></ol></div>
+    <div class="dq"><h3>5. Savings share start</h3><ol><li class="s">The slider starts at 0 and you move it. No 10/20/30% buttons. The drawn positions only show the labels.</li><li>Starts at 20%.</li></ol></div>
     <div class="dq"><h3>6. When a category is at its limit</h3><ol><li class="s">The slider stops and a line says "Nothing left to give. Lower another to free some."</li><li>The slider takes from the other categories on its own.</li></ol></div>
     <div class="dq"><h3>7. Leftover in the weekly grid</h3><ol><li class="s">Unassigned boxes stay empty and are called "spare". At the end of the week they can be saved (V5).</li><li>Leftover is put into one extra "other" category.</li></ol></div>
     <div class="dq"><h3>8. Savings and goals: how often</h3><ol><li class="s">The savings amount is set aside each month, so every goal can show a date (ETA).</li><li>A one-time amount now; dates only appear once savings repeat.</li></ol></div>
-    <div class="dq"><h3>9. Goals in setup</h3><ol><li class="s">Add one or more goals with a name and a target; skipping is allowed and goals can be added later in Savings.</li><li>At least one goal required.</li></ol></div>
+    <div class="dq"><h3>9. Goals in setup</h3><ol><li class="s">Each goal asks name, amount and by when; the date is optional and so is having a goal at all. Goals can be added later in Savings.</li><li>At least one goal required.</li></ol></div>
     <div class="dq"><h3>10. "No budget" path</h3><ol><li class="s">Savings split, then step 6; Trickle just tracks spending, then offers a weekly budget after four weeks.</li><li>Savings and goals only, with no later offer.</li></ol></div>
     <div class="dq"><h3>11. The 50 names and the recommended eight</h3><ol><li class="s">As in the list: Canteen &amp; mess, Chai &amp; coffee, Snacks, Bus &amp; metro, Auto &amp; cab, Mobile recharge, Outings, Stationery.</li><li>Tell me which to swap.</li></ol></div>
   </div>
@@ -257,9 +257,9 @@ const perm=()=>{let s=step(3)+T(35,140,'What Trickle asks for',26,{w:700})+T(35,
   return frame(s+btn(640,'Allow')+btn(706,'Not now',false),'Permissions')};
 
 const ST={
- V:{n:'Vaishak',bal:3000,pct:10,wk:600,cats:[['Canteen & mess',400],['Bus & metro',150]],goals:[['Phone',6000,300]]},
- Y:{n:'Yash',bal:9000,pct:20,wk:1700,cats:[['Canteen & mess',450],['Chai & coffee',150],['Snacks',150],['Bus & metro',200],['Mobile recharge',100],['Outings',300],['Stationery',100]],goals:[['Laptop',30000,1200],['Trip',6000,600]]},
- H:{n:'Harsh',bal:12000,pct:25,wk:2100,cats:[['Canteen & mess',300],['Chai & coffee',100],['Snacks',120],['Groceries',180],['Eating out',200],['Food delivery',100],['Petrol',220],['Bike upkeep',60],['Mobile recharge',90],['Wi-Fi & data',60],['Laundry',50],['Books',100],['Printouts',40],['Movies',100],['Games',50],['Outings',150],['Clothes',120],['Gifts',60]],goals:[['Bike',60000,1500],['Laptop',40000,1000],['Trip',10000,500]]}
+ V:{n:'Vaishak',bal:3000,pct:10,wk:600,cats:[['Canteen & mess',400],['Bus & metro',150]],goals:[['Phone',6000,300,20]]},
+ Y:{n:'Yash',bal:9000,pct:20,wk:1700,cats:[['Canteen & mess',450],['Chai & coffee',150],['Snacks',150],['Bus & metro',200],['Mobile recharge',100],['Outings',300],['Stationery',100]],goals:[['Laptop',30000,1200,26],['Trip',6000,600,8]]},
+ H:{n:'Harsh',bal:12000,pct:25,wk:2100,cats:[['Canteen & mess',300],['Chai & coffee',100],['Snacks',120],['Groceries',180],['Eating out',200],['Food delivery',100],['Petrol',220],['Bike upkeep',60],['Mobile recharge',90],['Wi-Fi & data',60],['Laundry',50],['Books',100],['Printouts',40],['Movies',100],['Games',50],['Outings',150],['Clothes',120],['Gifts',60]],goals:[['Bike',60000,1500,40],['Laptop',40000,1000,38],['Trip',10000,500,null]]}
 };
 const sv=s=>Math.round(s.bal*s.pct/100);
 
@@ -272,9 +272,8 @@ const split=(k,savOnly)=>{const s=ST[k],a=sv(s),b=s.bal-a;
   const sw=Math.round(320*s.pct/100);
   o+=R(35,270,320,44,12,savOnly?DIM:ORG,savOnly?'':'opacity=".9"')+R(35,270,sw,44,12,GRN)+R(35+sw-6,270,12,44,6,'#fff')+T(35,342,'Savings',14,{f:GRN,w:600})+T(355,342,savOnly?'Stays free':'Budget',14,{a:'end',f:savOnly?MUT:ORG,w:600});
   o+=T(35,392,money(a),30,{w:700,f:GRN})+T(355,392,money(b),30,{w:700,f:savOnly?INK:ORG,a:'end'});
-  [0,10,20,30].forEach((p,i)=>{o+=R(35+i*82,430,74,38,19,p===s.pct?INK:'none',`stroke="${EDGE}" stroke-width="1.5"`)+T(35+i*82+37,455,p+'%',15,{a:'middle',w:600,f:p===s.pct?'#111':INK})});
-  if(!savOnly)o+=T(35,520,'Your budget is '+money(b)+', about',15,{f:MUT})+T(35,542,money(s.wk)+' a week to share out.',15,{f:MUT});
-  else o+=T(35,520,'Not a budget. Spending is only tracked.',15,{f:MUT});
+  if(!savOnly)o+=T(35,440,'Your budget is '+money(b)+', about',15,{f:MUT})+T(35,462,money(s.wk)+' a week to share out.',15,{f:MUT});
+  else o+=T(35,440,'Not a budget. Spending is only tracked.',15,{f:MUT});
   return frame(o+btn(706,'Next'),s.n+' split')};
 
 const FIFTY=[['Food',['Canteen & mess','Chai & coffee','Snacks','Groceries','Eating out','Food delivery','Juice & shakes']],['Getting around',['Bus & metro','Auto & cab','Petrol','Bike upkeep','Parking','Train & bus tickets']],['Phone & home',['Mobile recharge','Wi-Fi & data','Rent','Hostel fee','Electricity','Laundry','Toiletries']],['College',['College fees','Books','Stationery','Printouts','Online courses','Exam fees','Project costs']],['Fun',['Movies','Games','Streaming','Music','Outings','Parties','Hobbies','Sports']],['Shopping',['Clothes','Shoes','Accessories','Gadgets','Gifts','Festivals']],['Health & self',['Medicines','Doctor','Gym','Haircut & salon','Skincare']],['Money & other',['Loan or EMI','Insurance','Donations','Pets']]];
@@ -318,13 +317,19 @@ function goalsSvg(s,sel,vals,noBudget){
   let o=step(5)+T(35,130,noBudget?'Savings and goals':'Where savings go',23,{w:700});
   o+=gridSvg(60,148,22,3.5,s.goals.map((g,i)=>({amt:vals[i],color:GG[i]})),a,0,sel);
   o+=chip(35,414,'1 box = '+money(Math.round(box)))+T(355,437,left>0?money(left)+' not given':'All given',16,{a:'end',w:700,f:left>0?MUT:GRN});
-  let y=464;s.goals.forEach((g,i)=>{const on=i===sel,m=vals[i]?Math.ceil(g[1]/vals[i]):0,h=on?106:44;
-    o+=R(35,y,320,h,14,DIM,on?`stroke="${GG[i]}" stroke-width="1.5"`:'')+`<circle cx="53" cy="${y+24}" r="6" fill="${GG[i]}"/>`+T(68,y+29,g[0],16.5,{w:700})+T(341,y+29,m?'ready '+eta(m):'no pace set',14.5,{a:'end',f:MUT});
-    if(on){const cap=vals[i]+left,fr=cap?vals[i]/cap:0;o+=R(55,y+60,280,8,4,'#2c333b')+R(55,y+60,Math.max(8,280*fr),8,4,GG[i])+`<circle cx="${55+280*fr}" cy="${y+64}" r="12" fill="#fff"/>`+T(55,y+92,money(vals[i])+' a month toward '+money(g[1]),13,{f:MUT})}
+  let y=464;s.goals.forEach((g,i)=>{const on=i===sel,m=vals[i]?Math.ceil(g[1]/vals[i]):0,late=g[3]&&m>g[3]?m-g[3]:0,h=on?126:44;
+    o+=R(35,y,320,h,14,DIM,on?`stroke="${GG[i]}" stroke-width="1.5"`:'')+`<circle cx="53" cy="${y+24}" r="6" fill="${GG[i]}"/>`+T(68,y+29,g[0],16.5,{w:700})+T(341,y+29,m?(g[3]?'by '+eta(g[3]):'no date'):'no pace set',14.5,{a:'end',f:MUT});
+    if(on){const cap=vals[i]+left,fr=cap?vals[i]/cap:0;o+=R(55,y+60,280,8,4,'#2c333b')+R(55,y+60,Math.max(8,280*fr),8,4,GG[i])+`<circle cx="${55+280*fr}" cy="${y+64}" r="12" fill="#fff"/>`+T(55,y+92,money(vals[i])+' a month toward '+money(g[1]),13,{f:MUT})+(late?T(55,y+112,'Ready '+eta(m)+', '+late+(late>1?' months':' month')+' late',13,{f:AMB,w:600}):T(55,y+112,g[3]?'Ready '+eta(m)+', in time':'Ready '+eta(m),13,{f:GRN}))}
     y+=h+8});
   o+=T(355,130,'+ Goal',15.5,{a:'end',f:GRN,w:700});
   return frame(o+btn(706,'Finish'),s.n+' savings and goals')}
-const goals=(k,nb)=>{const s=ST[k];return goalsSvg(s,0,s.goals.map(g=>g[2]),nb)};
+const addGoal=()=>{let o=goalsSvg(ST.Y,0,ST.Y.goals.map(g=>g[2]),false).replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'').replace(/<rect x="1" y="1"[^>]*\/>/,'').replace(/<rect x="150"[^>]*\/>/,'');
+  o+=R(1,300,388,543,36,'#14181b')+R(1,300,388,2,0,EDGE)+T(35,350,'Add a goal',22,{w:700});
+  o+=T(35,384,'What for',13,{f:MUT})+R(35,392,320,44,12,'none',`stroke="${GRN}" stroke-width="1.5"`)+T(52,421,'Trip',17);
+  o+=T(35,466,'How much',13,{f:MUT})+R(35,474,320,44,12,'none',`stroke="${EDGE}" stroke-width="1.5"`)+T(52,503,'₹ 6,000',17);
+  o+=T(35,548,'By when',13,{f:MUT});[['6 months',0],['1 year',1],['2 years',0],['Pick a month',0],['No date',0]].forEach((c,i)=>{const w=Math.round(30+c[0].length*8);if(i===0)window.__x=35;if(i===3)window.__x=35;const x=window.__x,y=i<3?558:604;window.__x+=w+8;o+=R(x,y,w,36,18,c[1]?GRN:'none',c[1]?'opacity=".25"':`stroke="${EDGE}" stroke-width="1.5"`)+(c[1]?R(x,y,w,36,18,'none',`stroke="${GRN}" stroke-width="1.5"`):'')+T(x+w/2,y+24,c[0],13.5,{a:'middle',w:600})});
+  o+=T(35,672,'Needs about ₹500 a month to be ready',14,{f:MUT})+T(35,692,'in a year. A date is optional.',14,{f:MUT})+btn(706,'Add goal');return frame(o,'Add a goal')};
+const goals=(k,nb,sel)=>{const s=ST[k];return goalsSvg(s,sel||0,s.goals.map(g=>g[2]),nb)};
 
 document.getElementById('secA').innerHTML=[fg(title(),'1 · Title'),fg(pin('Set a PIN','4 digits to open Trickle.',3),'2 · Set PIN'),fg(pin('Confirm your PIN','Enter it once more.',2),'2 · Confirm PIN'),fg(pin('Confirm your PIN','Enter it once more.',0,'Those did not match. Try again.'),'2 · If it differs'),fg(link(),'3 · Link or manual'),fg(perm(),'4 · Permissions')].join('');
 document.getElementById('noteA').innerHTML=`<div class="note"><b>PIN asked twice</b>The second screen says "once more". A mismatch is calm amber words and starts the confirm again; it never locks you out.</div><div class="note"><b>Permissions are two</b>Notifications and fingerprint/face, only what the app uses.</div><div class="note"><b>Linking is a choice</b>"Track by hand" leads to the same next step.</div>`;
@@ -337,8 +342,8 @@ document.getElementById('noteE').innerHTML=`<div class="note"><b>The limit is th
 document.getElementById('secF').innerHTML=fg(own(),'Create your own','sheet over the picker');
 document.getElementById('secG').innerHTML=[fg(split('Y',true),'Yash','no-budget: put aside'),fg(goals('Y',true),'Yash','then goals')].join('');
 document.getElementById('noteG').innerHTML=`<div class="note"><b>No categories</b>The balance is split into "put aside" and "stays free". Nothing is assigned.</div><div class="note"><b>Straight to goals</b>This is the focus: savings and goals fill the rest of onboarding.</div>`;
-document.getElementById('secH').innerHTML=['V','Y','H'].map(k=>fg(goals(k),ST[k].n,ST[k].goals.length+(ST[k].goals.length>1?' goals':' goal'))).join('');
-document.getElementById('noteH').innerHTML=`<div class="note"><b>Same grid as everything else</b>100 boxes, filled from the bottom, the savings amount in the green family (V4), with the scale chip.</div><div class="note"><b>A date for each goal</b>"ready Jun 2028" at the pace you set. Move a slider and the date moves.</div><div class="note"><b>Skippable</b>You can finish without a goal and add one in Savings later.</div>`;
+document.getElementById('secH').innerHTML=['V','Y','H'].map(k=>fg(goals(k,false,k==='V'?0:1),ST[k].n,ST[k].goals.length+(ST[k].goals.length>1?' goals':' goal'))).join('')+fg(addGoal(),'Add a goal','name, amount, by when');
+document.getElementById('noteH').innerHTML=`<div class="note"><b>Same grid as everything else</b>100 boxes, filled from the bottom, the savings amount in the green family (V4), with the scale chip.</div><div class="note"><b>A date you choose, and one it shows</b>Each goal asks by when. The row says "by Dec 2028", and the slider's pace says when it will really be ready: in time, or in amber "2 months late". The date is optional: Harsh's Trip has none.</div><div class="note"><b>Skippable</b>You can finish without a goal and add one in Savings later.</div>`;
 document.getElementById('fifty').innerHTML=FIFTY.map(g=>`<p style="margin-top:12px"><b>${g[0]}</b> · `+g[1].map(n=>REC.includes(n)?`<b>${esc(n)}</b>`:esc(n)).join(' · ')+`</p>`).join('')+`<p class="small" style="margin-top:12px">Total: ${FLAT.length}</p>`;
 
 /* live demo */
