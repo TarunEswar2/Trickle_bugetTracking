@@ -128,6 +128,7 @@ Drawn as: Day, "You spend most around 4 to 6 pm, and again around 10 pm."; Week,
 | V8-1 | It lives in the **Spending tab, in the Fixed group** (V1-7: rent, EMI, subscriptions as paid / due soon), a scroll below the rings and repeats. |
 | V8-2 | It is **a calendar of what is due**: days with a payment due glow, so "in 2 days" is a spot you can see (same hotspot-calendar language as repeats). |
 | V8-3 | **When, not how much, until you tap**: the glance says which bill and when; the amount is one tap in. |
+Board: https://claude.ai/artifact/4Py7ojfodqGQ6hcaLd42fZ (source archive/session-workfiles/viz8/viz8-fixed-bills.html).
 Defaults, drawn but not decided: the calendar runs from the start of this week for six weeks; glow shows status (due soon, later), not amount; past dues show as paid ticks; a plain sentence under the heading says what is next (X-1); names and "in N days" as text rows under the calendar; no Home heads-up (not chosen).
 
 ## Visualisation queue (one at a time)

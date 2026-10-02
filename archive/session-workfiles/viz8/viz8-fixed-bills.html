@@ -1,0 +1,291 @@
+<title>Trickle v14 — Fixed Bills</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a design board in the Viz 1 family. Sections A-F; each is a question, a gallery of dark phone
+   frames (rows = options, columns = students or moments), then what the drawing showed. Same tokens as Viz 1. */
+:root{
+  --bg:#f0f1ec; --surface:#fafaf7; --ink:#14181b; --ink2:#444c54; --muted:#727a83; --line:#d6d9d1;
+  --accent:#0d7a64; --accent-soft:#d9ece5; --amber:#a9680f;
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px;padding-block:40px 80px}
+@media (max-width:600px){.wrap{padding-inline:16px;padding-block:24px 56px}}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.12;margin:0}
+h1{font-size:clamp(30px,5vw,50px);font-weight:700;letter-spacing:-.02em}
+h2{font-size:clamp(23px,3vw,31px);font-weight:700;letter-spacing:-.01em}
+h3{font-size:18px;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lead{font-size:18px;color:var(--ink2);max-width:62ch}
+header.top{display:flex;flex-direction:column;gap:16px;padding-bottom:28px}
+section{display:flex;flex-direction:column;gap:18px;padding-block:40px;border-top:1px solid var(--line)}
+.sec-h{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.sec-h .k{font-family:var(--display);font-weight:700;font-size:clamp(23px,3vw,31px);color:var(--accent)}
+.q{color:var(--ink2)}
+ul.plain{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.logged{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.logged div{border-top:2px solid var(--ink);padding-top:10px}
+.logged b{display:block;font-family:var(--display);font-size:17px;margin-bottom:4px}
+.logged span{color:var(--ink2);font-size:15px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right}
+.opt{display:flex;flex-direction:column;gap:10px}
+.opt>h4{margin:0;font-size:15.5px;font-weight:600;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.opt>h4 b{font-family:var(--display);background:var(--ink);color:var(--bg);border-radius:5px;padding:1px 7px;font-size:13.5px}
+.opt>h4 span{color:var(--muted);font-weight:400}
+.gal{display:flex;flex-direction:column;gap:26px}
+.row{display:grid;grid-template-columns:repeat(6,minmax(170px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.row.four{grid-template-columns:repeat(4,minmax(200px,1fr))}
+.row.three{grid-template-columns:repeat(3,minmax(200px,300px))}
+.fg{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fg figcaption{font-size:13px;color:var(--muted);line-height:1.3}
+.fg figcaption b{color:var(--ink);font-weight:600}
+svg.ph{width:100%;height:auto;display:block;font-family:var(--body)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px 28px}
+.note{border-top:1px solid var(--line);padding-top:10px;font-size:15px;color:var(--ink2)}
+.note b{display:block;color:var(--ink);font-family:var(--display);font-size:16px;margin-bottom:3px}
+.demo{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:700px){.demo{grid-template-columns:minmax(0,1fr)}}
+.ctl{display:flex;flex-direction:column;gap:16px}
+.ctl .grp{display:flex;flex-direction:column;gap:7px}
+.ctl .lbl{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font:inherit;font-size:14.5px;font-weight:600;white-space:nowrap;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer}
+.chip:hover{border-color:var(--ink2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn{font:inherit;font-size:15px;font-weight:700;padding:10px 18px;border-radius:10px;border:0;background:var(--accent);color:#04231b;cursor:pointer;align-self:flex-start}
+.chip:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;max-width:420px;accent-color:var(--accent)}
+.small{font-size:13.5px;color:var(--muted)}
+.decide{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px}
+.dq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.dq h3{font-size:17px}
+.dq ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:5px;font-size:15px;color:var(--ink2);list-style:upper-alpha}
+.dq li.s{color:var(--ink)}
+.dq li.s::after{content:" suggested";font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-left:4px}
+
+svg.ph rect.bx{transition:fill .6s ease,transform .6s ease}
+@media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
+
+.lg{animation:lgin .9s ease .7s both}
+@keyframes lgin{from{opacity:0}to{opacity:1}}
+.static .lg{animation:none}
+@media (prefers-reduced-motion: reduce){.lg{animation:none}}
+
+svg.ph [data-open]{cursor:pointer}
+svg.ph [data-open]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+.lg.now{animation:none}
+
+svg.ph [data-go]{cursor:pointer}
+svg.ph [data-go]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+
+svg.ph [data-go]{cursor:pointer}
+.sw2{display:flex;gap:8px;flex-wrap:wrap}
+
+svg.ph rect.bx{transition:fill 1.3s ease}
+@media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
+
+svg.ph [data-go]{cursor:pointer}
+
+.sw3{display:flex;gap:8px;flex-wrap:wrap}
+
+
+</style>
+
+<div id="defs"></div>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Trickle v14 · Visualisation 8 of 11 · 2 Oct 2026</div>
+  <h1>Fixed bills coming up</h1>
+  <p class="lead">The Fixed group in the Spending tab, a scroll below the rings and repeats. A calendar of what is due: the days with a payment glow, so "in 2 days" is a spot you can see. A sentence says what is next. Under it, each bill and when, with no amounts. Tap a day for the amount. Drawn for all six students, including one with no fixed bills. Options only. You decide.</p>
+</header>
+
+<section style="border-top:0;padding-top:0">
+  <div class="sec-h"><h2>Already decided</h2></div>
+  <div class="logged">
+    <div><b>V8-1 · Where</b><span>The Spending tab, in the Fixed group (rent, EMI, subscriptions).</span></div>
+    <div><b>V8-2 · The form</b><span>A calendar of what is due.</span></div>
+    <div><b>V8-3 · Amounts</b><span>When, not how much, until you tap.</span></div>
+    <div><b>Carried over</b><span>The hotspot calendar look, a plain sentence (X-1), no red.</span></div>
+  </div>
+  <p class="small">Drawn as defaults, not decided: it starts on this week and runs six weeks; glow is due soon (brighter) or later (dimmer), never the amount; past dues show as ticks; today has a white outline. Today on this board is Sunday 25 October 2026. All figures are made up.</p>
+</section>
+
+<section>
+  <div class="sec-h"><h2>The pool</h2><span class="q">Each student's fixed bills. Harsh-type's bike EMI, gym and phone are his Fixed group.</span></div>
+  <div class="tw"><table>
+    <tr><th>Student</th><th>Fixed bills (day of the month)</th></tr>
+    <tbody id="pool"></tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">A</span><h2>The Fixed calendar</h2></div>
+  <p class="q">Six weeks from Monday 19 October. Bright spots are due in the next 7 days, dim ones later, ticks are paid. Under the calendar the bills are listed with when, and no amounts. Vaishak-type has none.</p>
+  <div class="gal" id="secA"></div>
+  <div class="notes" id="noteA"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">B</span><h2>Tap a day</h2></div>
+  <p class="q">The amount is one tap in. A day with more than one bill lists them. Three students, one tap each.</p>
+  <div class="gal" id="secB"></div>
+  <div class="notes" id="noteB"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">C</span><h2>The sentence at the top</h2></div>
+  <p class="q">What it says in different weeks. Due today, due in 2 days, nothing this week, and when there are no bills at all.</p>
+  <div class="gal" id="secC"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">D</span><h2>Try it</h2></div>
+  <p class="q">Pick a student and tap a day. Use "Move today" to see the sentence change as a bill gets closer.</p>
+  <div class="demo">
+    <div id="demo"></div>
+    <div class="ctl">
+      <div class="grp"><span class="lbl">Student</span><div class="chips" id="cs"></div></div>
+      <div class="chips"><button class="chip" id="back2" type="button">Today −1 day</button><button class="chip" id="fwd" type="button">Today +1 day</button><button class="chip" id="rst" type="button">Reset</button></div>
+      <span class="small" id="dnote"></span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>Decisions for Tarun</h2></div>
+  <div class="decide">
+    <div class="dq"><h3>1. How far ahead</h3><ol><li class="s">This week and the next five, six weeks.</li><li>The next 30 days only.</li><li>This calendar month.</li></ol></div>
+    <div class="dq"><h3>2. What glows</h3><ol><li class="s">Status: due within 7 days is bright, later is dim. The amount is never encoded.</li><li>The amount, so big bills stand out.</li></ol></div>
+    <div class="dq"><h3>3. Paid bills</h3><ol><li class="s">A quiet tick on the days this week that already went.</li><li>Not shown; the calendar starts from today.</li></ol></div>
+    <div class="dq"><h3>4. The list under the calendar</h3><ol><li class="s">Names and "in 2 days", no amounts.</li><li>Names, when and the amount.</li><li>No list, calendar only.</li></ol></div>
+    <div class="dq"><h3>5. A heads-up on Home</h3><ol><li class="s">Not in this view. Decide later with the Home screen.</li><li>A one-line note on Home in the week a bill is due.</li></ol></div>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+const PBG='#0b0d10',EDGE='#2b3038',DIM='#1b2026',INK='#f2f4f5',MUT='#8f97a1',GRN='#62dcb4',ORG='#f08a3c';
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const fmt=n=>'₹'+Math.round(Math.abs(n)).toLocaleString('en-IN');
+const T=(x,y,s,sz,o={})=>`<text x="${x}" y="${y}" font-size="${sz}" font-weight="${o.w||400}" fill="${o.f||INK}" text-anchor="${o.a||'start'}" ${o.ls?`letter-spacing="${o.ls}"`:''}>${esc(s)}</text>`;
+const cut=(s,n)=>s.length>n?s.slice(0,n-1)+'…':s;
+document.getElementById('defs').innerHTML=`<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4"/></filter></defs></svg>`;
+const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],DN=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],DAY=86400000;
+const addDays=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);
+const dow=d=>(d.getDay()+6)%7;
+const sameDay=(a,b)=>a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();
+const diffDays=(a,b)=>Math.round((new Date(a.getFullYear(),a.getMonth(),a.getDate())-new Date(b.getFullYear(),b.getMonth(),b.getDate()))/DAY);
+const BASE=new Date(2026,9,25);
+/* [name, day of month, amount] */
+const S=[
+ {short:'Vaishak-type',bills:[]},
+ {short:'Gautham-type',bills:[['YouTube Premium',6,129]]},
+ {short:'Tarun-type',bills:[['Spotify',22,119],['Cloud storage',28,179]]},
+ {short:'Yash-type',bills:[['Phone plan',24,399],['Prime',4,179]]},
+ {short:'Nishad-type',bills:[['Coursera',27,999],['Netflix',20,199],['Spotify',1,119]]},
+ {short:'Harsh-type',bills:[['Gym',1,800],['Bike EMI',5,2000],['Phone',10,400]]}
+];
+/* all occurrences in the six-week window */
+function occurrences(st,today){
+  const start=addDays(today,-dow(today)),out=[];
+  for(let i=0;i<42;i++){const d=addDays(start,i);st.bills.forEach(b=>{if(d.getDate()===b[1])out.push({i,d,name:b[0],amt:b[2]})})}
+  return {start,out}}
+const ago=n=>n===0?'today':n===1?'tomorrow':`in ${n} days`;
+function upcoming(st,today){const o=occurrences(st,today).out.filter(x=>diffDays(x.d,today)>=0).sort((a,b)=>a.i-b.i);return o}
+function sentence(st,today){
+  if(!st.bills.length)return {main:'No fixed bills yet.',sub:'Rent, EMIs and subscriptions will show here.'};
+  const up=upcoming(st,today),next=up[0];if(!next)return {main:'Nothing due soon.',sub:''};
+  const n=diffDays(next.d,today),soon=up.filter(x=>diffDays(x.d,today)<=7);
+  let main;
+  if(n<=7){main=n===0?`${next.name} takes money today.`:n===1?`${next.name} takes money tomorrow.`:`${next.name} takes money in ${n} days.`;if(soon.length>1)main+=` And ${soon.length-1} more this week.`}
+  else main=`Nothing this week. Next is ${next.name}, ${ago(n)}.`;
+  const within30=up.filter(x=>diffDays(x.d,today)<=30).length;
+  return {main,sub:`${within30} bill${within30===1?'':'s'} coming in the next 30 days.`}}
+function wrapText(s,n){const w=s.split(' '),out=[];let cur='';w.forEach(x=>{if((cur+' '+x).trim().length>n){out.push(cur.trim());cur=x}else cur=(cur+' '+x).trim()});if(cur)out.push(cur);return out}
+
+const TABS=['Home','Income','Spending','Savings','Insights'];
+const tabbar=a=>{let tb=`<line x1="0" y1="770" x2="390" y2="770" stroke="${EDGE}"/>`;TABS.forEach((t,i)=>{const x=39+78*i;tb+=T(x,808,t,14,{a:'middle',f:i===a?INK:MUT,w:i===a?700:400});if(i===a)tb+=`<rect x="${x-14}" y="782" width="28" height="4" rx="2" fill="${GRN}"/>`});return tb};
+const frame=(inner,label)=>`<svg class="ph" viewBox="0 0 390 844" role="img" aria-label="${esc(label)}"><rect x="1" y="1" width="388" height="842" rx="46" fill="${PBG}" stroke="${EDGE}" stroke-width="2"/>${inner}<rect x="150" y="16" width="90" height="24" rx="12" fill="#000"/>${tabbar(2)}</svg>`;
+
+function screen(st,o){
+  o=Object.assign({today:BASE,sel:null},o);const today=o.today;
+  let s=T(35,76,'Spending',17,{f:MUT})+T(35,112,'Fixed',30,{w:700});
+  const sent=sentence(st,today);
+  wrapText(sent.main,31).forEach((ln,i)=>{s+=T(35,144+i*22,ln,16.5,{w:600})});
+  const ln=wrapText(sent.main,31).length;
+  s+=T(35,144+ln*22+4,sent.sub,14.5,{f:MUT});
+  const y0=Math.max(238,144+ln*22+36);
+  if(!st.bills.length){
+    s+=`<rect x="35" y="${y0}" width="320" height="150" rx="16" fill="none" stroke="${EDGE}" stroke-dasharray="4 5"/>`;
+    s+=T(195,y0+66,'Nothing fixed yet',22,{a:'middle',w:700})+T(195,y0+98,'Rent, EMIs and subscriptions',16.5,{a:'middle',f:MUT})+T(195,y0+120,'show up here, with when they are due.',16.5,{a:'middle',f:MUT});
+    return {svg:frame(s,`${st.short} fixed bills, none`),info:null}}
+  const {start,out}=occurrences(st,today);
+  DN.forEach((d,c)=>{s+=T(35+c*46+20,y0-8,d[0],13,{a:'middle',f:MUT,w:600})});
+  const byIdx={};out.forEach(x=>{(byIdx[x.i]=byIdx[x.i]||[]).push(x)});
+  let info=null;
+  for(let i=0;i<42;i++){const d=addDays(start,i),col=i%7,row=Math.floor(i/7),x=35+col*46,y=y0+row*46,list=byIdx[i],n=diffDays(d,today),isToday=n===0,selected=o.sel===i;
+    const attr=`data-c="${i}" role="button" tabindex="0" aria-label="${d.getDate()} ${MN[d.getMonth()]}"`;
+    const stroke=selected?'stroke="#fff" stroke-width="2.5"':isToday?'stroke="#fff" stroke-width="1.6" stroke-dasharray="3 3"':'';
+    const showMon=d.getDate()===1||i===0;
+    if(list){const paid=n<0,soon=n>=0&&n<=7;
+      if(paid)s+=`<g ${attr}><rect x="${x}" y="${y}" width="40" height="40" rx="9" fill="${DIM}" ${stroke}/>${T(x+20,y+27,'✓',20,{a:'middle',f:'#6f7a86',w:700})}${T(x+5,y+14,String(d.getDate()),11,{f:'#566069'})}</g>`;
+      else{if(soon)s+=`<rect x="${x+2}" y="${y+2}" width="36" height="36" rx="9" fill="${ORG}" opacity=".8" filter="url(#glow)"/>`;
+        s+=`<g ${attr}><rect x="${x}" y="${y}" width="40" height="40" rx="9" fill="${ORG}" opacity="${soon?1:.34}" ${stroke}/>${T(x+7,y+17,String(d.getDate()),12.5,{f:soon?'#2a1604':INK,w:700})}${list.length>1?T(x+33,y+34,'+'+(list.length-1),11,{a:'end',f:soon?'#2a1604':INK,w:700}):''}</g>`}
+    }else s+=`<g ${attr}><rect x="${x}" y="${y}" width="40" height="40" rx="9" fill="${n<0?'#14181d':DIM}" ${stroke}/>${T(x+7,y+17,String(d.getDate()),12,{f:n<0?'#363d46':'#4a525d'})}</g>`;
+    if(showMon&&d.getDate()<=7)s+=T(x+20,y+34,MN[d.getMonth()],10.5,{a:'middle',f:'#6f7a86'});
+    if(selected){const l=list||[];info=l.length?l.map(b=>`${b.name} · ${fmt(b.amt)} · every month`):[`Nothing due on ${d.getDate()} ${MN[d.getMonth()]}`];info.date=`${DN[dow(d)]} ${d.getDate()} ${MN[d.getMonth()]}`}}
+  const ly=y0+6*46+6;
+  s+=`<rect x="35" y="${ly}" width="16" height="16" rx="4" fill="${ORG}"/>${T(57,ly+13,'due soon',13.5,{f:MUT})}<rect x="132" y="${ly}" width="16" height="16" rx="4" fill="${ORG}" opacity=".34"/>${T(154,ly+13,'later',13.5,{f:MUT})}<rect x="204" y="${ly}" width="16" height="16" rx="4" fill="${DIM}"/>${T(212,ly+13,'✓',13,{a:'middle',f:'#6f7a86'})}${T(226,ly+13,'paid',13.5,{f:MUT})}`;
+  let iy=ly+40;
+  if(info){s+=T(35,iy,info.date,15,{f:MUT,w:600});info.slice(0,3).forEach((l,i)=>{const parts=l.split(' · ');s+=T(35,iy+28+i*44,parts.length>1?parts[0]+'  '+parts[1]:cut(l,30),20,{w:700})+(parts.length>2?T(35,iy+48+i*44,parts[2],14.5,{f:MUT}):'')});}
+  else{const up=upcoming(st,today).slice(0,4);
+    up.forEach((b,i)=>{const y=iy+i*30;s+=`<rect x="35" y="${y-15}" width="9" height="9" rx="2.5" fill="${ORG}" opacity="${diffDays(b.d,today)<=7?1:.4}"/>${T(52,y-5,cut(b.name,18),16.5,{w:600})}${T(355,y-5,ago(diffDays(b.d,today)),15.5,{a:'end',f:diffDays(b.d,today)<=7?ORG:MUT,w:diffDays(b.d,today)<=7?700:400})}`})}
+  return {svg:frame(s,`${st.short} fixed bills calendar`),info}}
+
+const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c)}</figcaption></figure>`;
+document.getElementById('pool').innerHTML=S.map(st=>`<tr><td>${st.short}</td><td>${st.bills.length?st.bills.map(b=>`${b[0]} (${b[1]}th)`).join(' · '):'none'}</td></tr>`).join('');
+document.getElementById('secA').innerHTML=`<div class="opt"><div class="row">`+S.map(st=>fg(screen(st).svg,st.short,sentence(st,BASE).main)).join('')+`</div></div>`;
+document.getElementById('noteA').innerHTML=`
+<div class="note"><b>"In 2 days" is a spot</b>Nishad-type's Coursera on Tuesday is the brightest spot on his calendar, two days out. You can see how close it is before you read the sentence.</div>
+<div class="note"><b>When, not how much</b>The glow is status, not amount, so ₹999 and ₹119 look alike until you tap. The list under the calendar names each bill and when, and nothing else.</div>
+<div class="note"><b>Past dues are quiet ticks</b>This week's already-paid bills are a grey tick, not a spot, so the calendar is about what is ahead.</div>
+<div class="note"><b>No bills, no calendar</b>Vaishak-type has none. The view says so and says what will appear.</div>`;
+const picks=[[S[4],8],[S[5],17],[S[2],9]];
+document.getElementById('secB').innerHTML=`<div class="opt"><div class="row three">`+picks.map(([st,i])=>fg(screen(st,{sel:i}).svg,st.short,screen(st,{sel:i}).info?screen(st,{sel:i}).info.date:'')).join('')+`</div></div>`;
+document.getElementById('noteB').innerHTML=`
+<div class="note"><b>One tap, the amount</b>Tapping Tuesday 27 October on Nishad's calendar writes "Coursera · ₹999 · every month". The bill is the only place the amount appears.</div>
+<div class="note"><b>Two bills, one day</b>A day with more than one bill shows "+1" on its spot, and the tap lists them.</div>`;
+const w=(st,d)=>sentence(st,addDays(BASE,d));
+document.getElementById('secC').innerHTML=`<div class="opt"><div class="row four">`+[[S[4],0,'Coursera is 2 days out'],[S[4],2,'Coursera is due today'],[S[3],0,'a week with nothing'],[S[0],0,'no bills at all']].map(([st,d,c])=>fg(screen(st,{today:addDays(BASE,d)}).svg,st.short,c)).join('')+`</div></div>`;
+
+/* demo */
+const dem={s:4,off:0,sel:null};
+const demo=document.getElementById('demo'),dn=document.getElementById('dnote');
+function draw(){const t=addDays(BASE,dem.off);demo.innerHTML=screen(S[dem.s],{today:t,sel:dem.sel}).svg;dn.textContent=`Today is ${DN[dow(t)]} ${t.getDate()} ${MN[t.getMonth()]}. Tap a day for its bills.`}
+demo.addEventListener('click',e=>{const c=e.target.closest('[data-c]');if(c){dem.sel=+c.dataset.c;draw()}});
+demo.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest&&e.target.closest('[data-c]');if(t){e.preventDefault();t.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
+document.getElementById('fwd').onclick=()=>{dem.off++;dem.sel=null;draw()};
+document.getElementById('back2').onclick=()=>{dem.off--;dem.sel=null;draw()};
+document.getElementById('rst').onclick=()=>{dem.off=0;dem.sel=null;draw()};
+const el=document.getElementById('cs');
+el.innerHTML=S.map((s,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${i===dem.s}">${s.short.replace('-type','')}</button>`).join('');
+el.onclick=e=>{const b=e.target.closest('button');if(!b)return;dem.s=+b.dataset.i;dem.sel=null;[...el.children].forEach((c,i)=>c.setAttribute('aria-pressed',i===dem.s));draw()};
+draw();
+})();
+</script>
