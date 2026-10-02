@@ -88,6 +88,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;heigh
 .prof.on{border-color:#FF6A1A;background:#2a1608}.prof b{font-size:14.5px}.prof span{font-size:12px;color:var(--ink3);display:block}
 .pot{display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-size:13px}.pot span:nth-child(odd){color:var(--ink3)}
 .log{max-height:200px;overflow:auto;font-size:12.5px;color:var(--ink2);display:flex;flex-direction:column;gap:4px}
+#layer.still *{animation:none!important}
+#phone *{scrollbar-width:none}#phone *::-webkit-scrollbar{display:none}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style></head><body>
 <div class="app"><div class="stage"><div id="frame"><div id="phone"><div class="notch"></div><div class="status"><span id="clk"></span><span>●●● 5G ▮</span></div><div id="view"></div><div id="tabbar"></div><div id="layer"></div></div></div></div>
@@ -349,7 +351,10 @@ function render(){
  if(UI.flow&&FLOWS[UI.flow.id])L+=`<div class="modal" style="background:${UI.flow.bg||groundCss}">${FLOWS[UI.flow.id](UI.flow)}</div>`;
  if(UI.popup&&POPUPS[UI.popup.id])L+=`<div class="modal" style="background:${UI.popup.bg||groundCss}">${POPUPS[UI.popup.id](UI.popup)}</div>`;
  if(UI.toast)L+=`<div class="toast">${esc(UI.toast)}</div>`;
- $('#layer').innerHTML=L;
+ const lk=(UI.sheet?'s'+UI.sheet.id:'')+(UI.flow?'f'+UI.flow.id:'')+(UI.popup?'p'+UI.popup.id:'');const same=lk===UI._lk;UI._lk=lk;
+ const sc=[...document.querySelectorAll('#layer .mbody,#layer .sheet,#layer [data-sc]')].map(e=>e.scrollTop);
+ $('#layer').className=same?'still':'';$('#layer').innerHTML=L;
+ if(same)[...document.querySelectorAll('#layer .mbody,#layer .sheet,#layer [data-sc]')].forEach((e,i)=>{if(sc[i])e.scrollTop=sc[i]});
  if(window.afterRender)window.afterRender();
  if(window.renderPanel)renderPanel()}
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const [n,...a]=el.dataset.a.split('|');if(H[n]){e.preventDefault();const r=H[n](a,el,e);if(r!==false)render()}});
@@ -576,7 +581,7 @@ FLOWS.move=(F)=>{const d=F.d;const src=d.from;const have=src.type==='free'?S.fre
  <div class="card" style="padding:10px 14px;margin:6px 0 10px"><div class="cap" style="font-size:10.5px">From</div><div class="row sp"><b><i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${SAVE};margin-right:8px"></i>${esc(sname)} · ${money(have)} saved</b><span class="mut">›</span></div></div>
  <div style="margin:6px 0;background:#070708;border-radius:16px;padding:14px 8px;display:flex;justify-content:center;box-shadow:inset 0 0 0 2px #1d1e21">${amtDots("₹"+(d.kp||"0"))}</div><div class="sm" style="margin-bottom:10px;${amt>have?'color:var(--amber);font-weight:700':''}">${amt>have?`${esc(sname)} has ${money(have)} saved.`:`Most you can move: ${money(have)}`}</div>
  <div class="seg" style="margin-bottom:8px">${[['b','Budget'],['s','Savings']].map(t=>`<button class="chip ${d.tab===t[0]?'on':''}" data-a="mtab|${t[0]}">${t[1]}</button>`).join('')}</div><div class="cap" style="margin:8px 0 6px">To</div>
- <div class="tgrid" style="max-height:178px;overflow:auto">${tiles.map(t=>{const on=d.toK===t.k;return `<button class="tile ${on?'on':''}" style="${on?`border-color:${t.col};--glow:${t.col}33`:''}" data-a="mto|${t.k}|${d.tab}"><b><i style="background:${t.col}"></i>${esc(t.n)}</b><small style="${t.g?'color:'+SAVE:''}">${t.w}</small></button>`}).join('')||'<div class="sm">No other goals yet. Free savings is the only place.</div>'}</div>
+ <div class="tgrid" data-sc style="max-height:178px;overflow:auto">${tiles.map(t=>{const on=d.toK===t.k;return `<button class="tile ${on?'on':''}" style="${on?`border-color:${t.col};--glow:${t.col}33`:''}" data-a="mto|${t.k}|${d.tab}"><b><i style="background:${t.col}"></i>${esc(t.n)}</b><small style="${t.g?'color:'+SAVE:''}">${t.w}</small></button>`}).join('')||'<div class="sm">No other goals yet. Free savings is the only place.</div>'}</div>
  ${keypad('kp')}</div><div class="mfoot"><button class="btn ${amt&&d.toK?'':'d'}" ${amt&&d.toK?'data-a="mdo"':''}>${amt>have&&have?'Move '+money(have):'Move '+(amt?money(amt):'')}</button></div>`};
 H.mtab=a=>{const d=UI.flow.d;d.tab=a[0];d.toK=null;d.to=null};
 H.mto=a=>{const d=UI.flow.d;const t=moveTiles(d).find(x=>x.k===a[0]);d.toK=a[0];d.to=t.t};
@@ -619,7 +624,7 @@ FLOWS.pay=(F)=>{const d=F.d;const amt=amtOf(d.kp);const t=d.target;
   <div class="row wrap" style="margin:8px 0 6px">${recentPayees().map(p=>`<button class="chip ${d.payee===p?'on':''}" data-a="ppay|${esc(p)}">${esc(p)}</button>`).join('')}<button class="chip ${d.payee&&!recentPayees().includes(d.payee)?'on':''}" data-a="ppay|Someone new">Someone new</button></div>
   <div style="margin:6px 0;background:#070708;border-radius:16px;padding:14px 8px;display:flex;justify-content:center;box-shadow:inset 0 0 0 2px #1d1e21">${amtDots("₹"+(d.kp||"0"))}</div>${short?`<div class="sm" style="color:var(--amber);font-weight:700">${esc(tgtName(t))} has ${money(S.goals.find(g=>g.id===t.id).saved)} saved.</div>`:'<div style="height:20px"></div>'}
   <div class="seg" style="margin:10px 0 8px">${[['b','Budget'],['s','Savings']].map(x=>`<button class="chip ${d.tab===x[0]?'on':''}" data-a="ptab|${x[0]}">${x[1]}</button>`).join('')}</div>
-  <div class="tgrid" style="max-height:170px;overflow:auto;padding:2px">${tiles.map(x=>{const on=d.toK===x.k;return `<button class="tile ${on?'on':''}" style="${on?`border-color:${x.col};background:${x.col}22;--glow:${x.col}44`:''}" data-a="pto|${x.k}"><b><i style="background:${x.col}"></i>${esc(x.n)}</b><small style="${x.g?'color:'+SAVE:''}">${x.w}</small></button>`}).join('')}</div>
+  <div class="tgrid" data-sc style="max-height:170px;overflow:auto;padding:2px">${tiles.map(x=>{const on=d.toK===x.k;return `<button class="tile ${on?'on':''}" style="${on?`border-color:${x.col};background:${x.col}22;--glow:${x.col}44`:''}" data-a="pto|${x.k}"><b><i style="background:${x.col}"></i>${esc(x.n)}</b><small style="${x.g?'color:'+SAVE:''}">${x.w}</small></button>`}).join('')}</div>
   ${S.p.mode==='manual'?`<label class="row sm" style="margin:10px 0 0"><input type="checkbox" ${d.paid?'checked':''} data-i="ppaid"> I already paid</label>`:''}
   ${keypad('kp')}</div><div class="mfoot"><button class="btn ${amt&&t?'':'d'}" ${amt&&t?'data-a="pnext"':''}>Next</button></div>`}
  if(F.step===1){const pv=previewCascade(S,amt,t);const base=tgtBase(t);const left=targetLeft(S,t);const over=amt-pv.target;const col=t.type==='goal'?GG[0]:t.type==='fixed'?FIXC:t.type==='free'?'#7C8F89':catCol(catIdx(t.id));const liq0=Math.min(100,left/base*100),paidB=Math.min(pv.target,left)/base*100;const scale=Math.max(1,Math.round(base/100));
