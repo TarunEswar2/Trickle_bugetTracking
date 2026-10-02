@@ -47,7 +47,7 @@ Defaults, not explicitly answered: rings show the biggest five budgets and the r
 
 Earlier defaults, now partly superseded by V1-10: (a) a ring's name appears when you press/tap it; rings show the biggest few and the rest group as "others", tap opens the full list. (b) ~~rings beside the words list~~ — rings are now the Spending tab's main view; the words-only list (V1-3) remains the fallback question for 12–18 categories.
 
-### Viz 4 — Savings goals (Tarun, 2 Oct; options board in progress)
+### Viz 4 — Savings goals (Tarun, 2 Oct; board published)
 References he sent: iOS year-progress waffle (green filled grid, "299d left · 18%"), a segmented half-ring gauge ("74%"), a GitHub-style day heatmap in green glow.
 | # | Decision |
 |---|---|
@@ -81,7 +81,7 @@ Interpretation to confirm: the top gauge is all savings together, goals stacked 
 - Pay from savings by choosing a goal like a category (V4-7).
 - Celebration screen triggers: wherever a goal is completed (pay screen, income arriving, manual top-up).
 
-### Viz 5 — Unspent → saved (Tarun, 2 Oct; options board in progress)
+### Viz 5 — Unspent → saved (Tarun, 2 Oct; board published)
 | # | Decision |
 |---|---|
 | V5-1 | It happens **at the end of every week**, as a **pop-up screen on Home**. |
@@ -97,7 +97,7 @@ Interpretation to confirm: the top gauge is all savings together, goals stacked 
 Board: https://claude.ai/artifact/N3Lg6rmjweszAX6owzt5Eu (source archive/session-workfiles/viz5/viz5-weekly-savings.html).
 Viz 5 closed by Tarun ("done next"). The defaults below stand as drawn: default selection is all goals; boxes filled from the top = how far over (a week with exactly nothing left has no boxes from the top, just the alert); the alert's goal reminder is text rows with ETAs (no visualisation next to goals, V4-8); the next-week result is a plain list of categories and amounts.
 
-### Viz 6 — Small / repeat purchases (Tarun, 2 Oct; options board in progress)
+### Viz 6 — Small / repeat purchases (Tarun, 2 Oct; board published)
 | # | Decision |
 |---|---|
 | V6-1 | What counts: **the same place or kind, 3 or more times in 30 days, any amount** (the v9 definition). |
@@ -108,7 +108,7 @@ Board: https://claude.ai/artifact/AbKgJ6jeARMKgeGMdtLGox (source archive/session
 | V6-5 | **The habit list is the starting screen** of the repeats view: each habit with its **repeat count (x22, x12, x7…)**, **ordered by most repeats**. **No "All repeats"** entry. Tapping a habit opens its hotspot calendar. |
 Viz 6 closed by Tarun ("done"). The defaults below stand as drawn: three scales on a habit's calendar, Day (hours of a typical day), Week (weekday by time of day), Month (the last 30 days), opening on Month; a Times / ₹ switch for the glow; spending-orange glow; numbers on tap; fewer than 3 repeats shows an empty state.
 
-### Viz 7 — Time patterns (Tarun, 2 Oct; options board in progress)
+### Viz 7 — Time patterns (Tarun, 2 Oct; board published)
 | # | Decision |
 |---|---|
 | V7-1 | It shows **all spending by time of day** (one hotspot view of everything, by hour and weekday), so "you spend more at night" shows across all categories, not one habit. |
@@ -122,7 +122,7 @@ Viz 7 closed by Tarun ("done with viz 7"). The defaults below stand as drawn: th
 | X-1 | **Viz 6 and Viz 7 each carry a plain sentence** saying **the time of day, the day of the week, and which part of the month the user tends to spend more**, "just in case the user finds the visualisation hard to understand". It follows the scale on screen (Day, Week, Month) and the Times / ₹ switch. |
 Drawn as: Day, "You spend most around 4 to 6 pm, and again around 10 pm."; Week, "You spend most on weekdays, in the afternoon."; Month, "You spend most in the middle of the month, around the 7th to 13th." Computed from the data. In Viz 6 the subject is the habit.
 
-### Viz 8 — Subscriptions coming up (Tarun, 2 Oct; options board in progress)
+### Viz 8 — Subscriptions coming up (Tarun, 2 Oct; board published)
 | # | Decision |
 |---|---|
 | V8-1 | It lives in the **Spending tab, in the Fixed group** (V1-7: rent, EMI, subscriptions as paid / due soon), a scroll below the rings and repeats. |
@@ -132,7 +132,7 @@ Drawn as: Day, "You spend most around 4 to 6 pm, and again around 10 pm."; Week,
 Board: https://claude.ai/artifact/4Py7ojfodqGQ6hcaLd42fZ (source archive/session-workfiles/viz8/viz8-fixed-bills.html).
 Viz 8 closed by Tarun ("next"). The defaults below stand as drawn: the calendar runs from the start of this week for six weeks; glow shows status (due soon, later), not amount; past dues show as paid ticks; a plain sentence under the heading says what is next (X-1); the bills as text rows under the calendar with name, amount and "in N days" (V8-4); no Home heads-up (not chosen).
 
-### Viz 9 — This week vs last (Tarun, 2 Oct; options board in progress)
+### Viz 9 — This week vs last (Tarun, 2 Oct; board published)
 | # | Decision |
 |---|---|
 | V9-1 | It lives in the **Insights tab**. |
@@ -141,7 +141,7 @@ Viz 8 closed by Tarun ("next"). The defaults below stand as drawn: the calendar 
 Board: https://claude.ai/artifact/7HMcsvp68aqLTVr33y37sG (source archive/session-workfiles/viz9/viz9-week-vs-last.html).
 Viz 9 closed by Tarun ("next"). The defaults below stand as drawn: the weeks are compared **at the same point** (e.g. Monday to Thursday); each grid shows money left (V1-1); a plain sentence says more, less or the same, in words, no red (X-1); the by-category list shows the change in rupees on the tap layer, biggest change first, amber for more and green for less (not good or bad, just direction); a student in his first week has no last week and sees only this week with a note.
 
-### Viz 10 — Transaction history (Tarun, 2 Oct; options board in progress)
+### Viz 10 — Transaction history (Tarun, 2 Oct; board published)
 | # | Decision |
 |---|---|
 | V10-1 | The history is **a list grouped by day** (Today, Yesterday, Mon 27 Oct…). |
@@ -150,7 +150,7 @@ Viz 9 closed by Tarun ("next"). The defaults below stand as drawn: the weeks are
 Board: https://claude.ai/artifact/8LxmrXkdZfEGbp9H6uE8kZ (source archive/session-workfiles/viz10/viz10-history.html).
 Viz 10 closed by Tarun ("okay next"). The defaults below stand as drawn: it is the last screen of the Spending tab (Tarun's Spending tab: budget setting, how much spent, transaction history); a day header carries the day's total; ranges are Today, 7 days, 30 days, All; category chips use the ring colours; tapping a row opens a detail (category, when, how it was paid, and the habit it belongs to); an empty filter says so calmly; editing a transaction is a later flow.
 
-### Viz 11 — Exact amounts on tap (Tarun, 2 Oct; options board in progress)
+### Viz 11 — Exact amounts on tap (Tarun, 2 Oct; board published)
 | # | Decision |
 |---|---|
 | V11-1 | The deliverable is **both a rules table and one standard tap pattern**. |
@@ -158,6 +158,7 @@ Viz 10 closed by Tarun ("okay next"). The defaults below stand as drawn: it is t
 | V11-3 | **Home shows no ₹ at all.** (The end-of-week pop-up is his own exception, V5-8/V5-10.) |
 Not chosen by Tarun, listed in the table as what the drawn boards do (to confirm): no numbers on the marks of grids and rings (the scale chip is the only figure); the Savings page shows no amounts until a goal is opened; over / nothing-left is words first.
 Three kinds of tap outcome, as drawn: a spot, box or day gives **a line under the picture**; a category, habit, goal or purchase opens **its own full screen**; the weekly pop-up is **a pop-up on Home**.
+Board: https://claude.ai/artifact/RsXokgbfEjVoyKyb3pX7Zc (source `archive/session-workfiles/viz11/viz11-amounts-on-tap.html`). Still to confirm on the board: marks rule, Savings page amounts, over/nothing-left words first, rows that carry amounts, where the rules live.
 
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
@@ -170,7 +171,7 @@ Three kinds of tap outcome, as drawn: a spot, box or day gives **a line under th
 8. Subscriptions coming up (Fixed group) — DONE (V8-1…V8-4)
 9. This week vs last — DONE (V9-1…V9-3)
 10. Transaction history — DONE (V10-1…V10-3)
-11. Exact amounts on tap (progressive disclosure rules)
+11. Exact amounts on tap (progressive disclosure rules) — IN PROGRESS (V11-1…V11-3 given; board published, 5 points to confirm)
 
 ## Parked / superseded
 - Coin test (V4 vs V1) and name-rows vs families category ideas (claude/v14_stage2b_coins_categories.md) — superseded.

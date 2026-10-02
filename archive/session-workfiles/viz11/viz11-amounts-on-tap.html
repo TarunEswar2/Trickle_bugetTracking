@@ -1,0 +1,269 @@
+<title>Trickle v14 — Amounts On Tap</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a design board in the Viz 1 family. Sections A-F; each is a question, a gallery of dark phone
+   frames (rows = options, columns = students or moments), then what the drawing showed. Same tokens as Viz 1. */
+:root{
+  --bg:#f0f1ec; --surface:#fafaf7; --ink:#14181b; --ink2:#444c54; --muted:#727a83; --line:#d6d9d1;
+  --accent:#0d7a64; --accent-soft:#d9ece5; --amber:#a9680f;
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#111417; --surface:#181c20; --ink:#eef0f1; --ink2:#b9c0c7; --muted:#8a929b; --line:#2b3036;
+  --accent:#62dcb4; --accent-soft:#17362e; --amber:#e3a43f; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px;padding-block:40px 80px}
+@media (max-width:600px){.wrap{padding-inline:16px;padding-block:24px 56px}}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.12;margin:0}
+h1{font-size:clamp(30px,5vw,50px);font-weight:700;letter-spacing:-.02em}
+h2{font-size:clamp(23px,3vw,31px);font-weight:700;letter-spacing:-.01em}
+h3{font-size:18px;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lead{font-size:18px;color:var(--ink2);max-width:62ch}
+header.top{display:flex;flex-direction:column;gap:16px;padding-bottom:28px}
+section{display:flex;flex-direction:column;gap:18px;padding-block:40px;border-top:1px solid var(--line)}
+.sec-h{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.sec-h .k{font-family:var(--display);font-weight:700;font-size:clamp(23px,3vw,31px);color:var(--accent)}
+.q{color:var(--ink2)}
+ul.plain{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.logged{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.logged div{border-top:2px solid var(--ink);padding-top:10px}
+.logged b{display:block;font-family:var(--display);font-size:17px;margin-bottom:4px}
+.logged span{color:var(--ink2);font-size:15px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right}
+.opt{display:flex;flex-direction:column;gap:10px}
+.opt>h4{margin:0;font-size:15.5px;font-weight:600;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.opt>h4 b{font-family:var(--display);background:var(--ink);color:var(--bg);border-radius:5px;padding:1px 7px;font-size:13.5px}
+.opt>h4 span{color:var(--muted);font-weight:400}
+.gal{display:flex;flex-direction:column;gap:26px}
+.row{display:grid;grid-template-columns:repeat(6,minmax(170px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.row.four{grid-template-columns:repeat(4,minmax(200px,1fr))}
+.row.three{grid-template-columns:repeat(3,minmax(200px,300px))}
+.fg{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fg figcaption{font-size:13px;color:var(--muted);line-height:1.3}
+.fg figcaption b{color:var(--ink);font-weight:600}
+svg.ph{width:100%;height:auto;display:block;font-family:var(--body)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px 28px}
+.note{border-top:1px solid var(--line);padding-top:10px;font-size:15px;color:var(--ink2)}
+.note b{display:block;color:var(--ink);font-family:var(--display);font-size:16px;margin-bottom:3px}
+.demo{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:700px){.demo{grid-template-columns:minmax(0,1fr)}}
+.ctl{display:flex;flex-direction:column;gap:16px}
+.ctl .grp{display:flex;flex-direction:column;gap:7px}
+.ctl .lbl{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font:inherit;font-size:14.5px;font-weight:600;white-space:nowrap;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer}
+.chip:hover{border-color:var(--ink2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn{font:inherit;font-size:15px;font-weight:700;padding:10px 18px;border-radius:10px;border:0;background:var(--accent);color:#04231b;cursor:pointer;align-self:flex-start}
+.chip:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{width:100%;max-width:420px;accent-color:var(--accent)}
+.small{font-size:13.5px;color:var(--muted)}
+.decide{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px}
+.dq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.dq h3{font-size:17px}
+.dq ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:5px;font-size:15px;color:var(--ink2);list-style:upper-alpha}
+.dq li.s{color:var(--ink)}
+.dq li.s::after{content:" suggested";font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-left:4px}
+
+svg.ph rect.bx{transition:fill .6s ease,transform .6s ease}
+@media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
+
+.lg{animation:lgin .9s ease .7s both}
+@keyframes lgin{from{opacity:0}to{opacity:1}}
+.static .lg{animation:none}
+@media (prefers-reduced-motion: reduce){.lg{animation:none}}
+
+svg.ph [data-open]{cursor:pointer}
+svg.ph [data-open]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+.lg.now{animation:none}
+
+svg.ph [data-go]{cursor:pointer}
+svg.ph [data-go]:focus-visible{outline:2px solid #62dcb4;outline-offset:2px}
+
+svg.ph [data-go]{cursor:pointer}
+.sw2{display:flex;gap:8px;flex-wrap:wrap}
+
+svg.ph rect.bx{transition:fill 1.3s ease}
+@media (prefers-reduced-motion: reduce){svg.ph rect.bx{transition:none}}
+
+svg.ph [data-go]{cursor:pointer}
+
+.sw3{display:flex;gap:8px;flex-wrap:wrap}
+
+
+
+
+
+.rt{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.rt table{min-width:960px;font-size:14px}
+.rt td{white-space:normal;vertical-align:top;min-width:150px}
+.rt td:first-child{min-width:130px;font-weight:600}
+.rt th{white-space:nowrap}
+.ref{display:inline-block;font-size:11.5px;letter-spacing:.04em;background:var(--accent-soft);color:var(--ink);border-radius:5px;padding:0 6px;margin-left:4px;font-weight:600}
+.tap3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.tap3 .box{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface)}
+.tap3 b{font-family:var(--display);display:block;margin-bottom:4px}
+.tap3 span{color:var(--ink2);font-size:15px}
+</style>
+
+<div id="defs"></div>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Trickle v14 · Visualisation 11 of 11 · 2 Oct 2026</div>
+  <h1>Amounts on tap</h1>
+  <p class="lead">The rules for when a screen shows a rupee figure and when it waits for a tap. Part one is one standard pattern: tap a spot, box or day, and its exact amount is written in a line under the picture, the same on every screen. Part two is a table of every screen: what it shows at a glance, what one tap reveals, and what it never shows up front. Options only. You decide.</p>
+</header>
+
+<section style="border-top:0;padding-top:0">
+  <div class="sec-h"><h2>Already decided</h2></div>
+  <div class="logged">
+    <div><b>V11-1 · The deliverable</b><span>A rules table and one standard tap pattern.</span></div>
+    <div><b>V11-2 · The pattern</b><span>A line under the picture gives the exact amount.</span></div>
+    <div><b>V11-3 · Home</b><span>No ₹ at all. The end-of-week pop-up is your own exception (V5-8, V5-10).</span></div>
+    <div><b>Principle 3</b><span>Gentle on open: Home never leads with a big or bad number; detail on tap.</span></div>
+  </div>
+  <p class="small">Part two lists what each drawn board does today. Only "Home: no ₹" was a rule you set; the others are listed as observed and marked for you to confirm.</p>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">A</span><h2>Three kinds of tap</h2></div>
+  <p class="q">Across all ten visualisations a tap does one of three things.</p>
+  <div class="tap3">
+    <div class="box"><b>A spot, box or day: a line under the picture</b><span>Repeats and time-pattern spots, savings month and day boxes, fixed-bill days. The amount is written below, the picture stays put and the chosen spot gets a white outline.</span></div>
+    <div class="box"><b>A category, habit, goal or purchase: its own screen</b><span>The ring's categories, repeat habits, savings goals and history rows open a full screen with the exact figures (V1-11).</span></div>
+    <div class="box"><b>The week-end pop-up: a pop-up on Home</b><span>The one place that shows rupees without a tap, because you chose it (V5-8).</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">B</span><h2>The standard pattern</h2></div>
+  <p class="q">The same three steps on three different pictures: before a tap (a hint), after a tap (the amount in a line, a white outline on the spot), and the picture does not move. The pictures are a hotspot calendar, savings month boxes and a fixed-bills calendar.</p>
+  <div class="gal" id="secB"></div>
+  <div class="notes" id="noteB"></div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">C</span><h2>Try the pattern</h2></div>
+  <p class="q">Pick a picture, then tap a spot. The line under it changes, nothing else moves.</p>
+  <div class="demo">
+    <div id="demo"></div>
+    <div class="ctl">
+      <div class="grp"><span class="lbl">Picture</span><div class="chips" id="cs"></div></div>
+      <span class="small" id="dnote">Tap a spot.</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><span class="k">D</span><h2>The rules, screen by screen</h2></div>
+  <p class="q">At a glance means what is on the screen when you open it. One tap means what a single tap reveals. Never up front means what is held back. The tag after each row points to the decision.</p>
+  <div class="rt"><table>
+    <tr><th>Screen</th><th>At a glance</th><th>One tap</th><th>Never up front</th></tr>
+    <tbody id="rules"></tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>Still to confirm</h2></div>
+  <div class="decide">
+    <div class="dq"><h3>1. Grids and rings carry no numbers on the marks</h3><ol><li class="s">A rule: the scale chip ("1 box = ₹X") is the only figure on a grid screen. Amounts go in a line or on tap.</li><li>Allow a number on a mark where it fits.</li></ol></div>
+    <div class="dq"><h3>2. The Savings page</h3><ol><li class="s">No amounts until a goal is opened. The ring and the rows show how far, and the ETA.</li><li>Show the saved amount on each goal row.</li></ol></div>
+    <div class="dq"><h3>3. Over and nothing left</h3><ol><li class="s">Words first ("gone over"), the amount on a tap, except the week-end pop-up where the over amount is emphasised (V5-10).</li><li>Always show the amount with the words.</li></ol></div>
+    <div class="dq"><h3>4. Rows that carry amounts</h3><ol><li class="s">Lists you scan (history rows, fixed-bill rows, week-vs-last categories) carry amounts, as drawn.</li><li>Every list hides amounts until tapped.</li></ol></div>
+    <div class="dq"><h3>5. Where the rules live</h3><ol><li class="s">This table is the reference for the wireframes and the build.</li><li>A short list of rules instead of a table.</li></ol></div>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+const PBG='#0b0d10',EDGE='#2b3038',DIM='#1b2026',INK='#f2f4f5',MUT='#8f97a1',GRN='#62dcb4',AMB='#e3a43f',ORG='#f08a3c';
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const T=(x,y,s,sz,o={})=>`<text x="${x}" y="${y}" font-size="${sz}" font-weight="${o.w||400}" fill="${o.f||INK}" text-anchor="${o.a||'start'}">${esc(s)}</text>`;
+const rnd=n=>{const x=Math.sin(n*12.9898)*43758.5453;return x-Math.floor(x)};
+document.getElementById('defs').innerHTML=`<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4"/></filter></defs></svg>`;
+const TABS=['Home','Income','Spending','Savings','Insights'];
+const tabbar=a=>{let tb=`<line x1="0" y1="770" x2="390" y2="770" stroke="${EDGE}"/>`;TABS.forEach((t,i)=>{const x=39+78*i;tb+=T(x,808,t,14,{a:'middle',f:i===a?INK:MUT,w:i===a?700:400});if(i===a)tb+=`<rect x="${x-14}" y="782" width="28" height="4" rx="2" fill="${GRN}"/>`});return tb};
+const frame=(inner,label,tab)=>`<svg class="ph" viewBox="0 0 390 844" role="img" aria-label="${esc(label)}"><rect x="1" y="1" width="388" height="842" rx="46" fill="${PBG}" stroke="${EDGE}" stroke-width="2"/>${inner}<rect x="150" y="16" width="90" height="24" rx="12" fill="#000"/>${tabbar(tab)}</svg>`;
+const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],DN=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+/* the three pictures */
+const SKIN={
+ spots:{name:'Spots (repeats, time patterns)',tab:2,title:'Chai',sub:'×22 in 30 days',
+   cells:Array.from({length:35},(_,i)=>{const c=i%7,w=Math.floor(i/7);return {n:(c<5&&rnd(i*3+1)<.8)?1+Math.floor(rnd(i+7)*3):0,lab:String(((i+19)%31)||31)}}),
+   draw(sel){let s='';const cols=7;DN.forEach((d,c)=>{s+=T(35+c*46+20,262,d[0],13,{a:'middle',f:MUT,w:600})});
+     this.cells.forEach((c,i)=>{const col=i%cols,row=Math.floor(i/cols),x=35+col*46,y=274+row*46,k=c.n/3;
+       if(!c.n)s+=`<g data-c="${i}"><rect x="${x}" y="${y}" width="40" height="40" rx="9" fill="${DIM}" ${sel===i?'stroke="#fff" stroke-width="2.5"':''}/>${T(x+6,y+15,c.lab,11.5,{f:'#4a525d'})}</g>`;
+       else{if(k>.5)s+=`<rect x="${x+2}" y="${y+2}" width="36" height="36" rx="9" fill="${ORG}" opacity="${(k*.85).toFixed(2)}" filter="url(#glow)"/>`;
+         s+=`<g data-c="${i}"><rect x="${x}" y="${y}" width="40" height="40" rx="9" fill="${ORG}" opacity="${(.25+.75*k).toFixed(2)}" ${sel===i?'stroke="#fff" stroke-width="2.5"':''}/>${T(x+6,y+15,c.lab,11.5,{f:k>.55?'#2a1604':INK,w:600})}</g>`}});return s},
+   info(i){const c=this.cells[i];return c.n?[`${DN[i%7]} ${c.lab} Oct`,`${c.n} ${c.n===1?'time':'times'}, ₹${c.n*22+(i%3)*4}`]:[`${DN[i%7]} ${c.lab} Oct`,'Nothing that day']},hint:'Tap a spot for how many and how much.',yEnd:520},
+ boxes:{name:'Boxes (savings months)',tab:3,title:'Trip',sub:'Savings goal',
+   vals:[null,null,610,2260,1980,3170,2540,2210,3500,2790,-1560,3000],
+   draw(sel){let s='';const mx=3500;this.vals.forEach((v,j)=>{const c=j%4,r=Math.floor(j/4),x=35+c*82,y=262+r*76,lab=MN[(j+0)%12];
+       if(v==null){s+=`<rect x="${x}" y="${y}" width="74" height="68" rx="12" fill="none" stroke="#2f353d" stroke-dasharray="3 4"/>${T(x+10,y+22,lab,14,{f:'#4a5260'})}`;return}
+       const i=Math.abs(v)/mx,col=v<0?AMB:GRN;if(i>.5)s+=`<rect x="${x+4}" y="${y+4}" width="66" height="60" rx="12" fill="${col}" opacity="${(i*.8).toFixed(2)}" filter="url(#glow)"/>`;
+       s+=`<g data-c="${j}"><rect x="${x}" y="${y}" width="74" height="68" rx="12" fill="${col}" opacity="${(.2+.8*i).toFixed(2)}" ${sel===j?'stroke="#fff" stroke-width="3"':''}/>${T(x+10,y+22,lab,14,{f:i>.55?'#06231b':INK,w:600})}</g>`});return s},
+   info(j){const v=this.vals[j];return v==null?[MN[j],'No data yet']:[MN[j],`${v<0?'took out':'added'} ₹${Math.abs(v).toLocaleString('en-IN')}`]},hint:'Tap a month for its amount.',yEnd:520},
+ fixed:{name:'Days due (fixed bills)',tab:2,title:'Fixed',sub:'Next six weeks',
+   due:{8:['Coursera',999],9:['Netflix',199],17:['Spotify',119],23:['Prime',179],27:['Coursera',999]},
+   draw(sel){let s='';DN.forEach((d,c)=>{s+=T(35+c*46+20,262,d[0],13,{a:'middle',f:MUT,w:600})});
+     for(let i=0;i<35;i++){const col=i%7,row=Math.floor(i/7),x=35+col*46,y=274+row*46,d=this.due[i],lab=String(19+i>31?19+i-31:19+i);
+       if(d){const soon=i<10;if(soon)s+=`<rect x="${x+2}" y="${y+2}" width="36" height="36" rx="9" fill="${ORG}" opacity=".8" filter="url(#glow)"/>`;s+=`<g data-c="${i}"><rect x="${x}" y="${y}" width="40" height="40" rx="9" fill="${ORG}" opacity="${soon?1:.34}" ${sel===i?'stroke="#fff" stroke-width="2.5"':''}/>${T(x+7,y+17,lab,12.5,{f:soon?'#2a1604':INK,w:700})}</g>`}
+       else s+=`<g data-c="${i}"><rect x="${x}" y="${y}" width="40" height="40" rx="9" fill="${DIM}" ${sel===i?'stroke="#fff" stroke-width="2.5"':''}/>${T(x+7,y+17,lab,12,{f:'#4a525d'})}</g>`}return s},
+   info(i){const d=this.due[i],n=19+i>31?19+i-31:19+i,m=19+i>31?'Nov':'Oct';return d?[`${DN[i%7]} ${n} ${m}`,`${d[0]} ₹${d[1]} · every month`]:[`${DN[i%7]} ${n} ${m}`,'Nothing due']},hint:'Tap a day for what is due.',yEnd:520}
+};
+const KEYS=Object.keys(SKIN);
+function screen(key,sel){const k=SKIN[key];
+  let s=T(35,76,k.tab===3?'Savings':k.tab===2?'Spending':'Insights',17,{f:MUT})+T(35,112,k.title,30,{w:700})+T(35,142,k.sub,16,{f:MUT});
+  s+=k.draw(sel);
+  const y=k.yEnd+30;
+  if(sel!=null){const [a,b]=k.info(sel);s+=T(35,y,a,15,{f:MUT,w:600})+T(35,y+30,b,22,{w:700})}
+  else s+=T(35,y,k.hint,15.5,{f:'#5f6772'});
+  return frame(s,`${k.name}${sel!=null?', a spot tapped':''}`,k.tab)}
+const fg=(svg,b,c)=>`<figure class="fg static">${svg}<figcaption><b>${esc(b)}</b> ${esc(c)}</figcaption></figure>`;
+document.getElementById('secB').innerHTML=`<div class="opt"><div class="row">`+KEYS.flatMap((k,i)=>[fg(screen(k,null),SKIN[k].name,'before a tap'),fg(screen(k,[11,10,17][i]),SKIN[k].name,'after a tap')]).join('')+`</div></div>`;
+document.getElementById('noteB').innerHTML=`
+<div class="note"><b>The same three beats</b>A hint line before. After the tap the spot gets a white outline, a small muted label says which one, and the amount is written large. Nothing else on the screen moves.</div>
+<div class="note"><b>Always in the same place</b>The line sits under the picture, below the legend, on every screen. You learn where to look once.</div>
+<div class="note"><b>Words stay words</b>A spot with nothing in it says "Nothing that day" or "No data yet", not a zero.</div>`;
+const dem={k:'spots',sel:null};
+const demo=document.getElementById('demo'),dn=document.getElementById('dnote');
+function draw(){demo.innerHTML=screen(dem.k,dem.sel);dn.textContent='Tap a spot, or switch the picture.'}
+demo.addEventListener('click',e=>{const c=e.target.closest('[data-c]');if(c){dem.sel=+c.dataset.c;draw()}});
+const el=document.getElementById('cs');
+el.innerHTML=KEYS.map((k,i)=>`<button class="chip" type="button" data-i="${i}" aria-pressed="${k===dem.k}">${SKIN[k].name.split(' (')[0]}</button>`).join('');
+el.onclick=e=>{const b=e.target.closest('button');if(!b)return;dem.k=KEYS[+b.dataset.i];dem.sel=null;[...el.children].forEach((c,i)=>c.setAttribute('aria-pressed',KEYS[i]===dem.k));draw()};
+draw();
+
+/* the rules table */
+const R=[
+ ['Home','One sentence and the week\'s grid. No ₹, no scale.<span class="ref">V1-5</span>','Opening the week shows the scale chip. Nothing on Home shows a rupee figure.<span class="ref">V1-5</span>','Any ₹ figure, a big number, "₹200 left".<span class="ref">V11-3</span>'],
+ ['End-of-week pop-up (on Home)','The week\'s grid, what was left in rupees, the scale chip. If overspent, the amount over, large.<span class="ref">V5-8, V5-10</span>','Choosing goals shows each share and how much sooner a goal arrives.<span class="ref">V5-3</span>','Your own exception to the Home rule. Red is never used.<span class="ref">V5-7</span>'],
+ ['Income','One grid split by colour, names in drop-downs, the scale chip.<span class="ref">V3-9, V3-11</span>','Each part\'s exact amount (the split steps, not yet drawn).<span class="ref">V3-6</span>','Numbers on the boxes.'],
+ ['Spending: the rings','Colour-coded rings and a name list. No numbers on the rings.<span class="ref">V1-10, V1-12</span>','A category opens its own screen: "₹140 left of ₹400", the grid, the transactions.<span class="ref">V1-11</span>','Rupees on the rings; "outer/2nd" labels.'],
+ ['A category\'s screen','The grid in its colour, the scale chip, words ("under half left").<span class="ref">V1-1, V3-11</span>','The exact left and budget, then and now side by side.<span class="ref">V1-13, V1-14</span>','Red; a gone-over amount before words.<span class="ref">V1-4</span>'],
+ ['Pay screen','The amount you are paying, the grid, a ghost of the boxes that left.<span class="ref">V2-2</span>','Nothing more: the amount is what you typed.','Red, shake, timers.<span class="ref">V2-3</span>'],
+ ['Spending: repeats','A habit list with × counts, most first.<span class="ref">V6-5</span>','A habit\'s calendar; a spot gives count and ₹ in a line.<span class="ref">V6-4, V11-2</span>','Totals on the list.'],
+ ['Spending: fixed bills','A calendar, a sentence, and a list of bills with amount and when.<span class="ref">V8-2, V8-4</span>','A day gives its bills and amounts in a line.<span class="ref">V8-3</span>','Amounts encoded in the glow.'],
+ ['Spending: history','Rows with name, time, amount; day totals in headers.<span class="ref">V10-3</span>','A purchase\'s own screen: the big amount, category, how paid.<span class="ref">V10-3</span>','Notes or edits on the row.'],
+ ['Savings page','A segmented ring by goal, goal rows with how far and the ETA. No amounts.<span class="ref">V4-9, V4-8</span>','A goal opens its statistics: "₹ of ₹ saved", then months and days.<span class="ref">V4-3</span>','Amounts on the ring or on a goal row (to confirm).'],
+ ['A goal\'s statistics','ETA, ₹ saved of ₹ target, By month or By day boxes.<span class="ref">V4-10, V4-15</span>','A month or day gives its amount in a line.<span class="ref">V11-2</span>','Numbers on the boxes.'],
+ ['Insights: when you spend','A sentence and the hotspot grid.<span class="ref">V7-1, X-1</span>','A spot gives count and ₹ in a line.<span class="ref">V11-2</span>','Totals by hour on the grid.'],
+ ['Insights: this week vs last','A sentence and two grids, last week faded; the scale chip.<span class="ref">V9-3</span>','By category: the change in ₹, last and this week.<span class="ref">V9-2</span>','Rupees on the grids.']
+];
+document.getElementById('rules').innerHTML=R.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('');
+})();
+</script>
