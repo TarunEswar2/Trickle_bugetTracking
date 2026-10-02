@@ -66,6 +66,7 @@ References he sent: iOS year-progress waffle (green filled grid, "299d left · 1
 | V4-13 | **Most saved months are visualised, not written**: the separate "Most saved months" screen and text are gone. The biggest months show it through the glow of their boxes. |
 | V4-14 | **Statistics go back to the earlier "By month / By day" toggle** (supersedes the scroll-below layout of V4-12). The **month stepper stays only in By month**. **By day has no month toggle**: the days are shown as **columns (weeks) by weekday**, like his reference, across the last twelve weeks, each day a box. |
 | V4-15 | **The month toggle moves from By month to By day** (amends V4-14). **By month** has no stepper: just every month box (biggest months haloed). **By day** has the **month stepper** and shows **that month's days as week columns**. My reading: tapping a month box selects it, and By day then opens on that month. |
+| V4-16 | **In By day the days are columns, not rows** (amends V4-14/V4-15): Monday to Sunday run **across the top as seven columns**, the **weeks stack down as rows**, like a calendar. Replaces the weeks-as-columns layout. |
 Note: V4-12 puts two visualisations on one scrolling page. Kept to the one-visualisation-per-screen rule by having the day grid sit a scroll below the months (each is alone on screen). Board's "today" is now 28 October 2026 so the current month has days to show.
 Open: half ring (the earlier decision) or a full segmented ring (like his reference of a donut split into sections) — both drawn. Sections are sized by **target** amount (my reading of "based on the amounts").
 Board: https://claude.ai/artifact/X9aNwLv6pGGZb5sFcxiXEm (source archive/session-workfiles/viz4/viz4-savings-goals.html).
@@ -80,7 +81,7 @@ Interpretation to confirm: the top gauge is all savings together, goals stacked 
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
 3. Income split (spending vs savings) — DONE (V3-1…V3-11)
-4. Savings goal (how much, by when, actually saved) — IN PROGRESS (V4-1…V4-15 given); also: add goal, pay into a goal, completed goals (parked requirement above)
+4. Savings goal (how much, by when, actually saved) — IN PROGRESS (V4-1…V4-16 given); also: add goal, pay into a goal, completed goals (parked requirement above)
 5. Unspent → saved
 6. Small / repeat purchases
 7. Time patterns (e.g. nights)
