@@ -317,6 +317,8 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 - B-19 (Tarun): **Income tab holds income and the split.** Empty state: "No income added." → "Add income" → "How much came in?" → "How much to save?" (a slider from 0 to 100 percent in steps of 5, rest is spending). The saving part goes to savings. Income is independent of the plan and can be added with or without one.
 - B-20 (Tarun): **After about a week of tracking Trickle asks once:** "Here is how you spend. Want to make a plan?" with the top three categories. If the answer is no, it asks again after four weeks.
 
+- B-21 (Tarun): **Income can become the plan.** After the saving/spending slider (B-19), if no plan exists Income offers "Next": "How long should it last?" (a month, 2 months or 3 months), which turns the spending part into a weekly amount. "Make my plan" then continues to monthly bills and how much for each category, and that split becomes the plan. "Just add the income" skips the plan. Once a plan exists, adding income only splits saving and spending. The plan can still be made from Home without any income (B-18).
+
 ## Visualisation queue (one at a time)
 
 1. Budget gauge — DONE

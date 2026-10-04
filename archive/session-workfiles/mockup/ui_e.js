@@ -17,7 +17,7 @@ const ASKS={
 };
 POPUPS.ask=(P)=>{const A=ASKS[P.k](P);const chips=A.chips?`<div class="row wrap" style="gap:8px;margin:16px 0 4px">${A.chips.map(v=>`<button class="btn s ${v===A.val?'g':'q'}" data-a="askv|${v}">${money(v)}</button>`).join('')}</div>`:'';
  return `<div style="position:absolute;left:0;right:0;bottom:0;padding:26px 22px 30px;border-radius:28px 28px 0 0;background:#121720;box-shadow:0 -20px 60px rgba(0,0,0,.5);border-top:1px solid #2a313d"><div class="cap">${esc(A.cap)}</div><div class="title" style="font-size:28px;margin:6px 0 12px">${esc(A.q)}</div>${A.hint?`<div class="sub">${esc(A.hint)}</div>`:''}${chips}${A.extra||''}<div class="col" style="gap:10px;margin-top:22px"><button class="btn" data-a="askyes">${esc(A.yes)}</button>${A.no?`<button class="btn q" data-a="askno">${esc(A.no)}</button>`:''}</div></div>`};
-function startUpgrade(){window._oldS=S;UI.sheet=null;UI.flow={id:'onb',step:0,d:Object.assign(obInit(),{s:'q1',upgrade:true,method:'none',noBal:true,mode:S.p.mode,cats:S.cats.map(c=>c.name),limits:true})};render()}
+function startUpgrade(x){window._oldS=S;UI.sheet=null;UI.flow={id:'onb',step:0,d:Object.assign(obInit(),{s:'q1',upgrade:true,method:'none',noBal:true,mode:S.p.mode,cats:S.cats.map(c=>c.name),limits:true},x||{})};render()}
 function openAsk(k){UI.popup={id:'ask',k,bg:'rgba(5,7,11,.74)'};UI.flow=null;UI.sheet=null;render()}
 H.askv=a=>{UI.popup.v=+a[0]};
 H.askyes=()=>{const P=UI.popup,A=ASKS[P.k](P);const keep=A.ok();if(!keep)UI.popup=null;(S.asked=S.asked||{})[P.k]='yes';return true};
