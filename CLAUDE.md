@@ -37,3 +37,5 @@ Viz 1–11, onboarding and the pay / move-money flows are done. Tarun then deleg
 Design systems: Night (`archive/session-workfiles/designsystem/`) and Instrument (`designsystem2/`, DS2-1…DS2-6, published). Tarun chooses; mockup still wears Night.
 
 Instrument mockup: https://claude.ai/artifact/GMby4zaz4J8ZanziKiLBKM (`archive/session-workfiles/mockup2/`, M2-1). Night mockup stays as the other option.
+
+Decision: Tarun chose Night as the base (M2-3). The Night mockup at https://claude.ai/artifact/RuuvM1tyRSEj8fKvQrkLmZ now has the full flows; Instrument is kept as an alternate.

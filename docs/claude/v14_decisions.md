@@ -289,6 +289,8 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 
 - M2-2: Full-flow mockup. The Instrument mockup now opens on onboarding (title, PIN set and confirm, UPI link with soft failure or manual balance, permissions, category path with split slider, or the no-budget three questions, categories with search and create, equal or manual share with fixed bills and buffer, goals with dates, all set) and builds a live ledger from the answers. Added PIN lock screen, Settings sub-screens (notifications, PIN and lock, data: import placeholder, export, delete) and a re-fit-to-real-weeks sheet. Known gap: first week is not prorated. Delegated, open to override.
 
+- M2-3: Tarun chose the first design system (Night) to build on. The full flows (onboarding, lock, settings sub-screens, import, re-fit, flicker and scroll fixes) were ported into the Night mockup (`archive/session-workfiles/mockup/`, republished at the Night mockup link). Instrument stays as an alternate (`designsystem2/`, `mockup2/`).
+
 ## Visualisation queue (one at a time)
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE

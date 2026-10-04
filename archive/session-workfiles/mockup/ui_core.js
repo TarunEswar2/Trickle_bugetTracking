@@ -60,7 +60,10 @@ function render(){
  if(UI.flow&&FLOWS[UI.flow.id])L+=`<div class="modal" style="background:${UI.flow.bg||groundCss}">${FLOWS[UI.flow.id](UI.flow)}</div>`;
  if(UI.popup&&POPUPS[UI.popup.id])L+=`<div class="modal" style="background:${UI.popup.bg||groundCss}">${POPUPS[UI.popup.id](UI.popup)}</div>`;
  if(UI.toast)L+=`<div class="toast">${esc(UI.toast)}</div>`;
- $('#layer').innerHTML=L;
+ const lk=(UI.sheet?'s'+UI.sheet.id:'')+(UI.flow?'f'+UI.flow.id:'')+(UI.popup?'p'+UI.popup.id:'');const same=lk===UI._lk;UI._lk=lk;
+ const sc=[...document.querySelectorAll('#layer .mbody,#layer .sheet,#layer [data-sc]')].map(e=>e.scrollTop);
+ $('#layer').className=same?'still':'';$('#layer').innerHTML=L;
+ if(same)[...document.querySelectorAll('#layer .mbody,#layer .sheet,#layer [data-sc]')].forEach((e,i)=>{if(sc[i])e.scrollTop=sc[i]});
  if(window.afterRender)window.afterRender();
  if(window.renderPanel)renderPanel()}
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const [n,...a]=el.dataset.a.split('|');if(H[n]){e.preventDefault();const r=H[n](a,el,e);if(r!==false)render()}});

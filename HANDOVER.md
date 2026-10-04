@@ -177,3 +177,6 @@ Mockup re-skinned in Instrument (`mockup2/`, build with `python3 build.py`). Not
 
 ## Update: full-flow mockup
 Instrument mockup (`mockup2/`, `ui_d.js`) now has onboarding, lock, settings sub-screens, import and re-fit (M2-2). Open gaps: first-week proration, DETECT/LOOKBACK polish. Next: Tarun reviews; apply overrides to mockup and blueprint.
+
+## Update: Night is the base (M2-3)
+Night mockup (`mockup/`) now includes `ui_d.js`: onboarding, lock, settings sub-screens, import, re-fit. Open gaps: first-week proration. Next: Tarun reviews; apply overrides to mockup and blueprint.
