@@ -11,7 +11,9 @@ function fromOk([L,a,b]){const l=Math.pow(L+.3963377774*a+.2158037573*b,3),m=Mat
 function shiftL(h,dl,dc=0){const [L,a,b]=toOk(h);const C=Math.hypot(a,b),H=Math.atan2(b,a);const C2=Math.max(0,C+dc);return fromOk([Math.min(1,Math.max(0,L+dl)),C2*Math.cos(H),C2*Math.sin(H)])}
 const _dc={};const depth=h=>_dc[h]||(_dc[h]=[shiftL(h,.10,-.015),shiftL(h,-.11,0)]);
 const boxBg=h=>{const [a,b]=depth(h);return `linear-gradient(145deg,${a},${h} 50%,${b})`};
-const BLOB={blue:{b:['#2b2fa0','#3b6fb8','#2f7f78'],t:['#3f74b8','#2f7f78','#2b2fa0']},green:{b:['#0b5d24','#1f9d4a','#2fbf6a'],t:['#0b5d24','#1f9d4a','#2fbf6a']},amber:{b:['#6e3205','#c4690f','#f08a3c'],t:['#6e3205','#c4690f','#f08a3c']}};
+const BLOB={blue:{b:['#2b2fa0','#3b6fb8','#2f7f78'],t:['#3f74b8','#2f7f78','#2b2fa0']},green:{b:['#0b5d24','#1f9d4a','#2fbf6a'],t:['#0b5d24','#1f9d4a','#2fbf6a']},amber:{b:['#6e3205','#c4690f','#f08a3c'],t:['#6e3205','#c4690f','#f08a3c']},violet:{b:['#2b2fa0','#6a4bc4','#b48cff'],t:['#2b2fa0','#6a4bc4','#b48cff']},teal:{b:['#0b4d55','#1f9d9a','#62dcb4'],t:['#0b4d55','#1f9d9a','#62dcb4']},rose:{b:['#5a1f4a','#b0457a','#ff7eb6'],t:['#5a1f4a','#b0457a','#ff7eb6']}};
+const TABGLOW={income:'blue',spending:'rose',savings:'teal',insights:'violet'};
+const FLOWGLOW={pay:'blue',inc:'blue',oneoff:'blue',money:'blue',move:'teal',subadd:'violet',incend:'blue'};
 function blobs(kind,pos,op){const c=(BLOB[kind]||BLOB.blue)[pos==='top'?'t':'b'];const o=op==null?.9:op;const y=pos==='top';
  return `<div class="blobs" style="opacity:${o}"><i style="width:550px;height:460px;left:-270px;${y?'top':'bottom'}:-120px;background:${c[0]}"></i><i style="width:520px;height:400px;left:-30px;${y?'top':'bottom'}:-180px;background:${c[1]}"></i><i style="width:380px;height:380px;right:-190px;${y?'top':'bottom'}:-60px;background:${c[2]}"></i></div>`}
 function setGlow(kind){const g=document.getElementById('glow');if(!g)return;const k=kind||'';if(g.dataset.k!==k){g.dataset.k=k;g.innerHTML=k?blobs(k,'bottom',.55):''}}
@@ -55,15 +57,15 @@ function fitPhone(){const s=Math.min(1,(innerHeight-24)/844);const f=$('#frame')
 function render(){
  if(!S)return;$('#clk').textContent=S.now.toLocaleDateString('en-IN',{weekday:'short'})+' '+fmtTime(S.now);
  const c=cur();const fn=SCREENS[c.id];$('#view').innerHTML=fn?fn(c.p||{}):'';
- setGlow(UI.tab==='home'&&!UI.stack.length&&typeof homeGlow==='function'?homeGlow():'');
+ setGlow(UI.tab==='home'?(typeof homeGlow==='function'?homeGlow():''):(TABGLOW[UI.tab]||''));
  $('#view').classList.toggle('snap',!!(c.id==='spending'||c.id==='insights'));
  $('#tabbar').style.display=(UI.flow||UI.popup)?'none':'flex';
  const tabs=[['home','Home'],['income','Income'],['spending','Spending'],['savings','Savings'],['insights','Insights']];
  $('#tabbar').innerHTML=tabs.map(t=>`<button class="${UI.tab===t[0]?'on':''}" data-a="tab|${t[0]}">${t[1]}${t[0]==='home'&&(S.unsorted.length||S.pending.length)?'<span class="dot"></span>':''}${t[0]==='income'&&S.credits.length?'<span class="dot"></span>':''}</button>`).join('');
  let L='';
  if(UI.sheet&&SHEETS[UI.sheet.id])L+=`<div class="scrim" data-a="closesheet"></div><div class="sheet">${SHEETS[UI.sheet.id](UI.sheet.p)}</div>`;
- if(UI.flow&&FLOWS[UI.flow.id])L+=`<div class="modal" style="background:${UI.flow.bg||groundCss}">${FLOWS[UI.flow.id](UI.flow)}</div>`;
- if(UI.popup&&POPUPS[UI.popup.id])L+=`<div class="modal" style="background:${UI.popup.bg||groundCss}">${POPUPS[UI.popup.id](UI.popup)}</div>`;
+ if(UI.flow&&FLOWS[UI.flow.id]){let fh=FLOWS[UI.flow.id](UI.flow);if(fh.indexOf('class="blobs"')<0)fh=blobs(FLOWGLOW[UI.flow.id]||'blue','bottom',.6)+fh;L+=`<div class="modal" style="background:${UI.flow.bg||groundCss}">${fh}</div>`}
+ if(UI.popup&&POPUPS[UI.popup.id]){let ph=POPUPS[UI.popup.id](UI.popup);if(UI.popup.id==='weekend'&&ph.indexOf('class="blobs"')<0)ph=blobs('blue','bottom',.6)+ph;L+=`<div class="modal" style="background:${UI.popup.bg||groundCss}">${ph}</div>`}
  if(UI.toast)L+=`<div class="toast">${esc(UI.toast)}</div>`;
  const lk=(UI.sheet?'s'+UI.sheet.id:'')+(UI.flow?'f'+UI.flow.id:'')+(UI.popup?'p'+UI.popup.id:'');const same=lk===UI._lk;UI._lk=lk;
  const sc=[...document.querySelectorAll('#layer .mbody,#layer .sheet,#layer [data-sc]')].map(e=>e.scrollTop);

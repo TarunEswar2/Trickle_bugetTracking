@@ -345,6 +345,15 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 - B-41: Fixed: a dark rectangle behind the Pay button (the old fade behind the sticky button) is removed.
 - B-42: **A six-month demo account exists** ("Meera", first button in the side panel): 26 weeks of spends, three incomes with different date ranges (two ended or running out, one just started), four subscriptions including a yearly one, three goals, a running plan, a waiting ₹200 credit and two payments to sort.
 
+- B-43 (Tarun): **Each tab has its own blurred colour, from the Figma gradient system.** Home is green or amber by pace (blue until there is a plan), Income blue, Spending rose, Savings teal, Insights violet (its heat cells are violet too). Pay, Add income, One-off money and Move money also get the blurred colour behind them. Cell gradients stay the white, orange and green family from the title.
+- B-44 (delegated): **Logic fixes from an audit** (a scripted run of 60 random actions on every profile and on three fresh accounts, checking totals, negative amounts and NaN on every tab; nothing else broke):
+  1. The Income tab now lists every income with its dates, status (running, ended), progress and weekly share. Tapping one shows it and allows **changing the end date** or **removing** it; the plan follows.
+  2. "+ Add money" on Income no longer opens the old single-income flow that disagreed with the new model; it asks Income or One-off money.
+  3. Editing category amounts (Budget screen, Fit to my real weeks, a limit) now also updates the full-week amount, so a new week no longer snaps back to the old numbers.
+  4. If the plan was typed by hand and a first income is added, the screen says "This replaces your weekly amount" before it happens.
+  5. A subscription that would take more than 60% of the weekly plan says so in the form.
+  6. The first-week scaling resets cleanly at every week change; Back from "Two quick things" returns to the UPI split screens.
+
 ## Visualisation queue (one at a time)
 
 1. Budget gauge — DONE
