@@ -12,6 +12,7 @@ SCREENS.home=()=>{const [a,b]=homeSentence();const r=flexL()/flexW();const empty
  return `<div class="row sp" style="margin-top:2px"><span class="cap">${fmtDay(S.now)}</span><button class="chip" data-a="settings">⚙ Settings</button></div>
  <div class="title" style="margin-top:14px">${a}</div><div class="sub" style="margin-top:6px">${b}</div>
  <div style="margin:22px 8px 14px">${gridHtml(empty?0:r*100,(typeof paceHex==='function'&&S.planSet)?paceHex():SPEND,0,SPEND,{w:300})}${empty?`<div style="height:3px;background:${AMBER};margin:8px 4px 0;border-radius:2px;box-shadow:0 0 14px ${AMBER}"></div>`:''}</div>
+ <div class="row sp" style="margin:0 8px 16px;align-items:flex-end"><div><div class="cap">Left this week</div><div class="title" style="font-size:36px;margin-top:2px;${empty?'color:var(--amber)':''}">${money(Math.max(0,flexL()))}</div><div class="sub" style="margin-top:0">of ${money(flexW())}</div></div><span class="chipscale">1 box ≈ ₹${Math.max(1,Math.round(flexW()/100))}</span></div>
  <div class="col" style="gap:8px">${lines.join('')}</div>
  <div style="position:sticky;bottom:0;margin-top:24px;padding-top:10px;background:transparent"><button class="btn" data-a="pay">Pay</button></div>`};
 H.goto=a=>{go(a[0]);return false};H.push=a=>{push(a[0],a[1]?JSON.parse(a[1]):{});return false};

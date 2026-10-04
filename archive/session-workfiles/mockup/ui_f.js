@@ -20,10 +20,10 @@ SCREENS.home=()=>{if(!S.track)return _home();const tot=wkTot(0),prev=wkTot(1);co
  if(S.pending.length)lines.push(`<button class="li" data-a="openweek"><span class="d" style="background:var(--amber)"></span><span class="n">Last week is ready</span><span class="t">›</span></button>`);
  creditLines().forEach(l=>lines.push(l));
  if(S.unsorted.length)lines.push(`<button class="li" data-a="push|sort"><span class="d" style="border:1.5px dashed ${AMBER};background:none"></span><span class="n">${S.unsorted.length} payment${S.unsorted.length>1?'s need':' needs'} a place</span><span class="t">›</span></button>`);
- lines.push(`<button class="li" data-a="startplan"><span class="d" style="background:${SAVE}"></span><span class="n"><b>Make a plan</b><br><span class="sm">Say what you spend in a week.</span></span><span class="t">›</span></button>`);
  return `<div class="row sp" style="margin-top:2px"><span class="cap">${fmtDay(S.now)}</span><button class="chip" data-a="settings">⚙ Settings</button></div>
- <div class="title" style="margin-top:14px">${tot?'Mostly '+esc(tc.name)+'.':'A fresh week.'}</div><div class="sub" style="margin-top:6px">${tot?'So far this week.':'Your spends will show here.'}</div>
- <div style="margin:22px 8px 8px">${parts.length?multiGrid(parts,scale,{w:300}):gridHtml(0,SPEND,0,0,{w:300})}</div><div style="text-align:center;margin-bottom:14px"><span class="chipscale">1 box ≈ ₹${Math.max(1,Math.round(scale/100))}</span></div>
+ <button class="btn" data-a="startplan" style="margin-top:14px">Make your plan</button><p class="sm" style="margin:8px 2px 0">Add your income and split it. That becomes your weekly plan.</p>
+ <div class="cap" style="margin-top:20px">Spent this week</div><div class="title" style="font-size:40px;margin-top:2px">${money(tot)}</div><div class="sub" style="margin-top:2px">${tot?'Mostly '+esc(tc.name)+'.':'Your spends will show here.'}</div>
+ <div style="margin:14px 28px 8px">${parts.length?multiGrid(parts,scale,{w:260}):gridHtml(0,SPEND,0,0,{w:260})}</div><div style="text-align:center;margin-bottom:14px">${tot?`<span class="chipscale">1 box ≈ ₹${Math.max(1,Math.round(scale/100))} spent</span>`:''}</div>
  <div class="col" style="gap:8px">${lines.join('')}</div>
  <div style="position:sticky;bottom:0;margin-top:24px;padding-top:10px;background:transparent"><button class="btn" data-a="pay">${S.p.mode==='manual'?'Add a spend':'Pay'}</button></div>`};
 H.askopen=a=>{openAsk(a[0]);return false};
@@ -56,7 +56,7 @@ H.tadd=()=>{const d=UI.flow.d;const amt=amtOf(d.kp);const cid=d.cid||(d.target&&
 /* ---- lock needs a PIN ---- */
 const _lock=H.lock;H.lock=()=>{if(!APP_PIN){say('No PIN yet. Add one in Settings.');return false}return _lock()};
 
-H.startplan=()=>{startUpgrade();return false};
+H.startplan=()=>{openFlow('inc',{step:0,kp:''});return false};
 /* offer a plan after a week of tracking; ask again after four weeks if declined */
 function maybeOfferPlan(){if(!S.track||S.planSet||UI.popup||UI.flow||UI.sheet)return;if(!S.firstDay||(S.now-S.firstDay)/DAY<7||S.txns.length<4)return;const at=S.askedAt&&S.askedAt.planoffer;if(at&&(S.now.getTime()-at)/DAY<28)return;openAsk('planoffer')}
 /* ---- income: separate from the plan ---- */
