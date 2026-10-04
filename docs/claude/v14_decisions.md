@@ -300,6 +300,11 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 - B-6: **Soft prompts, never gates.** After ~1 week of data Trickle offers "Set a limit for Food? You usually spend about ₹X" (per category, optional, one tap to accept the suggestion). Balance is offered once when the user taps "how long will my money last". Each category can have a limit on its own; the full budget (pots, buffer, savings) appears only when the user turns it on in Settings.
 - B-7: **Three levels the user can sit at:** 1 Track (spends by category), 2 Limits (some categories have limits, gauges drain for those only), 3 Full plan (income, budget, savings, goals, cascade as in the blueprint). Moving up never loses history.
 - B-8: Engine: `S.mode` = track | limits | plan; `S.bal` and `S.income` may be null; cascade runs only for categories with `amt`; a category with no `amt` records spend but never overspends.
+- B-9: **The user can always say no.** Every question, prompt and setup step has a visible "Not now" / "Skip" that is as easy to tap as the main answer. Skipping never blocks, nags or locks a feature; the app uses a sensible default and asks again only when the answer would help (and never twice in a row). Applies to onboarding, in-app prompts, permissions, PIN, balance, budget, goals, bills.
+- B-10: **Every question is short and plain.** One question per screen, asked the way a friend would: at most ~8 words, no jargon (no "budget method", "pots", "cascade"), a one-line hint at most. Answers are big taps, not forms. Example: not "How would you like Trickle to track your money?" but **"How should we see your spends?"** with **"Link UPI"** / **"I'll add them"** / **"Skip"**. Other rewrites: "Set your account balance" becomes "How much is in your account?" (skip: "Not now"); "Choose a budget method" becomes "Want weekly limits?" ("Yes" / "Not now"); "Allocate weekly amounts to categories" becomes "How much a week for Food?"; "Enable notifications" becomes "Remind you about bills?".
+- B-11: Copy review: every existing onboarding and prompt string is rewritten to B-10 and checked for a Skip before the mockup, blueprint and Figma are updated.
+
+## Visualisation queue (one at a time)
 
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
