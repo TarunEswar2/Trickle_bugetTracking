@@ -1,5 +1,5 @@
 /* ===== control panel ===== */
-function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,0).getTime(),label:'Allowance',amt:S.p.income,note:''}];if(S.p.six)seedSix();resetUI();window._celeLock=false;render();fitPhone()}
+function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,0).getTime(),label:'Allowance',amt:S.p.income,note:''}];if(S.p.six)seedSix();else if(S.p.W>0){S.planSet=true;S.cats.forEach(c=>c.full=c.amt);S.bufFull=S.bufAmt;S.firstDay=new Date(S.now.getTime()-S.p.weeks*7*DAY)}resetUI();window._celeLock=false;render();fitPhone()}
 function ev(name,fn){return {name,fn}}
 const EVENTS=()=>{const c0=S.cats[0],big=S.cats.find(c=>c.name==='Outings')||S.cats[S.cats.length-1];const upi=S.p.mode==='upi';const g0=S.goals.find(g=>g.state==='active');const m0=S.memoryPick;return [
  {h:'Time',items:[
