@@ -38,4 +38,4 @@ Design systems: Night (`archive/session-workfiles/designsystem/`) and Instrument
 
 Instrument mockup: https://claude.ai/artifact/GMby4zaz4J8ZanziKiLBKM (`archive/session-workfiles/mockup2/`, M2-1). Night mockup stays as the other option.
 
-Decision: Tarun chose Night as the base (M2-3). The Night mockup at https://claude.ai/artifact/RuuvM1tyRSEj8fKvQrkLmZ now has the full flows; Instrument is kept as an alternate.
+Decision: Tarun chose Night as the base (M2-3). The Night mockup at https://claude.ai/artifact/F5iDLzVpmpKw8dSwUWkSU9 (new link; the old RuuvM1ty… link still shows the pre-flows version) now has the full flows; Instrument is kept as an alternate.
