@@ -20,6 +20,7 @@ The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 - **Progressive disclosure.** Few numbers up front; exact amounts on tap.
 - **Never design for one seed with five fixed categories.** Test every option across a
   pool of students (income ₹3k–25k, 2–20+ custom categories, month 1 vs month 6).
+- **The user can always say no** (every question has an easy Skip) and **every question is short and plain** (one per screen, ~8 words, no jargon). Money-model inputs like balance and budget are optional; category tracking is the bare minimum (B-1…B-11).
 - No coins/dots as a general money unit. Categories are fuel gauges (10×10 grid,
   liquid fill from the bottom). Squares/circles only for the pay/friction "crumble".
 
