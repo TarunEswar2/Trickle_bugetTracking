@@ -186,3 +186,4 @@ All Night-mockup screens are in Figma as editable layers, grouped by flow (86 fr
 
 ## Latest (bare-minimum mode)
 Tarun's feedback: budget and balance must be optional; category tracking is the minimum; every question short; every step skippable (even the PIN). Logged as B-1…B-15 in `docs/claude/v14_decisions.md`. Built in the Night mockup (`archive/session-workfiles/mockup/`: `ui_d.js` onboarding rewrite, `ui_e.js` skippable pop-ups, `ui_f.js` track mode). Next: Tarun reviews; then update the blueprint (`archive/session-workfiles/blueprint/`) and re-export the changed screens to Figma.
+Figma (https://www.figma.com/design/b9MRkClYToyPjpMcDaPbeT) was re-exported for B-9…B-15: new 01 Onboarding, 14 Pop-ups, 15 Track mode; other sections unchanged. Blueprint not yet updated.
