@@ -25,7 +25,7 @@ SCREENS.home=()=>{if(!S.track)return _home();const tot=wkTot(0),prev=wkTot(1);co
  <div class="title" style="margin-top:14px">${tot?'Mostly '+esc(tc.name)+'.':'A fresh week.'}</div><div class="sub" style="margin-top:6px">${tot?'So far this week.':'Your spends will show here.'}</div>
  <div style="margin:22px 8px 8px">${parts.length?multiGrid(parts,scale,{w:300}):gridHtml(0,SPEND,0,0,{w:300})}</div><div style="text-align:center;margin-bottom:14px"><span class="chipscale">1 box ≈ ₹${Math.max(1,Math.round(scale/100))}</span></div>
  <div class="col" style="gap:8px">${lines.join('')}</div>
- <div style="position:sticky;bottom:0;margin-top:24px;padding-top:10px;background:linear-gradient(180deg,transparent,rgba(5,7,11,.9) 40%)"><button class="btn" data-a="pay">${S.p.mode==='manual'?'Add a spend':'Pay'}</button></div>`};
+ <div style="position:sticky;bottom:0;margin-top:24px;padding-top:10px;background:transparent"><button class="btn" data-a="pay">${S.p.mode==='manual'?'Add a spend':'Pay'}</button></div>`};
 H.askopen=a=>{openAsk(a[0]);return false};
 /* ---- spending ---- */
 const _spend=SCREENS.spending;
@@ -90,6 +90,8 @@ H.incnext=()=>{UI.flow.step=1;UI.flow.d.pct=20};
 H.incback=()=>{UI.flow.step=Math.max(0,UI.flow.step-1)};H.incnext2=()=>{const d=UI.flow.d;UI.flow.step=2;if(!d.end){d.end=presetEnd(PRESETS[1]);const e=new Date(d.end),n=new Date(day0());d.cm=(e.getFullYear()-n.getFullYear())*12+e.getMonth()-n.getMonth()}};H.inclast=a=>{UI.flow.d.lasts=parseFloat(a[0])};
 HI.incpct=(a,el)=>{const d=UI.flow.d;d.pct=+el.value;const t=amtOf(d.kp),sav=Math.round(t*d.pct/100/10)*10,sp=t-sav;$('#inc-pct').textContent=d.pct+'%';$('#inc-sav').textContent=money(sav);$('#inc-sp').textContent=money(sp);$('#inc-grid').innerHTML=multiGrid([{amt:Math.max(0,sav),color:SAVE},{amt:Math.max(1,sp),color:SPEND}],Math.max(1,t),{w:260});return false};
 function addIncome(d,withEnd){const a=amtOf(d.kp),pct=d.pct===undefined?20:d.pct;const sav=Math.round(a*pct/100/10)*10;const sp=a-sav;const t0=day0();const end=withEnd&&d.end?snapEnd(d.end):null;
+
+ if(d.cr)S.credits=S.credits.filter(c=>c.id!==d.cr);
  (S.incomes=S.incomes||[]).push({id:'in'+(S.idc++),amt:a,sav,sp,start:t0,end});
  S.moneyIn.unshift({id:'m'+(S.idc++),t:S.now.getTime(),label:'Income'+(end?' until '+fmtDate(end):''),amt:a,note:money(sp)+' to spend, '+money(sav)+' to save'});
  S.free+=sav;S.p.income=(S.incomeSet?S.p.income:0)+a;S.p.savingsShare=(S.incomeSet?S.p.savingsShare:0)+sav;S.incomeSet=true;S.noInc=false;logE(S,`Income ₹${a}: ₹${sav} saved`);return {a,sav,sp,end}}

@@ -340,6 +340,11 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 - B-37 (Tarun): **End of week shows the ideal next to the actual.** A review screen gives, per category, a bar with the ideal marked and the spend filled green up to it and amber beyond it, plus a line chart of cumulative spending against an even week (the even line starts on the first covered day). It also says how much was left over and moved to savings.
 - B-38 (Tarun): **The PIN keypad sits at the bottom of the screen**, within thumb reach, on setup, confirm and lock. Amount keypads elsewhere are unchanged for now.
 
+- B-39 (Tarun): **When UPI is linked in onboarding, Trickle can read the balance, so it offers to split it.** Right after approval: "₹6,500 is in your account. How much of it do you want to save?" (slider), then "How long should it last?" (quick picks or calendar, ending on a Sunday). Both have "Not now". Saying yes makes that balance the first income and the setup continues into categories, subscriptions and the category split, so the user ends onboarding with a plan. Without UPI nothing about money is asked (B-16/B-17 still hold).
+- B-40 (Tarun): **Money that arrives on a linked UPI waits in the Income tab until it is assigned.** A card "₹200 from Rahul. Came in on your UPI. Tell Trickle what it is." sits at the top of Income and a dot shows on the tab. Tapping it asks "What is this?": Income (split and optional plan), One-off money (outside the plan) or Not mine. Home no longer carries these.
+- B-41: Fixed: a dark rectangle behind the Pay button (the old fade behind the sticky button) is removed.
+- B-42: **A six-month demo account exists** ("Meera", first button in the side panel): 26 weeks of spends, three incomes with different date ranges (two ended or running out, one just started), four subscriptions including a yearly one, three goals, a running plan, a waiting ₹200 credit and two payments to sort.
+
 ## Visualisation queue (one at a time)
 
 1. Budget gauge — DONE

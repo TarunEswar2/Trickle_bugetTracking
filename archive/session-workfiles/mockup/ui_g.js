@@ -61,7 +61,7 @@ H.oosave=()=>{const a=amtOf(UI.flow.d.kp);S.free+=a;ooDone(money(a)+' saved.');r
 H.oocat=h=>{const a=amtOf(UI.flow.d.kp);const c=S.cats.find(x=>x.id===h[0]);c.left+=a;ooDone(money(a)+' back in '+c.name+'.');return false};
 H.oonote=()=>{ooDone('Noted.');return false};
 H.credit=a=>{const c=S.credits.find(x=>x.id===a[0]);if(!c)return false;openFlow('oneoff',{step:1,kp:String(c.amt),cr:c.id,from:c.from});return false};
-const creditLines=()=>S.credits.map(c=>`<button class="li" data-a="credit|${c.id}"><span class="d" style="background:${SAVE}"></span><span class="n">${money(c.amt)} from ${esc(c.from)}</span><span class="t">where does it go? ›</span></button>`);
+const creditLines=()=>[];
 
 /* ---- plan health: say it before it happens ---- */
 function planLines(){const out=[];if(!S.planSet)return out;const t=S.now.getTime();const inc=(S.incomes||[]).filter(i=>i.end);
@@ -95,10 +95,43 @@ const OBSTEP={pin1:1,pin2:1,link:2,bank:2,verify:2,perm:3,cats:4};
 const dotsHtml=n=>`<div class="sdots">${[1,2,3,4].map(i=>`<i class="${i===n?'on':''}"></i>`).join('')}</div>`;
 const CELLW='linear-gradient(145deg,#fff 14%,#dedede 50%,#ababab 86%)',CELLO='linear-gradient(145deg,#ffae6c 14%,#f08a3c 50%,#ca6805 86%)',CELLG='linear-gradient(145deg,#6cff87 14%,#3cf05d 50%,#05ca29 86%)';
 const _onbDeco=FLOWS.onb;
-FLOWS.onb=F=>{const s=F.d.s;let h=_onbDeco(F);
+const ubSplit=d=>{const a=d.upiBal||0,pct=d.pct===undefined?20:d.pct,sav=Math.round(a*pct/100/10)*10;return {a,pct,sav,sp:a-sav}};
+FLOWS.onb=F=>{const s=F.d.s;let h=(s==='ubal'||s==='uend')?ubScreen(F.d,s):_onbDeco(F);
  if(s==='title')return blobs('blue','top',.7)+blobs('blue','bottom',.75)+`<div class="mbody" style="padding-top:0"><div style="position:absolute;left:0;right:0;top:340px;text-align:center"><div style="display:flex;justify-content:center;gap:10px"><i style="width:65px;height:64px;border-radius:3.2px;background:${CELLW};box-shadow:0 0 14px rgba(240,138,60,.4)"></i><i style="width:65px;height:64px;border-radius:3.2px;background:${CELLO}"></i><i style="width:65px;height:64px;border-radius:3.2px;background:${CELLG}"></i></div><div style="font-family:var(--display);font-weight:800;font-size:46px;letter-spacing:-.02em;line-height:46px;color:#7effd5;margin-top:14px">Trickle</div><div style="font-family:var(--display);font-weight:700;font-size:22px;line-height:25px;color:#F5F7FA;margin-top:2px">Spend calm.</div></div></div>`+obFoot(obBtn('Get started','obgo|pin1')+obBtn('Just start tracking','obquick','q'));
  const n=!F.d.upgrade&&OBSTEP[s];
  if(n){if(['pin1','pin2','link','perm','cats'].includes(s))h=h.replace('<div class="title"',`<div class="cap">Step ${n} of 4</div><div class="title"`);h=h.replace('<div class="mfoot">','<div class="mfoot" style="padding-bottom:46px">')+dotsHtml(n)}
  if(s==='pin1'||s==='pin2')h=h.replace(/(<div class="kp">[\s\S]*?<\/div>)/,'<div class="kpb">$1</div>');
  return blobs('blue','bottom',.9)+h};
 const _lockF=FLOWS.lock;FLOWS.lock=F=>blobs('blue','bottom',.9)+_lockF(F).replace(/(<div class="kp">[\s\S]*?<\/div>)/,'<div class="kpb">$1</div>');
+
+/* ---- linked UPI: Trickle can read the balance, so offer to split it and ask how long it should last ---- */
+function ubScreen(d,s){const {a,pct,sav,sp}=ubSplit(d);
+ if(s==='ubal')return `<div class="mbody" style="padding-top:64px"><div class="row sp" style="margin-bottom:6px"><span></span><button class="lnk" style="font-size:15px" data-a="ubskip">Not now</button></div><div class="cap">Step 2 of 4</div><div class="title">${money(a)} is in your account.</div><p class="sub">How much of it do you want to save?</p><div id="ub-grid" style="margin:16px auto;width:240px">${multiGrid([{amt:Math.max(0,sav),color:SAVE},{amt:Math.max(1,sp),color:SPEND}],Math.max(1,a),{w:240})}</div><div class="row sp"><span><span class="cap">Saving · <span id="ub-pct">${pct}%</span></span><div id="ub-sav" class="h2" style="color:${SAVE}">${money(sav)}</div></span><span style="text-align:right"><span class="cap">Spending</span><div id="ub-sp" class="h2" style="color:${SPEND}">${money(sp)}</div></span></div><input type="range" min="0" max="100" step="5" value="${pct}" data-i="ubpct" style="margin:18px 0 6px"><div class="row sp sm"><span>Nothing</span><span>All of it</span></div></div>`+obFoot(obBtn('Next','obgo|uend')+obBtn('Not now','ubskip','q'));
+ const t0=day0(),end=snapEnd(d.end||presetEnd(PRESETS[1])),days=daysIn(t0,end),wk=Math.max(5,r5b(sp/days*7)),left=daysIn(t0,wk0()+6*DAY),share=r5b(sp/days*left);d.end=end;
+ return `<div class="mbody" style="padding-top:64px"><div class="row sp" style="margin-bottom:6px"><button class="back" data-a="obgo|ubal">‹ Back</button><button class="lnk" style="font-size:15px" data-a="ubskip">Not now</button></div><div class="cap">${money(sp)} to spend</div><div class="title">How long should it last?</div><p class="sub">Plans end on a Sunday. The money is split by day.</p>
+  <div class="row wrap" style="gap:8px;margin:14px 0 10px">${PRESETS.map((p,i)=>`<button class="chip ${end===presetEnd(p)?'on':''}" data-a="incpre|${i}">${p[0]}</button>`).join('')}</div>
+  <div style="margin:6px 0 14px;text-align:center"><div class="sub">Until <b style="color:var(--ink)">Sunday ${fmtDate(end)}</b> · ${days} days</div><div style="display:flex;justify-content:center;margin-top:8px">${amtDots(money(wk))}</div><div class="sub">a week · about ${money(Math.round(wk*weeksPer/10)*10)} a month</div>${left<7?`<div class="card" style="margin-top:12px;text-align:left"><b>This week only ${left} day${left>1?'s':''} are left.</b><div class="sm" style="margin-top:4px">So this week gets ${money(share)}. Full weeks start next Monday.</div></div>`:''}</div>${calHtml(d,t0,end)}</div>`+obFoot(obBtn('Next','ubdone')+obBtn('Not now','ubskip','q'))}
+HI.ubpct=(a,el)=>{const d=UI.flow.d;d.pct=+el.value;const {a:t,pct,sav,sp}=ubSplit(d);$('#ub-pct').textContent=pct+'%';$('#ub-sav').textContent=money(sav);$('#ub-sp').textContent=money(sp);$('#ub-grid').innerHTML=multiGrid([{amt:Math.max(0,sav),color:SAVE},{amt:Math.max(1,sp),color:SPEND}],Math.max(1,t),{w:240});return false};
+H.ubskip=()=>{const d=obD();d.uinc=null;d.s='perm'};
+H.ubdone=()=>{const d=obD();const {a,sav,sp}=ubSplit(d);const end=snapEnd(d.end);d.uinc={a,sav,sp,end};d.limits=true;d.noBal=true;d.method='none';d.fromInc=true;d.qW=Math.max(5,r5b(sp/daysIn(day0(),end)*7));d.s='perm'};
+/* ---- money that arrives waits in Income until it is assigned ---- */
+const waitingHtml=()=>S.credits.length?`<div class="cap" style="margin:0 0 8px">Waiting for you</div><div class="col" style="gap:8px;margin-bottom:18px">${S.credits.map(c=>`<button class="card" style="text-align:left;font:inherit;cursor:pointer;color:var(--ink);border-color:#3DBB94" data-a="assign|${c.id}"><div class="row sp"><b style="font-size:17px">${money(c.amt)}</b><span class="sm">from ${esc(c.from)}</span></div><div class="sm" style="margin-top:4px">Came in on your UPI. Tell Trickle what it is.</div></button>`).join('')}</div>`:'';
+const _inc3=SCREENS.income;
+SCREENS.income=()=>{const cr=S.credits;let h;S.credits=[];try{h=_inc3()}finally{S.credits=cr}return waitingHtml()+h};
+SHEETS.assign=({id})=>{const c=S.credits.find(x=>x.id===id);if(!c)return '';return `<div class="cap">${money(c.amt)} from ${esc(c.from)}</div><div class="title" style="font-size:26px;margin:2px 0 14px">What is this?</div><div class="col" style="gap:8px"><button class="btn" data-a="asinc|${id}">Income</button><button class="btn q" data-a="asone|${id}">One-off money</button><button class="btn o" data-a="asno|${id}">Not mine</button></div><p class="sm" style="margin-top:12px">Income is split into saving and spending. One-off money, like a friend paying you back, stays outside your plan.</p>`};
+H.assign=a=>{openSheet('assign',{id:a[0]});return false};
+H.asinc=a=>{const c=S.credits.find(x=>x.id===a[0]);UI.sheet=null;UI.flow={id:'inc',step:1,d:{kp:String(c.amt),pct:20,cr:c.id}};return true};
+H.asone=a=>{const c=S.credits.find(x=>x.id===a[0]);UI.sheet=null;UI.flow={id:'oneoff',step:1,d:{kp:String(c.amt),cr:c.id,from:c.from}};return true};
+H.asno=a=>{S.credits=S.credits.filter(x=>x.id!==a[0]);UI.sheet=null;say('Dismissed.');return true};
+
+/* ---- one account, six months in: three incomes, subscriptions, goals, a plan that has run ---- */
+PROFILES.M={key:'M',name:'Meera',blurb:'Six months in · 3 incomes · subscriptions · 3 goals',mode:'upi',six:true,income:34000,savingsShare:5900,lasts:4.3,bal:0,weeks:26,
+ cats:[['Food',200],['Travel',90],['Phone & data',40],['College & study',70],['Chai & coffee',55],['Snacks',45],['Outings',80]],W:900,
+ bills:[['Spotify',119,'month',5],['Netflix',199,'month',9],['Wi-Fi',399,'month',12],['Coursera',1500,'year',20]],
+ goals:[['Laptop',40000,14500,24,6],['Goa trip',9000,5600,12,5],['Emergency fund',5000,2300,0,4]],free:1200};
+function seedSix(){const D=(y,m,d)=>new Date(y,m-1,d).getTime();
+ S.incomes=[{id:'in1',amt:18000,sav:3600,sp:14400,start:D(2026,4,6),end:D(2026,9,27)},{id:'in2',amt:6000,sav:800,sp:5200,start:D(2026,7,6),end:D(2026,11,29)},{id:'in3',amt:10000,sav:1500,sp:8500,start:D(2026,9,28),end:D(2026,12,27)}];
+ S.moneyIn=[{id:'m3',t:D(2026,9,28)+9*36e5,label:'Income until 27 Dec 2026',amt:10000,note:'₹8,500 to spend, ₹1,500 to save'},{id:'m2',t:D(2026,7,6)+9*36e5,label:'Income until 29 Nov 2026',amt:6000,note:'₹5,200 to spend, ₹800 to save'},{id:'m1',t:D(2026,4,6)+9*36e5,label:'Income until 27 Sep 2026',amt:18000,note:'₹14,400 to spend, ₹3,600 to save'}];
+ S.planSet=true;S.incomeSet=true;S.noInc=false;S.noBal=true;S.firstDay=new Date(S.now.getTime()-182*DAY);S.asked={link:'yes',pin:'no'};
+ S.cats.forEach(c=>c.full=c.amt);S.bufFull=S.bufAmt;applyWeekScale();
+ addCredit(S,'Rahul',200);detectPayment(S,'Blue Tokai',180);detectPayment(S,'Print Hub',60)}

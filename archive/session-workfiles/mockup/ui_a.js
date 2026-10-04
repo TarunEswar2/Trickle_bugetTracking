@@ -13,7 +13,7 @@ SCREENS.home=()=>{const [a,b]=homeSentence();const r=flexL()/flexW();const empty
  <div class="title" style="margin-top:14px">${a}</div><div class="sub" style="margin-top:6px">${b}</div>
  <div style="margin:22px 8px 14px">${gridHtml(empty?0:r*100,(typeof paceHex==='function'&&S.planSet)?paceHex():SPEND,0,SPEND,{w:300})}${empty?`<div style="height:3px;background:${AMBER};margin:8px 4px 0;border-radius:2px;box-shadow:0 0 14px ${AMBER}"></div>`:''}</div>
  <div class="col" style="gap:8px">${lines.join('')}</div>
- <div style="position:sticky;bottom:0;margin-top:24px;padding-top:10px;background:linear-gradient(180deg,transparent,rgba(5,7,11,.9) 40%)"><button class="btn" data-a="pay">Pay</button></div>`};
+ <div style="position:sticky;bottom:0;margin-top:24px;padding-top:10px;background:transparent"><button class="btn" data-a="pay">Pay</button></div>`};
 H.goto=a=>{go(a[0]);return false};H.push=a=>{push(a[0],a[1]?JSON.parse(a[1]):{});return false};
 /* ===== SPENDING ===== */
 const catIdx=id=>S.cats.findIndex(c=>c.id===id);const catCol=i=>i<5?COLORS[i]:REST;
