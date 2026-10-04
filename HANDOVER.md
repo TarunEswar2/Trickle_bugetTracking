@@ -180,3 +180,6 @@ Instrument mockup (`mockup2/`, `ui_d.js`) now has onboarding, lock, settings sub
 
 ## Update: Night is the base (M2-3)
 Night mockup (`mockup/`) now includes `ui_d.js`: onboarding, lock, settings sub-screens, import, re-fit. Open gaps: first-week proration. Next: Tarun reviews; apply overrides to mockup and blueprint.
+
+## Update: Figma export
+All Night-mockup screens are in Figma as editable layers, grouped by flow (86 frames, 13 sections): https://www.figma.com/design/b9MRkClYToyPjpMcDaPbeT . Tooling in `archive/session-workfiles/figma-export/`. Not yet componentised or auto-laid-out.
