@@ -304,6 +304,8 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 - B-10: **Every question is short and plain.** One question per screen, asked the way a friend would: at most ~8 words, no jargon (no "budget method", "pots", "cascade"), a one-line hint at most. Answers are big taps, not forms. Example: not "How would you like Trickle to track your money?" but **"How should we see your spends?"** with **"Link UPI"** / **"I'll add them"** / **"Skip"**. Other rewrites: "Set your account balance" becomes "How much is in your account?" (skip: "Not now"); "Choose a budget method" becomes "Want weekly limits?" ("Yes" / "Not now"); "Allocate weekly amounts to categories" becomes "How much a week for Food?"; "Enable notifications" becomes "Remind you about bills?".
 - B-11: Copy review: every existing onboarding and prompt string is rewritten to B-10 and checked for a Skip before the mockup, blueprint and Figma are updated.
 
+- B-12: **Pop-up set built in the Night mockup** (`ui_e.js`, one bottom card each, one question, big yes, equally easy no): Link UPI? · Add a spend? · Payments need a place · Set a limit for [Category]? (suggests last week's average) · How much is in your account? (four quick amounts) · Want a full plan? · Saving for something? · Remind you about bills? · Lock with a PIN? · Bring in older spends? · Last-week recap (no budget, no "no" button, just OK). All in the Simulate panel under "Pop-ups (always skippable)". Answers are remembered so a "no" is not asked again straight away.
+
 ## Visualisation queue (one at a time)
 
 1. Budget gauge — DONE
