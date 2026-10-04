@@ -19,7 +19,7 @@ SCREENS.home=()=>{if(!S.track)return _home();const tot=wkTot(0),prev=wkTot(1);co
  const parts=S.cats.map((c,i)=>({amt:wkCat(c,0),color:catCol(i)})).filter(p=>p.amt>0);const lines=[];
  if(S.pending.length)lines.push(`<button class="li" data-a="openweek"><span class="d" style="background:var(--amber)"></span><span class="n">Last week is ready</span><span class="t">›</span></button>`);
  if(S.unsorted.length)lines.push(`<button class="li" data-a="push|sort"><span class="d" style="border:1.5px dashed ${AMBER};background:none"></span><span class="n">${S.unsorted.length} payment${S.unsorted.length>1?'s need':' needs'} a place</span><span class="t">›</span></button>`);
- if(tot>0&&!S.cats.some(c=>c.amt))lines.push(nudge('limit','Set a limit for '+esc(tc.name)+'?','askopen|limit'));
+ lines.push(`<button class="li" data-a="startplan"><span class="d" style="background:${SAVE}"></span><span class="n"><b>Make a plan</b><br><span class="sm">Say what you spend in a week.</span></span><span class="t">›</span></button>`);
  return `<div class="row sp" style="margin-top:2px"><span class="cap">${fmtDay(S.now)}</span><button class="chip" data-a="settings">⚙ Settings</button></div>
  <div class="title" style="margin-top:14px">${tot?'Mostly '+esc(tc.name)+'.':'A fresh week.'}</div><div class="sub" style="margin-top:6px">${tot?'So far this week.':'Your spends will show here.'}</div>
  <div style="margin:22px 8px 8px">${parts.length?multiGrid(parts,scale,{w:300}):gridHtml(0,SPEND,0,0,{w:300})}</div><div style="text-align:center;margin-bottom:14px"><span class="chipscale">1 box ≈ ₹${Math.max(1,Math.round(scale/100))}</span></div>
@@ -43,8 +43,8 @@ H.tnolimit=a=>{const c=S.cats.find(x=>x.id===a[0]);c.amt=0;c.left=0;say('Limit r
 /* ---- tabs that need a plan: invite, never require ---- */
 function invite(cap,title,sub,label,k){return `<div class="sec" style="padding-top:40px"><div class="cap">${cap}</div><div class="title" style="margin-top:6px">${title}</div><p class="sub" style="margin:10px 0 22px">${sub}</p><div class="col" style="gap:10px"><button class="btn" data-a="askopen|${k}">${label}</button></div><p class="sm" style="margin-top:14px">You can keep tracking without it.</p></div>`}
 const _inc=SCREENS.income,_sav=SCREENS.savings;
-SCREENS.income=()=>S.noInc?invite('Money in','No plan yet.','Add what you get each month and Trickle splits it. Only if you want.','Make a plan','plan'):_inc();
-SCREENS.savings=()=>(S.track||S.noInc)&&!S.goals.length?invite('Savings','Saving for something?','Name it and pick an amount. Trickle shows how close you are.','Add a goal','goal'):_sav();
+SCREENS.income=()=>S.noInc?invite('Money in','No income added.','Add money you get and split it between spending and saving. Only if you want.','Add income','income'):_inc();
+SCREENS.savings=()=>(S.track||S.noInc)&&!S.goals.length&&S.free<=0?invite('Savings','Saving for something?','Name it and pick an amount. Trickle shows how close you are.','Add a goal','goal'):_sav();
 /* ---- pay / add a spend while tracking ---- */
 const _payF=FLOWS.pay;
 FLOWS.pay=F=>{if(!S.track)return _payF(F);const d=F.d;const amt=amtOf(d.kp);const cid=d.cid||(d.target&&d.target.id);const ok=amt>0&&cid;
@@ -53,3 +53,18 @@ H.tpick=a=>{UI.flow.d.cid=a[0]};
 H.tadd=()=>{const d=UI.flow.d;const amt=amtOf(d.kp);const cid=d.cid||(d.target&&d.target.id);doPay(S,{amt,target:{type:'cat',id:cid},payee:d.payee||'Cash',paid:true});const n=labelOf(S,{type:'cat',id:cid});closeFlow();say(money(amt)+' added to '+n+'.');return false};
 /* ---- lock needs a PIN ---- */
 const _lock=H.lock;H.lock=()=>{if(!APP_PIN){say('No PIN yet. Add one in Settings.');return false}return _lock()};
+
+H.startplan=()=>{startUpgrade();return false};
+/* offer a plan after a week of tracking; ask again after four weeks if declined */
+function maybeOfferPlan(){if(!S.track||S.planSet||UI.popup||UI.flow||UI.sheet)return;if(!S.firstDay||(S.now-S.firstDay)/DAY<7||S.txns.length<4)return;const at=S.askedAt&&S.askedAt.planoffer;if(at&&(S.now.getTime()-at)/DAY<28)return;openAsk('planoffer')}
+/* ---- income: separate from the plan ---- */
+const SPLITS=[0,10,20,30,50];
+FLOWS.inc=F=>{const d=F.d;const a=amtOf(d.kp);const pct=d.pct===undefined?20:d.pct;const sav=Math.round(a*pct/100/10)*10,sp=a-sav;
+ if(F.step===0)return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">Money in</div><div class="title" style="margin-top:4px">How much came in?</div><div style="margin:10px 0;display:flex;justify-content:center">${amtDots('₹'+(d.kp||'0'))}</div>${keypad('kp')}</div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn ${a>0?'':'d'}" data-a="${a>0?'incnext':'x'}">Next</button><button class="btn q" data-a="pclose">Not now</button></div></div>`;
+ return `<div class="mbody"><button class="back" data-a="incback">‹ Back</button><div class="cap">${money(a)} came in</div><div class="title" style="margin-top:4px">How much to save?</div><p class="sub">The rest is for spending. Change it any time.</p><div style="margin:16px auto;width:260px">${multiGrid([{amt:Math.max(0,sav),color:SAVE},{amt:Math.max(1,sp),color:SPEND}],Math.max(1,a),{w:260})}</div><div class="row sp"><span><span class="cap">Saving</span><div class="h2" style="color:${SAVE}">${money(sav)}</div></span><span style="text-align:right"><span class="cap">Spending</span><div class="h2" style="color:${SPEND}">${money(sp)}</div></span></div><div class="seg" style="margin-top:18px">${SPLITS.map(v=>`<button class="chip ${pct===v?'on':''}" data-a="incpct|${v}">${v}%</button>`).join('')}</div></div><div class="mfoot"><button class="btn" data-a="incdone">Add ${money(a)}</button></div>`};
+H.incnext=()=>{UI.flow.step=1;UI.flow.d.pct=20};
+H.incback=()=>{UI.flow.step=0};
+H.incpct=a=>{UI.flow.d.pct=+a[0]};
+H.incdone=()=>{const d=UI.flow.d;const a=amtOf(d.kp),pct=d.pct===undefined?20:d.pct;const sav=Math.round(a*pct/100/10)*10;
+ S.moneyIn.unshift({id:'m'+(S.idc++),t:S.now.getTime(),label:'Income',amt:a,note:money(a-sav)+' to spend, '+money(sav)+' to save'});
+ S.free+=sav;S.p.income=(S.incomeSet?S.p.income:0)+a;S.p.savingsShare=(S.incomeSet?S.p.savingsShare:0)+sav;S.incomeSet=true;S.noInc=false;logE(S,`Income ₹${a}: ₹${sav} saved`);closeFlow();say('Added. '+money(sav)+' saved.');return false};

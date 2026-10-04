@@ -3,8 +3,8 @@ function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,
 function ev(name,fn){return {name,fn}}
 const EVENTS=()=>{const c0=S.cats[0],big=S.cats.find(c=>c.name==='Outings')||S.cats[S.cats.length-1];const upi=S.p.mode==='upi';const g0=S.goals.find(g=>g.state==='active');const m0=S.memoryPick;return [
  {h:'Time',items:[
-  ['+1 day',()=>{advanceDays(S,1);say('One day later.');maybeWeek()}],
-  ['+3 days',()=>{advanceDays(S,3);say('Three days later.');maybeWeek()}],
+  ['+1 day',()=>{advanceDays(S,1);say('One day later.');maybeWeek();maybeOfferPlan()}],
+  ['+3 days',()=>{advanceDays(S,3);say('Three days later.');maybeWeek();maybeOfferPlan()}],
   ['Sunday 8 pm: week-end pop-up',()=>{const sun=new Date(startOfWeek(S.now).getTime()+6*DAY+20*36e5);if(S.now<sun)S.now=sun;openWeekPop();UI.flow=null;UI.sheet=null}],
   ['New week starts (Monday)',()=>{const n=nextMonday(S.now);const days=Math.round((n-S.now)/DAY);advanceDays(S,Math.max(1,days));say('A new week began.');maybeWeek()}]]},
  {h:'Payments seen on your link',items:[
@@ -25,7 +25,7 @@ const EVENTS=()=>{const c0=S.cats[0],big=S.cats.find(c=>c.name==='Outings')||S.c
  {h:'Budget and lock',items:[
   ['Offer: fit budget to real weeks',()=>{UI.sheet={id:'refit',p:{}}}],
   ['Lock the app',()=>{H.lock()}]]},
- {h:'Pop-ups (always skippable)',items:[['Link UPI?',()=>openAsk('link')],['Add a spend?',()=>openAsk('add')],['Payments need a place',()=>openAsk('sort')],['Set a limit?',()=>openAsk('limit')],['Full plan?',()=>openAsk('plan')],['Add a goal?',()=>openAsk('goal')],['Remind about bills?',()=>openAsk('notif')],['Add a PIN?',()=>openAsk('pin')],['Bring in older spends?',()=>openAsk('import')],['Last week recap (no budget)',()=>openAsk('recap')]]},
+ {h:'Pop-ups (always skippable)',items:[['Link UPI?',()=>openAsk('link')],['Add a spend?',()=>openAsk('add')],['Payments need a place',()=>openAsk('sort')],['Set a limit?',()=>openAsk('limit')],['Make a plan?',()=>openAsk('plan')],['Add your income?',()=>openAsk('income')],['After a week: here is how you spend',()=>{if(S.firstDay){S.now=new Date(S.firstDay.getTime()+8*DAY)}openAsk('planoffer')}],['Add a goal?',()=>openAsk('goal')],['Remind about bills?',()=>openAsk('notif')],['Add a PIN?',()=>openAsk('pin')],['Bring in older spends?',()=>openAsk('import')],['Last week recap (no budget)',()=>openAsk('recap')]]},
  {h:'Goals',items:[
   ['A goal reaches its target',()=>{if(!g0)return say('No active goal.');g0.saved=g0.target;g0.hist[11]=(g0.hist[11]||0)+Math.max(0,g0.target-g0.saved);reachedCheck(S);logE(S,g0.name+' reached its target')}],
   ['Add ₹500 to a goal',()=>{if(!g0)return say('No active goal.');g0.saved=Math.min(g0.target,g0.saved+500);g0.hist[11]=(g0.hist[11]||0)+500;reachedCheck(S);say('₹500 added to '+g0.name+'.')}]]}

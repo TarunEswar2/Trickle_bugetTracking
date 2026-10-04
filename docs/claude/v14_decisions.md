@@ -312,6 +312,11 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 
 - B-16 (Tarun): **Trickle never asks for the account balance.** The only money number it asks for, and only when the user chooses "Yes, set limits", is how much they spend in a week ("About how much do you spend in a week?", quick amounts or Other). Removed: the balance step, the "How much to save?" step, the balance pop-up and the "How long will my money last?" nudge. Goals and savings are added later, in the app, never in setup. This supersedes the balance parts of B-5, B-6, B-13 and B-15.
 
+- B-17 (Tarun): **A plan and income are two different things.** A plan is what you spend in a week, split by category. Income is money you get, and it can be split any way into saving and spending. Neither is asked in onboarding: onboarding is only PIN (skippable), how to see spends, two small permissions, and categories. Balance is never asked (B-16).
+- B-18 (Tarun): **Home holds "Make a plan" until a plan is set.** Tapping it runs the plan steps (weekly spend, monthly bills, how much for each category). Spends already tracked carry over.
+- B-19 (Tarun): **Income tab holds income and the split.** Empty state: "No income added." → "Add income" → "How much came in?" → "How much to save?" (0, 10, 20, 30 or 50 percent of it, rest is spending). The saving part goes to savings. Income is independent of the plan and can be added with or without one.
+- B-20 (Tarun): **After about a week of tracking Trickle asks once:** "Here is how you spend. Want to make a plan?" with the top three categories. If the answer is no, it asks again after four weeks.
+
 ## Visualisation queue (one at a time)
 
 1. Budget gauge — DONE
