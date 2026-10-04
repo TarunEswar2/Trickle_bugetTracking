@@ -1,6 +1,6 @@
 /* ===== PAY FLOW ===== */
 function recentPayees(){const seen=[];S.txns.forEach(t=>{if(t.kind==='cat'&&!seen.includes(t.payee))seen.push(t.payee)});return seen.slice(0,4)}
-function payTiles(d){if(d.tab==='b')return S.cats.map((c,i)=>({k:c.id,n:c.name,w:wordLeft(c.left,c.amt),col:catCol(i),t:{type:'cat',id:c.id}})).concat(S.bills.map(b=>({k:b.id,n:b.name,w:'fixed bill',col:FIXC,t:{type:'fixed',id:b.id}})));
+function payTiles(d){if(d.tab==='b')return S.cats.map((c,i)=>({k:c.id,n:c.name,w:wordLeft(c.left,c.amt),col:catCol(i),t:{type:'cat',id:c.id}})).concat(S.bills.map(b=>({k:b.id,n:b.name,w:'subscription',col:FIXC,t:{type:'fixed',id:b.id}})));
  return S.goals.filter(g=>g.state!=='done').map((g,i)=>({k:g.id,n:g.name,w:Math.round(g.saved/g.target*100)+'% there',col:GG[i%3],t:{type:'goal',id:g.id},g:1})).concat(S.free>0?[{k:'free',n:'Free savings',w:'not given yet',col:'#7C8F89',t:{type:'free'},g:1}]:[])}
 function openPay(d){const F={id:'pay',step:0,d:Object.assign({kp:'',tab:'b',payee:null,paid:S.p.mode==='manual'},d||{})};if(F.d.preTarget){F.d.target=F.d.preTarget;F.d.toK=F.d.preTarget.id||'free';F.d.tab=['goal','free'].includes(F.d.preTarget.type)?'s':'b';if(F.d.preAmt){F.d.kp=F.d.preAmt;F.step=1}}UI.flow=F;render()}
 H.pay=a=>{const d={};if(a[0]){d.target={type:'cat',id:a[0]};d.toK=a[0]}openPay(d);return false};

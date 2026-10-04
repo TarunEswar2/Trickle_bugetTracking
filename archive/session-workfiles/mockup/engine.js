@@ -50,7 +50,8 @@ const weeksPer=4.3;
 const r5=x=>Math.round(x/5)*5;
 const startOfWeek=d=>{const x=new Date(d);x.setHours(0,0,0,0);const k=(x.getDay()+6)%7;return new Date(x.getTime()-k*DAY)};
 const NOW0=new Date(2026,9,2,17,30,0); // Fri 2 Oct 2026, 5:30 pm
-function billWeekly(b){const per=b.every==='month'?weeksPer:b.every==='3 months'?13:52;return b.amt/per}
+function billWeekly(b){if(b.paused)return 0;const per=b.every==='week'?1:b.every==='month'?weeksPer:b.every==='3 months'?13:52;return b.amt/per}
+function nextDueAfter(b){const d=new Date(b.nextDue);if(b.every==='week')return new Date(d.getTime()+7*DAY);if(b.every==='3 months')return new Date(d.getFullYear(),d.getMonth()+3,d.getDate());if(b.every==='year')return new Date(d.getFullYear()+1,d.getMonth(),d.getDate());return new Date(d.getFullYear(),d.getMonth()+1,b.dueDay||d.getDate())}
 function newState(key){
  const P=PROFILES[key],rnd=mulberry(key.charCodeAt(0)*977+13);let id=1;const S={key,p:P,now:new Date(NOW0),idc:1,
   cats:P.cats.map((c,i)=>({id:'c'+i,name:c[0],amt:c[1],left:c[1],order:i})),
@@ -61,7 +62,7 @@ function newState(key){
  S.fixedWeekly=()=>S.bills.reduce((a,b)=>a+billWeekly(b),0);
  S.W=P.W;S.fixedW=Math.round(S.fixedWeekly());S.flexW=S.W-S.fixedW;S.bufAmt=S.flexW-S.cats.reduce((a,c)=>a+c.amt,0);S.bufLeft=S.bufAmt;
  // bills next due
- S.bills.forEach(b=>{const d=new Date(S.now);let t=new Date(d.getFullYear(),d.getMonth(),b.dueDay);if(t<=S.now)t=new Date(d.getFullYear(),d.getMonth()+1,b.dueDay);b.nextDue=t});
+ S.bills.forEach((b,bi)=>{if(P.bills[bi]&&P.bills[bi][4]){b.nextDue=new Date(P.bills[bi][4]);return}const d=new Date(S.now);let t=new Date(d.getFullYear(),d.getMonth(),b.dueDay);if(t<=S.now)t=new Date(d.getFullYear(),d.getMonth()+1,b.dueDay);b.nextDue=t});
  // seed transactions
  const ws=startOfWeek(S.now),elapsed=((S.now-ws)/DAY)/7;
  const weeks=P.weeks;const hist=[];
@@ -160,7 +161,7 @@ function weekEnd(S,{to,goalIds}){ // to: 'savings'|'next'
 function addGoal(S,{name,target,byMonths}){const g={id:'g'+(S.idc++),name,target,saved:0,byMonths:byMonths||0,createdMonthsAgo:0,state:'active',hist:new Array(12).fill(0),celebrated:false};S.goals.push(g);logE(S,`Goal added: ${name}`);return g}
 function markDone(S,id){const g=S.goals.find(x=>x.id===id);if(!g)return;if(g.saved>0){S.free+=g.saved}g.saved=0;g.state='done';g.doneOn=new Date(S.now);logE(S,`${g.name} marked done`)}
 function advanceDays(S,n){for(let i=0;i<n;i++){const before=startOfWeek(S.now).getTime();S.now=new Date(S.now.getTime()+DAY);S.now.setHours(9,0);
-  S.bills.forEach(b=>{if(S.now>=b.nextDue){if(S.p.mode==='upi'){const r=cascade(S,b.amt,{type:'fixed',id:b.id});S.txns.unshift({id:'t'+(S.idc++),t:b.nextDue.getTime()+36e5*10,payee:b.name,amt:b.amt,kind:'fixed',ref:b.id,via:'detected',src:r});b.paid.push(b.nextDue.getTime());b.nextDue=new Date(b.nextDue.getFullYear(),b.nextDue.getMonth()+1,b.dueDay);logE(S,`${b.name} was paid (₹${b.amt})`)}else{b.dueNow=true}}});
+  S.bills.forEach(b=>{if(S.now>=b.nextDue){if(b.paused){b.nextDue=nextDueAfter(b);return}if(S.p.mode==='upi'){const r=cascade(S,b.amt,{type:'fixed',id:b.id});S.txns.unshift({id:'t'+(S.idc++),t:b.nextDue.getTime()+36e5*10,payee:b.name,amt:b.amt,kind:'fixed',ref:b.id,via:'detected',src:r});b.paid.push(b.nextDue.getTime());b.nextDue=nextDueAfter(b);logE(S,`${b.name} was paid (₹${b.amt})`)}else{b.dueNow=true}}});
   if(startOfWeek(S.now).getTime()!==before){const un=unspentNow(S);S.pending.push({un,week:new Date(before),touched:!!S.touched,touchedAmt:S.touchedAmt||0});S.touched=false;S.touchedAmt=0;S.cats.forEach(c=>{c.left=c.amt});S.bufLeft=S.bufAmt;S.bills.forEach(b=>{b.reserve=Math.min(b.reserve+Math.round(billWeekly(b)),b.amt*1.2)});logE(S,'A new week began')}}}
 function billsRefill(S){S.bills.forEach(b=>{b.reserve=Math.round(billWeekly(b)*3)})}
 /* derived views */
