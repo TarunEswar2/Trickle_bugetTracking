@@ -20,7 +20,6 @@ SCREENS.home=()=>{if(!S.track)return _home();const tot=wkTot(0),prev=wkTot(1);co
  if(S.pending.length)lines.push(`<button class="li" data-a="openweek"><span class="d" style="background:var(--amber)"></span><span class="n">Last week is ready</span><span class="t">›</span></button>`);
  if(S.unsorted.length)lines.push(`<button class="li" data-a="push|sort"><span class="d" style="border:1.5px dashed ${AMBER};background:none"></span><span class="n">${S.unsorted.length} payment${S.unsorted.length>1?'s need':' needs'} a place</span><span class="t">›</span></button>`);
  if(tot>0&&!S.cats.some(c=>c.amt))lines.push(nudge('limit','Set a limit for '+esc(tc.name)+'?','askopen|limit'));
- if(!S.balSet)lines.push(nudge('bal','How long will my money last?','askopen|bal'));
  return `<div class="row sp" style="margin-top:2px"><span class="cap">${fmtDay(S.now)}</span><button class="chip" data-a="settings">⚙ Settings</button></div>
  <div class="title" style="margin-top:14px">${tot?'Mostly '+esc(tc.name)+'.':'A fresh week.'}</div><div class="sub" style="margin-top:6px">${tot?'So far this week.':'Your spends will show here.'}</div>
  <div style="margin:22px 8px 8px">${parts.length?multiGrid(parts,scale,{w:300}):gridHtml(0,SPEND,0,0,{w:300})}</div><div style="text-align:center;margin-bottom:14px"><span class="chipscale">1 box ≈ ₹${Math.max(1,Math.round(scale/100))}</span></div>

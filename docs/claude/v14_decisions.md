@@ -310,6 +310,8 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 - B-14: **Track mode in the app** (`ui_f.js`): Home shows one grid of this week's spends by category, scaled to last week (or the week so far, min ₹100), headline "Mostly Food.", and at most two soft nudges that vanish after a "no". Spending lists categories with this week's amount; a category screen shows this week, last week and an optional limit (set or remove any time). Pay becomes "How much? / For what?" with no cascade. Income and Savings show an invite ("No plan yet." / "Saving for something?") instead of numbers. Week-end becomes a one-line recap with only OK. Lock is off until a PIN is added (Settings, or the PIN pop-up).
 - B-15: **Moving up keeps history.** "Want a full plan?" re-opens the budget steps (balance, save, share-out, goals), each skippable, and carries over all spends and the remembered places; spends in categories the user dropped become unsorted. A limit-only user without a balance never sees income or a balance.
 
+- B-16 (Tarun): **Trickle never asks for the account balance.** The only money number it asks for, and only when the user chooses "Yes, set limits", is how much they spend in a week ("About how much do you spend in a week?", quick amounts or Other). Removed: the balance step, the "How much to save?" step, the balance pop-up and the "How long will my money last?" nudge. Goals and savings are added later, in the app, never in setup. This supersedes the balance parts of B-5, B-6, B-13 and B-15.
+
 ## Visualisation queue (one at a time)
 
 1. Budget gauge — DONE
