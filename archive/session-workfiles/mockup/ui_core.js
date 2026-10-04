@@ -63,9 +63,9 @@ function render(){
  const tabs=[['home','Home'],['income','Income'],['spending','Spending'],['savings','Savings'],['insights','Insights']];
  $('#tabbar').innerHTML=tabs.map(t=>`<button class="${UI.tab===t[0]?'on':''}" data-a="tab|${t[0]}">${t[1]}${t[0]==='home'&&(S.unsorted.length||S.pending.length)?'<span class="dot"></span>':''}${t[0]==='income'&&S.credits.length?'<span class="dot"></span>':''}</button>`).join('');
  let L='';
- if(UI.sheet&&SHEETS[UI.sheet.id])L+=`<div class="scrim" data-a="closesheet"></div><div class="sheet">${SHEETS[UI.sheet.id](UI.sheet.p)}</div>`;
  if(UI.flow&&FLOWS[UI.flow.id]){let fh=FLOWS[UI.flow.id](UI.flow);if(fh.indexOf('class="blobs"')<0)fh=blobs(FLOWGLOW[UI.flow.id]||'blue','bottom',.6)+fh;L+=`<div class="modal" style="background:${UI.flow.bg||groundCss}">${fh}</div>`}
  if(UI.popup&&POPUPS[UI.popup.id]){let ph=POPUPS[UI.popup.id](UI.popup);if(UI.popup.id==='weekend'&&ph.indexOf('class="blobs"')<0)ph=blobs('blue','bottom',.6)+ph;L+=`<div class="modal" style="background:${UI.popup.bg||groundCss}">${ph}</div>`}
+ if(UI.sheet&&SHEETS[UI.sheet.id])L+=`<div class="scrim" data-a="closesheet"></div><div class="sheet">${SHEETS[UI.sheet.id](UI.sheet.p)}</div>`;
  if(UI.toast)L+=`<div class="toast">${esc(UI.toast)}</div>`;
  const lk=(UI.sheet?'s'+UI.sheet.id:'')+(UI.flow?'f'+UI.flow.id:'')+(UI.popup?'p'+UI.popup.id:'');const same=lk===UI._lk;UI._lk=lk;
  const sc=[...document.querySelectorAll('#layer .mbody,#layer .sheet,#layer [data-sc]')].map(e=>e.scrollTop);

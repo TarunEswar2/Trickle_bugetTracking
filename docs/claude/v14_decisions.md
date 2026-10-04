@@ -354,6 +354,10 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
   5. A subscription that would take more than 60% of the weekly plan says so in the form.
   6. The first-week scaling resets cleanly at every week change; Back from "Two quick things" returns to the UPI split screens.
 
+- B-45 (Tarun): **"This week vs last" says what is being compared.** It states the same days in both weeks ("Monday to Fri"), the sentence now names the amount ("₹180 more than last week at this point"), and each category line reads "last week, then this week, then the difference" with an arrow and words ("↑ ₹75 more", "↓ ₹25 less"). Amber for more, green for less (no red).
+- B-46 (Tarun): **"When you spend" leads with its finding and always says which day, week or month it shows.** A large card gives the answer ("Today, you spend most around 12 pm", "Tue afternoon", "the 6th"). Under the Day, Week and Month buttons there is a title with the exact period and arrows to flip back through earlier days, weeks and months (stopping at the first month with data). The month view is a real calendar with weekday letters; future days are dim.
+- B-47 (Tarun): **Categories can be searched and created anywhere one is chosen.** Sorting a payment, changing a payment's category, Add a spend and Pay all show a search box, the categories you have, ideas from the library, and "+ Create 'Gaming'". A new category starts at ₹0 and uses the buffer until it is given an amount (D-18); the limit is 30.
+
 ## Visualisation queue (one at a time)
 
 1. Budget gauge — DONE
