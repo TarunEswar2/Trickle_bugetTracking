@@ -183,3 +183,6 @@ Night mockup (`mockup/`) now includes `ui_d.js`: onboarding, lock, settings sub-
 
 ## Update: Figma export
 All Night-mockup screens are in Figma as editable layers, grouped by flow (86 frames, 13 sections): https://www.figma.com/design/b9MRkClYToyPjpMcDaPbeT . Tooling in `archive/session-workfiles/figma-export/`. Not yet componentised or auto-laid-out.
+
+## Latest (bare-minimum mode)
+Tarun's feedback: budget and balance must be optional; category tracking is the minimum; every question short; every step skippable (even the PIN). Logged as B-1…B-15 in `docs/claude/v14_decisions.md`. Built in the Night mockup (`archive/session-workfiles/mockup/`: `ui_d.js` onboarding rewrite, `ui_e.js` skippable pop-ups, `ui_f.js` track mode). Next: Tarun reviews; then update the blueprint (`archive/session-workfiles/blueprint/`) and re-export the changed screens to Figma.
