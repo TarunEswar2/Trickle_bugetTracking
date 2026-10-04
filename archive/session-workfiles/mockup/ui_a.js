@@ -7,6 +7,7 @@ SCREENS.home=()=>{const [a,b]=homeSentence();const r=flexL()/flexW();const empty
  if(S.pending.length)lines.push(`<button class="li" data-a="openweek"><span class="d" style="background:var(--amber)"></span><span class="n">Last week is ready to wrap up</span><span class="t">›</span></button>`);
  billSoon().forEach(t=>lines.push(`<button class="li" data-a="goto|spending"><span class="d" style="background:${FIXC}"></span><span class="n">${esc(t)}</span><span class="t">›</span></button>`));
  creditLines().forEach(l=>lines.push(l));
+ planLines().forEach(l=>lines.push(l));
  if(S.unsorted.length)lines.push(`<button class="li" data-a="push|sort"><span class="d" style="border:1.5px dashed ${AMBER};background:none"></span><span class="n">${S.unsorted.length} payment${S.unsorted.length>1?'s need':' needs'} a category</span><span class="t">›</span></button>`);
  return `<div class="row sp" style="margin-top:2px"><span class="cap">${fmtDay(S.now)}</span><button class="chip" data-a="settings">⚙ Settings</button></div>
  <div class="title" style="margin-top:14px">${a}</div><div class="sub" style="margin-top:6px">${b}</div>

@@ -32,7 +32,7 @@ H.obsubnew=()=>{const d=obD();d.sf=newSF();d.sfBack=d.s;d.s='subform'};
 H.sfsave=()=>{const sf=SFT();const amt=amtOf(sf.amt);if(!sf.name.trim()||!amt)return false;const due=new Date(sf.due);
  if(UI.flow.id==='onb'){const d=UI.flow.d;const e=[sf.name.trim(),amt,sf.every,due.getDate(),sf.due];(d.customs=d.customs||[]).push(e);d.qB.push(e[0]);if(d.s==='subform'&&d.sfBack==='share'){d.bills.push(e)}d.s=d.sfBack||'q2';d.sf=null;return true}
  if(sf.editId){const b=S.bills.find(x=>x.id===sf.editId);Object.assign(b,{name:sf.name.trim(),amt,every:sf.every,dueDay:due.getDate(),nextDue:due});say('Saved.')}
- else{S.bills.push({id:'b'+(S.idc++),name:sf.name.trim(),amt,every:sf.every,dueDay:due.getDate(),reserve:0,nextDue:due,paid:[]});say(S.planSet?`${sf.name.trim()} added. About ${money(Math.round(billWeekly({amt,every:sf.every})))} a week is set aside.`:`${sf.name.trim()} added.`)}
+ else{S.bills.push({id:'b'+(S.idc++),name:sf.name.trim(),amt,every:sf.every,dueDay:due.getDate(),reserve:S.planSet?Math.min(amt,Math.round(billWeekly({amt,every:sf.every})*3)):0,nextDue:due,paid:[]});say(S.planSet?`${sf.name.trim()} added. About ${money(Math.round(billWeekly({amt,every:sf.every})))} a week is set aside.`:`${sf.name.trim()} added.`)}
  applyBills();closeFlow();return false};
 /* subscriptions come off the top of the weekly plan; pausing gives the share back to the buffer */
 function applyBills(){if(!S.planSet)return;const oldBuf=S.bufAmt;S.fixedW=Math.round(S.fixedWeekly());const flex=Math.max(10,S.W-S.fixedW);const sum=S.cats.reduce((a,c)=>a+c.amt,0);
@@ -62,3 +62,12 @@ H.oocat=h=>{const a=amtOf(UI.flow.d.kp);const c=S.cats.find(x=>x.id===h[0]);c.le
 H.oonote=()=>{ooDone('Noted.');return false};
 H.credit=a=>{const c=S.credits.find(x=>x.id===a[0]);if(!c)return false;openFlow('oneoff',{step:1,kp:String(c.amt),cr:c.id,from:c.from});return false};
 const creditLines=()=>S.credits.map(c=>`<button class="li" data-a="credit|${c.id}"><span class="d" style="background:${SAVE}"></span><span class="n">${money(c.amt)} from ${esc(c.from)}</span><span class="t">where does it go? ›</span></button>`);
+
+/* ---- plan health: say it before it happens ---- */
+function planLines(){const out=[];if(!S.planSet)return out;const t=S.now.getTime();const inc=(S.incomes||[]).filter(i=>i.end);
+ if(inc.length){const act=inc.filter(i=>i.end+DAY>t);
+  if(!act.length)out.push(`<button class="li" data-a="askopen|income"><span class="d" style="background:var(--amber)"></span><span class="n">No income covers this week</span><span class="t">Add income ›</span></button>`);
+  else{const nx=act.slice().sort((a,b)=>a.end-b.end)[0];const days=Math.ceil((nx.end+DAY-t)/DAY);if(days<=14){const rest=act.filter(i=>i!==nx).reduce((x,i)=>x+i.sp/weeksIn(i.start,i.end),0);out.push(`<button class="li" data-a="goto|income"><span class="d" style="background:var(--amber)"></span><span class="n">${rest>0?'Plan drops to '+money(r5b(rest))+' a week after':'Income covers you until'} ${fmtDate(nx.end)}</span><span class="t">›</span></button>`)}}}
+ if(S.W&&S.fixedW>S.W*0.5)out.push(`<button class="li" data-a="goto|spending"><span class="d" style="background:var(--amber)"></span><span class="n">Subscriptions take ${money(S.fixedW)} of your ${money(S.W)} a week</span><span class="t">›</span></button>`);
+ return out}
+function autoWeek(){if(!S.planSet||!S.pending.length)return false;let tot=0;S.pending.slice().forEach(p=>{tot+=Math.max(0,p.un);applyPending(S,p,{to:'savings'})});S.pending=[];if(tot>0)openAsk('weekmoved',{moved:tot});return true}

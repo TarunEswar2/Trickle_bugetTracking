@@ -104,7 +104,7 @@ function cascade(S,amt,target){ // target {type:'cat'|'fixed'|'goal',id}
  else if(target.type==='free'){const t=take(S,'free',rem);res.target=t;rem-=t}
  else if(target.type==='unsorted'){const t=take(S,'bufLeft',rem);res.target=0;res.buffer=t;rem-=t;if(rem>0){/* continue cascade below */}}
  if(rem>0&&target.type!=='unsorted'||(rem>0&&target.type==='unsorted')){const b=Math.min(rem,S.bufLeft);if(target.type!=='unsorted'){S.bufLeft-=b;res.buffer+=b;rem-=b}}
- if(rem>0){ // other categories equally
+ if(rem>0&&target.type!=='fixed'){ // other categories equally
   let pool=S.cats.filter(c=>!(target.type==='cat'&&c.id===target.id)&&c.left>0);
   while(rem>0&&pool.length){const share=Math.max(1,Math.floor(rem/pool.length));let moved=0;pool.forEach(c=>{const t=Math.min(share,c.left,rem-moved);c.left-=t;moved+=t;res.othersDetail[c.id]=(res.othersDetail[c.id]||0)+t});rem-=moved;res.others+=moved;pool=pool.filter(c=>c.left>0);if(!moved)break}
  }

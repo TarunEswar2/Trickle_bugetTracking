@@ -328,6 +328,12 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 - B-27 (Tarun, "use that system"): **Repeat payments are spotted.** If the same place charges about the same amount twice, about a month (or a week, 3 months, a year) apart, Trickle asks "Is Netflix a subscription?" once. "Not now" means it is never asked about that place again.
 - B-28 (Tarun): **One-off money (a friend paying back, a gift) sits outside income and the plan.** It shows on Home as "₹200 from Rahul, where does it go?" and can be saved, put back into a category (when there is a plan) or just noted. It is also available from the Income tab as "Add one-off money".
 
+- B-29 (delegated, open to override): **Weekly stays the engine, not the only language.** Evidence for weekly is thin (see `docs/claude/weekly_budget_validation.md`): the interviews show weekly *checking*, not weekly *planning*. Inputs are taken in the units people think in (monthly income, monthly or yearly subscriptions, a date range), converted to weeks, and the monthly equivalent is shown beside the weekly amount. A 5-student test is proposed in the memo.
+- B-30 (delegated): Quick picks are calendar months, snapped to the Sunday of that week; the number of weeks is counted as whole Monday-Sunday weeks (an off-by-one that divided plans by one week too many is fixed).
+- B-31 (delegated): **Plan health is said on Home, before it happens:** "Plan drops to ₹X a week after 8 Nov" (within 14 days), "No income covers this week", "Subscriptions take ₹X of your ₹Y a week". The plan steps warn when subscriptions leave almost nothing for categories.
+- B-32 (delegated, supersedes the open part of B-23): **Left-over money moves to savings by itself at week end**, with a one-line recap ("₹1,150 moved to savings"). The three-step week-end pop-up is no longer shown to people with a plan; moving it back is done in Move money. Needs a student test (see memo).
+- B-33 (delegated): **A subscription never raids other categories.** If its set-aside is short when it falls due, the order is its set-aside, then the buffer, then savings.
+
 ## Visualisation queue (one at a time)
 
 1. Budget gauge — DONE

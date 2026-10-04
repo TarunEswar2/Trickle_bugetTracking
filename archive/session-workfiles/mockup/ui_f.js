@@ -2,7 +2,7 @@
 const wkTot=w=>Math.round(weekSpentAll(S,w,1));
 const wkCat=(c,w)=>Math.round(weekSpentBy(S,c.id,w));
 function topCat(w){return S.cats.map(c=>[c,wkCat(c,w)]).sort((a,b)=>b[1]-a[1])[0]}
-function openWeekPop(){if(S.track){openAsk('recap');return}UI.popup={id:'weekend',step:(S.p.mode==='manual'&&!S.noBal)?'bal':1,sel:S.goals.filter(g=>g.state==='active').map(g=>g.id)}}
+function openWeekPop(){if(S.track){openAsk('recap');return}if(S.planSet){if(!S.pending.length){const un=unspentNow(S);weekEnd(S,{to:'savings'});S.now=nextMonday(S.now);if(un>0)openAsk('weekmoved',{moved:un});return}autoWeek();return}UI.popup={id:'weekend',step:(S.p.mode==='manual'&&!S.noBal)?'bal':1,sel:S.goals.filter(g=>g.state==='active').map(g=>g.id)}}
 H.openweek=()=>{openWeekPop();return true};
 /* engine: no cascade while tracking only */
 const _doPay=doPay,_detect=detectPayment,_sort=sortTxn,_refile=refileTxn;
@@ -64,16 +64,17 @@ FLOWS.inc=F=>{const d=F.d;const a=amtOf(d.kp);const pct=d.pct===undefined?20:d.p
  if(F.step===0)return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">Money in</div><div class="title" style="margin-top:4px">How much came in?</div><div style="margin:10px 0;display:flex;justify-content:center">${amtDots('₹'+(d.kp||'0'))}</div>${keypad('kp')}</div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn ${a>0?'':'d'}" data-a="${a>0?'incnext':'x'}">Next</button><button class="btn q" data-a="pclose">Not now</button></div></div>`;
  if(F.step===2){const t0=wk0(),end=snapEnd(d.end||t0+27*DAY),wks=weeksIn(t0,end),wk=Math.max(5,r5b(sp/wks));
   return `<div class="mbody"><button class="back" data-a="incback">‹ Back</button><div class="cap">${money(sp)} to spend</div><div class="title" style="margin-top:4px">Until when?</div><p class="sub">Plans run in whole weeks, Monday to Sunday.</p>
-  <div class="row wrap" style="gap:8px;margin:14px 0 10px">${PRESETS.map(p=>`<button class="chip ${wks===p[1]?'on':''}" data-a="incpre|${p[1]}">${p[0]}</button>`).join('')}</div>
-  <div style="margin:6px 0 14px;text-align:center"><div class="sub">Until <b style="color:var(--ink)">Sunday ${fmtDate(end)}</b> · ${wks} week${wks>1?'s':''}</div><div style="display:flex;justify-content:center;margin-top:8px">${amtDots(money(wk))}</div><div class="sub">a week</div></div>${calHtml(d,t0,end)}</div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn" data-a="${S.planSet?'incaddplan':'incplan'}">${S.planSet?'Add to my plan':'Make my plan'}</button><button class="btn q" data-a="incdone">Just add the income</button></div></div>`}
+  <div class="row wrap" style="gap:8px;margin:14px 0 10px">${PRESETS.map((p,i)=>`<button class="chip ${end===presetEnd(p)?'on':''}" data-a="incpre|${i}">${p[0]}</button>`).join('')}</div>
+  <div style="margin:6px 0 14px;text-align:center"><div class="sub">Until <b style="color:var(--ink)">Sunday ${fmtDate(end)}</b> · ${wks} week${wks>1?'s':''}</div><div style="display:flex;justify-content:center;margin-top:8px">${amtDots(money(wk))}</div><div class="sub">a week · about ${money(Math.round(wk*weeksPer/10)*10)} a month</div></div>${calHtml(d,t0,end)}</div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn" data-a="${S.planSet?'incaddplan':'incplan'}">${S.planSet?'Add to my plan':'Make my plan'}</button><button class="btn q" data-a="incdone">Just add the income</button></div></div>`}
  return `<div class="mbody"><button class="back" data-a="incback">‹ Back</button><div class="cap">${money(a)} came in</div><div class="title" style="margin-top:4px">How much to save?</div><p class="sub">The rest is for spending. Change it any time.</p><div id="inc-grid" style="margin:16px auto;width:260px">${multiGrid([{amt:Math.max(0,sav),color:SAVE},{amt:Math.max(1,sp),color:SPEND}],Math.max(1,a),{w:260})}</div><div class="row sp"><span><span class="cap">Saving · <span id="inc-pct">${pct}%</span></span><div id="inc-sav" class="h2" style="color:${SAVE}">${money(sav)}</div></span><span style="text-align:right"><span class="cap">Spending</span><div id="inc-sp" class="h2" style="color:${SPEND}">${money(sp)}</div></span></div><input type="range" min="0" max="100" step="5" value="${pct}" data-i="incpct" style="margin:18px 0 6px"><div class="row sp sm"><span>Nothing</span><span>All of it</span></div></div><div class="mfoot"><div class="col" style="gap:10px">${sp>0?`<button class="btn" data-a="incnext2">Next</button><button class="btn q" data-a="incdone">Just add ${money(a)}</button>`:`<button class="btn" id="inc-btn" data-a="incdone">Add ${money(a)}</button>`}</div></div>`};
 
 /* ---- dates: an income covers a date range ---- */
-const PRESETS=[['1 week',1],['1 month',4],['3 months',13],['6 months',26],['1 year',52],['2 years',104]];
+const PRESETS=[['1 week','w',1],['1 month','m',1],['3 months','m',3],['6 months','m',6],['1 year','m',12],['2 years','m',24]];
+const presetEnd=p=>{if(p[1]==='w')return wk0()+6*DAY;const t=new Date(day0());t.setMonth(t.getMonth()+p[2]);return snapEnd(t.getTime())};
 const day0=()=>{const t=new Date(S.now);t.setHours(0,0,0,0);return t.getTime()};
 const wk0=()=>startOfWeek(S.now).getTime();
 const snapEnd=ts=>startOfWeek(new Date(ts)).getTime()+6*DAY;
-const weeksIn=(t0,end)=>Math.round((end-t0)/(7*DAY))+1;
+const weeksIn=(t0,end)=>Math.max(1,Math.round((end-t0+DAY)/(7*DAY)));
 const fmtDate=ts=>new Date(ts).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
 function calHtml(d,t0,end){const today0=day0();const off=d.cm||0;const m0=new Date(new Date(today0).getFullYear(),new Date(today0).getMonth()+off,1);const first=(m0.getDay()+6)%7,dim=new Date(m0.getFullYear(),m0.getMonth()+1,0).getDate(),max=t0+735*DAY;
  let cells='';for(let i=0;i<first;i++)cells+='<i></i>';
@@ -83,9 +84,9 @@ function calHtml(d,t0,end){const today0=day0();const off=d.cm||0;const m0=new Da
  return `<div class="card" style="padding:12px 10px"><div class="row sp" style="margin:0 4px 8px"><button class="chip" style="${off<=0?'opacity:.3;pointer-events:none':''}" data-a="incmon|-1">‹</button><b>${m0.toLocaleDateString('en-IN',{month:'long',year:'numeric'})}</b><button class="chip" style="${off>=24?'opacity:.3;pointer-events:none':''}" data-a="incmon|1">›</button></div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center">${['M','T','W','T','F','S','S'].map(x=>`<span class="cap" style="font-size:11px;padding:4px 0">${x}</span>`).join('')}${cells}</div></div>`}
 H.incday=a=>{const d=UI.flow.d;d.end=snapEnd(+a[0])};
 H.incmon=a=>{const d=UI.flow.d;d.cm=Math.max(0,Math.min(24,(d.cm||0)+(+a[0])))};
-H.incpre=a=>{const d=UI.flow.d;const t0=wk0();d.end=t0+(+a[0])*7*DAY-DAY;const e=new Date(d.end),n=new Date(day0());d.cm=(e.getFullYear()-n.getFullYear())*12+e.getMonth()-n.getMonth()};
+H.incpre=a=>{const d=UI.flow.d;d.end=presetEnd(PRESETS[+a[0]]);const e=new Date(d.end),n=new Date(day0());d.cm=(e.getFullYear()-n.getFullYear())*12+e.getMonth()-n.getMonth()};
 H.incnext=()=>{UI.flow.step=1;UI.flow.d.pct=20};
-H.incback=()=>{UI.flow.step=Math.max(0,UI.flow.step-1)};H.incnext2=()=>{const d=UI.flow.d;UI.flow.step=2;if(!d.end){d.end=wk0()+27*DAY;const e=new Date(d.end),n=new Date(day0());d.cm=(e.getFullYear()-n.getFullYear())*12+e.getMonth()-n.getMonth()}};H.inclast=a=>{UI.flow.d.lasts=parseFloat(a[0])};
+H.incback=()=>{UI.flow.step=Math.max(0,UI.flow.step-1)};H.incnext2=()=>{const d=UI.flow.d;UI.flow.step=2;if(!d.end){d.end=presetEnd(PRESETS[1]);const e=new Date(d.end),n=new Date(day0());d.cm=(e.getFullYear()-n.getFullYear())*12+e.getMonth()-n.getMonth()}};H.inclast=a=>{UI.flow.d.lasts=parseFloat(a[0])};
 HI.incpct=(a,el)=>{const d=UI.flow.d;d.pct=+el.value;const t=amtOf(d.kp),sav=Math.round(t*d.pct/100/10)*10,sp=t-sav;$('#inc-pct').textContent=d.pct+'%';$('#inc-sav').textContent=money(sav);$('#inc-sp').textContent=money(sp);$('#inc-grid').innerHTML=multiGrid([{amt:Math.max(0,sav),color:SAVE},{amt:Math.max(1,sp),color:SPEND}],Math.max(1,t),{w:260});return false};
 function addIncome(d,withEnd){const a=amtOf(d.kp),pct=d.pct===undefined?20:d.pct;const sav=Math.round(a*pct/100/10)*10;const sp=a-sav;const t0=wk0();const end=withEnd&&d.end?snapEnd(d.end):null;
  (S.incomes=S.incomes||[]).push({id:'in'+(S.idc++),amt:a,sav,sp,start:t0,end});
