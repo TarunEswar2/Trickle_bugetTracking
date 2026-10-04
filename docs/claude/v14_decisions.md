@@ -291,7 +291,16 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 
 - M2-3: Tarun chose the first design system (Night) to build on. The full flows (onboarding, lock, settings sub-screens, import, re-fit, flicker and scroll fixes) were ported into the Night mockup (`archive/session-workfiles/mockup/`, published at https://claude.ai/artifact/F5iDLzVpmpKw8dSwUWkSU9). Instrument stays as an alternate (`designsystem2/`, `mockup2/`).
 
-## Visualisation queue (one at a time)
+## Bare-minimum mode (user feedback: no budget or balance required) — delegated, open to override
+- B-1: **Only category tracking is required.** Balance and budget are optional and can be added at any moment. The product is a ledger of spends by category first; budgeting and balance layer on top.
+- B-2: **Required inputs: none beyond a way to see spends** — UPI link, or manual add. PIN, permissions, bank, balance, budget, split, bills, goals, categories-with-amounts are all skippable ("Skip, I'll start tracking").
+- B-3: **Categories seed from defaults** (six basics, editable). Unsorted payments sit in an "Unsorted" tray; the user sorts them with one tap. Custom categories can be created in the moment of sorting.
+- B-4: **No budget → no gauges that "run out".** Each category shows what was spent this week/month as a 10×10 grid scaled to its own recent average (week 1: scaled to the biggest category). No "left", no overspend, no cascade, no buffer, no week-end pop-up pressure; the week-end card becomes a neutral recap ("You spent ₹X, mostly on Food").
+- B-5: **No balance → no balance anywhere**, no low-balance warning, no "weeks left". Home shows the spend total and the top categories only.
+- B-6: **Soft prompts, never gates.** After ~1 week of data Trickle offers "Set a limit for Food? You usually spend about ₹X" (per category, optional, one tap to accept the suggestion). Balance is offered once when the user taps "how long will my money last". Each category can have a limit on its own; the full budget (pots, buffer, savings) appears only when the user turns it on in Settings.
+- B-7: **Three levels the user can sit at:** 1 Track (spends by category), 2 Limits (some categories have limits, gauges drain for those only), 3 Full plan (income, budget, savings, goals, cascade as in the blueprint). Moving up never loses history.
+- B-8: Engine: `S.mode` = track | limits | plan; `S.bal` and `S.income` may be null; cascade runs only for categories with `amt`; a category with no `amt` records spend but never overspends.
+
 1. Budget gauge — DONE
 2. Pay / friction: amount crumbling away — DONE
 3. Income split (spending vs savings) — DONE (V3-1…V3-11)
