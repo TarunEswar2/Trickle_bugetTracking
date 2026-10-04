@@ -319,6 +319,9 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 
 - B-21 (Tarun): **Income can become the plan.** After the saving/spending slider (B-19), if no plan exists Income offers "Next": "How long should it last?" (a month, 2 months or 3 months), which turns the spending part into a weekly amount. "Make my plan" then continues to monthly bills and how much for each category, and that split becomes the plan. "Just add the income" skips the plan. Once a plan exists, adding income only splits saving and spending. The plan can still be made from Home without any income (B-18).
 
+- B-22 (Tarun): **An income covers a date range.** "How long should it last?" is now "Until when?": quick picks (1 week to 2 years) or any day on a calendar from today up to two years out. The screen shows the weekly amount for that range (a range shorter than a week counts as one week).
+- B-23 (Tarun): **Several incomes, one weekly plan.** Each income keeps its own saving/spending split and date range. The weekly plan is the sum of the spending parts of every income that is still running, divided over its own weeks. Adding an income to an existing plan raises the weekly amount and the category amounts scale with it. When an income's range ends, the plan drops by that income's share. Money left over is moved to savings. Open (delegated): whether the leftover moves on its own at week-end or after one tap, as it does now.
+
 ## Visualisation queue (one at a time)
 
 1. Budget gauge — DONE

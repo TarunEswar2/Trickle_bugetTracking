@@ -3,8 +3,8 @@ function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,
 function ev(name,fn){return {name,fn}}
 const EVENTS=()=>{const c0=S.cats[0],big=S.cats.find(c=>c.name==='Outings')||S.cats[S.cats.length-1];const upi=S.p.mode==='upi';const g0=S.goals.find(g=>g.state==='active');const m0=S.memoryPick;return [
  {h:'Time',items:[
-  ['+1 day',()=>{advanceDays(S,1);say('One day later.');maybeWeek();maybeOfferPlan()}],
-  ['+3 days',()=>{advanceDays(S,3);say('Three days later.');maybeWeek();maybeOfferPlan()}],
+  ['+1 day',()=>{advanceDays(S,1);say('One day later.');maybeWeek();planTick();maybeOfferPlan()}],
+  ['+3 days',()=>{advanceDays(S,3);say('Three days later.');maybeWeek();planTick();maybeOfferPlan()}],
   ['Sunday 8 pm: week-end pop-up',()=>{const sun=new Date(startOfWeek(S.now).getTime()+6*DAY+20*36e5);if(S.now<sun)S.now=sun;openWeekPop();UI.flow=null;UI.sheet=null}],
   ['New week starts (Monday)',()=>{const n=nextMonday(S.now);const days=Math.round((n-S.now)/DAY);advanceDays(S,Math.max(1,days));say('A new week began.');maybeWeek()}]]},
  {h:'Payments seen on your link',items:[
