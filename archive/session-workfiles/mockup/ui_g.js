@@ -92,7 +92,7 @@ POPUPS.weekreview=P=>{const w0=P.week,w1=w0+7*DAY;const tx=S.txns.filter(t=>t.t>
  <div class="sm" style="margin-top:2px">The dashed line is an even week. The solid line is what you spent.</div></div><div class="mfoot"><button class="btn" data-a="wrdone">Done</button></div>`};
 H.wrdone=()=>{UI.popup=null;setTimeout(checkCele,50)};
 /* ---- onboarding look from the Figma file: blurred colour at the bottom, three-cell logo, step dots, keypad within thumb reach ---- */
-const OBSTEP={pin1:1,pin2:1,link:2,bank:2,verify:2,perm:3,cats:4};
+const OBSTEP={pin1:1,pin2:1,link:2,bank:2,verify:2,cats:3,perm:4};
 const dotsHtml=n=>`<div class="sdots">${[1,2,3,4].map(i=>`<i class="${i===n?'on':''}"></i>`).join('')}</div>`;
 const CELLW='linear-gradient(145deg,#fff 14%,#dedede 50%,#ababab 86%)',CELLO='linear-gradient(145deg,#ffae6c 14%,#f08a3c 50%,#ca6805 86%)',CELLG='linear-gradient(145deg,#6cff87 14%,#3cf05d 50%,#05ca29 86%)';
 const _onbDeco=FLOWS.onb;
@@ -113,8 +113,8 @@ function ubScreen(d,s){const {a,pct,sav,sp}=ubSplit(d);
   <div class="row wrap" style="gap:8px;margin:14px 0 10px">${PRESETS.map((p,i)=>`<button class="chip ${end===presetEnd(p)?'on':''}" data-a="incpre|${i}">${p[0]}</button>`).join('')}</div>
   <div style="margin:6px 0 14px;text-align:center"><div class="sub">Until <b style="color:var(--ink)">Sunday ${fmtDate(end)}</b> · ${days} days</div><div style="display:flex;justify-content:center;margin-top:8px">${amtDots(money(wk))}</div><div class="sub">a week · about ${money(Math.round(wk*weeksPer/10)*10)} a month</div>${left<7?`<div class="card" style="margin-top:12px;text-align:left"><b>This week only ${left} day${left>1?'s':''} are left.</b><div class="sm" style="margin-top:4px">So this week gets ${money(share)}. Full weeks start next Monday.</div></div>`:''}</div>${calHtml(d,t0,end)}</div>`+obFoot(obBtn('Next','ubdone')+obBtn('Not now','ubskip','q'))}
 HI.ubpct=(a,el)=>{const d=UI.flow.d;d.pct=+el.value;const {a:t,pct,sav,sp}=ubSplit(d);$('#ub-pct').textContent=pct+'%';$('#ub-sav').textContent=money(sav);$('#ub-sp').textContent=money(sp);$('#ub-grid').innerHTML=multiGrid([{amt:Math.max(0,sav),color:SAVE},{amt:Math.max(1,sp),color:SPEND}],Math.max(1,t),{w:240});return false};
-H.ubskip=()=>{const d=obD();d.uinc=null;d.s='perm'};
-H.ubdone=()=>{const d=obD();const {a,sav,sp}=ubSplit(d);const end=snapEnd(d.end);d.uinc={a,sav,sp,end};d.limits=true;d.noBal=true;d.method='none';d.fromInc=true;d.qW=Math.max(5,r5b(sp/daysIn(day0(),end)*7));d.s='perm'};
+H.ubskip=()=>{const d=obD();d.uinc=null;d.s='cats'};
+H.ubdone=()=>{const d=obD();const {a,sav,sp}=ubSplit(d);const end=snapEnd(d.end);d.uinc={a,sav,sp,end};d.limits=true;d.noBal=true;d.method='none';d.fromInc=true;d.qW=Math.max(5,r5b(sp/daysIn(day0(),end)*7));d.s='cats'};
 /* ---- money that arrives waits in Income until it is assigned ---- */
 const waitingHtml=()=>S.credits.length?`<div class="cap" style="margin:0 0 8px">Waiting for you</div><div class="col" style="gap:8px;margin-bottom:18px">${S.credits.map(c=>`<button class="card" style="text-align:left;font:inherit;cursor:pointer;color:var(--ink);border-color:#3DBB94" data-a="assign|${c.id}"><div class="row sp"><b style="font-size:17px">${money(c.amt)}</b><span class="sm">from ${esc(c.from)}</span></div><div class="sm" style="margin-top:4px">Came in on your UPI. Tell Trickle what it is.</div></button>`).join('')}</div>`:'';
 const _inc3=SCREENS.income;

@@ -360,6 +360,7 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 - B-48 (Tarun): **Home always shows what a box means and how much is left.** With a plan: big "Left this week" with "of ₹W" and "1 box ≈ ₹N" beside it. With no plan: "Spent this week" in big type and the box chip says what it counts.
 - B-49 (Tarun): **"Make your plan" is the same as adding income.** On Home it is the main button until a plan exists. It opens the income flow (amount, how much to save, until when) and the weekly plan comes from that. The older separate plan questionnaire is no longer reached from Home or pop-ups.
 - B-50 (Tarun): **Chosen categories in onboarding show a ×, unchosen show a +,** so selected and not selected are obvious.
+- B-51 (Tarun): **Bill reminders and fingerprint ("Two quick things") come last in onboarding,** after the budget questions, so nothing interrupts setting up categories and a plan. Order: PIN, how to see spends, categories, plan questions, then those two, then All set.
 
 ## Visualisation queue (one at a time)
 
