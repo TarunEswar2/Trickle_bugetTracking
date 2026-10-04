@@ -2,7 +2,7 @@
 const wkTot=w=>Math.round(weekSpentAll(S,w,1));
 const wkCat=(c,w)=>Math.round(weekSpentBy(S,c.id,w));
 function topCat(w){return S.cats.map(c=>[c,wkCat(c,w)]).sort((a,b)=>b[1]-a[1])[0]}
-function openWeekPop(){if(S.track){openAsk('recap');return}if(S.planSet){if(!S.pending.length){const un=unspentNow(S);weekEnd(S,{to:'savings'});S.now=nextMonday(S.now);if(un>0)openAsk('weekmoved',{moved:un});return}autoWeek();return}UI.popup={id:'weekend',step:(S.p.mode==='manual'&&!S.noBal)?'bal':1,sel:S.goals.filter(g=>g.state==='active').map(g=>g.id)}}
+function openWeekPop(){if(S.track){openAsk('recap');return}if(S.planSet){if(!S.pending.length){const un=unspentNow(S),snap=S.cats.map(c=>[c.id,c.name,c.amt]),bufAmt=S.bufAmt,wk=wk0(),from=S.weekFrom||null;weekEnd(S,{to:'savings'});S.now=nextMonday(S.now);openWeekReview({week:wk,snap,bufAmt,from,moved:un});return}autoWeek();return}UI.popup={id:'weekend',step:(S.p.mode==='manual'&&!S.noBal)?'bal':1,sel:S.goals.filter(g=>g.state==='active').map(g=>g.id)}}
 H.openweek=()=>{openWeekPop();return true};
 /* engine: no cascade while tracking only */
 const _doPay=doPay,_detect=detectPayment,_sort=sortTxn,_refile=refileTxn;
@@ -62,10 +62,10 @@ function maybeOfferPlan(){if(!S.track||S.planSet||UI.popup||UI.flow||UI.sheet)re
 /* ---- income: separate from the plan ---- */
 FLOWS.inc=F=>{const d=F.d;const a=amtOf(d.kp);const pct=d.pct===undefined?20:d.pct;const sav=Math.round(a*pct/100/10)*10,sp=a-sav;
  if(F.step===0)return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">Money in</div><div class="title" style="margin-top:4px">How much came in?</div><div style="margin:10px 0;display:flex;justify-content:center">${amtDots('₹'+(d.kp||'0'))}</div>${keypad('kp')}</div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn ${a>0?'':'d'}" data-a="${a>0?'incnext':'x'}">Next</button><button class="btn q" data-a="pclose">Not now</button></div></div>`;
- if(F.step===2){const t0=wk0(),end=snapEnd(d.end||t0+27*DAY),wks=weeksIn(t0,end),wk=Math.max(5,r5b(sp/wks));
-  return `<div class="mbody"><button class="back" data-a="incback">‹ Back</button><div class="cap">${money(sp)} to spend</div><div class="title" style="margin-top:4px">Until when?</div><p class="sub">Plans run in whole weeks, Monday to Sunday.</p>
+ if(F.step===2){const t0=day0(),end=snapEnd(d.end||t0+27*DAY),days=daysIn(t0,end),wk=Math.max(5,r5b(sp/days*7)),left=daysIn(t0,wk0()+6*DAY),share=r5b(sp/days*left);
+  return `<div class="mbody"><button class="back" data-a="incback">‹ Back</button><div class="cap">${money(sp)} to spend</div><div class="title" style="margin-top:4px">Until when?</div><p class="sub">Plans end on a Sunday. The money is split by day.</p>
   <div class="row wrap" style="gap:8px;margin:14px 0 10px">${PRESETS.map((p,i)=>`<button class="chip ${end===presetEnd(p)?'on':''}" data-a="incpre|${i}">${p[0]}</button>`).join('')}</div>
-  <div style="margin:6px 0 14px;text-align:center"><div class="sub">Until <b style="color:var(--ink)">Sunday ${fmtDate(end)}</b> · ${wks} week${wks>1?'s':''}</div><div style="display:flex;justify-content:center;margin-top:8px">${amtDots(money(wk))}</div><div class="sub">a week · about ${money(Math.round(wk*weeksPer/10)*10)} a month</div></div>${calHtml(d,t0,end)}</div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn" data-a="${S.planSet?'incaddplan':'incplan'}">${S.planSet?'Add to my plan':'Make my plan'}</button><button class="btn q" data-a="incdone">Just add the income</button></div></div>`}
+  <div style="margin:6px 0 14px;text-align:center"><div class="sub">Until <b style="color:var(--ink)">Sunday ${fmtDate(end)}</b> · ${days} days</div><div style="display:flex;justify-content:center;margin-top:8px">${amtDots(money(wk))}</div><div class="sub">a week · about ${money(Math.round(wk*weeksPer/10)*10)} a month</div>${left<7?`<div class="card" style="margin-top:12px;text-align:left"><b>This week only ${left} day${left>1?'s':''} are left.</b><div class="sm" style="margin-top:4px">So this week gets ${money(share)}. Full weeks start next Monday.</div></div>`:''}</div>${calHtml(d,t0,end)}</div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn" data-a="${S.planSet?'incaddplan':'incplan'}">${S.planSet?'Add to my plan':'Make my plan'}</button><button class="btn q" data-a="incdone">Just add the income</button></div></div>`}
  return `<div class="mbody"><button class="back" data-a="incback">‹ Back</button><div class="cap">${money(a)} came in</div><div class="title" style="margin-top:4px">How much to save?</div><p class="sub">The rest is for spending. Change it any time.</p><div id="inc-grid" style="margin:16px auto;width:260px">${multiGrid([{amt:Math.max(0,sav),color:SAVE},{amt:Math.max(1,sp),color:SPEND}],Math.max(1,a),{w:260})}</div><div class="row sp"><span><span class="cap">Saving · <span id="inc-pct">${pct}%</span></span><div id="inc-sav" class="h2" style="color:${SAVE}">${money(sav)}</div></span><span style="text-align:right"><span class="cap">Spending</span><div id="inc-sp" class="h2" style="color:${SPEND}">${money(sp)}</div></span></div><input type="range" min="0" max="100" step="5" value="${pct}" data-i="incpct" style="margin:18px 0 6px"><div class="row sp sm"><span>Nothing</span><span>All of it</span></div></div><div class="mfoot"><div class="col" style="gap:10px">${sp>0?`<button class="btn" data-a="incnext2">Next</button><button class="btn q" data-a="incdone">Just add ${money(a)}</button>`:`<button class="btn" id="inc-btn" data-a="incdone">Add ${money(a)}</button>`}</div></div>`};
 
 /* ---- dates: an income covers a date range ---- */
@@ -74,7 +74,8 @@ const presetEnd=p=>{if(p[1]==='w')return wk0()+6*DAY;const t=new Date(day0());t.
 const day0=()=>{const t=new Date(S.now);t.setHours(0,0,0,0);return t.getTime()};
 const wk0=()=>startOfWeek(S.now).getTime();
 const snapEnd=ts=>startOfWeek(new Date(ts)).getTime()+6*DAY;
-const weeksIn=(t0,end)=>Math.max(1,Math.round((end-t0+DAY)/(7*DAY)));
+const daysIn=(a,b)=>Math.max(1,Math.round((b-a)/DAY)+1);
+const perDay=i=>i.sp/daysIn(i.start,i.end);
 const fmtDate=ts=>new Date(ts).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
 function calHtml(d,t0,end){const today0=day0();const off=d.cm||0;const m0=new Date(new Date(today0).getFullYear(),new Date(today0).getMonth()+off,1);const first=(m0.getDay()+6)%7,dim=new Date(m0.getFullYear(),m0.getMonth()+1,0).getDate(),max=t0+735*DAY;
  let cells='';for(let i=0;i<first;i++)cells+='<i></i>';
@@ -88,14 +89,19 @@ H.incpre=a=>{const d=UI.flow.d;d.end=presetEnd(PRESETS[+a[0]]);const e=new Date(
 H.incnext=()=>{UI.flow.step=1;UI.flow.d.pct=20};
 H.incback=()=>{UI.flow.step=Math.max(0,UI.flow.step-1)};H.incnext2=()=>{const d=UI.flow.d;UI.flow.step=2;if(!d.end){d.end=presetEnd(PRESETS[1]);const e=new Date(d.end),n=new Date(day0());d.cm=(e.getFullYear()-n.getFullYear())*12+e.getMonth()-n.getMonth()}};H.inclast=a=>{UI.flow.d.lasts=parseFloat(a[0])};
 HI.incpct=(a,el)=>{const d=UI.flow.d;d.pct=+el.value;const t=amtOf(d.kp),sav=Math.round(t*d.pct/100/10)*10,sp=t-sav;$('#inc-pct').textContent=d.pct+'%';$('#inc-sav').textContent=money(sav);$('#inc-sp').textContent=money(sp);$('#inc-grid').innerHTML=multiGrid([{amt:Math.max(0,sav),color:SAVE},{amt:Math.max(1,sp),color:SPEND}],Math.max(1,t),{w:260});return false};
-function addIncome(d,withEnd){const a=amtOf(d.kp),pct=d.pct===undefined?20:d.pct;const sav=Math.round(a*pct/100/10)*10;const sp=a-sav;const t0=wk0();const end=withEnd&&d.end?snapEnd(d.end):null;
+function addIncome(d,withEnd){const a=amtOf(d.kp),pct=d.pct===undefined?20:d.pct;const sav=Math.round(a*pct/100/10)*10;const sp=a-sav;const t0=day0();const end=withEnd&&d.end?snapEnd(d.end):null;
  (S.incomes=S.incomes||[]).push({id:'in'+(S.idc++),amt:a,sav,sp,start:t0,end});
  S.moneyIn.unshift({id:'m'+(S.idc++),t:S.now.getTime(),label:'Income'+(end?' until '+fmtDate(end):''),amt:a,note:money(sp)+' to spend, '+money(sav)+' to save'});
  S.free+=sav;S.p.income=(S.incomeSet?S.p.income:0)+a;S.p.savingsShare=(S.incomeSet?S.p.savingsShare:0)+sav;S.incomeSet=true;S.noInc=false;logE(S,`Income ₹${a}: ₹${sav} saved`);return {a,sav,sp,end}}
 /* the weekly plan follows the incomes that are still running */
-function planRate(){const t=S.now.getTime();return (S.incomes||[]).filter(i=>i.end&&i.end+DAY>t).reduce((x,i)=>x+i.sp/weeksIn(i.start,i.end),0)}
-function recomputePlan(){const W=r5b(planRate());if(!S.planSet||W<=0||W===S.W)return false;const old=S.cats.reduce((x,c)=>x+c.amt,0)||1,flex=Math.max(10,W-S.fixedW);const sc=(flex*0.85)/old;S.cats.forEach(c=>{c.amt=Math.max(5,r5b(c.amt*sc));c.left=Math.max(0,c.amt-weekSpentBy(S,c.id,0))});const sum=S.cats.reduce((x,c)=>x+c.amt,0);S.W=W;S.flexW=Math.max(sum,flex);S.bufAmt=S.flexW-sum;S.bufLeft=S.bufAmt;S.planSig=W;logE(S,'Weekly plan is now ₹'+W);return true}
+function planRate(){const t=S.now.getTime();return (S.incomes||[]).filter(i=>i.end&&i.end+DAY>t).reduce((x,i)=>x+perDay(i)*7,0)}
+/* money is split by day: the current week only gets the days that are left of it */
+function weekScale(){const t=S.now.getTime(),w0=wk0(),w1=w0+6*DAY;let num=0,den=0;(S.incomes||[]).filter(i=>i.end&&i.end+DAY>t).forEach(i=>{const a=Math.max(i.start,w0),b=Math.min(i.end,w1);den+=perDay(i)*7;if(b>=a)num+=perDay(i)*daysIn(a,b)});return den>0?Math.min(1,num/den):1}
+function applyWeekScale(){if(!S.planSet)return;S.cats.forEach(c=>{if(c.full==null)c.full=c.amt});if(S.bufFull==null)S.bufFull=S.bufAmt;const sc=weekScale();S.weekScale=sc;
+ S.cats.forEach(c=>{c.amt=sc<1?(c.full>0?Math.max(5,r5b(c.full*sc)):0):c.full;c.left=Math.max(0,c.amt-weekSpentBy(S,c.id,0))});S.bufAmt=sc<1?r5b(S.bufFull*sc):S.bufFull;S.bufLeft=S.bufAmt;
+ const t=S.now.getTime(),act=(S.incomes||[]).filter(i=>i.end&&i.end+DAY>t);S.weekFrom=act.length?Math.max(wk0(),Math.min(...act.map(i=>i.start))):wk0()}
+function recomputePlan(force){const W=r5b(planRate());if(!S.planSet||W<=0)return false;if(W===S.W&&!force)return false;S.cats.forEach(c=>{if(c.full==null)c.full=c.amt});const old=S.cats.reduce((x,c)=>x+c.full,0)||1,flex=Math.max(10,W-S.fixedW);const sc=(flex*0.85)/old;S.cats.forEach(c=>{c.full=Math.max(5,r5b(c.full*sc))});const sum=S.cats.reduce((x,c)=>x+c.full,0);S.W=W;S.flexW=Math.max(sum,flex);S.bufFull=S.flexW-sum;applyWeekScale();S.planSig=W;logE(S,'Weekly plan is now ₹'+W);return true}
 function planTick(){if(S.planSet&&S.incomes&&recomputePlan())say('Your weekly plan changed to '+money(S.W)+'.')}
 H.incdone=()=>{const r=addIncome(UI.flow.d,false);closeFlow();say('Added. '+money(r.sav)+' saved.');return false};
-H.incaddplan=()=>{const r=addIncome(UI.flow.d,true);recomputePlan();closeFlow();say('Added. Weekly plan is '+money(S.W)+'.');return false};
-H.incplan=()=>{const d=UI.flow.d;const r=addIncome(d,true);const wk=Math.max(5,r5b(r.sp/weeksIn(wk0(),r.end)));UI.flow=null;startUpgrade({s:'q2',qW:wk,fromInc:true});return false};
+H.incaddplan=()=>{const r=addIncome(UI.flow.d,true);recomputePlan(true);closeFlow();say('Added. Weekly plan is '+money(S.W)+'.');return false};
+H.incplan=()=>{const d=UI.flow.d;const r=addIncome(d,true);const wk=Math.max(5,r5b(r.sp/daysIn(day0(),r.end)*7));UI.flow=null;startUpgrade({s:'q2',qW:wk,fromInc:true});return false};

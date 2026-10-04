@@ -334,6 +334,12 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 - B-32 (delegated, supersedes the open part of B-23): **Left-over money moves to savings by itself at week end**, with a one-line recap ("₹1,150 moved to savings"). The three-step week-end pop-up is no longer shown to people with a plan; moving it back is done in Move money. Needs a student test (see memo).
 - B-33 (delegated): **A subscription never raids other categories.** If its set-aside is short when it falls due, the order is its set-aside, then the buffer, then savings.
 
+- B-34 (Tarun): **An income added mid-week is split day by day and this week only gets its own days.** The range runs from today to the chosen Sunday; the weekly amount is the spending part divided by the days times 7; the current week gets only the days that are left in it (for example 3 of 7 days, so 43% of a full week). Category amounts and the buffer are scaled for that first week and go back to full from the next Monday. This replaces the "first week is not pro-rated" gap and B-24's "the current week counts as week 1".
+- B-35 (Tarun): **The look follows his Figma file (`TrickleMockup`).** Blurred blue, violet and teal colour at the bottom of every onboarding screen (top and bottom on the title), a title with three gradient cells (white, orange, green) over "Trickle" in mint, "STEP n OF 4" captions and four step dots (current dot mint, the rest orange), and his copy on the link cards. "Choose your bank" now lists "Enter UPI ID" and the detected UPI IDs.
+- B-36 (Tarun): **Home shows pace.** Green gradient (cells and a green glow at the bottom) when the week is on pace; amber gradient when spending is ahead of an even burn, with the sentence "A bit ahead of pace." Pace compares the share of the week's money spent with the share of the week gone (from the first day the plan covers), with 10 points of slack.
+- B-37 (Tarun): **End of week shows the ideal next to the actual.** A review screen gives, per category, a bar with the ideal marked and the spend filled green up to it and amber beyond it, plus a line chart of cumulative spending against an even week (the even line starts on the first covered day). It also says how much was left over and moved to savings.
+- B-38 (Tarun): **The PIN keypad sits at the bottom of the screen**, within thumb reach, on setup, confirm and lock. Amount keypads elsewhere are unchanged for now.
+
 ## Visualisation queue (one at a time)
 
 1. Budget gauge — DONE

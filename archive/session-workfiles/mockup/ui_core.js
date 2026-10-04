@@ -11,6 +11,10 @@ function fromOk([L,a,b]){const l=Math.pow(L+.3963377774*a+.2158037573*b,3),m=Mat
 function shiftL(h,dl,dc=0){const [L,a,b]=toOk(h);const C=Math.hypot(a,b),H=Math.atan2(b,a);const C2=Math.max(0,C+dc);return fromOk([Math.min(1,Math.max(0,L+dl)),C2*Math.cos(H),C2*Math.sin(H)])}
 const _dc={};const depth=h=>_dc[h]||(_dc[h]=[shiftL(h,.10,-.015),shiftL(h,-.11,0)]);
 const boxBg=h=>{const [a,b]=depth(h);return `linear-gradient(145deg,${a},${h} 50%,${b})`};
+const BLOB={blue:{b:['#2b2fa0','#3b6fb8','#2f7f78'],t:['#3f74b8','#2f7f78','#2b2fa0']},green:{b:['#0b5d24','#1f9d4a','#2fbf6a'],t:['#0b5d24','#1f9d4a','#2fbf6a']},amber:{b:['#6e3205','#c4690f','#f08a3c'],t:['#6e3205','#c4690f','#f08a3c']}};
+function blobs(kind,pos,op){const c=(BLOB[kind]||BLOB.blue)[pos==='top'?'t':'b'];const o=op==null?.9:op;const y=pos==='top';
+ return `<div class="blobs" style="opacity:${o}"><i style="width:550px;height:460px;left:-270px;${y?'top':'bottom'}:-120px;background:${c[0]}"></i><i style="width:520px;height:400px;left:-30px;${y?'top':'bottom'}:-180px;background:${c[1]}"></i><i style="width:380px;height:380px;right:-190px;${y?'top':'bottom'}:-60px;background:${c[2]}"></i></div>`}
+function setGlow(kind){const g=document.getElementById('glow');if(!g)return;const k=kind||'';if(g.dataset.k!==k){g.dataset.k=k;g.innerHTML=k?blobs(k,'bottom',.55):''}}
 const groundCss="radial-gradient(60% 40% at 8% 0%,rgba(110,60,200,.22),transparent 70%),radial-gradient(55% 40% at 100% 14%,rgba(20,150,170,.15),transparent 70%),linear-gradient(180deg,#0A0D14,#05070B)";
 const meshCss=s=>{const [tl,tr,r,br,base]=s;return `radial-gradient(60% 60% at 18% 24%,rgba(255,255,255,.16),transparent 62%),linear-gradient(180deg,transparent 46%,${base} 100%),radial-gradient(55% 55% at 100% 56%,${r},transparent 72%),radial-gradient(60% 60% at 100% 0%,${tr},transparent 72%),radial-gradient(60% 60% at 0% 0%,${tl},transparent 72%),radial-gradient(60% 60% at 88% 100%,${br},transparent 72%),linear-gradient(90deg,${tl},${tr})`};
 const MESH_GOAL=['#F6FC5A','#3CEFA3','#42F5E1','#00A55F','#0E1C17'],MESH_PAYDAY=['#FCDC45','#F6FC5A','#3CEFA3','#00A55F','#10201A'],MESH_DUSK=['#B48CFF','#5AA9FF','#6C6FD1','#3E4B8A','#101322'];
@@ -51,6 +55,7 @@ function fitPhone(){const s=Math.min(1,(innerHeight-24)/844);const f=$('#frame')
 function render(){
  if(!S)return;$('#clk').textContent=S.now.toLocaleDateString('en-IN',{weekday:'short'})+' '+fmtTime(S.now);
  const c=cur();const fn=SCREENS[c.id];$('#view').innerHTML=fn?fn(c.p||{}):'';
+ setGlow(UI.tab==='home'&&!UI.stack.length&&typeof homeGlow==='function'?homeGlow():'');
  $('#view').classList.toggle('snap',!!(c.id==='spending'||c.id==='insights'));
  $('#tabbar').style.display=(UI.flow||UI.popup)?'none':'flex';
  const tabs=[['home','Home'],['income','Income'],['spending','Spending'],['savings','Savings'],['insights','Insights']];

@@ -1,6 +1,6 @@
 /* ===== HOME ===== */
 const flexW=()=>S.flexW,flexL=()=>flexLeft(S);
-function homeSentence(){const r=flexL()/flexW();if(S.touched||(flexL()<=0))return ['Gone over a little.','Savings covered the rest this week.'];if(r>.6)return ['A calm week so far.','Plenty left for the days ahead.'];if(r>.3)return ['Going steady.','About half the week\'s money is left.'];return ['Running a bit low.','Take the rest of the week gently.']}
+function homeSentence(){const p=typeof paceInfo==='function'&&paceInfo();if(p){if(S.touched||p.left<=0)return ['Gone over a little.','Savings covered the rest this week.'];if(p.over)return ['A bit ahead of pace.','At this pace the week runs out early.'];return ['On pace.',p.left>.6?'Plenty left for the days ahead.':'Spending about as planned.']}const r=flexL()/flexW();if(S.touched||(flexL()<=0))return ['Gone over a little.','Savings covered the rest this week.'];if(r>.6)return ['A calm week so far.','Plenty left for the days ahead.'];if(r>.3)return ['Going steady.','About half the week\'s money is left.'];return ['Running a bit low.','Take the rest of the week gently.']}
 function billSoon(){const out=[];S.bills.forEach(b=>{const d=Math.ceil((b.nextDue-S.now)/DAY);if(b.dueNow)out.push(`${b.name} is due today.`);else if(d>=0&&d<=2)out.push(`${b.name} is due ${d===0?'today':d===1?'tomorrow':'in 2 days'}.`)});return out}
 SCREENS.home=()=>{const [a,b]=homeSentence();const r=flexL()/flexW();const empty=flexL()<=0;const lines=[];
  if(S.flags.linkLost)lines.push(`<button class="banner" style="width:100%;text-align:left;color:var(--ink);font:inherit" data-a="settings|acct"><b style="color:var(--amber)">Your link needs a refresh.</b> <span class="sub">Tap to fix or switch to manual.</span></button>`);
@@ -11,7 +11,7 @@ SCREENS.home=()=>{const [a,b]=homeSentence();const r=flexL()/flexW();const empty
  if(S.unsorted.length)lines.push(`<button class="li" data-a="push|sort"><span class="d" style="border:1.5px dashed ${AMBER};background:none"></span><span class="n">${S.unsorted.length} payment${S.unsorted.length>1?'s need':' needs'} a category</span><span class="t">›</span></button>`);
  return `<div class="row sp" style="margin-top:2px"><span class="cap">${fmtDay(S.now)}</span><button class="chip" data-a="settings">⚙ Settings</button></div>
  <div class="title" style="margin-top:14px">${a}</div><div class="sub" style="margin-top:6px">${b}</div>
- <div style="margin:22px 8px 14px">${gridHtml(empty?0:r*100,SPEND,0,SPEND,{w:300})}${empty?`<div style="height:3px;background:${AMBER};margin:8px 4px 0;border-radius:2px;box-shadow:0 0 14px ${AMBER}"></div>`:''}</div>
+ <div style="margin:22px 8px 14px">${gridHtml(empty?0:r*100,(typeof paceHex==='function'&&S.planSet)?paceHex():SPEND,0,SPEND,{w:300})}${empty?`<div style="height:3px;background:${AMBER};margin:8px 4px 0;border-radius:2px;box-shadow:0 0 14px ${AMBER}"></div>`:''}</div>
  <div class="col" style="gap:8px">${lines.join('')}</div>
  <div style="position:sticky;bottom:0;margin-top:24px;padding-top:10px;background:linear-gradient(180deg,transparent,rgba(5,7,11,.9) 40%)"><button class="btn" data-a="pay">Pay</button></div>`};
 H.goto=a=>{go(a[0]);return false};H.push=a=>{push(a[0],a[1]?JSON.parse(a[1]):{});return false};

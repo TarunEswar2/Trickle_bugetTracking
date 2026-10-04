@@ -39,5 +39,5 @@ Keep **weekly as the engine** (what the gauge, reset and week-end work on). Do *
 
 ## Still open (not fixed)
 - Income that starts in the future (allowance on the 1st). Rule for now: add an income when the money arrives.
-- The first week is not pro-rated when an income is added late in the week.
+- (Fixed, B-34) The first week used to be a full week even when an income arrived on a Friday. It is now split by day.
 - Leftover rolling into next week is no longer offered; it is reachable through Move money. Needs a test with students.
