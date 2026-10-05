@@ -187,3 +187,11 @@ All Night-mockup screens are in Figma as editable layers, grouped by flow (86 fr
 ## Latest (bare-minimum mode)
 Tarun's feedback: budget and balance must be optional; category tracking is the minimum; every question short; every step skippable (even the PIN). Logged as B-1…B-15 in `docs/claude/v14_decisions.md`. Built in the Night mockup (`archive/session-workfiles/mockup/`: `ui_d.js` onboarding rewrite, `ui_e.js` skippable pop-ups, `ui_f.js` track mode). Next: Tarun reviews; then update the blueprint (`archive/session-workfiles/blueprint/`) and re-export the changed screens to Figma.
 Figma (https://www.figma.com/design/b9MRkClYToyPjpMcDaPbeT) was re-exported for B-9…B-15: new 01 Onboarding, 14 Pop-ups, 15 Track mode; other sections unchanged. Blueprint not yet updated.
+
+## Latest (v15, 5 Oct 2026)
+Reviews kept saying the app is hard to follow with too much on every screen. I audited all 116 v14 screens (avg 56 words, 12 taps, 21 taller than a phone,
+Spending 7 phone-heights) and traced it to the information architecture: tabs mirrored the money model, every tab stacked visualisations, ~17 concepts were
+exposed, onboarding ran up to 12 screens, and every review added something and nothing was ever removed.
+v15 (fork in `archive/session-workfiles/mockup15/`, v14 untouched): three tabs for three questions, a density budget, onboarding of two questions,
+plan = add income, Pay in three screens. Core 46 states average 21 words and 6 taps. Read `docs/claude/v15_audit.md` and `v15_spec.md`.
+Next: Tarun reviews v15 and the four departures listed in the spec; student test of v15 vs v14 (nothing is tested yet); then Figma export of v15 if accepted.

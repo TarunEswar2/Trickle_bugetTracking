@@ -40,3 +40,5 @@ Design systems: Night (`archive/session-workfiles/designsystem/`) and Instrument
 Instrument mockup: https://claude.ai/artifact/GMby4zaz4J8ZanziKiLBKM (`archive/session-workfiles/mockup2/`, M2-1). Night mockup stays as the other option.
 
 Decision: Tarun chose Night as the base (M2-3). The Night mockup at https://claude.ai/artifact/F5iDLzVpmpKw8dSwUWkSU9 (new link; the old RuuvM1ty… link still shows the pre-flows version) now has the full flows; Instrument is kept as an alternate.
+
+v15 (5 Oct 2026): audit in `docs/claude/v15_audit.md`, spec in `docs/claude/v15_spec.md`, build in `archive/session-workfiles/mockup15/` (v14 stays in `mockup/`). Reviews said screens carry too much; the cause was the information architecture. v15 = 3 tabs for 3 questions, a density budget (≤25 words, one hero, ≤4 taps per screen) checked by `archive/session-workfiles/audit/density.js`. Delegated (V15-1…V15-12), open to override. **Before adding anything to a screen, remove something or run density.js.**

@@ -379,3 +379,18 @@ Second visual direction from Tarun's hardware-instrument moodboard. Published be
 
 ## Parked / superseded
 - Coin test (V4 vs V1) and name-rows vs families category ideas (claude/v14_stage2b_coins_categories.md) — superseded.
+
+## v15 (5 Oct 2026): information-architecture reset, all delegated and open to override
+Triggered by repeated reviews saying screens are hard to follow with too much information. Audit: `v15_audit.md`. Spec and measured result: `v15_spec.md`. Build: `archive/session-workfiles/mockup15/`.
+- V15-1 (delegated): **Density budget.** At most 25 words, one hero, 3 ₹ values, 4 taps per screen, never taller than a phone (History aside). Checked by `archive/session-workfiles/audit/density.js`. Anything added must remove something.
+- V15-2 (delegated): **Three tabs for three questions.** Home (am I okay), Spending (where did it go), Money (what comes in, what is saved). Replaces the 5 tabs; open to override.
+- V15-3 (delegated): **Insights becomes Patterns** inside Spending: three findings, one per screen (when you spend, what repeats, this week vs last).
+- V15-4 (delegated): **Spending is three one-screen views** (Categories, History, Patterns), not one long scroll. Rings dropped; each category row has a thin gauge.
+- V15-5 (delegated): **Home holds one thing.** Sentence, the grid, one caption (`₹607 left · box ≈ ₹11`), Pay, and at most one ranked "next thing" row.
+- V15-6 (delegated): **Onboarding is two questions** (how to see spends, what you spend on). PIN, plan, subscriptions, goals, balance split are asked when they matter.
+- V15-7 (delegated): **Making a plan is adding income** and ends there; the plan is built silently (equal split, rest is buffer).
+- V15-8 (delegated): **Pay is three screens** (how much, for what, confirm). Payee, budget/savings switch and "I already paid" leave the main path.
+- V15-9 (delegated): **Subscriptions are three screens** (which, how much and how often, when).
+- V15-10 (delegated): **Week review is two screens** (what happened; by category on request).
+- V15-11 (delegated): **Engine notes removed from screens** (mid-week split, weekly scale, replace-weekly-amount). The engine behaves the same; the explaining text is gone.
+- V15-12 (delegated): **Parked, not deleted:** one-off money, move money, the incoming-credit explainer, nested rings, hot-hour calendar, month navigation.
