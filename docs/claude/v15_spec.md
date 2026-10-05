@@ -108,3 +108,11 @@ plan-drops warning (Home row) · pay from savings · subscriptions list and add.
 
 ## Measured (55 core states)
 22 words and 8 taps on average (v14: 56 and 12), none taller than a phone (v14: 21). Over 25 words: lists, Insights grids (their cell labels count as words), the calendar, the pay confirm.
+
+
+## v15.2: first-time tips
+A small bottom card appears **once**, the first time something happens, and says what it means in one sentence. Always one button ("Got it"). Only one at a time; none while a flow or sheet is open.
+Events (detected as changes in the account): first spend, first payment that needs a category, first incoming credit, first plan, first income, first one-off, first subscription, first goal, first time ahead of pace (amber), first time over the week.
+First views: Home grid ("How to read it", with the dashed ghost boxes), Spending, Money, Insights, and the first category you open.
+The side panel has "Show every tip again" and "Turn tips on or off" so they can be reviewed without making a new account. Tips are off while measuring density.
+What to test: after the first week, can a new user say why a payment disappeared boxes, what amber means and what a one-off is, without ever opening Settings?

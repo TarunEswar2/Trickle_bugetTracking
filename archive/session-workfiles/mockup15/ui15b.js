@@ -37,10 +37,6 @@ SHEETS.gridhow=({tour})=>{const pl=planned();const box=pl?boxVal(flexW()):boxVal
  <div style="display:flex;justify-content:center">${pl?gridHtml(lvl-n,paceHex(),n,'#F5F7FA',{w:220}):gridHtml(0,SPEND,0,0,{w:220})}</div>
  <p class="sub" style="margin:14px 0 18px">${pl?`Each box is about ${money(box)}. Spend ${money(box*n)} and the dashed ${n} boxes go.`:`Each box is about ${money(box)}. Add a spend and a box fills.`}</p><button class="btn" data-a="closesheet">Got it</button>`};
 H.gridhow=()=>{openSheet('gridhow',{});return false};
-const _ar2=window.afterRender;
-window.afterRender=()=>{if(_ar2)_ar2();
- if(!S||UI.flow||UI.popup||UI.sheet||UI.stack.length||UI.tab!=='home'||S.seenGrid||S.p.key!=='O')return;
- if(planned()||S.txns.length>=1){S.seenGrid=true;openSheet('gridhow',{tour:1})}};
 /* at the moment of paying: say how many boxes go */
 const _payFlow2=FLOWS.pay;
 FLOWS.pay=F=>{let h=_payFlow2(F);if(F.step===1||F.step===undefined){const amt=amtOf(F.d.kp);h=h.replace(/1 box (=|≈) ₹(\d+)/,(m,e,v)=>`${Math.max(1,Math.min(100,Math.round(amt/(+v||1))))} boxes go · 1 box ≈ ₹${v}`)}return h};

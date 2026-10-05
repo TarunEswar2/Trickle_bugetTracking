@@ -2,7 +2,7 @@
 const {chromium}=require('/opt/node-tools/node_modules/playwright');const fs=require('fs');const path=require('path');
 const html=path.resolve(process.argv[2]),FR=require(path.resolve(process.argv[3])),out=process.argv[4];
 (async()=>{const b=await chromium.launch();const p=await (await b.newContext({viewport:{width:1280,height:1000}})).newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
-await p.goto('file://'+html);await p.waitForTimeout(2000);const rows=[];
+await p.goto('file://'+html);await p.waitForTimeout(2000);await p.evaluate(()=>{window.TIPS=false});const rows=[];
 for(const f of FR){try{await p.evaluate(f.setup);await p.waitForTimeout(250);}catch(e){errs.push(f.id+':'+e.message);continue}
  const r=await p.evaluate(()=>{const root=document.querySelector('#layer .modal')||document.querySelector('#view');const sc=document.querySelector('#layer .mbody')||root;
   const txt=root.innerText.replace(/\s+/g,' ').trim();const words=txt?txt.split(' ').length:0;const money=(txt.match(/₹/g)||[]).length;
