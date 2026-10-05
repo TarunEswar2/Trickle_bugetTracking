@@ -43,4 +43,4 @@ window.afterRender=()=>{if(_ar3)_ar3();if(!window.TIPS||!S||!UI)return;
   else if(UI.tab==='home'){if(planned()&&flexL()<=0)k='over';else if(planned()&&typeof paceInfo==='function'&&paceInfo()&&paceInfo().over)k='ahead';else if(!TS.grid&&(planned()||S.txns.length>=1)){TS.grid=1;openSheet('gridhow',{tour:1});return}}}
  if(k&&!TS[k]){TS[k]=1;openSheet('tip',{k})}};
 
-const _ru=resetUI;resetUI=function(){_ru();UI.hot.mode='rupees'};UI.hot.mode='rupees';
+const _ru=resetUI;resetUI=function(){_ru();UI.hot.mode='rupees'};

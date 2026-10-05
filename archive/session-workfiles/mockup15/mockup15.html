@@ -1460,7 +1460,7 @@ window.afterRender=()=>{if(_ar3)_ar3();if(!window.TIPS||!S||!UI)return;
   else if(UI.tab==='home'){if(planned()&&flexL()<=0)k='over';else if(planned()&&typeof paceInfo==='function'&&paceInfo()&&paceInfo().over)k='ahead';else if(!TS.grid&&(planned()||S.txns.length>=1)){TS.grid=1;openSheet('gridhow',{tour:1});return}}}
  if(k&&!TS[k]){TS[k]=1;openSheet('tip',{k})}};
 
-const _ru=resetUI;resetUI=function(){_ru();UI.hot.mode='rupees'};UI.hot.mode='rupees';
+const _ru=resetUI;resetUI=function(){_ru();UI.hot.mode='rupees'};
 
 /* ===== control panel ===== */
 function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,0).getTime(),label:'Allowance',amt:S.p.income,note:''}];if(S.p.six)seedSix();else if(S.p.W>0){S.planSet=true;S.cats.forEach(c=>c.full=c.amt);S.bufFull=S.bufAmt;S.firstDay=new Date(S.now.getTime()-S.p.weeks*7*DAY)}resetUI();window._celeLock=false;render();fitPhone()}
