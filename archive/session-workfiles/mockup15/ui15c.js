@@ -14,7 +14,7 @@ const TIPDEF={
  over:{cap:'Pace',t:'You went over.',b:'Savings covered the rest. It is a signal, not a failure.',c:ACC.a},
  spending:{cap:'Spending',t:'Where it went.',b:'Each bar is a category this week. Tap one to see its boxes.',c:ACC.a},
  money:{cap:'Money',t:'Money in, and what you keep.',b:'Income is split into spending and saving. Goals live under Savings.',c:ACC.b},
- insights:{cap:'Insights',t:'Patterns, not a list.',b:'See when you spend and what repeats. Tap a spot for details.',c:ACC.v},
+ insights:{cap:'Insights',t:'Patterns, not a list.',b:'See when your money goes and what repeats. Tap a spot for the amount.',c:ACC.v},
  cat:{cap:'A category',t:'One category, one gauge.',b:'Its 100 boxes are its weekly limit. Boxes go as you spend.',c:ACC.g}
 };
 SHEETS.tip=({k})=>{const d=TIPDEF[k];const b=typeof d.b==='function'?d.b():d.b;
@@ -42,3 +42,5 @@ window.afterRender=()=>{if(_ar3)_ar3();if(!window.TIPS||!S||!UI)return;
  else if(!top){if(UI.tab==='spending')k='spending';else if(UI.tab==='money')k='money';else if(UI.tab==='insights')k='insights';
   else if(UI.tab==='home'){if(planned()&&flexL()<=0)k='over';else if(planned()&&typeof paceInfo==='function'&&paceInfo()&&paceInfo().over)k='ahead';else if(!TS.grid&&(planned()||S.txns.length>=1)){TS.grid=1;openSheet('gridhow',{tour:1});return}}}
  if(k&&!TS[k]){TS[k]=1;openSheet('tip',{k})}};
+
+const _ru=resetUI;resetUI=function(){_ru();UI.hot.mode='rupees'};UI.hot.mode='rupees';

@@ -75,12 +75,12 @@ function hotHtml(cells,cols,sel,color,w){const mx=Math.max(1,...cells.map(c=>c.v
 function hotSentence(cells,scale,subject){const top=[...cells].map((c,i)=>({...c,i})).sort((a,b)=>b.v-a.v)[0];if(!top||!top.v)return `${subject} fills in as you go.`;if(scale==='day')return `${subject} most around ${top.w}.`;if(scale==='week')return `${subject} most on ${top.w.toLowerCase()}s.`.replace('s.','.').replace(/(\w+) (\w+)s\./,'$1 $2.');return `${subject} most around the ${top.label}th.`}
 SCREENS.habit=({payee})=>{const h=habits().find(x=>x.payee===payee);if(!h)return `<button class="back" data-a="back">‹ Back</button>`;const sc=UI.hot.hscale||'month',mode=UI.hot.mode;const {cols,cells}=habitCells(h,sc,mode);const sel=UI.hot.sel;const col=SPEND;
  const sent=hotSentence(cells,sc==='week'?'week':sc,esc(payee)).replace(/^(.*)$/,'$1');const tot=h.list.reduce((a,t)=>a+t.amt,0);
- return `<button class="back" data-a="back">‹ Repeats</button><div class="title">${esc(payee)}</div><div class="sub" style="margin:4px 0 12px">×${h.n} in 30 days</div>
+ return `<button class="back" data-a="back">‹ Repeats</button><div class="title">${esc(payee)}</div><div class="sub" style="margin:4px 0 12px">${money(tot)} in 30 days</div>
  <div class="seg">${[['day','Day'],['week','Week'],['month','Month']].map(x=>`<button class="chip ${sc===x[0]?'on':''}" data-a="hscale|${x[0]}">${x[1]}</button>`).join('')}</div>
- <div class="row" style="margin:10px 0 14px;justify-content:space-between"><div class="seg" style="width:150px">${[['times','Times'],['rupees','₹']].map(x=>`<button class="chip ${mode===x[0]?'on':''}" data-a="hmode|${x[0]}">${x[1]}</button>`).join('')}</div></div>
+
  <div class="sub" style="margin-bottom:12px">${sent}</div>${hotHtml(cells,cols,sel,col,cols===6?300:310)}
- <div style="margin-top:14px;min-height:46px">${sel!=null&&cells[sel]?`<div class="cap">${esc(cells[sel].w)}</div><div class="h2" style="margin-top:2px">${cells[sel].v?(mode==='times'?cells[sel].v+(cells[sel].v>1?' times':' time'):money(cells[sel].v)):'Nothing here'}</div>`:'<div class="sm">Tap a spot for how many and how much.</div>'}</div>
- <div class="sm" style="margin-top:10px">${money(tot)} in 30 days.</div>`};
+ <div style="margin-top:14px;min-height:46px">${sel!=null&&cells[sel]?`<div class="cap">${esc(cells[sel].w)}</div><div class="h2" style="margin-top:2px">${cells[sel].v?money(cells[sel].v):'Nothing here'}</div>`:'<div class="sm">Tap a spot for the amount.</div>'}</div>
+`};
 H.hscale=a=>{UI.hot.hscale=a[0];UI.hot.sel=null};H.hmode=a=>{UI.hot.mode=a[0]};H.hsel=a=>{UI.hot.sel=+a[0]};
 /* ===== TRANSACTION ===== */
 function srcStrip(src){if(!src)return '';const parts=[['Category',src.target,REST],['Buffer',src.buffer,BUFC],['Others',src.others,'#CDB8FF'],['Savings',src.savings,AMBER]].filter(p=>p[1]>0);const tot=parts.reduce((a,p)=>a+p[1],0)||1;let n=parts.map(p=>p[1]/tot*25),b=n.map(Math.floor),rem=25-b.reduce((a,x)=>a+x,0);n.map((x,i)=>[x-Math.floor(x),i]).sort((a,c)=>c[0]-a[0]).slice(0,rem).forEach(([f,i])=>b[i]++);
@@ -88,7 +88,7 @@ function srcStrip(src){if(!src)return '';const parts=[['Category',src.target,RES
 SCREENS.txn=({id})=>{const t=S.txns.find(x=>x.id===id);if(!t)return `<button class="back" data-a="back">‹ Back</button><div class="sub">Gone.</div>`;
  const name=t.kind==='unsorted'?'Unsorted':t.kind==='goal'?labelOf(S,{type:'goal',id:t.ref}):t.kind==='fixed'?'Subscriptions · '+labelOf(S,{type:'fixed',id:t.ref}):labelOf(S,{type:'cat',id:t.ref});const dt=new Date(t.t);const over=t.src&&(t.src.buffer||t.src.others||t.src.savings);const hab=habits().find(h=>h.payee===t.payee);
  return `<button class="back" data-a="back">‹ Back</button><div class="cap">${esc(t.payee)}</div><div class="title" style="font-size:46px;margin-top:4px">${money(t.amt)}</div>
- <div class="card" style="margin:16px 0;display:grid;gap:10px">${[['Category',name],['When',fmtDay(dt)+', '+fmtTime(dt)],['How',t.via==='trickle'?'Paid through Trickle':t.via==='manual'?'Added by hand':'Seen on your UPI link'],['Habit',hab?`×${hab.n} in 30 days`:'—']].map(r=>`<div class="row sp"><span class="mut">${r[0]}</span><b style="text-align:right">${esc(r[1])}</b></div>`).join('')}</div>
+ <div class="card" style="margin:16px 0;display:grid;gap:10px">${[['Category',name],['When',fmtDay(dt)+', '+fmtTime(dt)],['How',t.via==='trickle'?'Paid through Trickle':t.via==='manual'?'Added by hand':'Seen on your UPI link'],['Habit',hab?`${money(hab.list.reduce((x,y)=>x+y.amt,0))} in 30 days`:'—']].map(r=>`<div class="row sp"><span class="mut">${r[0]}</span><b style="text-align:right">${esc(r[1])}</b></div>`).join('')}</div>
  ${over?`<div class="card" style="margin-bottom:14px"><div class="cap">Where it came from</div>${srcStrip(t.src)}</div>`:''}
  <div class="col" style="gap:8px">${t.kind==='cat'||t.kind==='unsorted'?`<button class="btn q" data-a="sheet|refile|${J({id:t.id})}">Change category</button>`:''}${t.via==='manual'?`<button class="btn o" data-a="rm|${t.id}">Delete</button>`:`<button class="btn o" data-a="rm|${t.id}">Not mine</button>`}</div>`};
 H.rm=a=>{removeTxn(S,a[0]);pop();say('Removed. The money went back.');return false};

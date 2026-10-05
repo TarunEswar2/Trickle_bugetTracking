@@ -401,3 +401,4 @@ Triggered by repeated reviews saying screens are hard to follow with too much in
 - V15-17 (delegated): **Visual hierarchy system:** one hero, quiet underline tabs, one primary action, text-style secondary actions, controls after the finding.
 - V15-18 (delegated): **Logic fixes** listed in `v15_spec.md` (monthly vs weekly figures, ended incomes, one-offs excluded from the week, pay from free savings).
 - V15-19 (Tarun asked, Claude designed): **First-time tips.** One short card the first time each thing happens (first spend, unsorted payment, credit, plan, income, one-off, subscription, goal, amber, over) or each area is first opened (grid, Spending, Money, Insights, a category). Once each, one at a time, never during a flow. Panel can reset or turn them off.
+- V15-20 (Tarun): **Insights is rupees only.** No Times/₹ toggle, no "N times" anywhere. Hot grids, the hero and Repeats all show amounts.

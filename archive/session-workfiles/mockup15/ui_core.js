@@ -43,7 +43,7 @@ const fmtTime=d=>d.toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit',h
 const DOW=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 /* ===== state & router ===== */
 let S=null,UI=null;const H={},HI={};const SCREENS={},SHEETS={},FLOWS={},POPUPS={};
-function resetUI(){UI={tab:'home',stack:[],sheet:null,flow:null,popup:null,toast:null,inc:1,filter:{cat:'all',range:30},hot:{scale:'day',mode:'times'},viz:{}}}
+function resetUI(){UI={tab:'home',stack:[],sheet:null,flow:null,popup:null,toast:null,inc:1,filter:{cat:'all',range:30},hot:{scale:'day',mode:'rupees'},viz:{}}}
 function cur(){return UI.stack.length?UI.stack[UI.stack.length-1]:{id:UI.tab}}
 function push(id,p){UI.stack.push({id,p:p||{}});render()}
 function pop(){UI.stack.pop();render()}

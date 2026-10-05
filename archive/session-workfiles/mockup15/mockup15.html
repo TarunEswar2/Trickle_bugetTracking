@@ -322,7 +322,7 @@ const fmtTime=d=>d.toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit',h
 const DOW=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 /* ===== state & router ===== */
 let S=null,UI=null;const H={},HI={};const SCREENS={},SHEETS={},FLOWS={},POPUPS={};
-function resetUI(){UI={tab:'home',stack:[],sheet:null,flow:null,popup:null,toast:null,inc:1,filter:{cat:'all',range:30},hot:{scale:'day',mode:'times'},viz:{}}}
+function resetUI(){UI={tab:'home',stack:[],sheet:null,flow:null,popup:null,toast:null,inc:1,filter:{cat:'all',range:30},hot:{scale:'day',mode:'rupees'},viz:{}}}
 function cur(){return UI.stack.length?UI.stack[UI.stack.length-1]:{id:UI.tab}}
 function push(id,p){UI.stack.push({id,p:p||{}});render()}
 function pop(){UI.stack.pop();render()}
@@ -438,12 +438,12 @@ function hotHtml(cells,cols,sel,color,w){const mx=Math.max(1,...cells.map(c=>c.v
 function hotSentence(cells,scale,subject){const top=[...cells].map((c,i)=>({...c,i})).sort((a,b)=>b.v-a.v)[0];if(!top||!top.v)return `${subject} fills in as you go.`;if(scale==='day')return `${subject} most around ${top.w}.`;if(scale==='week')return `${subject} most on ${top.w.toLowerCase()}s.`.replace('s.','.').replace(/(\w+) (\w+)s\./,'$1 $2.');return `${subject} most around the ${top.label}th.`}
 SCREENS.habit=({payee})=>{const h=habits().find(x=>x.payee===payee);if(!h)return `<button class="back" data-a="back">‹ Back</button>`;const sc=UI.hot.hscale||'month',mode=UI.hot.mode;const {cols,cells}=habitCells(h,sc,mode);const sel=UI.hot.sel;const col=SPEND;
  const sent=hotSentence(cells,sc==='week'?'week':sc,esc(payee)).replace(/^(.*)$/,'$1');const tot=h.list.reduce((a,t)=>a+t.amt,0);
- return `<button class="back" data-a="back">‹ Repeats</button><div class="title">${esc(payee)}</div><div class="sub" style="margin:4px 0 12px">×${h.n} in 30 days</div>
+ return `<button class="back" data-a="back">‹ Repeats</button><div class="title">${esc(payee)}</div><div class="sub" style="margin:4px 0 12px">${money(tot)} in 30 days</div>
  <div class="seg">${[['day','Day'],['week','Week'],['month','Month']].map(x=>`<button class="chip ${sc===x[0]?'on':''}" data-a="hscale|${x[0]}">${x[1]}</button>`).join('')}</div>
- <div class="row" style="margin:10px 0 14px;justify-content:space-between"><div class="seg" style="width:150px">${[['times','Times'],['rupees','₹']].map(x=>`<button class="chip ${mode===x[0]?'on':''}" data-a="hmode|${x[0]}">${x[1]}</button>`).join('')}</div></div>
+
  <div class="sub" style="margin-bottom:12px">${sent}</div>${hotHtml(cells,cols,sel,col,cols===6?300:310)}
- <div style="margin-top:14px;min-height:46px">${sel!=null&&cells[sel]?`<div class="cap">${esc(cells[sel].w)}</div><div class="h2" style="margin-top:2px">${cells[sel].v?(mode==='times'?cells[sel].v+(cells[sel].v>1?' times':' time'):money(cells[sel].v)):'Nothing here'}</div>`:'<div class="sm">Tap a spot for how many and how much.</div>'}</div>
- <div class="sm" style="margin-top:10px">${money(tot)} in 30 days.</div>`};
+ <div style="margin-top:14px;min-height:46px">${sel!=null&&cells[sel]?`<div class="cap">${esc(cells[sel].w)}</div><div class="h2" style="margin-top:2px">${cells[sel].v?money(cells[sel].v):'Nothing here'}</div>`:'<div class="sm">Tap a spot for the amount.</div>'}</div>
+`};
 H.hscale=a=>{UI.hot.hscale=a[0];UI.hot.sel=null};H.hmode=a=>{UI.hot.mode=a[0]};H.hsel=a=>{UI.hot.sel=+a[0]};
 /* ===== TRANSACTION ===== */
 function srcStrip(src){if(!src)return '';const parts=[['Category',src.target,REST],['Buffer',src.buffer,BUFC],['Others',src.others,'#CDB8FF'],['Savings',src.savings,AMBER]].filter(p=>p[1]>0);const tot=parts.reduce((a,p)=>a+p[1],0)||1;let n=parts.map(p=>p[1]/tot*25),b=n.map(Math.floor),rem=25-b.reduce((a,x)=>a+x,0);n.map((x,i)=>[x-Math.floor(x),i]).sort((a,c)=>c[0]-a[0]).slice(0,rem).forEach(([f,i])=>b[i]++);
@@ -451,7 +451,7 @@ function srcStrip(src){if(!src)return '';const parts=[['Category',src.target,RES
 SCREENS.txn=({id})=>{const t=S.txns.find(x=>x.id===id);if(!t)return `<button class="back" data-a="back">‹ Back</button><div class="sub">Gone.</div>`;
  const name=t.kind==='unsorted'?'Unsorted':t.kind==='goal'?labelOf(S,{type:'goal',id:t.ref}):t.kind==='fixed'?'Subscriptions · '+labelOf(S,{type:'fixed',id:t.ref}):labelOf(S,{type:'cat',id:t.ref});const dt=new Date(t.t);const over=t.src&&(t.src.buffer||t.src.others||t.src.savings);const hab=habits().find(h=>h.payee===t.payee);
  return `<button class="back" data-a="back">‹ Back</button><div class="cap">${esc(t.payee)}</div><div class="title" style="font-size:46px;margin-top:4px">${money(t.amt)}</div>
- <div class="card" style="margin:16px 0;display:grid;gap:10px">${[['Category',name],['When',fmtDay(dt)+', '+fmtTime(dt)],['How',t.via==='trickle'?'Paid through Trickle':t.via==='manual'?'Added by hand':'Seen on your UPI link'],['Habit',hab?`×${hab.n} in 30 days`:'—']].map(r=>`<div class="row sp"><span class="mut">${r[0]}</span><b style="text-align:right">${esc(r[1])}</b></div>`).join('')}</div>
+ <div class="card" style="margin:16px 0;display:grid;gap:10px">${[['Category',name],['When',fmtDay(dt)+', '+fmtTime(dt)],['How',t.via==='trickle'?'Paid through Trickle':t.via==='manual'?'Added by hand':'Seen on your UPI link'],['Habit',hab?`${money(hab.list.reduce((x,y)=>x+y.amt,0))} in 30 days`:'—']].map(r=>`<div class="row sp"><span class="mut">${r[0]}</span><b style="text-align:right">${esc(r[1])}</b></div>`).join('')}</div>
  ${over?`<div class="card" style="margin-bottom:14px"><div class="cap">Where it came from</div>${srcStrip(t.src)}</div>`:''}
  <div class="col" style="gap:8px">${t.kind==='cat'||t.kind==='unsorted'?`<button class="btn q" data-a="sheet|refile|${J({id:t.id})}">Change category</button>`:''}${t.via==='manual'?`<button class="btn o" data-a="rm|${t.id}">Delete</button>`:`<button class="btn o" data-a="rm|${t.id}">Not mine</button>`}</div>`};
 H.rm=a=>{removeTxn(S,a[0]);pop();say('Removed. The money went back.');return false};
@@ -1343,24 +1343,23 @@ const _spHist=spHist;spHist=function(){const full=UI.spAll;const keep=S.txns;con
 
 /* ---------- Insights: When / Repeats / Vs last week (v14 visuals, one per view, finding first) ---------- */
 H.insseg=a=>{UI.ins=a[0];UI.hot.isel=null};
-function insWhen(){const sc=UI.hot.scale,mode=UI.hot.mode,off=UI.hot.off||0;const {P,cols,cells}=insCells(sc,off,mode);const sel=UI.hot.isel;
+function insWhen(){const sc=UI.hot.scale,mode='rupees',off=UI.hot.off||0;const {P,cols,cells}=insCells(sc,off,mode);const sel=UI.hot.isel;
  const minT=S.txns.length?Math.min(...S.txns.map(t=>t.t)):Infinity;const canPrev=periodInfo(sc,off-1).to>minT,canNext=off<0;
  const real=cells.filter(c=>!c.blank);const top=[...real].sort((a,b)=>b.v-a.v)[0];const tot=real.reduce((a,c)=>a+c.v,0);
  const lead=sc==='day'?'You spend most around':sc==='week'?'You spend most on':'You spend most around the';
- const hero=top&&top.v?`<div class="cap" style="text-transform:none;letter-spacing:0;font-size:15px;color:var(--ink2)">${lead}</div><div class="hero" style="font-size:${top.big.length>8?42:58}px;margin-top:4px;background:linear-gradient(145deg,#F1E8FF,#B48CFF 55%,#7C5CFF);-webkit-background-clip:text;background-clip:text;color:transparent">${esc(top.big)}</div><div class="sub" style="margin-top:6px">${mode==='times'?(top.v+(top.v>1?' spends':' spend')+(tot>top.v?' of '+tot:'')):(money(top.v)+(tot>top.v?' of '+money(tot):''))} ${sc==='day'?(off===0?'today':'that day'):sc==='week'?(off===0?'this week':'that week'):'that month'}</div>`
+ const hero=top&&top.v?`<div class="cap" style="text-transform:none;letter-spacing:0;font-size:15px;color:var(--ink2)">${lead}</div><div class="hero" style="font-size:${top.big.length>8?42:58}px;margin-top:4px;background:linear-gradient(145deg,#F1E8FF,#B48CFF 55%,#7C5CFF);-webkit-background-clip:text;background-clip:text;color:transparent">${esc(top.big)}</div><div class="sub" style="margin-top:6px">${money(top.v)+(tot>top.v?' of '+money(tot):'')} ${sc==='day'?(off===0?'today':'that day'):sc==='week'?(off===0?'this week':'that week'):'that month'}</div>`
   :`<div class="title" style="font-size:26px">Nothing in this ${sc}.</div>`;
  const nav=`<div class="row sp" style="margin:20px 0 10px;align-items:center"><button class="chip" style="${canPrev?'':'opacity:.3;pointer-events:none'}" data-a="ioff|-1">‹</button><b style="font-size:16px">${esc(P.label)}</b><button class="chip" style="${canNext?'':'opacity:.3;pointer-events:none'}" data-a="ioff|1">›</button></div>`;
  const head=sc==='month'?`<div style="display:grid;grid-template-columns:repeat(7,1fr);width:310px;margin:0 auto 4px">${['M','T','W','T','F','S','S'].map(x=>`<span class="cap" style="text-align:center;font-size:11px">${x}</span>`).join('')}</div>`:sc==='week'?`<div style="display:grid;grid-template-columns:repeat(7,1fr);width:310px;margin:0 auto 4px">${DOW.map(x=>`<span class="cap" style="text-align:center;font-size:11px">${x[0]}</span>`).join('')}</div>`:'';
  let grid=hotHtml(cells.map(c=>c.blank?{v:0,label:'',w:''}:c),cols,sel,'#B48CFF',cols===6?300:310);cells.forEach((c,k)=>{if(c.blank)grid=grid.replace(`<i data-a="hsel|${k}" style="`,'<i style="visibility:hidden;')});
  const selc=sel!=null&&cells[sel]&&!cells[sel].blank?cells[sel]:null;
  return `<div>${hero}</div>${nav}${S.txns.length?head+grid:''}
-  <div style="min-height:40px;margin-top:12px;text-align:center">${selc?`<b>${esc(selc.w)}</b> · ${selc.v?(mode==='times'?selc.v+(selc.v>1?' times':' time'):money(selc.v)):'nothing'}`:`<span class="sm">${sc==='week'?'Top to bottom: morning to night. Tap a spot.':'Tap a spot for details.'}</span>`}</div>
-  <div class="row sp ctl" style="margin-top:8px"><div class="row" style="gap:6px">${[['day','Day'],['week','Week'],['month','Month']].map(x=>`<button class="chip ${sc===x[0]?'on':''}" data-a="iscale|${x[0]}">${x[1]}</button>`).join('')}</div><div class="row" style="gap:6px">${[['times','Times'],['rupees','₹']].map(x=>`<button class="chip ${mode===x[0]?'on':''}" data-a="hmode|${x[0]}">${x[1]}</button>`).join('')}</div></div>`}
-function insRep(){const hs=habits();if(!hs.length)return `<div class="title" style="font-size:26px">Nothing repeats yet.</div><div class="sub" style="margin-top:8px">Habits show up after a few weeks.</div>`;
- const top=hs[0],sum=top.list.reduce((a,t)=>a+t.amt,0);
- return `<div class="cap" style="text-transform:none;letter-spacing:0;font-size:15px;color:var(--ink2)">Your most repeated spend</div><div class="hero" style="font-size:38px;line-height:1.05;margin-top:4px;background:linear-gradient(145deg,#F1E8FF,#B48CFF 55%,#7C5CFF);-webkit-background-clip:text;background-clip:text;color:transparent">${esc(top.payee)}</div><div class="sub" style="margin-top:6px">${top.n} times in 30 days · ${money(sum)}</div>
- <div class="row wrap" style="gap:6px;margin:18px 0 22px">${top.list.slice(0,30).map(()=>`<i style="width:14px;height:14px;border-radius:4px;background:${boxBg('#B48CFF')}"></i>`).join('')}</div>
- <div class="col" style="gap:8px">${hs.slice(1,5).map(h=>`<button class="li" data-a="push|habit|${J({payee:h.payee}).replace(/\|/g,'')}"><span class="n">${esc(h.payee)}</span><span class="t">×${h.n}</span><span class="a">${money(h.list.reduce((a,t)=>a+t.amt,0))}</span></button>`).join('')}<button class="btn q" data-a="push|habit|${J({payee:top.payee}).replace(/\|/g,'')}">See ${esc(top.payee)} by day</button></div>`}
+  <div style="min-height:40px;margin-top:12px;text-align:center">${selc?`<b>${esc(selc.w)}</b> · ${selc.v?money(selc.v):'nothing'}`:`<span class="sm">${sc==='week'?'Top to bottom: morning to night. Tap a spot.':'Tap a spot for details.'}</span>`}</div>
+  <div class="row sp ctl" style="margin-top:8px"><div class="row" style="gap:6px">${[['day','Day'],['week','Week'],['month','Month']].map(x=>`<button class="chip ${sc===x[0]?'on':''}" data-a="iscale|${x[0]}">${x[1]}</button>`).join('')}</div></div>`}
+function insRep(){const sm=h=>h.list.reduce((a,t)=>a+t.amt,0);const hs=habits().sort((x,y)=>sm(y)-sm(x));if(!hs.length)return `<div class="title" style="font-size:26px">Nothing repeats yet.</div><div class="sub" style="margin-top:8px">Habits show up after a few weeks.</div>`;
+ const top=hs[0];
+ return `<div class="cap" style="text-transform:none;letter-spacing:0;font-size:15px;color:var(--ink2)">The spend that repeats most</div><div class="hero" style="font-size:38px;line-height:1.05;margin-top:4px;background:linear-gradient(145deg,#F1E8FF,#B48CFF 55%,#7C5CFF);-webkit-background-clip:text;background-clip:text;color:transparent">${esc(top.payee)}</div><div class="sub" style="margin-top:6px">${money(sm(top))} in 30 days</div>
+ <div class="col" style="gap:8px;margin-top:22px">${hs.slice(1,5).map(h=>`<button class="li" data-a="push|habit|${J({payee:h.payee}).replace(/\|/g,'')}"><span class="n">${esc(h.payee)}</span><span class="a">${money(sm(h))}</span></button>`).join('')}<button class="btn q" data-a="push|habit|${J({payee:top.payee}).replace(/\|/g,'')}">See ${esc(top.payee)} by day</button></div>`}
 function insCmp(){const frac=Math.min(1,((S.now-startOfWeek(S.now))/DAY+1)/7);const hasLast=S.p.weeks>0||S.txns.some(t=>t.t<wk0());
  if(!hasLast)return `<div class="title" style="font-size:26px">Come back next week.</div><div class="sub" style="margin-top:8px">Then this week and last sit side by side.</div>`;
  const nowSp=weekSpentAll(S,0,frac),lastSp=weekSpentAll(S,1,frac);const diff=nowSp-lastSp;const tf=planned()?flexW():Math.max(nowSp,lastSp,100);
@@ -1432,7 +1431,7 @@ const TIPDEF={
  over:{cap:'Pace',t:'You went over.',b:'Savings covered the rest. It is a signal, not a failure.',c:ACC.a},
  spending:{cap:'Spending',t:'Where it went.',b:'Each bar is a category this week. Tap one to see its boxes.',c:ACC.a},
  money:{cap:'Money',t:'Money in, and what you keep.',b:'Income is split into spending and saving. Goals live under Savings.',c:ACC.b},
- insights:{cap:'Insights',t:'Patterns, not a list.',b:'See when you spend and what repeats. Tap a spot for details.',c:ACC.v},
+ insights:{cap:'Insights',t:'Patterns, not a list.',b:'See when your money goes and what repeats. Tap a spot for the amount.',c:ACC.v},
  cat:{cap:'A category',t:'One category, one gauge.',b:'Its 100 boxes are its weekly limit. Boxes go as you spend.',c:ACC.g}
 };
 SHEETS.tip=({k})=>{const d=TIPDEF[k];const b=typeof d.b==='function'?d.b():d.b;
@@ -1460,6 +1459,8 @@ window.afterRender=()=>{if(_ar3)_ar3();if(!window.TIPS||!S||!UI)return;
  else if(!top){if(UI.tab==='spending')k='spending';else if(UI.tab==='money')k='money';else if(UI.tab==='insights')k='insights';
   else if(UI.tab==='home'){if(planned()&&flexL()<=0)k='over';else if(planned()&&typeof paceInfo==='function'&&paceInfo()&&paceInfo().over)k='ahead';else if(!TS.grid&&(planned()||S.txns.length>=1)){TS.grid=1;openSheet('gridhow',{tour:1});return}}}
  if(k&&!TS[k]){TS[k]=1;openSheet('tip',{k})}};
+
+const _ru=resetUI;resetUI=function(){_ru();UI.hot.mode='rupees'};UI.hot.mode='rupees';
 
 /* ===== control panel ===== */
 function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,0).getTime(),label:'Allowance',amt:S.p.income,note:''}];if(S.p.six)seedSix();else if(S.p.W>0){S.planSet=true;S.cats.forEach(c=>c.full=c.amt);S.bufFull=S.bufAmt;S.firstDay=new Date(S.now.getTime()-S.p.weeks*7*DAY)}resetUI();window._celeLock=false;render();fitPhone()}
