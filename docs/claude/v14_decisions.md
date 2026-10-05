@@ -394,3 +394,9 @@ Triggered by repeated reviews saying screens are hard to follow with too much in
 - V15-10 (delegated): **Week review is two screens** (what happened; by category on request).
 - V15-11 (delegated): **Engine notes removed from screens** (mid-week split, weekly scale, replace-weekly-amount). The engine behaves the same; the explaining text is gone.
 - V15-12 (delegated): **Parked, not deleted:** one-off money, move money, the incoming-credit explainer, nested rings, hot-hour calendar, month navigation.
+- V15-13 (Tarun asked, Claude designed): **Insights is its own tab again** (4 tabs). Three views: When, Repeats, Vs last week; finding first, controls last. Spending keeps Categories and History.
+- V15-14 (delegated): **The grid is taught three ways:** a tappable `1 box ≈ ₹N ⓘ` chip with "₹N left" beside it, a one-time "How to read it" sheet with dashed ghost boxes, and "N boxes go" on the pay confirm.
+- V15-15 (Tarun asked, Claude designed): **One-off payments** are a tile in Pay > For what?, then What was it?, then Paid from? (outside the plan or savings). They never count in the week, the review or Insights.
+- V15-16 (delegated): **One-off money is reachable** from Money in, plus the balance split after UPI link, edit all limits, plan-drops row.
+- V15-17 (delegated): **Visual hierarchy system:** one hero, quiet underline tabs, one primary action, text-style secondary actions, controls after the finding.
+- V15-18 (delegated): **Logic fixes** listed in `v15_spec.md` (monthly vs weekly figures, ended incomes, one-offs excluded from the week, pay from free savings).

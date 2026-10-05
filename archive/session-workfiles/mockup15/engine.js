@@ -88,7 +88,7 @@ function newState(key){
 /* ===== ledger helpers ===== */
 const goalNeeded=(g)=>g.byMonths?Math.ceil(g.target/g.byMonths/10)*10:null;
 function weekStart(S){return startOfWeek(S.now)}
-function spentThisWeek(S){const ws=weekStart(S).getTime();return S.txns.filter(t=>t.t>=ws&&t.kind!=='fixed').reduce((a,t)=>a+t.amt,0)}
+function spentThisWeek(S){const ws=weekStart(S).getTime();return S.txns.filter(t=>t.t>=ws&&t.kind!=='fixed'&&t.kind!=='oneoff').reduce((a,t)=>a+t.amt,0)}
 function flexLeft(S){return S.cats.reduce((a,c)=>a+c.left,0)+S.bufLeft}
 function savedTotal(S){return S.goals.filter(g=>g.state!=='done').reduce((a,g)=>a+g.saved,0)+S.free}
 function logE(S,t){S.log.unshift({t:new Date(S.now),text:t})}
@@ -166,13 +166,13 @@ function advanceDays(S,n){for(let i=0;i<n;i++){const before=startOfWeek(S.now).g
 function billsRefill(S){S.bills.forEach(b=>{b.reserve=Math.round(billWeekly(b)*3)})}
 /* derived views */
 function weekSpentBy(S,catId,wAgo,uptoFrac){const ws=startOfWeek(S.now).getTime()-wAgo*7*DAY;const end=wAgo===0?S.now.getTime():ws+7*DAY*(uptoFrac==null?1:uptoFrac);return S.txns.filter(t=>t.ref===catId&&t.kind==='cat'&&t.t>=ws&&t.t<(wAgo===0?end+1:ws+7*DAY*(uptoFrac==null?1:uptoFrac))).reduce((a,t)=>a+t.amt,0)}
-function weekSpentAll(S,wAgo,frac){const ws=startOfWeek(S.now).getTime()-wAgo*7*DAY;const end=wAgo===0?S.now.getTime()+1:ws+7*DAY*frac;return S.txns.filter(t=>t.kind!=='fixed'&&t.t>=ws&&t.t<end).reduce((a,t)=>a+t.amt,0)}
+function weekSpentAll(S,wAgo,frac){const ws=startOfWeek(S.now).getTime()-wAgo*7*DAY;const end=wAgo===0?S.now.getTime()+1:ws+7*DAY*frac;return S.txns.filter(t=>t.kind!=='fixed'&&t.kind!=='oneoff'&&t.t>=ws&&t.t<end).reduce((a,t)=>a+t.amt,0)}
 /* ===== engine additions ===== */
 function refileTxn(S,id,newCat){const t=S.txns.find(x=>x.id===id);if(!t||t.kind==='fixed'||t.kind==='goal')return;
  if(t.kind==='cat'){const c=S.cats.find(x=>x.id===t.ref);if(c)c.left=Math.min(c.amt,c.left+((t.src&&t.src.target)||0))}
  if(t.kind==='unsorted'){S.bufLeft=Math.min(S.bufAmt,S.bufLeft+((t.src&&t.src.buffer)||0));S.unsorted=S.unsorted.filter(x=>x!==id)}
  t.kind='cat';t.ref=newCat;t.src=cascade(S,t.amt,{type:'cat',id:newCat});S.memory[t.payee]=newCat;logE(S,`Re-filed ${t.payee} under ${labelOf(S,{type:'cat',id:newCat})}`)}
-function removeTxn(S,id){const t=S.txns.find(x=>x.id===id);if(!t)return;if(t.kind==='cat'){const c=S.cats.find(x=>x.id===t.ref);if(c)c.left=Math.min(c.amt,c.left+((t.src&&t.src.target)||t.amt))}
+function removeTxn(S,id){const t=S.txns.find(x=>x.id===id);if(!t)return;if(t.kind==='oneoff'&&t.src&&t.src.fromSavings)S.free+=t.src.fromSavings;if(t.kind==='cat'){const c=S.cats.find(x=>x.id===t.ref);if(c)c.left=Math.min(c.amt,c.left+((t.src&&t.src.target)||t.amt))}
  if(t.src&&t.src.buffer)S.bufLeft=Math.min(S.bufAmt,S.bufLeft+t.src.buffer);S.txns=S.txns.filter(x=>x.id!==id);S.unsorted=S.unsorted.filter(x=>x!==id);logE(S,`Removed ${t.payee}`)}
 function previewCascade(S,amt,target){const T={cats:JSON.parse(JSON.stringify(S.cats)),bills:JSON.parse(JSON.stringify(S.bills)),goals:JSON.parse(JSON.stringify(S.goals)),free:S.free,bufLeft:S.bufLeft};return cascade(T,amt,target)}
 function targetLeft(S,t){if(t.type==='cat')return S.cats.find(c=>c.id===t.id).left;if(t.type==='goal')return S.goals.find(g=>g.id===t.id).saved;if(t.type==='fixed')return S.bills.find(b=>b.id===t.id).reserve;if(t.type==='free')return S.free;return 0}

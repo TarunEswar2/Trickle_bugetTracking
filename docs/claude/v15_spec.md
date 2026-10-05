@@ -1,4 +1,4 @@
-# Trickle v15: three questions, three tabs, one thing per screen
+# Trickle v15: four tabs, one thing per screen
 
 Written 5 Oct 2026. Built as a fork: `archive/session-workfiles/mockup15/` (v14 is untouched in `mockup/`). Everything here is
 **delegated and open to override** (V15-1…V15-12 in `v14_decisions.md`). v15 supersedes the 5-tab decision only if Tarun accepts it.
@@ -61,3 +61,50 @@ v15's set is the core 46 states, not all 116. Parked screens are counted as zero
 2. Do they know what a box is without the caption? (Home)
 3. Do three tabs feel too few, or do Money's two halves confuse? (Money in / Savings)
 4. Does a plan-less Home still feel useful for a week? (spent so far and Make your plan)
+
+
+## v15.1 (5 Oct 2026, after Tarun's first review)
+Tarun's review: the grid needs teaching, Insights should be its own tab with the v14 visuals improved, there is no way to enter a one-off payment, v15 loses
+functionality, every screen needs better visual hierarchy, fix logical flaws.
+
+**Tabs are now four:** Home · Spending · Money · Insights. Spending = Categories | History. Money = Money in | Savings. Insights = When | Repeats | Vs last week.
+
+**Teaching the grid** (no manual, three small moments):
+1. The caption under the grid names the unit: **`₹796 left`** (large) and a tappable chip **`1 box ≈ ₹16 ⓘ`**. Tap the chip or the grid itself to open "How to read it".
+2. "How to read it" shows 100 boxes with 10 dashed ghost boxes: *Each box is about ₹16. Spend ₹160 and the dashed 10 boxes go.* It opens once, by itself, the first time an account you built has a plan or a first spend.
+3. At the moment of paying, the confirm screen says **`62 boxes go · 1 box ≈ ₹5`**, so the unit is learned from an action, not a legend.
+Plan-less Home says "spent this week" with the same chip, and the sheet reads "Boxes fill as you spend."
+What to test: can a new user say what a box is after their first payment, without opening the sheet?
+
+**Insights (v14 visuals, improved):** each view leads with the finding in large type and puts the controls last.
+- *When:* "You spend most around **9 pm**", then the hot-hour grid with Day/Week/Month navigation, Times/₹ and tap-a-spot detail. Opens on Week.
+- *Repeats:* the most repeated spend as the hero with a box per time, then four more rows; tap for the day-by-day grid.
+- *Vs last week:* "₹330 more than last week." then two grids side by side (last faded) and the four categories that changed most, with ↑ ↓ amounts.
+
+**One-off payments and one-off money**
+- Pay > For what? has a dashed **One-off** tile (outside your plan). Then: What was it? (Trip, Gift, Repair, Fees, Medical, Event or type) > Paid from? (Outside my plan, or My savings when there are savings). A one-off is recorded in History (violet dot, "one-off"), never counts in "left this week", the week review or Insights, and deleting it gives savings back.
+- Money in has **One-off money** (a friend paying you back: save it, put it back in a category, or just note it). It is also on the plan-less Money tab.
+
+**Functionality restored (all of it reachable, none of it on the first screen)**
+Balance split after linking UPI (two short skippable screens) · one-off money · one-off payments · edit all weekly limits (Spending > Categories > Edit weekly limits) · incoming UPI credit (Home row) ·
+plan-drops warning (Home row) · pay from savings · subscriptions list and add. Still parked: the nested rings, move-money between categories, the old "how much for each" screen.
+
+**Visual hierarchy system (applies to every screen)**
+1. One hero per screen: a number, a sentence or the grid, in the display font.
+2. Segmented controls are quiet underlined tabs, never white pills, so they do not outshine the content.
+3. One primary action per screen (green). Secondary actions are plain text buttons ("Skip", "Not now", "Edit").
+4. Controls come after the finding. Meta text (captions, hints) is the only small grey text.
+5. Lists are quiet rows with one bold name and one value; a thin gauge replaces words where it can.
+
+**Logic flaws fixed**
+- Money in showed a monthly total beside a weekly figure ("₹7,200" under "₹1,325 a week"). It now shows only percentages (Saving 20% · Spending 80%), and says "₹X to spend" without "a week" when an income has no end date.
+- An ended income no longer shows stale numbers; it says "Your income ended."
+- The plan-drops warning was lost in v15; it is a Home row again.
+- A one-off payment cannot distort the week, the review or Insights.
+- "Pay from savings" was only offered when there were goals; it now also appears when there is free savings.
+- Paid-from question is skipped when there is nothing to choose.
+- Settings rows no longer overlap their hints.
+- 60-step random-tap run across all seven demo accounts and two fresh accounts: no errors, no NaN, no negative balances.
+
+## Measured (55 core states)
+22 words and 8 taps on average (v14: 56 and 12), none taller than a phone (v14: 21). Over 25 words: lists, Insights grids (their cell labels count as words), the calendar, the pay confirm.
