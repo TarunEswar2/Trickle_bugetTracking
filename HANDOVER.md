@@ -195,3 +195,8 @@ exposed, onboarding ran up to 12 screens, and every review added something and n
 v15 (fork in `archive/session-workfiles/mockup15/`, v14 untouched): three tabs for three questions, a density budget, onboarding of two questions,
 plan = add income, Pay in three screens. Core 46 states average 21 words and 6 taps. Read `docs/claude/v15_audit.md` and `v15_spec.md`.
 Next: Tarun reviews v15 and the four departures listed in the spec; student test of v15 vs v14 (nothing is tested yet); then Figma export of v15 if accepted.
+
+## Latest (6 Oct 2026): RESEARCH.md
+Tarun asked for a comprehensive record from v1 to v15 and a diagnosis of why the work is not reaching the desired outcome. It is `RESEARCH.md` at the repo root (12,000 words): primary and secondary research, a new search round, every version with scope and size, the decision register, the visualisation register, data requirements, research-to-feature traceability, the diagnosis, contradictions, and a three-week research plan.
+Headline: no measurable outcome and no student contact in 14 builds; the product drifted from awareness to budgeting (4 of 6 participants have no budget); every review was answered by adding; the build size is a sawtooth; the evidence is 6 interviews including the researcher. Also recovered the V2 and V3 sections that had been deleted from the decision log by accident (commit 836e0fe).
+Next step: Tarun accepts or edits the outcome ladder (RESEARCH.md 1.3), v15 is frozen as the test build, then the feasibility spike and the five-student rounds (Part 10).

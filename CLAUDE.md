@@ -4,6 +4,7 @@ Trickle is a UPI-based budgeting app for students, designed by Tarun (MDes proje
 The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 
 ## Read first, in this order
+00. `RESEARCH.md` (repo root) — the whole record v1 to v15: research, decisions, data requirements, and why the work has not converged. Read Part 0 and Part 10 first.
 0. `HANDOVER.md` — where the last session stopped and the exact next step.
 1. `docs/claude/v14_decisions.md` — the authoritative decision log and the visualisation queue.
 2. `docs/claude/v14_stage0_facts.md` — approved facts and the 7 principles.
@@ -42,3 +43,5 @@ Instrument mockup: https://claude.ai/artifact/GMby4zaz4J8ZanziKiLBKM (`archive/s
 Decision: Tarun chose Night as the base (M2-3). The Night mockup at https://claude.ai/artifact/F5iDLzVpmpKw8dSwUWkSU9 (new link; the old RuuvM1ty… link still shows the pre-flows version) now has the full flows; Instrument is kept as an alternate.
 
 v15 (5 Oct 2026): audit in `docs/claude/v15_audit.md`, spec in `docs/claude/v15_spec.md`, build in `archive/session-workfiles/mockup15/` (v14 stays in `mockup/`). Reviews said screens carry too much; the cause was the information architecture. v15 = 3 tabs for 3 questions, a density budget (≤25 words, one hero, ≤4 taps per screen) checked by `archive/session-workfiles/audit/density.js`. Delegated (V15-1…V15-12), open to override. **Before adding anything to a screen, remove something or run density.js.**
+
+**Current build (6 Oct): v15** https://claude.ai/artifact/XmxrV3ZoboyDBF52Hvc2GB (source `archive/session-workfiles/mockup15/`). The Night mockup link above is v14. Nothing has been tested with students; per `RESEARCH.md` Part 10, no new features or decisions until the five-student round is done.

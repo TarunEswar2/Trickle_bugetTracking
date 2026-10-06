@@ -47,6 +47,39 @@ Defaults, not explicitly answered: rings show the biggest five budgets and the r
 
 Earlier defaults, now partly superseded by V1-10: (a) a ring's name appears when you press/tap it; rings show the biggest few and the rest group as "others", tap opens the full list. (b) ~~rings beside the words list~~ — rings are now the Spending tab's main view; the words-only list (V1-3) remains the fallback question for 12–18 categories.
 
+(Restored 6 Oct 2026: the Viz 2 and Viz 3 sections and the parked Savings requirement were deleted by accident in commit 836e0fe when V1-10 was logged. Recovered verbatim from git history.)
+
+### Viz 2 — Pay / friction (answers 2 Oct; options board not drawn yet)
+| # | Decision |
+|---|---|
+| V2-1 | What crumbles: boxes from the category's own 10x10 grid (same object as Viz 1). |
+| V2-2 | When: "crumble away and indicate a ghost of what left, before paying" - the crumble plays on the pay screen before the payment is confirmed, leaving a ghost of what left. (My reading: boxes crumble out of the grid as a preview; can still back out - confirm with Tarun.) |
+| V2-3 | Sting: "indicate what left until we move to the next screen" - the ghost of the departed boxes stays visible until the user moves on; no red/shake/sound drama. |
+| V2-4 | Crumble = **D, fade in order**: the paid boxes fade out one by one, top first, no pieces (~1.5 s). |
+| V2-5 | Ghost = **G2, dashed outline** where the liquid was, kept until the user moves on. |
+Defaults on my recommendation, not explicitly answered (change any time): payments under one box crumble at true size; going over carries V1-4 to the pay screen (everything left fades, then amber floor line + words, no red); the ghost updates live as the amount or category changes and snaps back if you back out.
+Board: https://claude.ai/artifact/Fsvd6fogygvPdtsrHsqMyN (source archive/session-workfiles/viz2/viz2-pay-friction.html). No inspiration images were needed.
+
+### Viz 3 — Income split (Tarun's structure, 2 Oct; options board drawn)
+| # | Decision |
+|---|---|
+| V3-1 | Income splits into spending and savings. Spending splits into budget and subscriptions. Savings splits into goals. |
+| V3-2 | All of it is drawn from the same grid (the 10x10 box grid). |
+| V3-3 | Colours: income grey, spending orange, savings green; the budget's categories are different colours (matches V1-9). |
+| V3-4 | Layout: **bands from the bottom** (not columns). |
+| V3-5 | **Savings at the bottom**, spending on top. |
+| V3-6 | Go deeper **level by level**, each step with a slow, smooth delay (my reading: the same grid splits in place, one step at a time). |
+| V3-7 | **Biggest five categories coloured, the rest shared as "others".** |
+| V3-8 | Labels must be separated and differentiated better: savings and spending were run together in one list. Resolved by V3-9 and V3-10. |
+| V3-9 | Labels = **L2, drop-downs after the split**: two collapsed lines, "Savings" and "Spending", each opens into its own list. |
+| V3-10 | A **visible gap between the savings band and the spending band inside the grid** (not only in the labels). |
+| V3-11 | **App-wide rule:** the scale line ("1 box = ₹120") must carry visual hierarchy so people don't miss it — a prominent chip, not small grey text, on every screen that shows it (Viz 1 gauge, Viz 2 pay screen, Viz 3 income). Applied to the Viz 2 and Viz 3 boards; the Viz 1 board still has the old small line and gets it in the build. |
+Viz 3 closed by Tarun ("done viz 3"). Defaults that stand, not explicitly answered: the stepped edge in the split row (spending boxes sit higher than savings boxes beside them); a group with nothing in it (no subscriptions / no goals) is not drawn; budget is light orange and subscriptions hatched orange.
+Board (updated): https://claude.ai/artifact/KHq3fHEr8sebrJzRksghMQ (source archive/session-workfiles/viz3/viz3-income-split.html).
+
+### Parked requirement (Tarun, 2 Oct) — Savings tab
+In the Savings tab the user must be able to **add goals**, **make a payment toward a goal**, and see **a few completed goals**. Not for now ("this happens later"); belongs with visualisation 4 (savings goal) and the Savings-tab screens. Keep track of it.
+
 ### Viz 4 — Savings goals (Tarun, 2 Oct; board published)
 References he sent: iOS year-progress waffle (green filled grid, "299d left · 18%"), a segmented half-ring gauge ("74%"), a GitHub-style day heatmap in green glow.
 | # | Decision |
