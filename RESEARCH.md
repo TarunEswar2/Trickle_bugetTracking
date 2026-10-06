@@ -129,6 +129,7 @@ Without something like this every future decision can only be judged by taste. T
 3. **Nobody was asked how they plan** across a month, how they get income (allowance, parents, part-time), or what they do at the moment of paying.
 4. **The two most-used design ideas have the thinnest support:** friction before paying (P10) and savings goals as the motivator (P8, one person each).
 5. **The survey** is cited in later docs and is not in the repo.
+6. **The reviewers of the builds were mostly design students** (Tarun, 6 Oct). The interview participants probably came from the same network (the sampling frame is not recorded). Part 8.4 explains how to weigh this.
 
 ---
 
@@ -497,6 +498,12 @@ Counting the change requests in the v14 and v15 conversations (my count, about 4
 ### 8.4 The reviews that drive the swings are the project's best evidence, and they are not recorded
 "Too much information, I don't know what I'm looking at" (v7), "lost a lot of functionality" (v11), "very hard to follow" (v14), "I'm losing functionality" (v15), plus Tarun's own repeated verdict that the approach is off. The people behind them were real users of the builds; the docs just never say who they were or how many. Taken together they are consistent and they form a strong signal: **both ends of the same dial**. They contradict each other only because the content is not ranked. They should be harvested now (Part 10, Step 0b) and captured from here on as dated notes tied to a screen, a task and a person.
 
+**Who the reviewers were (Tarun, 6 Oct): mostly design students.** This changes how to read the signal, in both directions.
+- *Stronger than it looks:* design students are the most tolerant audience for dense visuals and new vocabulary. If they say "very hard to follow" and "too much on every screen", students outside design will find it harder. The "too much" signal should be treated as a floor.
+- *Weaker than it looks:* design reviewers judge craft, hierarchy and completeness, and tend to ask for features as a checklist ("add insights", "add one-off", "tips"). Their "lost functionality" may reflect what a design portfolio piece should contain, not what a student with ₹6,000 a month needs. They also do not represent the target's money habits: income from parents, quick-commerce, no budget, GPay as the only payment app.
+- *Missing entirely:* anyone who would use it with real money for a week. Showing a prototype and watching someone try it for real are different tests.
+So treat design-student feedback as strong evidence on **clarity and density**, and as weak evidence on **which features matter**. The first test rounds should recruit mostly **non-design** students (Part 10, Steps 2 to 5).
+
 ### 8.5 Thin, second-hand evidence carrying heavy decisions
 n = 6; researcher included; no transcripts or survey in the repo; the pre-payment idea (value 3, the product's signature) rests on one uncoded remark. Decisions about weekly budgeting, tabs, a unit and a tone were made on this base. The right use of this evidence is to choose *questions*, not answers.
 
@@ -554,7 +561,7 @@ The project has enough ideas and builds, and it has plenty of informal feedback.
 ### 10.2 Plan
 **Step 0 (one day): decide the outcome and freeze.** Tarun accepts or edits O1 to O6 with pass marks (1.3). v15 (this build) becomes the test build; **no new features and no new decisions** are logged until Step 3 is done, other than fixes found in tests.
 
-**Step 0b (one hour, highest value for the effort): harvest what the showings already told you.** Tarun lists, per version, who saw it (even just "a friend on my course", "a mentor"), what they were doing, and what they said, as close to word for word as memory allows. Tag each comment with the screen it was about and one of: *too much*, *lost something*, *unclear*, *liked*, *wanted X*. This turns fourteen informal rounds into a dataset and shows which complaints repeat across people, which is the ranking that has been missing (Tier 1 vs Tier 2, 10.3).
+**Step 0b (one hour, highest value for the effort): harvest what the showings already told you.** Tarun lists, per version, who saw it (even just "a design classmate", "a mentor"), what they were doing, and what they said, as close to word for word as memory allows. Tag each comment with the screen it was about and one of: *too much*, *lost something*, *unclear*, *liked*, *wanted X*. This turns fourteen informal rounds into a dataset and shows which complaints repeat across people, which is the ranking that has been missing (Tier 1 vs Tier 2, 10.3).
 
 **Step 1 (two to three days): feasibility spike on how spends get in.** Output: one page with a go or no-go on each route.
 1. **Account Aggregator** through an aggregator partner or sandbox: what does one real UPI debit look like (merchant, time, UPI ID, category)?
@@ -562,7 +569,7 @@ The project has enough ideas and builds, and it has plenty of informal feedback.
 3. **Statement or CSV import** as the honest "auto" fallback.
 4. **Notification reading** (Android) as a possible fallback, with an explicit decision from Tarun on whether it counts as covered by the no-SMS rule.
 
-**Step 2 (one week): structured five-second and first-click tests, five students, recorded.** Recruit outside Tarun's own network where possible, and include at least one non-design student.
+**Step 2 (one week): structured five-second and first-click tests, five students, recorded.** Recruit **at least three of the five from outside design** (engineering, commerce, science, arts), because most feedback so far came from design students; keep one or two design students so the results can be compared with earlier reviews.
 - Home grid for 5 seconds: "What does this tell you?" "About how much is left?" "What would you do next?"
 - Pay confirm: "What happens when you tap Pay?" "What is a box?"
 - Insights hero: "What does this say?"
