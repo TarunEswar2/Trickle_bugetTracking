@@ -30,10 +30,10 @@ Appendices: A boards and artifacts, B file map, C quote bank, D source list, E d
 
 **The outcome the research asks for.** Students pay by UPI so easily that the cost of a payment only registers later, when they look at a balance and are surprised. The job of the app is to close the gap between *making a payment* and *feeling what it did*, without guilt, restriction or a tracking chore. [P, S-V]
 
-**Where the work is.** Between 10 Sep and 6 Oct the project produced 14 clickable builds, about **340 logged decisions** since 1 Oct (v12: 71, v13: 18, v14 and v15: 251), about 80 docs and 128,000 words. **No build has been put in front of a student.** Every "pass" so far is a script, a score or a judgement written by the same side that made the thing.
+**Where the work is.** Between 10 Sep and 6 Oct the project produced 14 clickable builds, about **340 logged decisions** since 1 Oct (v12: 71, v13: 18, v14 and v15: 251), about 80 docs and 128,000 words. **Every build has been shown to people, informally, and those showings are the project's best evidence**: they are how the real flaws were found ("too much information", "lost functionality", "very hard to follow"). What does not exist is a **structured, recorded test**: set tasks, noted outcomes, who the people were, saved in the repo. So the only recorded "passes" are scripts, scores and judgements written by the side that made the thing, and the showings cannot be compared from one build to the next.
 
 **Why it is not leading to the outcome, in eight lines** (evidence in Part 8)
-1. **The outcome was never turned into something measurable**, so no version could succeed or fail. There is no target for "awareness", no target for "effort", and no test that could say a version is better than the last.
+1. **The outcome was never turned into something measurable, and the feedback that does exist was never captured.** Showings happened for every build and drove every swing, but who saw it, what they did and what they said is not recorded. With no target for "awareness" or "effort" and no comparable record, no version could be shown to be better than the last, only reacted to.
 2. **The product drifted from awareness to budgeting.** Four of six participants have *no budget* [P]; the app is built around a plan, income splits, categories with limits, weekly resets and a week review. About 6% of the v14/v15 decisions concern the payment moment, which is the research's centre.
 3. **Every review was answered by adding something.** Of roughly 45 change requests in v14 and v15, about five removed anything. Two reviewers' complaints, "too much" and "lost functionality", have alternated for the whole project because nothing ranks what *must* exist.
 4. **The size of the build is a sawtooth**: 270 KB (v7) → 98 → 145 → 160 → 84 → 179 → 190 → 228 → 271 KB (v15). Each cut was followed by a restore. That is the pendulum, and v15 has just started the next swing (the first review of v15 asked for functionality back and it was restored within the day).
@@ -62,7 +62,7 @@ An outcome is something that can be seen to happen or not. The statements above 
 - a comparison of any two builds on the same task;
 - a statement of what result would make the team stop and change course.
 
-The original plan did contain this (`build_plan.md`: low-fi Phase 1 with 4 screens, 4 to 6 people including the interviewees, three validation questions, a gate before building). **It was never run** (Part 4, Part 8.1).
+The original plan did contain this (`build_plan.md`: low-fi Phase 1 with 4 screens, 4 to 6 people including the interviewees, three validation questions, a gate before building). **It was never run as a structured test.** Informal showings of every build did happen (Tarun), and they are the source of the reviews quoted in Part 4 and 8.4. What is missing is the record: tasks, outcomes, participants, notes (Part 8.1).
 
 ### 1.3 A proposed outcome ladder (a proposal [C], to be accepted or changed by Tarun)
 | # | Outcome | How it could be measured with five to eight students | Proposed pass mark (not evidence-based; a starting line) |
@@ -251,7 +251,8 @@ v7: 75 numbers; v8 to v13: no number, glow plus word; v14: sentence + one grid, 
 | v13: 41 of 41 checks | Claude | Scripts |
 | v14b: 60-step random-tap run per profile (no NaN, no negatives) | Claude | Script |
 | v15: density of 55 core states; same fuzz | Claude | Script |
-| **Any build with a real student** | nobody | **never** |
+| **Informal showings of every build to people** | Tarun | Conversation; the comments were relayed, not recorded (who, how many, which task) |
+| **A structured, recorded task test** (set tasks, noted outcomes, saved notes) | nobody | **none on record** |
 
 ---
 
@@ -260,7 +261,7 @@ v7: 75 numbers; v8 to v13: no number, glow plus word; v14: sentence + one grid, 
 All decisions are in the logs. This part groups them by domain so a decision can be found by topic, with its status in v15. IDs and prefixes: **V** = visualisation, **F** = pay and move-money flows, **O** = onboarding, **D** = delegated rules, **DS** = design system, **M** = mockup, **B** = bare-minimum and refinement decisions, **V15** = v15. Tags: [T] Tarun decided, [C] Claude decided (delegated or proposed), **S** stands, **R** reversed, **Sup** superseded, **P** parked.
 
 ### 5.1 Counts [M]
-v12: 71 rows. v13: 18. **v14 and v15 log: 251 IDs** (B 52, D 36, O 28, V4 21, V15 20, V1 15, V3 11, V5 10, DS 10, F 7, M 6, DS2 6, V2 5, V6 5, V8 4, V9 3, V10 3, V11 3, M2 3, V7 2, X 1). About **340 decisions in six days**, none tested. Per prefix tags (Tarun or Claude) are inconsistent in the log: 28 rows are marked "(Tarun)", 23 "(delegated)", 3 "(Tarun asked, Claude designed)". The rest have no marker in the row, which is part of the problem (Part 9).
+v12: 71 rows. v13: 18. **v14 and v15 log: 251 IDs** (B 52, D 36, O 28, V4 21, V15 20, V1 15, V3 11, V5 10, DS 10, F 7, M 6, DS2 6, V2 5, V6 5, V8 4, V9 3, V10 3, V11 3, M2 3, V7 2, X 1). About **340 decisions in six days**, none put through a structured test. Per prefix tags (Tarun or Claude) are inconsistent in the log: 28 rows are marked "(Tarun)", 23 "(delegated)", 3 "(Tarun asked, Claude designed)". The rest have no marker in the row, which is part of the problem (Part 9).
 
 ### 5.2 Who decided what
 | Phase | Decider | Notes |
@@ -354,7 +355,7 @@ DS-1 to DS-10 (Trickle Night), DS2 (Instrument, alternate), M2-3 (Tarun chose Ni
 | **V10 History** | Day-grouped list, filter chips (category, range), name/amount/time | V10-1 to V10-3 | all transactions | Spending → History (latest 8, "Show all"; filters dropped) |
 | **V11 Exact amounts on tap** | One tap pattern: a line under the picture; Home shows no ₹ | V11-1 to V11-3 | none | Pattern kept; Home rule relaxed |
 
-**Visualisation lessons:** four of the eleven were revised after Tarun saw them (V1 rings, V4 three times, V6 withdrawn, V5 amber for red). Two had to be cut for v15 because they added a second thing to a screen. **None was tested for comprehension.**
+**Visualisation lessons:** four of the eleven were revised after Tarun saw them (V1 rings, V4 three times, V6 withdrawn, V5 amber for red). Two had to be cut for v15 because they added a second thing to a screen. **None went through a structured comprehension test** (informal reactions drove each revision).
 
 ---
 
@@ -476,8 +477,13 @@ Situations (P6), the accumulation of **small** (not repeated) purchases, "expect
 
 Evidence for each is in the earlier parts. The causes are ordered by how much they explain.
 
-### 8.1 No measurable outcome and no test (the root)
-Three things that would have made the work converge are missing together: a target, a way to measure it, and contact with students. The original plan had all three (`build_plan.md`). It was skipped at v2 and never reinstated. Every later "validation" checks rules the builder wrote: numbers per screen, red pixels, tap counts, 44/44, 37/37, 41/41. These pass by construction. After 14 builds nobody can say whether v15 is better than v8 for a student.
+### 8.1 No measurable outcome, and feedback that is real but not captured (the root)
+Tarun's own account is the key evidence here: **every version has been shown to people, and that is how the gaps and flaws were found.** That is real user contact, repeated fourteen times, and it is why the diagnosis in this document can be trusted: the same complaints keep coming back. The gap is in what happens to that feedback.
+- **It is not recorded.** The docs never say who saw each build, how many, what they were asked to do, or what they said word for word. Several were evidently design-literate friends or reviewers, and none is logged against a screen.
+- **It is not ranked.** "Too much information" (v7), "lost functionality" (v11), "very hard to follow" (v14), "I'm losing functionality" (v15) are all true at once, because nothing says which things must stay on the first screen.
+- **It is not turned into a target.** Without something like the outcome ladder in 1.3, a showing can only produce a reaction ("fix that") and never a result ("4 of 5 could do X in under a minute").
+- **The original structured test was never run** (`build_plan.md`: low-fi Phase 1, 4 screens, 4 to 6 people, three validation questions). Informal showings replaced it, and they have more reach and less discipline.
+Every scripted "validation" checks rules the builder wrote: numbers per screen, red pixels, tap counts, 44/44, 37/37, 41/41. Those pass by construction. After 14 builds the informal showings say clearly **that** it is not working, and cannot say **which** change would fix it or whether the last change helped.
 
 ### 8.2 The product drifted from awareness to budgeting
 - The research is about **a gap in perception at the moment of paying**. Four of six participants have no budget at all [P4].
@@ -488,8 +494,8 @@ Three things that would have made the work converge are missing together: a targ
 ### 8.3 Every review was answered by adding
 Counting the change requests in the v14 and v15 conversations (my count, about 45): roughly five removed anything (never ask the balance; move the "two quick things" screen; Insights rupees only; and the reviews that led to v15). The rest asked for more: tile meaning, left amount, more categories, popups, one-off, tips, restored functionality, more Insights. Each request was reasonable alone. Without a ranking of what **must** be on the first screen, adding is always the safest answer to a reviewer, and the product grows until the next reviewer says "too much". This is the pendulum in 4.2.
 
-### 8.4 The reviews that drive the swings are not recorded as evidence
-"Too much information, I don't know what I'm looking at" (v7), "lost a lot of functionality" (v11), "very hard to follow" (v14), "I'm losing functionality" (v15): the docs never say who the reviewers were, how many, or what they were doing. They are valuable signals and they contradict each other because the content is not ranked. They should be captured as dated notes tied to a screen, a task and a person.
+### 8.4 The reviews that drive the swings are the project's best evidence, and they are not recorded
+"Too much information, I don't know what I'm looking at" (v7), "lost a lot of functionality" (v11), "very hard to follow" (v14), "I'm losing functionality" (v15), plus Tarun's own repeated verdict that the approach is off. The people behind them were real users of the builds; the docs just never say who they were or how many. Taken together they are consistent and they form a strong signal: **both ends of the same dial**. They contradict each other only because the content is not ranked. They should be harvested now (Part 10, Step 0b) and captured from here on as dated notes tied to a screen, a task and a person.
 
 ### 8.5 Thin, second-hand evidence carrying heavy decisions
 n = 6; researcher included; no transcripts or survey in the repo; the pre-payment idea (value 3, the product's signature) rests on one uncoded remark. Decisions about weekly budgeting, tabs, a unit and a tone were made on this base. The right use of this evidence is to choose *questions*, not answers.
@@ -504,7 +510,7 @@ Six changes since v8 (4.3). Each time the previous unit was blamed for a real pr
 (a) **Data in:** reading UPI spends without SMS has never been examined; the New round says the real route is Account Aggregator, which needs a regulated partner and gives bank-level narrations. (b) **Friction before the payment:** UPI payments happen inside other apps; the product assumes Trickle starts the payment. If neither holds, the first and signature job (zero-effort tracking and friction at pay) cannot be delivered as designed.
 
 ### 8.9 Process cost went to polish and export, not to learning
-Three full Figma re-exports (116 frames each), two design systems, eight named gradients, a motion and sound lab, a Sankey and a logo exploration were built before one student looked at a screen. Each is a reasonable activity. Together they used the time that a five-student test needs.
+Three full Figma re-exports (116 frames each), two design systems, eight named gradients, a motion and sound lab, a Sankey and a logo exploration were built between showings, before any structured test was designed. Each is a reasonable activity. Together they used the time that a recorded test round needs.
 
 ### 8.10 The record itself became unreliable
 - The V2 and V3 sections and a parked Savings requirement were **deleted from the decision log by accident** (commit 836e0fe, while logging V1-10) and went unnoticed for five days. Restored from git on 6 Oct.
@@ -543,10 +549,12 @@ Three full Figma re-exports (116 frames each), two design systems, eight named g
 ## 10. What to do next
 
 ### 10.1 Principle: learn before adding
-The project has enough ideas and builds. What it lacks is feedback from students and a stable definition of success. The next three weeks should produce **evidence, not features**.
+The project has enough ideas and builds, and it has plenty of informal feedback. What it lacks is a stable definition of success and a record of the feedback that makes it comparable across builds. The next three weeks should produce **evidence, not features**.
 
 ### 10.2 Plan
 **Step 0 (one day): decide the outcome and freeze.** Tarun accepts or edits O1 to O6 with pass marks (1.3). v15 (this build) becomes the test build; **no new features and no new decisions** are logged until Step 3 is done, other than fixes found in tests.
+
+**Step 0b (one hour, highest value for the effort): harvest what the showings already told you.** Tarun lists, per version, who saw it (even just "a friend on my course", "a mentor"), what they were doing, and what they said, as close to word for word as memory allows. Tag each comment with the screen it was about and one of: *too much*, *lost something*, *unclear*, *liked*, *wanted X*. This turns fourteen informal rounds into a dataset and shows which complaints repeat across people, which is the ranking that has been missing (Tier 1 vs Tier 2, 10.3).
 
 **Step 1 (two to three days): feasibility spike on how spends get in.** Output: one page with a go or no-go on each route.
 1. **Account Aggregator** through an aggregator partner or sandbox: what does one real UPI debit look like (merchant, time, UPI ID, category)?
@@ -554,13 +562,13 @@ The project has enough ideas and builds. What it lacks is feedback from students
 3. **Statement or CSV import** as the honest "auto" fallback.
 4. **Notification reading** (Android) as a possible fallback, with an explicit decision from Tarun on whether it counts as covered by the no-SMS rule.
 
-**Step 2 (one week): five-second and first-click tests, five students.** Recruit outside Tarun's own network where possible, and include at least one non-design student.
+**Step 2 (one week): structured five-second and first-click tests, five students, recorded.** Recruit outside Tarun's own network where possible, and include at least one non-design student.
 - Home grid for 5 seconds: "What does this tell you?" "About how much is left?" "What would you do next?"
 - Pay confirm: "What happens when you tap Pay?" "What is a box?"
 - Insights hero: "What does this say?"
 - Pass: at least 4 of 5 answer correctly without help (O3). Also test the **percent teaching** (box = 1%) against the **rupee teaching** (box ≈ ₹N) with different students.
 
-**Step 3 (two weeks): task tests of v15, five students, three rounds, fix between rounds** (NN/g: about five users per round, several small rounds).
+**Step 3 (two weeks): recorded task tests of v15, five students, three rounds, fix between rounds** (NN/g: about five users per round, several small rounds).
 Tasks: start from nothing and log a first spend; find where most of last week's money went; make a plan; add a subscription; record a one-off; understand an over-budget week; add a goal; set up with UPI link (simulated). Capture success, time, errors, quotes and the standard 10-item usability scale. Run a **"what does this mean?"** probe on every number and word on screen (it is how "2 times of 7" would have been caught).
 
 **Step 4 (one week, in parallel): one-week diary with five students.** Use the manual path (no UPI needed). Day 0 interview: how they get and plan money, their estimate of a normal week. Daily: log spends and answer one question. Day 7: "How much did you spend this week? Top category?" against the ledger (O1). Also ask whether they would have made a plan, and in which units they think (day, week, month, until a date), which settles the weekly question with data.
