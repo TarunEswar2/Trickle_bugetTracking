@@ -35,8 +35,8 @@ Appendices: A boards and artifacts, B file map, C quote bank, D source list, E d
 **Why it is not leading to the outcome, in eight lines** (evidence in Part 8)
 1. **The outcome was never turned into something measurable, and the feedback that does exist was never captured.** Showings happened for every build and drove every swing, but who saw it, what they did and what they said is not recorded. With no target for "awareness" or "effort" and no comparable record, no version could be shown to be better than the last, only reacted to.
 2. **The product drifted from awareness to budgeting.** Four of six participants have *no budget* [P]; the app is built around a plan, income splits, categories with limits, weekly resets and a week review. About 6% of the v14/v15 decisions concern the payment moment, which is the research's centre.
-3. **Every review was answered by adding something.** Of roughly 45 change requests in v14 and v15, about five removed anything. Two reviewers' complaints, "too much" and "lost functionality", have alternated for the whole project because nothing ranks what *must* exist.
-4. **The size of the build is a sawtooth**: 270 KB (v7) → 98 → 145 → 160 → 84 → 179 → 190 → 228 → 271 KB (v15). Each cut was followed by a restore. That is the pendulum, and v15 has just started the next swing (the first review of v15 asked for functionality back and it was restored within the day).
+3. **The reviewers say one thing and the design intuition says the opposite.** Reviewers (mostly design students) have said the same thing for the whole project: *too much information, what do I look at, I can't understand*. "Lost functionality" is **Tarun's own intuition**, not a reviewer's complaint. The builds listened to reviewers by cutting now and then (v8, v11, v15) and to intuition by adding almost all the time: of roughly 45 change requests in v14 and v15, about five removed anything. Nothing ranks what *must* be on the first screen, so each cut gets undone.
+4. **The size of the build is a sawtooth**: 270 KB (v7) → 98 → 145 → 160 → 84 → 179 → 190 → 228 → 271 KB (v15). Each cut, made because reviewers could not follow it, was followed by a restore driven by the designer's intuition that functionality was lost. That is the pendulum, and v15 has just started the next swing (the "I'm losing functionality" note on v15 was Tarun's own, and much of it was restored within the day).
 5. **The evidence is thin and second-hand**: six interviews, one of them the researcher, coded by one person; the transcripts and the survey are not in the repo. The payment-friction idea, which is the product's signature, rests mainly on one uncoded remark by one participant.
 6. **The decision process outran any possibility of testing**: about 60 logged decisions a day, most accepted from Claude's recommendation, many made by Claude under delegation. Decisions were never tagged with the evidence behind them or the test that would confirm them.
 7. **The unit of money has changed six times since v8** and v14's 10×10 grid brought back the very problem that sank v9: a different ₹ per box on every screen. The project's own scoring ranked a 10×10 waffle last of 15 systems (2.8 of 5), and it was chosen anyway from a reference image.
@@ -190,12 +190,12 @@ Sizes are the final built HTML of each prototype [M]. "Screens" are as reported 
 | **v8** | 30 Sep | **The calm reframe.** 4 tabs, no budget number on Home, glow + word, one choice per step, two jars, no red, no streaks. Tarun set the six values and picked Tiles | 98 KB (−64%) | 4 tabs | Tiles meant ₹100, ₹500, 1% and "1 spend" in different places | Six values; reviews on v7 |
 | **v9** | 30 Sep | Adaptive tile ladder ₹10 to ₹2,500 with a key on every card; 20 widgets; Sankey back; repeat-buys suite; sound | 145 KB | "Small purchases" redefined as **repeat purchases** | The unit changes per card, so the key must be read every time | v8 critique |
 | **v10** | 30 Sep | Six-shape denomination ladder; logo B; splash | 160 KB | six shapes | **Rejected: "shapes are not working"** | Design taste |
-| **v11** | 30 Sep to 1 Oct | Full 12-phase process; fixed ₹100 tile; rows of 10 split 5 and 5; confirmed money model; 4-tap starter month | **84 KB (−48%)** | 25 frames; Home 0 numbers; 44/44 scripted checks | Clear, but "lost a lot of functionality and insights" | Literature; a **simulated** comprehension test |
+| **v11** | 30 Sep to 1 Oct | Full 12-phase process; fixed ₹100 tile; rows of 10 split 5 and 5; confirmed money model; 4-tap starter month | **84 KB (−48%)** | 25 frames; Home 0 numbers; 44/44 scripted checks | Clear, but "lost a lot of functionality and insights" (Tarun's own view, not a reviewer's) | Literature; a **simulated** comprehension test |
 | **v12** | 1 Oct | Recovery audit: **152 items inventoried, 33 brought back**; 5 tabs; Tarun's dot ladder (crumb/dot/pill/block); Day lanes; 31 insights; 20 flows | 179 KB | **75 frames; about 60 decisions in one day**; 37/37 scripted checks | Visual identity next | Literature (39 sources, 33 verified) |
 | **v13** | 1 to 2 Oct | Identity pass. Tarun: "make your own decisions". Mesh gradients, "Zentra" onboarding template, dot-ladder logo | 190 KB | 41/41 scripted checks; **every decision Claude's** | Tarun: project "has swayed far from the intended" → reset | Reference images |
 | **v14a** | 2 Oct | **The reset: facts first, one visualisation at a time.** Stage 0 facts and 7 principles; 11 visualisation boards (V1 to V11); 28 onboarding decisions | boards | 5 tabs; 10×10 grid | Tarun decided each viz; then delegated the rest | Interviews; Tarun's references |
 | **v14b** | 2 to 5 Oct | Blueprint (69 screens, 23 flows), design system "Trickle Night", clickable mockup with live ledger, 6 profiles, simulator, then B-1 to B-52 (bare-minimum mode, plan vs income, date ranges, subscriptions, pace colours, week review, UPI split, six-month account, categories) | **228 KB; 116 screens** | 36 delegated rules (D-1 to D-36), 52 B-decisions | Reviews: "very hard to follow, too much info on every screen" | User comments on each build |
-| **v15** | 5 to 6 Oct | Audit; density budget; 4 tabs; onboarding of 2 questions; Pay in 3 screens; Insights as its own tab; one-off payments; grid teaching; first-time tips; rupees-only Insights | **271 KB** (includes unreachable parked code) | 55 core states; avg 22 words, 8 taps (v14: 56 and 12) | First v15 review: "I'm losing functionality" → much of it restored the same day | Density audit; Tarun's comments |
+| **v15** | 5 to 6 Oct | Audit; density budget; 4 tabs; onboarding of 2 questions; Pay in 3 screens; Insights as its own tab; one-off payments; grid teaching; first-time tips; rupees-only Insights | **271 KB** (includes unreachable parked code) | 55 core states; avg 22 words, 8 taps (v14: 56 and 12) | Tarun's own note: "I'm losing functionality" → much of it restored the same day | Density audit; Tarun's comments |
 
 ### 4.2 The pendulum, as numbers
 ```
@@ -203,17 +203,17 @@ v3  128 ████████████████
 v4  142 ██████████████████
 v5  159 ████████████████████
 v6  159 ████████████████████
-v7  270 ██████████████████████████████████  ← "too much information, panic on open"
-v8   98 ████████████                         ← calm reframe
-v9  145 ██████████████████                   ← restore breadth
+v7  270 ██████████████████████████████████  ← reviewers: "too much information, panic on open"
+v8   98 ████████████                         ← cut (answering reviewers)
+v9  145 ██████████████████                   ← restore breadth (designer's intuition)
 v10 160 ████████████████████
-v11  84 ██████████                           ← cut hard
-v12 179 ██████████████████████               ← "lost functionality": restore (33 items back)
+v11  84 ██████████                           ← cut hard (answering reviewers)
+v12 179 ██████████████████████               ← Tarun: "lost functionality": restore (33 items back)
 v13 190 ████████████████████████
 v14 228 █████████████████████████████        ← mockup, 116 screens
 v15 271 ██████████████████████████████████   ← size again equals v7 (parked code included)
 ```
-Three cuts (v8, v11, v15) were each followed within a build or a day by a restore (v9, v12, v15.1). Both complaints, *too much* and *lost functionality*, are true of every version because the project has never decided **what must be on the first screen and what may live one tap away**. Part 10.3 proposes a three-tier answer.
+Three cuts (v8, v11, v15) were each followed within a build or a day by a restore (v9, v12, v15.1). The cuts answered **reviewers** ("too much, what do I look at, I can't understand"); the restores answered the **designer's intuition** ("lost functionality"). These are not two audiences disagreeing: it is one consistent outside signal against one inside instinct, and the project has never decided **what must be on the first screen and what may live one tap away**, so the instinct wins each round. Part 10.3 proposes a three-tier answer.
 
 ### 4.3 Four long-running threads
 **Tabs**
@@ -481,7 +481,7 @@ Evidence for each is in the earlier parts. The causes are ordered by how much th
 ### 8.1 No measurable outcome, and feedback that is real but not captured (the root)
 Tarun's own account is the key evidence here: **every version has been shown to people, and that is how the gaps and flaws were found.** That is real user contact, repeated fourteen times, and it is why the diagnosis in this document can be trusted: the same complaints keep coming back. The gap is in what happens to that feedback.
 - **It is not recorded.** The docs never say who saw each build, how many, what they were asked to do, or what they said word for word. Several were evidently design-literate friends or reviewers, and none is logged against a screen.
-- **It is not ranked.** "Too much information" (v7), "lost functionality" (v11), "very hard to follow" (v14), "I'm losing functionality" (v15) are all true at once, because nothing says which things must stay on the first screen.
+- **It is not ranked against the designer's own view.** Reviewers said "too much information" (v7), "what do I look at, I can't understand" (v14 and since). "Lost functionality" (v11, v15) is Tarun's intuition. Both are valid, but only one comes from people using the product, and nothing says which things must stay on the first screen.
 - **It is not turned into a target.** Without something like the outcome ladder in 1.3, a showing can only produce a reaction ("fix that") and never a result ("4 of 5 could do X in under a minute").
 - **The original structured test was never run** (`build_plan.md`: low-fi Phase 1, 4 screens, 4 to 6 people, three validation questions). Informal showings replaced it, and they have more reach and less discipline.
 Every scripted "validation" checks rules the builder wrote: numbers per screen, red pixels, tap counts, 44/44, 37/37, 41/41. Those pass by construction. After 14 builds the informal showings say clearly **that** it is not working, and cannot say **which** change would fix it or whether the last change helped.
@@ -492,17 +492,23 @@ Every scripted "validation" checks rules the builder wrote: numbers per screen, 
 - Of 251 v14 and v15 decision IDs, about 15 (V2, F-1 to F-7, D-10 to D-12) concern the payment moment, **about 6%**. Principle 5 ("mental limits over rigid budgets") says one thing, the structure says another. The "bare minimum" mode (B-1 to B-8) was the right correction and was then followed by B-17 to B-52, which rebuilt the plan machinery on top of it.
 - The strongest finding (small purchases adding up) did not exist in the app until v9, was redefined as repeats, and in v14 sits one tap deeper than the plan.
 
-### 8.3 Every review was answered by adding
-Counting the change requests in the v14 and v15 conversations (my count, about 45): roughly five removed anything (never ask the balance; move the "two quick things" screen; Insights rupees only; and the reviews that led to v15). The rest asked for more: tile meaning, left amount, more categories, popups, one-off, tips, restored functionality, more Insights. Each request was reasonable alone. Without a ranking of what **must** be on the first screen, adding is always the safest answer to a reviewer, and the product grows until the next reviewer says "too much". This is the pendulum in 4.2.
+### 8.3 Reviews asked for less, the design intuition asked for more, and more won
+Counting the change requests in the v14 and v15 conversations (my count, about 45): roughly five removed anything (never ask the balance; move the "two quick things" screen; Insights rupees only; and the reviews that led to v15). The rest asked for more: tile meaning, left amount, more categories, popups, one-off, tips, restored functionality, more Insights. These were Tarun's design requests (several themselves answers to a reviewer's "I don't understand", such as showing the box meaning and the amount left) and Claude built each one. Each was reasonable alone. Even the fixes for "I can't understand" were additions (a chip, a sheet, a tip, a number) instead of removals. Without a ranking of what **must** be on the first screen, adding is always the easiest way to answer anything, and the product grows until the next reviewer says "too much". This is the pendulum in 4.2.
 
-### 8.4 The reviews that drive the swings are the project's best evidence, and they are not recorded
-"Too much information, I don't know what I'm looking at" (v7), "lost a lot of functionality" (v11), "very hard to follow" (v14), "I'm losing functionality" (v15), plus Tarun's own repeated verdict that the approach is off. The people behind them were real users of the builds; the docs just never say who they were or how many. Taken together they are consistent and they form a strong signal: **both ends of the same dial**. They contradict each other only because the content is not ranked. They should be harvested now (Part 10, Step 0b) and captured from here on as dated notes tied to a screen, a task and a person.
+### 8.4 What the reviewers said, and what is intuition
+**From reviewers (Tarun, 6 Oct): mostly design students, and most of what they said was "too much information, what do I look at, I can't understand".** Three separate complaints are folded in that sentence:
+- *Too much information:* density, the number of things on a screen.
+- *What do I look at:* hierarchy, no single hero or starting point.
+- *I can't understand:* vocabulary and meaning (what is a box, what do these numbers refer to, what is a plan versus income).
+All three have been repeated across builds (v7, then v14 and v15). This is the project's strongest user evidence and it points one way.
 
-**Who the reviewers were (Tarun, 6 Oct): mostly design students.** This changes how to read the signal, in both directions.
-- *Stronger than it looks:* design students are the most tolerant audience for dense visuals and new vocabulary. If they say "very hard to follow" and "too much on every screen", students outside design will find it harder. The "too much" signal should be treated as a floor.
-- *Weaker than it looks:* design reviewers judge craft, hierarchy and completeness, and tend to ask for features as a checklist ("add insights", "add one-off", "tips"). Their "lost functionality" may reflect what a design portfolio piece should contain, not what a student with ₹6,000 a month needs. They also do not represent the target's money habits: income from parents, quick-commerce, no budget, GPay as the only payment app.
-- *Missing entirely:* anyone who would use it with real money for a week. Showing a prototype and watching someone try it for real are different tests.
-So treat design-student feedback as strong evidence on **clarity and density**, and as weak evidence on **which features matter**. The first test rounds should recruit mostly **non-design** students (Part 10, Steps 2 to 5).
+**From Tarun's own intuition: "lost functionality" (v11 and v15).** This is a designer's judgement about what a complete product should contain. It may well be right, and it is **not** a finding: no reviewer asked for functionality back, and the interviews do not show students asking for most of it (Part 7.2). Treat it as a hypothesis to be tested, and satisfy it with Tier 2 (one tap away, Part 10.3) rather than by putting things back on the first screen.
+
+**How to weigh the reviewers.**
+- *Stronger than it looks:* design students are the most tolerant audience for dense visuals and new vocabulary. If they say "very hard to follow", students outside design will find it harder. The "too much" signal is a floor.
+- *Weaker than it looks:* design reviewers judge craft and hierarchy well, and are not the target on money habits (income from parents, quick commerce, no budget, GPay as the only payment app). They say little about which features matter.
+- *Missing entirely:* anyone using it with real money for a week. Showing a prototype and watching someone try it for real are different tests.
+So treat design-student feedback as strong evidence on **clarity and density**, and as weak evidence on **which features matter**. The first recorded test rounds should recruit mostly **non-design** students (Part 10, Steps 2 to 5).
 
 ### 8.5 Thin, second-hand evidence carrying heavy decisions
 n = 6; researcher included; no transcripts or survey in the repo; the pre-payment idea (value 3, the product's signature) rests on one uncoded remark. Decisions about weekly budgeting, tabs, a unit and a tone were made on this base. The right use of this evidence is to choose *questions*, not answers.
@@ -561,7 +567,7 @@ The project has enough ideas and builds, and it has plenty of informal feedback.
 ### 10.2 Plan
 **Step 0 (one day): decide the outcome and freeze.** Tarun accepts or edits O1 to O6 with pass marks (1.3). v15 (this build) becomes the test build; **no new features and no new decisions** are logged until Step 3 is done, other than fixes found in tests.
 
-**Step 0b (one hour, highest value for the effort): harvest what the showings already told you.** Tarun lists, per version, who saw it (even just "a design classmate", "a mentor"), what they were doing, and what they said, as close to word for word as memory allows. Tag each comment with the screen it was about and one of: *too much*, *lost something*, *unclear*, *liked*, *wanted X*. This turns fourteen informal rounds into a dataset and shows which complaints repeat across people, which is the ranking that has been missing (Tier 1 vs Tier 2, 10.3).
+**Step 0b (one hour, highest value for the effort): harvest what the showings already told you.** Tarun lists, per version, who saw it (even just "a design classmate", "a mentor"), what they were doing, and what they said, as close to word for word as memory allows. Tag each comment with the screen it was about and one of: *too much*, *what do I look at* (hierarchy), *can't understand* (meaning), *liked*, *wanted X*. Keep Tarun's own "lost functionality" notes in a separate column, so reviewer evidence and intuition stay apart. This turns fourteen informal rounds into a dataset and shows which complaints repeat across people, which is the ranking that has been missing (Tier 1 vs Tier 2, 10.3).
 
 **Step 1 (two to three days): feasibility spike on how spends get in.** Output: one page with a go or no-go on each route.
 1. **Account Aggregator** through an aggregator partner or sandbox: what does one real UPI debit look like (merchant, time, UPI ID, category)?
