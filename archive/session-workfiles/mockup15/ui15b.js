@@ -28,7 +28,7 @@ function insCmp(){const frac=Math.min(1,((S.now-startOfWeek(S.now))/DAY+1)/7);co
  return `<div class="title" style="font-size:30px;line-height:1.1">${head}</div><div class="sub" style="margin-top:6px">Same days of the week.</div>
  <div class="row" style="gap:14px;justify-content:center;margin:20px 0 16px"><div style="width:132px;opacity:.5"><div class="cap" style="text-align:center;margin-bottom:6px">Last</div>${gridHtml(lastL,'#B48CFF',0,'#B48CFF',{fade:.5})}</div><div style="width:132px"><div class="cap" style="text-align:center;margin-bottom:6px">This</div>${gridHtml(nowL,'#B48CFF',0,'#B48CFF')}</div></div>
  <div class="col" style="gap:8px">${rows.map(r=>`<button class="li" data-a="insc|${r.c.id}"><span class="d" style="background:${catCol(r.i)}"></span><span class="n">${esc(r.c.name)}</span><span class="a" style="color:${r.d>0?AMBER:r.d<0?SAVE:'var(--ink3)'}">${r.d>0?'↑ '+money(r.d):r.d<0?'↓ '+money(-r.d):'same'}</span></button>`).join('')}</div>`}
-SCREENS.insights=()=>{if(!UI._insInit){UI._insInit=1;UI.hot.scale='week'}const v=UI.ins||'when';return `${SEG([['when','When'],['rep','Repeats'],['cmp','Vs last week']],v,'insseg')}${v==='when'?insWhen():v==='rep'?insRep():insCmp()}`};
+SCREENS.insights=()=>{if(!UI._insInit){UI._insInit=1;UI.hot.scale='week'}const v=UI.ins||'when';return `${SEG([['when','When'],['rep','Repeats'],['cmp','Last week']],v,'insseg')}${v==='when'?insWhen():v==='rep'?insRep():insCmp()}`};
 
 /* ---------- Teaching the grid: label it, let people tap it, show what a payment does to it ---------- */
 SHEETS.gridhow=({tour})=>{const pl=planned();const box=pl?boxVal(flexW()):boxVal(Math.max(100,Math.ceil(Math.max(wkTot(0),wkTot(1))/50)*50));const n=10;const lvl=pl?Math.max(n,Math.min(100,flexL()/flexW()*100)):60;
@@ -38,7 +38,7 @@ SHEETS.gridhow=({tour})=>{const pl=planned();const box=pl?boxVal(flexW()):boxVal
 H.gridhow=()=>{openSheet('gridhow',{});return false};
 /* at the moment of paying: say how many boxes go */
 const _payFlow2=FLOWS.pay;
-FLOWS.pay=F=>{let h=_payFlow2(F);if(F.step===1||F.step===undefined){const amt=amtOf(F.d.kp);h=h.replace(/1 box (=|≈) ₹(\d+)/,(m,e,v)=>`${Math.max(1,Math.min(100,Math.round(amt/(+v||1))))} boxes go · 1 box ≈ ₹${v}`)}return h};
+FLOWS.pay=F=>{let h=_payFlow2(F);if(F.step===1||F.step===undefined){const amt=amtOf(F.d.kp);h=h.replace(/1 mark (=|≈) ₹(\d+)/,(m,e,v)=>`${Math.max(1,Math.min(100,Math.round(amt/(+v||1))))} marks go · 1 mark ≈ ₹${v}`)}return h};
 
 /* ---------- One-off payments: outside the weekly plan ---------- */
 const OOCH=['Trip','Gift','Repair','Fees','Medical','Event'];
@@ -46,7 +46,7 @@ function doOneOff(amt,payee,fromSav){const fs=fromSav?Math.min(amt,Math.max(0,S.
 const _payFlow3=FLOWS.pay;
 FLOWS.pay=F=>{const d=F.d;if(F.step>0||!d.ask)return _payFlow3(F);const amt=amtOf(d.kp);
  if(d.ask===1){let h=_payFlow3(F);
-  const tile=`<button class="tile ${d.oneoff?'on':''}" style="border-style:dashed;${d.oneoff?'border-color:#B48CFF;background:#B48CFF22':''}" data-a="poneoff"><b><i style="background:#B48CFF"></i>One-off</b><small>outside your plan</small></button>`;
+  const tile=`<button class="tile ${d.oneoff?'on':''}" style="border-style:dashed;${d.oneoff?'border-color:#B48CFF;background:#B48CFF22':''}" data-a="poneoff"><b><i style="background:#B48CFF"></i>One-off</b><small>not part of your week</small></button>`;
   h=/data-a="(pto\|__more|tmore)"/.test(h)?h.replace(/<button class="tile[^"]*"[^>]*data-a="(pto\|__more|tmore)"/,m=>tile+m):h.replace(/(<div class="tgrid"[^>]*>[\s\S]*?)(<\/div>)/,`$1${tile}$2`);
   if(d.oneoff)h=h.replace(/<button class="btn d" data-a="x">Pick one<\/button>/,`<button class="btn" data-a="oonext">Next</button>`).replace(/data-a="(pnext|tadd)">(Next|Add [^<]*)<\/button>/,`data-a="oonext">Next</button>`);
   return h}
@@ -62,7 +62,7 @@ H.oonext2=()=>{const d=UI.flow.d;if(!planned()||S.free<=0){H.oofinal(['plan']);r
 H.oofinal=a=>{const d=UI.flow.d,amt=amtOf(d.kp);const t=doOneOff(amt,(d.ooname||'One-off').trim(),a[0]==='sav');closeFlow();say(a[0]==='sav'?money(t.src.fromSavings)+' taken from savings.':'One-off added. Your week is untouched.');return false};
 const _txScreen=SCREENS.txn;
 SCREENS.txn=p=>{const t=S.txns.find(x=>x.id===p.id);if(!t||t.kind!=='oneoff')return _txScreen(p);const dt=new Date(t.t);
- return `<button class="back" data-a="back">‹ Back</button><div class="cap">${esc(t.payee)} · one-off</div><div class="title" style="font-size:46px;margin-top:4px">${money(t.amt)}</div><div class="card" style="margin:16px 0;display:grid;gap:10px">${[['When',fmtDay(dt)+', '+fmtTime(dt)],['Paid from',t.src&&t.src.fromSavings?'Savings':'Outside your plan']].map(r=>`<div class="row sp"><span class="mut">${r[0]}</span><b>${esc(r[1])}</b></div>`).join('')}</div><button class="btn o" data-a="rm|${t.id}">Delete</button>`};
+ return `<button class="back" data-a="back">‹ Back</button><div class="cap">${esc(t.payee)} · one-off</div><div class="title" style="font-size:46px;margin-top:4px">${money(t.amt)}</div><div class="card" style="margin:16px 0;display:grid;gap:10px">${[['When',fmtDay(dt)+', '+fmtTime(dt)],['Paid from',t.src&&t.src.fromSavings?'Savings':'Not part of your week']].map(r=>`<div class="row sp"><span class="mut">${r[0]}</span><b>${esc(r[1])}</b></div>`).join('')}</div><button class="btn o" data-a="rm|${t.id}">Delete</button>`};
 
 /* ---------- UPI linked: use the balance to make a plan (skippable, two short screens) ---------- */
 H.obverify=a=>{const d=obD();if(a[0]==='fail'){d.fail=true;return}d.fail=false;d.upiBal=6500;d.pct=20;d.s='ubal'};

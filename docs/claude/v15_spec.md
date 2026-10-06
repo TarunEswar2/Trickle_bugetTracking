@@ -116,3 +116,15 @@ Events (detected as changes in the account): first spend, first payment that nee
 First views: Home grid ("How to read it", with the dashed ghost boxes), Spending, Money, Insights, and the first category you open.
 The side panel has "Show every tip again" and "Turn tips on or off" so they can be reviewed without making a new account. Tips are off while measuring density.
 What to test: after the first week, can a new user say why a payment disappeared boxes, what amber means and what a one-off is, without ever opening Settings?
+
+
+## v15.3: from the Architecture & Strategy Document (6 Oct 2026)
+Source: Tarun's upload. Decisions V15-21…V15-30 in `v14_decisions.md` (all PROPOSED). Built in `ui15x.js` (loaded before `ui15d.js`).
+- **Weekly amount (wallet mode).** Onboarding: link, categories, then "How much can you spend each week?" (presets ₹500/1,000/1,500/2,000 or type; Skip). Home with no amount shows "Set your weekly amount". `makeAllowance(wk)` builds a plan with every category at ₹0 and the whole amount in the buffer (`S.wallet=true`); the existing cascade then charges the wallet. Money tab shows "₹N a week to spend" with "Change amount" and "Add money you get". Making a plan from income also ends in wallet mode.
+- **Home.** Hero "₹N left this week", 10×10 gauge in 5 blocks of 20 (gap after every 2 rows), spent marks as faint outlines, chip "1 mark = 1% ≈ ₹N ⓘ", an action row only when something needs doing, one button ("Log expense", or "Scan & pay" in Model B). Amber sentence only when over: "Spending fast this week." / "This week's amount is used up." With no amount: empty outlined gauge.
+- **Rollup.** `marksLeft` rounds spending down to whole marks; the amount still waiting is shown in the "How to read it" sheet.
+- **Pay confirm in wallet mode** speaks about the week: "3 marks go · 1 mark ≈ ₹10", "₹970 left after this."
+- **Copy.** See V15-27. "box" is now "mark" everywhere (`1 mark ≈ ₹N`).
+- **Model B (Test B).** Panel group "Home button (Test B)". The scan step is a stand-in.
+- **Not done on purpose:** nothing in the document asks for anything that needs SMS; the feasibility of a Trickle-started UPI payment is still unverified (H2). Category limits still exist in the seeded profiles (they are the "legacy" mode); wallet mode hides "Change how much each gets".
+- **Measured:** Home states 11 to 23 words; 6 of 7 meet the document's 20-word Tier 1 limit (only "Home · unsorted", 23, does not, because the action row adds a sentence). Whole-app average 22.7 words, 17 of 55 states over 25 (was 18).

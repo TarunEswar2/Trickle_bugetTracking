@@ -58,6 +58,8 @@ h1,h2,h3{font-family:var(--display);margin:0;line-height:1.08;letter-spacing:-.0
 .tile.on{box-shadow:0 6px 22px var(--glow,rgba(98,220,180,.2))}
 .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .lg{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}.lg i{aspect-ratio:1;border-radius:22%;display:block;transition:background .5s,opacity .4s,box-shadow .5s}
+.lg.blk i:nth-child(n+11):nth-child(-n+20),.lg.blk i:nth-child(n+31):nth-child(-n+40),.lg.blk i:nth-child(n+51):nth-child(-n+60),.lg.blk i:nth-child(n+71):nth-child(-n+80){margin-bottom:7px}
+
 .chipscale{display:inline-block;background:#262c33;border-radius:999px;padding:6px 16px;font-weight:700;font-size:16px}
 .banner{background:linear-gradient(180deg,rgba(227,164,63,.16),rgba(227,164,63,.07));border:1px solid rgba(227,164,63,.4);border-radius:14px;padding:11px 14px}
 .kp{display:grid;grid-template-columns:repeat(3,1fr);gap:2px 10px;text-align:center}.kp button{background:none;border:0;color:var(--ink);font:inherit;font-size:23px;font-weight:500;height:40px;cursor:pointer;border-radius:14px}.kp button:active{background:rgba(255,255,255,.07)}
@@ -375,7 +377,7 @@ SCREENS.home=()=>{const [a,b]=homeSentence();const r=flexL()/flexW();const empty
  return `<div class="row sp" style="margin-top:2px"><span class="cap">${fmtDay(S.now)}</span><button class="chip" data-a="settings">⚙ Settings</button></div>
  <div class="title" style="margin-top:14px">${a}</div><div class="sub" style="margin-top:6px">${b}</div>
  <div style="margin:22px 8px 14px">${gridHtml(empty?0:r*100,(typeof paceHex==='function'&&S.planSet)?paceHex():SPEND,0,SPEND,{w:300})}${empty?`<div style="height:3px;background:${AMBER};margin:8px 4px 0;border-radius:2px;box-shadow:0 0 14px ${AMBER}"></div>`:''}</div>
- <div class="row sp" style="margin:0 8px 16px;align-items:flex-end"><div><div class="cap">Left this week</div><div class="title" style="font-size:36px;margin-top:2px;${empty?'color:var(--amber)':''}">${money(Math.max(0,flexL()))}</div><div class="sub" style="margin-top:0">of ${money(flexW())}</div></div><span class="chipscale">1 box ≈ ₹${Math.max(1,Math.round(flexW()/100))}</span></div>
+ <div class="row sp" style="margin:0 8px 16px;align-items:flex-end"><div><div class="cap">Left this week</div><div class="title" style="font-size:36px;margin-top:2px;${empty?'color:var(--amber)':''}">${money(Math.max(0,flexL()))}</div><div class="sub" style="margin-top:0">of ${money(flexW())}</div></div><span class="chipscale">1 mark ≈ ₹${Math.max(1,Math.round(flexW()/100))}</span></div>
  <div class="col" style="gap:8px">${lines.join('')}</div>
  <div style="position:sticky;bottom:0;margin-top:24px;padding-top:10px;background:transparent"><button class="btn" data-a="pay">Pay</button></div>`};
 H.goto=a=>{go(a[0]);return false};H.push=a=>{push(a[0],a[1]?JSON.parse(a[1]):{});return false};
@@ -422,7 +424,7 @@ SCREENS.cat=({id})=>{const c=S.cats.find(x=>x.id===id);if(!c)return '';const col
   <div style="margin:14px 0"><input type="range" min="1" max="12" value="${k}" data-i="cmp|${id}"><div class="row sp sm"><span>1</span><span>12 periods back</span></div></div>`}
  else viz=`<div style="margin:12px 8px">${gridHtml(lvl,col,0,col,{w:300})}${c.left<=0?`<div style="height:3px;background:${AMBER};margin:8px 4px 0;border-radius:2px;box-shadow:0 0 14px ${AMBER}"></div>`:''}</div>`;
  const tx=S.txns.filter(t=>t.ref===id&&t.kind==='cat'&&t.t>=startOfWeek(S.now).getTime()).slice(0,8);
- return `<button class="back" data-a="back">‹ Spending</button><div class="row sp"><div class="title">${esc(c.name)}</div></div><div class="sub" style="margin-top:4px">${words}</div><div style="margin-top:12px"><span class="chipscale">1 box ${box===c.amt/100?'=':'≈'} ₹${box}</span></div>
+ return `<button class="back" data-a="back">‹ Spending</button><div class="row sp"><div class="title">${esc(c.name)}</div></div><div class="sub" style="margin-top:4px">${words}</div><div style="margin-top:12px"><span class="chipscale">1 mark ${box===c.amt/100?'=':'≈'} ₹${box}</span></div>
  <div style="margin-top:12px">${viz}</div>
  <div class="row" style="gap:8px;margin:6px 0 14px"><button class="btn q s" data-a="cmp|${id}">${cmp?'Hide earlier weeks':'Compare with earlier weeks'}</button><button class="btn o s" data-a="push|budget">Change this budget</button><button class="btn o s" data-a="pay|${id}">Pay</button></div>
  <div class="cap" style="margin:8px 0">This week</div><div class="col" style="gap:6px">${tx.length?tx.map(t=>`<button class="li" data-a="push|txn|${J({id:t.id})}"><span class="d" style="background:${col}"></span><span class="n">${esc(t.payee)}</span><span class="t">${fmtDay(new Date(t.t))} ${fmtTime(new Date(t.t))}</span><span class="a">${money(t.amt)}</span></button>`).join(''):'<div class="card sub">Nothing spent here yet this week.</div>'}</div>
@@ -471,7 +473,7 @@ SCREENS.budget=()=>{if(!UI.viz.bud)UI.viz.bud=budInit();const B=UI.viz.bud;const
  const box=Math.round(S.W/100);
  return `<button class="back" data-a="back">‹ Back</button><div class="title" style="font-size:28px">Share out your week</div>
  <div class="seg" style="margin:12px 0">${[['equal','Equal'],['manual','Manual'],['preset','Preset']].map(m=>`<button class="chip ${B.mode===m[0]?'on':''}" data-a="bmode|${m[0]}">${m[1]}</button>`).join('')}</div>
- <div style="margin:10px 12px">${multiGrid(parts,S.W,{w:280})}</div><div class="row sp" style="margin:12px 0"><span class="chipscale">1 box ≈ ₹${box}</span><b style="font-size:16px">Buffer ${money(Math.max(0,buf))}</b></div>
+ <div style="margin:10px 12px">${multiGrid(parts,S.W,{w:280})}</div><div class="row sp" style="margin:12px 0"><span class="chipscale">1 mark ≈ ₹${box}</span><b style="font-size:16px">Buffer ${money(Math.max(0,buf))}</b></div>
  <div class="col" style="gap:6px">${S.cats.map((c,i)=>{const spent=c.amt-c.left;const mx=B.vals[c.id]+Math.max(0,buf);return `<div class="card" style="padding:9px 12px"><div class="row sp"><span class="row"><i style="width:10px;height:10px;border-radius:50%;background:${catCol(i)};display:inline-block"></i><span style="font-weight:600">${esc(c.name)}</span></span><b>${money(B.vals[c.id])}</b></div><input type="range" min="${Math.min(spent,mx)}" max="${Math.max(mx,5)}" step="5" value="${B.vals[c.id]}" data-i="bud|${c.id}" ${B.mode==='manual'?'':'disabled'} style="margin:8px 0 2px;opacity:${B.mode==='manual'?1:.45}"></div>`}).join('')}
   <button class="li" data-a="sheet|refit"><span class="n">Fit to my real weeks</span><span class="t">›</span></button>
   <button class="li" data-a="sheet|billsum"><span class="d" style="background:${FIXC}"></span><span class="n">Subscriptions</span><span class="a">${S.fixedW?money(S.fixedW):'None yet'} ›</span></button>
@@ -495,7 +497,7 @@ SCREENS.income=()=>{const L=UI.inc;const {parts,inc,ns,nsp}=incomeParts(L);const
  const bands=L>=2?`<div class="col" style="gap:8px;margin-top:14px"><button class="li" data-a="isel|spend"><span class="d" style="background:${SPEND}"></span><span class="n">Spending</span><span class="a">${UI.viz.isel==='spend'?money(S.p.income-S.p.savingsShare):'›'}</span></button><button class="li" data-a="isel|save"><span class="d" style="background:${SAVE}"></span><span class="n">Savings</span><span class="a">${UI.viz.isel==='save'?money(S.p.savingsShare):'›'}</span></button>${L>=3?`<button class="li" data-a="isel|fixed"><span class="d" style="background:${FIXC}"></span><span class="n">Subscriptions</span><span class="a">${UI.viz.isel==='fixed'?money(S.fixedW)+' a week':'›'}</span></button>`:''}</div>`:'';
  return `<div class="cap">Income</div><div class="title" style="margin-top:4px">Where your money went</div>
  <div class="seg" style="margin:14px 0">${[[1,'Income'],[2,'Split'],[3,'Detail']].map(x=>`<button class="chip ${L===x[0]?'on':''}" data-a="ilvl|${x[0]}">${x[1]}</button>`).join('')}</div>
- <div style="margin:6px 0 10px">${incGrid(parts)}</div><div style="margin:8px 0"><span class="chipscale">1 box ≈ ₹${scale}</span></div>${bands}
+ <div style="margin:6px 0 10px">${incGrid(parts)}</div><div style="margin:8px 0"><span class="chipscale">1 mark ≈ ₹${scale}</span></div>${bands}
  <div style="margin:18px 0 8px"><button class="btn" data-a="openmoney">+ Add money</button></div>
  ${S.credits.length?`<div class="cap" style="margin:16px 0 8px">Unsorted money in</div><div class="col" style="gap:8px">${S.credits.map(c=>`<div class="card"><div class="row sp"><span style="font-weight:600">${esc(c.from)}</span><b>${money(c.amt)}</b></div><div class="row" style="gap:8px;margin-top:10px"><button class="btn s" data-a="credit|${c.id}">Add money</button><button class="btn q s" data-a="dismiss|${c.id}">Dismiss</button></div></div>`).join('')}</div>`:''}
  <div class="cap" style="margin:18px 0 8px">Money in</div><div class="col" style="gap:8px">${S.moneyIn.length?S.moneyIn.map(m=>`<div class="li" style="cursor:default"><span class="d" style="background:${SAVE}"></span><span class="n">${esc(m.label)}</span><span class="t">${fmtDay(new Date(m.t))}</span><span class="a">${money(m.amt)}</span></div>`).join(''):'<div class="card sub">Nothing added yet.</div>'}</div>`};
@@ -520,7 +522,7 @@ FLOWS.money=(F)=>{const d=F.d;const x=(t,back)=>`<button class="back" data-a="${
   if(F.step===3){if(!d.vals){const tot=S.cats.reduce((a,c)=>a+c.amt,0)||1;d.vals={};S.cats.forEach(c=>d.vals[c.id]=r5(c.amt/tot*.9*P.flex));d.bmode='preset'}const sum=Object.values(d.vals).reduce((a,b)=>a+b,0);const buf=P.flex-sum;
    const parts=(S.fixedW?[{amt:S.fixedW,color:FIXC}]:[]).concat(S.cats.map((c,i)=>({amt:d.vals[c.id],color:catCol(i)}))).concat([{amt:Math.max(0,buf),color:BUFC}]);
    return `<div class="mbody">${x()}<div class="cap">New money · 2 of 3</div><div class="title" style="font-size:26px;margin:6px 0 10px">Share out your week</div><div class="seg" style="margin-bottom:12px">${[['preset','Preset'],['equal','Equal'],['manual','Manual']].map(m=>`<button class="chip ${d.bmode===m[0]?'on':''}" data-a="mbm|${m[0]}">${m[1]}</button>`).join('')}</div>
-   <div style="margin:0 20px">${multiGrid(parts,P.W,{w:250})}</div><div class="row sp" style="margin:10px 0"><span class="chipscale">1 box ≈ ₹${Math.round(P.W/100)}</span><b>Buffer ${money(Math.max(0,buf))}</b></div>
+   <div style="margin:0 20px">${multiGrid(parts,P.W,{w:250})}</div><div class="row sp" style="margin:10px 0"><span class="chipscale">1 mark ≈ ₹${Math.round(P.W/100)}</span><b>Buffer ${money(Math.max(0,buf))}</b></div>
    <div class="col" style="gap:6px">${S.cats.slice(0,7).map((c,i)=>`<div class="card" style="padding:8px 12px"><div class="row sp"><span style="font-weight:600">${esc(c.name)}</span><b>${money(d.vals[c.id])}</b></div><input type="range" min="0" max="${d.vals[c.id]+Math.max(0,buf)}" step="5" value="${d.vals[c.id]}" data-i="mval|${c.id}" style="margin:6px 0 0"></div>`).join('')}${S.cats.length>7?`<div class="sm">+ ${S.cats.length-7} more, shared the same way</div>`:''}</div></div>${foot('Next','mnext')}`}
   if(F.step===4){const P2=P;const gs=S.goals.filter(g=>g.state==='active');if(!d.gs){d.gs={};let left=P2.sav;gs.forEach(g=>{const n=goalNeeded(g);const rem=Math.max(0,g.target-g.saved);const v=n?Math.min(n,rem,left):0;d.gs[g.id]=v;left-=v});gs.forEach(g=>{if(!goalNeeded(g)&&left>0){d.gs[g.id]=Math.min(left,Math.max(0,g.target-g.saved));left-=d.gs[g.id]}})}
    const given=Object.values(d.gs).reduce((a,b)=>a+b,0);
@@ -601,7 +603,7 @@ SCREENS.insights=()=>{const sc=UI.hot.scale,mode=UI.hot.mode;const {cols,cells}=
   ${S.p.weeks===0?`<div class="card sub">This fills in as you go. A few days of payments and a pattern appears.</div>`:hotHtml(cells,cols,sel,'#B48CFF',cols===6?300:310)}
   <div style="margin-top:14px;min-height:44px">${sel!=null&&cells[sel]?`<div class="cap">${esc(cells[sel].w)}</div><div class="h2">${cells[sel].v?(mode==='times'?cells[sel].v+(cells[sel].v>1?' times':' time'):money(cells[sel].v)):'Nothing here'}</div>`:'<div class="sm">Tap a spot for how many and how much.</div>'}</div><div class="sm" style="text-align:center;margin-top:10px">Scroll for this week against last ↓</div></div>
  <div class="sec"><div class="cap">Insights</div><div class="title" style="margin-top:4px">This week vs last</div><div class="sub" style="margin:6px 0 14px">${sentence}</div>
-  ${hasLast?`<div class="row" style="gap:12px;align-items:flex-start;justify-content:center"><div style="width:140px;opacity:.55"><div class="cap" style="text-align:center;margin-bottom:6px">Last week</div>${gridHtml(lastL,SPEND,0,SPEND,{fade:.5})}</div><div style="width:140px"><div class="cap" style="text-align:center;margin-bottom:6px">This week</div>${gridHtml(nowL,SPEND,0,SPEND)}</div></div><div style="margin:12px 0;text-align:center"><span class="chipscale">1 box ≈ ₹${Math.round(flexW()/100)}</span></div>
+  ${hasLast?`<div class="row" style="gap:12px;align-items:flex-start;justify-content:center"><div style="width:140px;opacity:.55"><div class="cap" style="text-align:center;margin-bottom:6px">Last week</div>${gridHtml(lastL,SPEND,0,SPEND,{fade:.5})}</div><div style="width:140px"><div class="cap" style="text-align:center;margin-bottom:6px">This week</div>${gridHtml(nowL,SPEND,0,SPEND)}</div></div><div style="margin:12px 0;text-align:center"><span class="chipscale">1 mark ≈ ₹${Math.round(flexW()/100)}</span></div>
   <div class="cap" style="margin:8px 0">By category</div><div class="col" style="gap:6px">${rows.map(r=>`<button class="li" data-a="insc|${r.c.id}"><span class="d" style="background:${catCol(r.i)}"></span><span class="n">${esc(r.c.name)}</span><span class="a" style="color:${r.d>0?AMBER:r.d<0?SAVE:'var(--ink3)'}">${r.d>0?'+':''}${r.d?money(r.d):'same'}</span></button>`).join('')}</div>`:`<div class="card sub">Come back next week. Then this week and last sit side by side.</div>`}</div>`};
 H.iscale=a=>{UI.hot.scale=a[0];UI.hot.isel=null};
 H.insc=a=>{UI.tab='spending';UI.stack=[{id:'cat',p:{id:a[0]}}];UI.viz.cmp={id:a[0],k:1}};
@@ -630,7 +632,7 @@ FLOWS.pay=(F)=>{const d=F.d;const amt=amtOf(d.kp);const t=d.target;
   const lowbal=S.flags.lowBalance&&S.p.mode==='upi';
   return `<div class="mbody">${closeB}<div class="cap">${t.type==='goal'||t.type==='free'?'Paying from savings':'Paying'}</div><div class="title" style="font-size:28px;margin:4px 0 2px">${money(amt)} · ${esc(tgtName(t))}</div><div class="sub" style="margin-bottom:8px">${t.type==='goal'?'A goal you saved for':'To '+esc(d.payee||'Someone')}</div>
   <div id="pgrid" style="margin:8px 8px 0">${over>0?gridHtml(0,col,100,AMBER,{w:290}):gridHtml(liq0,col,paidB,col,{w:290})}</div>${over>0?`<div style="height:3px;background:${AMBER};margin:8px 8px 0;border-radius:2px;box-shadow:0 0 14px ${AMBER}"></div>`:''}
-  <div style="margin:12px 0 4px"><span class="chipscale">1 box ${base%100===0?'=':'≈'} ₹${scale}</span></div>
+  <div style="margin:12px 0 4px"><span class="chipscale">1 mark ${base%100===0?'=':'≈'} ₹${scale}</span></div>
   ${over>0?`<div class="title" style="font-size:32px;color:var(--amber);margin-top:8px">${money(over)} ${t.type==='goal'||t.type==='free'?'short':'over'}.</div>`:''}<div class="sub" style="margin-top:4px">${words}</div>
   ${over>0?`<button class="lnk" style="margin-top:8px" data-a="psrc">Where it comes from ${d.showSrc?'⌃':'›'}</button>${d.showSrc?`<div class="card" style="margin-top:8px">${srcStrip(pv)}</div>`:''}`:''}
   ${lowbal?`<div class="banner" style="margin-top:12px"><b style="color:var(--amber)">Your account shows ${money(40)}.</b> <span class="sub">This may not go through.</span></div>`:''}</div>
@@ -671,10 +673,10 @@ H.openweek=()=>{UI.popup={id:'weekend',step:S.p.mode==='manual'?'bal':1,sel:S.go
 POPUPS.weekend=(P)=>{const I=weekInfo();const over=I.touched||I.un<=0;const goals=S.goals.filter(g=>g.state==='active');const box=Math.max(1,Math.round(S.flexW/100));const foot=(h)=>`<div class="mfoot">${h}</div>`;
  if(P.step==='bal')return `<div class="mbody" style="padding-top:70px"><div class="cap">The week is ending</div><div class="title" style="margin:6px 0 10px">Does your balance still look right?</div><div class="sub">Since you track by hand, a quick check keeps things honest.</div><div class="field" style="margin:18px 0">₹ ${S.p.bal}</div><div class="sm">Not right? A difference becomes “unlogged spends” in your buffer.</div></div>${foot('<button class="btn" data-a="wnext">Looks right</button>')}`;
  if(P.step===1){if(over){const ov=I.tAmt;const topFill=Math.min(100,Math.max(12,Math.round(ov/S.flexW*100)));let g='<div class="lg" style="width:290px;margin:0 auto">';for(let i=0;i<100;i++){const row=Math.floor(i/10);g+=row*10<topFill?`<i style="background:${boxBg(AMBER)};box-shadow:inset 0 1px 0 rgba(255,255,255,.3)"></i>`:'<i style="background:#171C25"></i>'}g+='</div>';
-   return `<div class="mbody" style="padding-top:60px"><div class="cap">Week's end</div><div class="title" style="font-size:30px;margin:4px 0 12px">${I.un<=0&&!I.touched?'Nothing left this week.':'Let\'s do better this week.'}</div>${g}<div style="margin:12px 0"><span class="chipscale">1 box ≈ ₹${box}</span></div>${ov?`<div class="title" style="font-size:34px;color:var(--amber)">${money(ov)} over</div><div class="sub">Taken from your savings.</div>`:`<div class="title" style="font-size:34px;color:var(--amber)">Nothing left</div>`}
+   return `<div class="mbody" style="padding-top:60px"><div class="cap">Week's end</div><div class="title" style="font-size:30px;margin:4px 0 12px">${I.un<=0&&!I.touched?'Nothing left this week.':'Let\'s do better this week.'}</div>${g}<div style="margin:12px 0"><span class="chipscale">1 mark ≈ ₹${box}</span></div>${ov?`<div class="title" style="font-size:34px;color:var(--amber)">${money(ov)} over</div><div class="sub">Taken from your savings.</div>`:`<div class="title" style="font-size:34px;color:var(--amber)">Nothing left</div>`}
    ${goals.length?`<div class="cap" style="margin:16px 0 8px">Your goals are waiting</div><div class="col" style="gap:6px">${goals.slice(0,3).map(g=>`<div class="li" style="cursor:default"><span class="d" style="background:${boxBg(GG[S.goals.indexOf(g)%3])}"></span><span class="n">${esc(g.name)}</span><span class="t">${goalEta(g)}</span></div>`).join('')}</div>`:''}</div>${foot('<button class="btn" data-a="wskip">Start the new week</button>')}`}
   let g='<div class="lg" style="width:290px;margin:0 auto">';const lv=Math.round(I.un/S.flexW*100);for(let i=0;i<100;i++){const row=Math.floor(i/10),c=i%10,k=(9-row)*10+c;g+=k<lv?`<i style="background:${boxBg(AMBER)};box-shadow:inset 0 1px 0 rgba(255,255,255,.3)"></i>`:'<i style="background:#171C25"></i>'}g+='</div>';
-  return `<div class="mbody" style="padding-top:60px"><div class="cap">Week's end</div><div class="title" style="font-size:30px;margin:4px 0 12px">Here is what you did not spend.</div>${g}<div class="row sp" style="margin:14px 0"><span class="chipscale">1 box ≈ ₹${box}</span></div><div class="title" style="font-size:44px">${money(I.un)} left</div><div class="sub">That is money you can keep.</div></div>${foot('<button class="btn" data-a="wnext">Next</button>')}`}
+  return `<div class="mbody" style="padding-top:60px"><div class="cap">Week's end</div><div class="title" style="font-size:30px;margin:4px 0 12px">Here is what you did not spend.</div>${g}<div class="row sp" style="margin:14px 0"><span class="chipscale">1 mark ≈ ₹${box}</span></div><div class="title" style="font-size:44px">${money(I.un)} left</div><div class="sub">That is money you can keep.</div></div>${foot('<button class="btn" data-a="wnext">Next</button>')}`}
  if(P.step===2){return `<div class="mbody" style="padding-top:60px"><div class="cap">Where should it go?</div><div class="title" style="font-size:28px;margin:4px 0 14px">${money(I.un)} to keep</div>${goals.length?`<div class="cap" style="margin-bottom:8px">Into these goals</div><div class="col" style="gap:8px">${goals.map(g=>{const on=P.sel.includes(g.id);return `<button class="tile ${on?'on':''}" style="${on?`border-color:${SAVE};background:${SAVE}18`:''}" data-a="wsel|${g.id}"><b><i style="background:${boxBg(GG[S.goals.indexOf(g)%3])}"></i>${esc(g.name)}</b><small>${on?'gets an equal share':'left out'}</small></button>`}).join('')}</div>`:'<div class="card sub">No goals yet, so it goes to free savings.</div>'}</div>${foot(`<div class="col" style="gap:10px"><button class="btn" data-a="wgo|savings">Move to savings</button><button class="btn o" data-a="wgo|next">Move to next week's budget</button></div>`)}`}
  if(P.step===3){const R=P.res;const act=S.goals.filter(g=>g.state!=='done');const tot=act.reduce((a,g)=>a+g.target,0)||1,sv=act.reduce((a,g)=>a+Math.min(g.saved,g.target),0);
   return `<div class="mbody" style="padding-top:60px;text-align:center"><div class="cap">All set</div><div class="title" style="font-size:28px;margin:4px 0 8px">${P.to==='savings'?money(R.un)+' moved to savings':money(R.un)+' added to next week'}</div>${P.to==='savings'?`<div style="display:flex;justify-content:center">${segRing(act,270,Math.round(sv/tot*100)+'%')}</div><div class="sub">Your savings ring, updated.</div>`:`<div class="col" style="gap:6px;text-align:left;margin-top:12px">${S.cats.slice(0,8).map((c,i)=>`<div class="li" style="cursor:default"><span class="d" style="background:${catCol(i)}"></span><span class="n">${esc(c.name)}</span><span class="a">${money(c.amt)}</span></div>`).join('')}<div class="li" style="cursor:default"><span class="d" style="background:${BUFC}"></span><span class="n">Buffer</span><span class="a">${money(S.bufAmt)}</span></div></div>`}</div>${foot('<button class="btn" data-a="wfinish">Done</button>')}`}
@@ -745,7 +747,7 @@ FLOWS.onb=F=>{const d=F.d;
  <div class="cap" style="margin-bottom:8px">For how long?</div><div class="seg">${LASTS.map(l=>`<button class="chip ${d.lasts===l[1]?'on':''}" data-a="oblasts|${l[1]}">${l[0]}</button>`).join('')}</div><p class="sm" style="margin-top:12px">About <b id="ob-w">${money(obW(d))}</b> a week.</p>`,obFoot(obBtn('Next','obgo|share')+obBtn('Not now','oblimno','q')))}
  case 'q1':{const w=d.qOther?amtOf(d.qwt):d.qW;return B(`${top(d.upgrade?'':obBack('limits'),'')}<div class="title">About how much do you spend in a week?</div><p class="sub">A rough guess is fine.</p><div class="row wrap" style="gap:10px;margin-top:18px">${[300,500,800,1200,2000].map(v=>`<button class="chip ${!d.qOther&&d.qW===v?'on':''}" style="font-size:15px;padding:11px 18px" data-a="obq1|${v}">${money(v)}</button>`).join('')}<button class="chip ${d.qOther?'on':''}" style="font-size:15px;padding:11px 18px" data-a="obq1|other">Other</button></div>${d.qOther?`<div style="margin:10px 0;display:flex;justify-content:center">${amtDots('₹'+(d.qwt||'0'))}</div>${keypad('qwt')}`:''}`,obFoot((w>=50?obBtn('Next','obgo|q2'):'')+obBtn('Not now','oblimno','q')))}
  case 'q2':return B(`${top(d.fromInc?'':obBack('q1'),'')}<div class="title">Any subscriptions?</div><div class="row wrap" style="gap:8px;margin-top:18px">${ALLSUB(d).map(b=>`<button class="chip ${d.qB.includes(b[0])?'on':''}" data-a="obq2|${b[0]}">${b[0]} ${money(b[1])}${b[2]==='month'?'':' · '+b[2]}</button>`).join('')}<button class="chip" style="border-style:dashed" data-a="obsubnew">+ Add your own</button></div><p class="sm" style="margin-top:12px">Tap the ones you pay. Or add your own.</p>`,obFoot(obBtn(d.qB.length?'Next':'None','obbuild')));
- case 'share':{const a=obAmts(d),fx=obFlex(d),sum=Object.values(a).reduce((x,y)=>x+y,0),buf=Math.max(0,fx-sum);return B(`${top(obBack(d.noBal?'q2':'split'),'')}<div class="title">How much for each?</div><p class="sm">${money(obW(d))} a week (about ${money(Math.round(obW(d)*weeksPer/10)*10)} a month). Subscriptions come off first. What is left is your buffer.</p>${obFlex(d)<5*d.cats.length?`<p class="sm" style="color:var(--amber);font-weight:600">Subscriptions leave only ${money(obFlex(d))} a week for ${d.cats.length} categories. Try fewer subscriptions or a longer range.</p>`:''}<div class="seg" style="margin:12px 0">${[['eq','Equal'],['man','My way']].map(m=>`<button class="chip ${d.share===m[0]?'on':''}" data-a="obshare|${m[0]}">${m[1]}</button>`).join('')}</div><div id="ob-grid" style="margin:8px auto;width:260px">${obGrid(d)}</div><div class="row sp" style="margin:10px 0"><span class="chipscale">1 box ≈ ₹${Math.max(1,Math.round(obW(d)/100))}</span><b>Buffer <span id="ob-buf">${money(buf)}</span></b></div>
+ case 'share':{const a=obAmts(d),fx=obFlex(d),sum=Object.values(a).reduce((x,y)=>x+y,0),buf=Math.max(0,fx-sum);return B(`${top(obBack(d.noBal?'q2':'split'),'')}<div class="title">How much for each?</div><p class="sm">${money(obW(d))} a week (about ${money(Math.round(obW(d)*weeksPer/10)*10)} a month). Subscriptions come off first. What is left is your buffer.</p>${obFlex(d)<5*d.cats.length?`<p class="sm" style="color:var(--amber);font-weight:600">Subscriptions leave only ${money(obFlex(d))} a week for ${d.cats.length} categories. Try fewer subscriptions or a longer range.</p>`:''}<div class="seg" style="margin:12px 0">${[['eq','Equal'],['man','My way']].map(m=>`<button class="chip ${d.share===m[0]?'on':''}" data-a="obshare|${m[0]}">${m[1]}</button>`).join('')}</div><div id="ob-grid" style="margin:8px auto;width:260px">${obGrid(d)}</div><div class="row sp" style="margin:10px 0"><span class="chipscale">1 mark ≈ ₹${Math.max(1,Math.round(obW(d)/100))}</span><b>Buffer <span id="ob-buf">${money(buf)}</span></b></div>
  <div class="cap" style="margin:6px 0 6px">Subscriptions</div><div class="row wrap" style="gap:8px">${ALLSUB(d).map(b=>`<button class="chip ${d.bills.some(x=>x[0]===b[0])?'on':''}" data-a="obbill|${b[0]}">${b[0]} ${money(b[1])}${b[2]==='month'?'':' · '+b[2]}</button>`).join('')}<button class="chip" style="border-style:dashed" data-a="obsubnew">+ Add your own</button></div>
  <div class="col" style="gap:6px;margin-top:14px">${d.cats.map((c,i)=>`<div class="card" style="padding:9px 12px"><div class="row sp"><span class="row"><i style="width:10px;height:10px;border-radius:50%;background:${i<5?COLORS[i]:REST};display:inline-block"></i><span style="font-weight:600">${esc(c)}</span></span><span class="row" style="gap:10px"><b id="ob-a${i}">${money(a[c])}</b>${d.cats.length>1?`<button class="lnk" style="font-size:18px;line-height:1" data-a="obcat|${esc(c)}">×</button>`:''}</span></div>${d.share==='man'?`<input type="range" min="0" max="${Math.max(5,fx)}" step="5" value="${a[c]}" data-i="obamt|${i}" style="margin:8px 0 2px">`:''}</div>`).join('')}</div>${d.addcat?`<input id="ob-q" class="field" style="width:100%;font-size:17px;font-family:var(--body);color:#E9E5DC;margin-top:12px" placeholder="Search or add your own" value="${esc(d.q)}" data-i="obq" autocomplete="off"><div id="ob-res" class="row wrap" style="gap:8px;margin-top:10px">${obRes(d)}</div>`:`<button class="chip" style="border-style:dashed;margin-top:12px" data-a="obaddcat">+ Add a category</button>`}<div style="height:170px"></div>`,obFoot(obBtn('Next','obgo|done')+obBtn('Not now','oblimno','q')))}
  case 'goals':return B(`${top(obBack('share'),'')}<div class="title">Saving for something?</div><p class="sub">Pick one, or skip.</p><div class="row wrap" style="gap:8px;margin:14px 0">${GOALCH.filter(g=>!d.goals.some(x=>x.name===g[0])).map(g=>`<button class="chip" data-a="obgoal|${g[0]}">+ ${g[0]}</button>`).join('')}</div><div class="col" style="gap:10px">${d.goals.map((g,i)=>`<div class="card"><div class="row sp"><b style="font-size:17px">${esc(g.name)}</b><button class="lnk" data-a="obgoaldel|${i}">Remove</button></div><div class="row sp" style="margin:8px 0"><button class="chip" data-a="obgoalamt|${i}|-1">−</button><b class="h2">${money(g.target)}</b><button class="chip" data-a="obgoalamt|${i}|1">+</button></div><div class="seg">${[6,12,24,0].map(m=>`<button class="chip ${g.months===m?'on':''}" data-a="obgoalm|${i}|${m}">${m?m+' mo':'No date'}</button>`).join('')}</div><p class="sm" style="margin-top:8px">${g.months?`Save about <b>${money(Math.ceil(g.target/g.months/10)*10)}</b> a month.`:'No date, no monthly amount.'}</p></div>`).join('')}</div>`,obFoot(obBtn(d.goals.length?'Next':'Skip','obgo|done')));
@@ -881,7 +883,7 @@ SCREENS.home=()=>{if(!S.track)return _home();const tot=wkTot(0),prev=wkTot(1);co
  return `<div class="row sp" style="margin-top:2px"><span class="cap">${fmtDay(S.now)}</span><button class="chip" data-a="settings">⚙ Settings</button></div>
  <button class="btn" data-a="startplan" style="margin-top:14px">Make your plan</button><p class="sm" style="margin:8px 2px 0">Add your income and split it. That becomes your weekly plan.</p>
  <div class="cap" style="margin-top:20px">Spent this week</div><div class="title" style="font-size:40px;margin-top:2px">${money(tot)}</div><div class="sub" style="margin-top:2px">${tot?'Mostly '+esc(tc.name)+'.':'Your spends will show here.'}</div>
- <div style="margin:14px 28px 8px">${parts.length?multiGrid(parts,scale,{w:260}):gridHtml(0,SPEND,0,0,{w:260})}</div><div style="text-align:center;margin-bottom:14px">${tot?`<span class="chipscale">1 box ≈ ₹${Math.max(1,Math.round(scale/100))} spent</span>`:''}</div>
+ <div style="margin:14px 28px 8px">${parts.length?multiGrid(parts,scale,{w:260}):gridHtml(0,SPEND,0,0,{w:260})}</div><div style="text-align:center;margin-bottom:14px">${tot?`<span class="chipscale">1 mark ≈ ₹${Math.max(1,Math.round(scale/100))} spent</span>`:''}</div>
  <div class="col" style="gap:8px">${lines.join('')}</div>
  <div style="position:sticky;bottom:0;margin-top:24px;padding-top:10px;background:transparent"><button class="btn" data-a="pay">${S.p.mode==='manual'?'Add a spend':'Pay'}</button></div>`};
 H.askopen=a=>{openAsk(a[0]);return false};
@@ -893,7 +895,7 @@ SCREENS.spending=()=>{if(!S.track)return _spend();const rows=S.cats.map((c,i)=>(
  ${subsHtml()}<div class="cap" style="margin:22px 0 8px">History</div>${hist.length?`<div class="col" style="gap:6px">${hist.map(t=>`<button class="li" data-a="push|txn|${J({id:t.id})}"><span class="d" style="${t.kind==='unsorted'?`border:1.5px dashed ${AMBER};background:none`:`background:${catColor2(t.ref)}`}"></span><span class="n">${esc(t.payee)}${t.kind==='unsorted'?' <span class="mut" style="font-weight:500">· unsorted</span>':''}</span><span class="t">${fmtDay(new Date(t.t))}</span><span class="a">${money(t.amt)}</span></button>`).join('')}</div>`:`<div class="card sub">Nothing yet. Add a spend to begin.</div>`}</div>`};
 SCREENS.tcat=({id})=>{const c=S.cats.find(x=>x.id===id);if(!c)return '';const i=catIdx(id),a=wkCat(c,0),b=wkCat(c,1);const scale=Math.max(100,Math.ceil(Math.max(a,b,c.amt)/50)*50);const list=S.txns.filter(t=>t.ref===id&&t.kind==='cat').slice(0,20);
  return `<button class="back" data-a="back">‹ Spending</button><div class="title">${esc(c.name)}</div><div class="sub" style="margin-top:6px">${a?'This week so far.':'Nothing this week.'}</div>
- <div style="margin:18px 8px 8px">${gridHtml(a/scale*100,catCol(i),0,0,{w:280})}</div><div style="text-align:center;margin-bottom:12px"><span class="chipscale">1 box ≈ ₹${Math.max(1,Math.round(scale/100))}</span></div>
+ <div style="margin:18px 8px 8px">${gridHtml(a/scale*100,catCol(i),0,0,{w:280})}</div><div style="text-align:center;margin-bottom:12px"><span class="chipscale">1 mark ≈ ₹${Math.max(1,Math.round(scale/100))}</span></div>
  <div class="card" style="display:grid;gap:10px"><div class="row sp"><span class="mut">This week</span><b>${money(a)}</b></div><div class="row sp"><span class="mut">Last week</span><b>${money(b)}</b></div>${c.amt?`<div class="row sp"><span class="mut">Weekly limit</span><b>${money(c.amt)} · ${money(limLeft(c))} left</b></div>`:''}</div>
  <div class="col" style="gap:8px;margin:14px 0"><button class="btn q" data-a="tlimit|${id}">${c.amt?'Change the limit':'Set a limit?'}</button>${c.amt?`<button class="btn o" data-a="tnolimit|${id}">Remove the limit</button>`:''}</div>
  ${list.length?`<div class="cap" style="margin-bottom:8px">Recent</div><div class="col" style="gap:6px">${list.map(t=>`<button class="li" data-a="push|txn|${J({id:t.id})}"><span class="n">${esc(t.payee)}</span><span class="t">${fmtDay(new Date(t.t))}</span><span class="a">${money(t.amt)}</span></button>`).join('')}</div>`:''}`};
@@ -1122,7 +1124,7 @@ SHEETS.incd=({id})=>{const i=(S.incomes||[]).find(x=>x.id===id);if(!i)return '';
 H.incd=a=>{openSheet('incd',{id:a[0]});return false};
 H.incchg=a=>{const i=S.incomes.find(x=>x.id===a[0]);UI.sheet=null;const end=Math.max(i.end,snapEnd(day0()));UI.flow={id:'incend',step:0,d:{iid:i.id,end,cm:Math.max(0,monOff(end))}};return true};
 FLOWS.incend=F=>{const d=F.d,i=S.incomes.find(x=>x.id===d.iid);const t0=day0(),end=snapEnd(d.end),days=daysIn(i.start,end),wk=Math.max(5,r5b(i.sp/days*7));
- return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">${money(i.sp)} to spend, from ${shortD(i.start)}</div><div class="title" style="margin-top:4px">Until when?</div><div class="row wrap" style="gap:8px;margin:14px 0 10px">${PRESETS.map((p,k)=>`<button class="chip ${end===presetEnd(p)?'on':''}" data-a="incpre|${k}">${p[0]}</button>`).join('')}</div><div style="margin:6px 0 14px;text-align:center"><div class="sub">Until <b style="color:var(--ink)">Sunday ${fmtDate(end)}</b> · ${days} days in all</div><div style="display:flex;justify-content:center;margin-top:8px">${amtDots(money(wk))}</div><div class="sub">a week</div></div>${calHtml(d,t0,end)}</div><div class="mfoot"><button class="btn" data-a="incendgo">Save</button></div>`};
+ return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">${money(i.sp)} to spend, from ${shortD(i.start)}</div><div class="title" style="margin-top:4px">How many days should this money last?</div><div class="row wrap" style="gap:8px;margin:14px 0 10px">${PRESETS.map((p,k)=>`<button class="chip ${end===presetEnd(p)?'on':''}" data-a="incpre|${k}">${p[0]}</button>`).join('')}</div><div style="margin:6px 0 14px;text-align:center"><div class="sub">Until <b style="color:var(--ink)">Sunday ${fmtDate(end)}</b> · ${days} days in all</div><div style="display:flex;justify-content:center;margin-top:8px">${amtDots(money(wk))}</div><div class="sub">a week</div></div>${calHtml(d,t0,end)}</div><div class="mfoot"><button class="btn" data-a="incendgo">Save</button></div>`};
 H.incendgo=()=>{const d=UI.flow.d,i=S.incomes.find(x=>x.id===d.iid);i.end=snapEnd(d.end);if(S.planSet)recomputePlan(true);closeFlow();say(S.planSet?'Saved. Weekly plan is '+money(S.W)+'.':'Saved.');return false};
 H.incrm=a=>{S.incomes=S.incomes.filter(x=>x.id!==a[0]);UI.sheet=null;if(S.planSet&&planRate()>0)recomputePlan(true);else if(S.planSet)applyWeekScale();say('Removed.');return true};
 /* ===== INSIGHTS: say which day, week or month it is; flip back through them; make the main finding big ===== */
@@ -1156,7 +1158,7 @@ SCREENS.insights=()=>{const sc=UI.hot.scale,mode=UI.hot.mode,off=UI.hot.off||0;c
   ${nav}${S.txns.length?head+grid:`<div class="card sub">This fills in as you go.</div>`}
   <div style="margin-top:14px;min-height:44px">${selc?`<div class="cap">${esc(selc.w)}</div><div class="h2">${selc.v?(mode==='times'?selc.v+(selc.v>1?' times':' time'):money(selc.v)):'Nothing here'}</div>`:'<div class="sm">Tap a spot for how many and how much.</div>'}</div><div class="sm" style="text-align:center;margin-top:10px">Scroll for this week against last ↓</div></div>
  <div class="sec"><div class="cap">Insights</div><div class="title" style="margin-top:4px">This week vs last</div><div class="sub" style="margin:6px 0 4px">${sentence}</div><div class="sm" style="margin-bottom:14px">Same days in both weeks: Monday to ${upto}.</div>
-  ${hasLast?`<div class="row" style="gap:12px;align-items:flex-start;justify-content:center"><div style="width:140px;opacity:.55"><div class="cap" style="text-align:center;margin-bottom:6px">Last week</div>${gridHtml(lastL,'#B48CFF',0,'#B48CFF',{fade:.5})}</div><div style="width:140px"><div class="cap" style="text-align:center;margin-bottom:6px">This week</div>${gridHtml(nowL,'#B48CFF',0,'#B48CFF')}</div></div><div style="margin:12px 0;text-align:center"><span class="chipscale">1 box ≈ ₹${Math.max(1,Math.round((tf>0?flexW():base)/100))}</span></div>
+  ${hasLast?`<div class="row" style="gap:12px;align-items:flex-start;justify-content:center"><div style="width:140px;opacity:.55"><div class="cap" style="text-align:center;margin-bottom:6px">Last week</div>${gridHtml(lastL,'#B48CFF',0,'#B48CFF',{fade:.5})}</div><div style="width:140px"><div class="cap" style="text-align:center;margin-bottom:6px">This week</div>${gridHtml(nowL,'#B48CFF',0,'#B48CFF')}</div></div><div style="margin:12px 0;text-align:center"><span class="chipscale">1 mark ≈ ₹${Math.max(1,Math.round((tf>0?flexW():base)/100))}</span></div>
   <div class="cap" style="margin:8px 0 2px">What changed since last week</div><div class="sm" style="margin-bottom:8px">Each line: last week, then this week, then the difference.</div><div class="col" style="gap:6px">${rows.map(r=>`<button class="li" data-a="insc|${r.c.id}" style="padding:10px 14px"><span class="d" style="background:${catCol(r.i)}"></span><span class="n" style="flex:1">${esc(r.c.name)}<br><span class="sm" style="font-weight:500">${money(r.was)} then ${money(r.now)} now</span></span><span class="a" style="text-align:right;color:${r.d>0?AMBER:r.d<0?SAVE:'var(--ink3)'}">${r.d>0?'↑ '+money(r.d)+' more':r.d<0?'↓ '+money(-r.d)+' less':'same'}</span></button>`).join('')}</div>`:`<div class="card sub">Come back next week. Then this week and last sit side by side.</div>`}</div>`};
 /* ===== CATEGORIES: search the ones you have, add ideas, or make your own ===== */
 const cleanName=n=>String(n||'').replace(/[|"<>]/g,' ').replace(/\s+/g,' ').trim().slice(0,28);
@@ -1198,7 +1200,7 @@ function nextThing(){
  if(S.unsorted.length)return {t:S.unsorted.length+(S.unsorted.length>1?' payments need':' payment needs')+' a category',a:'push|sort',c:'amber'};
  const b=billSoon()[0];if(b)return {t:b,a:'goto|spending',c:'amber'};
  const pl=planned()?planLines()[0]:null;if(pl)return {html:pl};
- if(!planned())return {t:'Make your plan',a:'startplan',c:'plan'};
+ if(!planned())return {t:'Set your weekly amount',a:'startplan',c:'plan'};
  return null}
 SCREENS.home=()=>{const nt=nextThing();let title,grid,cap;
  if(planned()){const [a]=homeSentence();const empty=flexL()<=0,r=flexL()/flexW();title=a;
@@ -1212,7 +1214,7 @@ SCREENS.home=()=>{const nt=nextThing();let title,grid,cap;
  <div class="title" style="margin-top:12px;font-size:36px">${title}</div>
  <div style="margin:20px 8px 12px" data-a="gridhow">${grid}</div><div style="margin:0 10px 16px">${cap}</div>
  ${row}
- <div style="position:sticky;bottom:0;margin-top:22px;padding-top:10px;background:transparent"><button class="btn" data-a="pay">${S.p.mode==='manual'?'Add a spend':'Pay'}</button></div>`};
+ <div style="position:sticky;bottom:0;margin-top:22px;padding-top:10px;background:transparent"><button class="btn" data-a="pay">${payLabel()}</button></div>`};
 
 /* ---------- Spending: where did it go? ---------- */
 H.spseg=a=>{UI.sp=a[0];UI.pat=0;UI.spAll=false};
@@ -1223,7 +1225,7 @@ function spCats(){const rows=S.cats.map((c,i)=>({c,i,v:wkCat(c,0)})).sort((a,b)=
  const li=show.map(r=>{const c=r.c,col=catCol(r.i),pl=planned()&&c.amt>0;const pct=pl?Math.min(100,(c.amt-c.left)/c.amt*100):Math.min(100,r.v/mx*100);
   return `<button class="li" style="display:block;padding:12px 16px" data-a="push|${pl?'cat':'tcat'}|${J({id:c.id})}"><span class="row sp"><span class="n" style="flex:none"><i style="width:10px;height:10px;border-radius:50%;background:${col};display:inline-block;margin-right:10px"></i>${esc(c.name)}</span><span class="t">${pl?wordLeft(c.left,c.amt)+' left':r.v?money(r.v):''}</span></span><span style="display:block;height:5px;border-radius:3px;background:#171C25;margin-top:9px"><span style="display:block;height:5px;width:${Math.max(r.v||pl?4:0,pct)}%;border-radius:3px;background:${boxBg(col)}"></span></span></button>`}).join('');
  const more=rows.length>7&&!UI.spAll?`<button class="li" data-a="spall"><span class="n mut">Show all ${rows.length}</span><span class="t">›</span></button>`:'';
- const edit=planned()?`<button class="li" data-a="push|budget"><span class="n mut">Edit weekly limits</span><span class="t">›</span></button>`:'';
+ const edit=planned()&&!S.wallet?`<button class="li" data-a="push|budget"><span class="n mut">Change how much each gets</span><span class="t">›</span></button>`:'';
  const bills=S.bills.length?`<button class="li" data-a="v15bills"><span class="d" style="background:${FIXC}"></span><span class="n">Subscriptions</span><span class="t">${S.bills.length} ›</span></button>`:'';
  return `<div class="col" style="gap:8px">${li}${more}${bills}${edit}</div>`}
 var spHist=function(){const list=S.txns.slice(0,40);if(!list.length)return `<div class="title" style="font-size:22px">Nothing yet.</div>`;const groups={};list.forEach(t=>{const k=new Date(t.t).toDateString();(groups[k]=groups[k]||[]).push(t)});
@@ -1250,13 +1252,13 @@ SHEETS.v15inc=()=>`<div class="h2">Your incomes</div>${incomesHtml()}`;
 H.v15incs=()=>{openSheet('v15inc');return false};
 function mnInc(){const l=S.incomes||[];const now=S.now.getTime();const run=l.filter(i=>!i.end||i.end+DAY>now);
  const one=`<button class="li" data-a="oneoff"><span class="n mut">One-off money</span><span class="t">›</span></button>`;
- if(!l.length&&!planned())return `<div class="title">Money in.</div><div class="sub" style="margin:8px 0 22px">Add it, split it. Only if you want.</div><button class="btn" data-a="startplan">Add income</button><div style="margin-top:12px">${one}</div>`;
- if(!l.length)return `<div class="title">${money(S.W)} a week to spend.</div><div class="sub" style="margin:8px 0 22px">Planned by hand.</div><button class="btn" data-a="startplan">Add income</button><div style="margin-top:12px">${one}</div>`;
- if(!run.length)return `<div class="title">Your income ended.</div><div class="sub" style="margin:8px 0 22px">Add more to keep a plan going.</div><button class="btn" data-a="startplan">Add income</button><div class="col" style="gap:8px;margin-top:12px"><button class="li" data-a="v15incs"><span class="n">Your incomes</span><span class="t">${l.length} ›</span></button>${one}</div>`;
+ if(!l.length&&!planned())return `<div class="title">Money in.</div><div class="sub" style="margin:8px 0 22px">Add it, split it. Only if you want.</div><button class="btn" data-a="v15addinc">Add income</button><div style="margin-top:12px">${one}</div>`;
+ if(!l.length)return `<div class="title">${money(S.W)} a week to spend.</div><div class="sub" style="margin:8px 0 22px">Planned by hand.</div><button class="btn" data-a="v15addinc">Add income</button><div style="margin-top:12px">${one}</div>`;
+ if(!run.length)return `<div class="title">Your income ended.</div><div class="sub" style="margin:8px 0 22px">Add more to keep a plan going.</div><button class="btn" data-a="v15addinc">Add income</button><div class="col" style="gap:8px;margin-top:12px"><button class="li" data-a="v15incs"><span class="n">Your incomes</span><span class="t">${l.length} ›</span></button>${one}</div>`;
  const wk=planned()?S.W:Math.round(planRate());const sav=run.reduce((a,i)=>a+i.sav,0),sp=run.reduce((a,i)=>a+i.sp,0),tot=Math.max(1,sav+sp),pct=Math.round(sav/tot*100);
  return `<div class="title">${wk>0?money(wk)+' a week to spend.':money(sp)+' to spend.'}</div><div style="margin:18px 12px 8px">${multiGrid([{amt:Math.max(0,sav),color:SAVE},{amt:Math.max(1,sp),color:SPEND}],tot,{w:250})}</div>
  <div class="row sp sm" style="margin:8px 12px 20px"><span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${SAVE};margin-right:6px"></i>Saving ${pct}%</span><span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${SPEND};margin-right:6px"></i>Spending ${100-pct}%</span></div>
- <button class="btn" data-a="startplan">Add income</button><div class="col" style="gap:8px;margin-top:12px"><button class="li" data-a="v15incs"><span class="n">Your incomes</span><span class="t">${l.length} ›</span></button>${one}</div>`}
+ <button class="btn" data-a="v15addinc">Add income</button><div class="col" style="gap:8px;margin-top:12px"><button class="li" data-a="v15incs"><span class="n">Your incomes</span><span class="t">${l.length} ›</span></button>${one}</div>`}
 function mnSav(){const act=S.goals.filter(g=>g.state!=='done');
  if(!act.length&&S.free<=0)return `<div class="title" style="margin-top:6px">Saving for something?</div><div class="sub" style="margin:8px 0 22px">Name it. Pick an amount.</div><button class="btn" data-a="v15goal">Add a goal</button>`;
  const sv=act.reduce((a,g)=>a+Math.min(g.saved,g.target),0)+Math.max(0,S.free);
@@ -1267,7 +1269,7 @@ SCREENS.money=()=>{const v=UI.mn||'inc';return `<div class="sec">${SEG([['inc','
 const _incFlow=FLOWS.inc;
 FLOWS.inc=F=>{const d=F.d;
  if(F.step===2){const a=amtOf(d.kp),pct=d.pct===undefined?20:d.pct,sp=a-Math.round(a*pct/100/10)*10;const t0=day0(),end=snapEnd(d.end||presetEnd(PRESETS[1])),days=daysIn(t0,end),wk=Math.max(5,r5b(sp/days*7));
-  return `<div class="mbody"><button class="back" data-a="incback">‹ Back</button><div class="title" style="margin-top:8px">Until when?</div>
+  return `<div class="mbody"><button class="back" data-a="incback">‹ Back</button><div class="title" style="margin-top:8px">How many days should this money last?</div>
   <div class="row wrap" style="gap:8px;margin:16px 0 10px">${PRESETS.map((p,i)=>`<button class="chip ${!d.cal&&end===presetEnd(p)?'on':''}" data-a="incpre|${i}">${p[0]}</button>`).join('')}<button class="chip ${d.cal?'on':''}" data-a="v15cal">Pick a date</button></div>
   ${d.cal?`<div class="sub" style="text-align:center;margin:0 0 8px">${money(wk)} a week · until ${fmtDate(end)}</div>${calHtml(d,t0,end)}`:`<div style="text-align:center;margin-top:30px"><div style="display:flex;justify-content:center">${amtDots(money(wk))}</div><div class="sub">a week to spend</div></div>`}</div>
   <div class="mfoot"><button class="btn" data-a="incfinish">Done</button></div>`}
@@ -1291,7 +1293,7 @@ window.afterRender=()=>{if(_ar)_ar();
 const _payFlow=FLOWS.pay;
 FLOWS.pay=F=>{const d=F.d;if(F.step>0)return _payFlow(F);
  const amt=amtOf(d.kp),back=`<button class="back" data-a="pclose">‹ Close</button>`;
- if(!d.ask)return `<div class="mbody">${back}<div class="cap">${S.p.mode==='manual'?'Add a spend':'Pay'}</div><div class="title" style="margin-top:4px">How much?</div><div style="margin:10px 0;display:flex;justify-content:center">${amtDots('₹'+(d.kp||'0'))}</div>${keypad('kp')}</div><div class="mfoot"><button class="btn ${amt?'':'d'}" data-a="${amt?'payask':'x'}">Next</button></div>`;
+ if(!d.ask)return `<div class="mbody">${back}<div class="cap">${payLabel()}</div><div class="title" style="margin-top:4px">How much?</div><div style="margin:10px 0;display:flex;justify-content:center">${amtDots('₹'+(d.kp||'0'))}</div>${keypad('kp')}</div><div class="mfoot"><button class="btn ${amt?'':'d'}" data-a="${amt?'payask':'x'}">Next</button></div>`;
  const pl=planned(),sav=pl&&d.tab==='s';const cid=d.cid||(d.target&&d.target.id);
  const tiles=(pl?payTiles(d).filter(x=>sav||S.cats.some(c=>c.id===x.k)||x.k==='__more'):[]);
  const ok=pl?!!d.target:!!cid;
@@ -1309,7 +1311,7 @@ POPUPS.weekreview=P=>{const w0=P.week,w1=w0+7*DAY;const tx=S.txns.filter(t=>t.t>
   const bar=r=>{const m=Math.max(r.ideal,r.act,1);const g=Math.min(r.act,r.ideal)/m*100,a=Math.max(0,r.act-r.ideal)/m*100,t=r.ideal/m*100;return `<div style="position:relative;height:10px;border-radius:5px;background:#171C25;margin-top:6px"><span style="position:absolute;left:0;top:0;bottom:0;width:${g}%;border-radius:5px 0 0 5px;background:${boxBg('#3CF05D')}"></span><span style="position:absolute;left:${g}%;top:0;bottom:0;width:${a}%;border-radius:0 5px 5px 0;background:${boxBg('#F08A3C')}"></span><span style="position:absolute;left:calc(${t}% - 1px);top:-3px;bottom:-3px;width:2px;background:#F5F7FA;border-radius:1px"></span></div>`};
   return `${blobs('blue','bottom',.7)}<div class="mbody" style="padding-top:58px"><button class="back" data-a="wrback">‹ Back</button><div class="title" style="font-size:28px;margin:6px 0 4px">Plan and actual.</div><div class="sub">The white line is your plan.</div><div class="col" style="gap:14px;margin-top:20px">${rows.map(r=>`<div><div class="row sp"><span style="font-weight:600">${esc(r.name)}</span></div>${bar(r)}</div>`).join('')}</div></div><div class="mfoot"><button class="btn" data-a="wrdone">Done</button></div>`}
  const sub=P.moved>0?money(P.moved)+' moved to savings.':over?'Savings covered the rest.':'';
- return `${blobs('blue','bottom',.7)}<div class="mbody" style="padding-top:70px"><div class="title" style="font-size:32px">${over?'A bit over this week.':'You stayed on pace.'}</div>${sub?`<div class="sub" style="margin-top:6px">${sub}</div>`:''}<div style="margin:24px 10px 0">${gridHtml(Math.min(100,act/ideal*100),over?'#F08A3C':'#3CF05D',0,'#3CF05D',{w:260})}</div></div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn" data-a="wrdone">Done</button><button class="btn q" data-a="wrcat">By category</button></div></div>`};
+ return `${blobs('blue','bottom',.7)}<div class="mbody" style="padding-top:70px"><div class="title" style="font-size:32px">${over?'A bit over this week.':'You stayed within your week.'}</div>${sub?`<div class="sub" style="margin-top:6px">${sub}</div>`:''}<div style="margin:24px 10px 0">${gridHtml(Math.min(100,act/ideal*100),over?'#F08A3C':'#3CF05D',0,'#3CF05D',{w:260})}</div></div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn" data-a="wrdone">Done</button><button class="btn q" data-a="wrcat">By category</button></div></div>`};
 H.wrcat=()=>{UI.popup.cat=true};H.wrback=()=>{UI.popup.cat=false};
 
 /* ---------- Category screens: one gauge, one sentence, one action ---------- */
@@ -1369,7 +1371,7 @@ function insCmp(){const frac=Math.min(1,((S.now-startOfWeek(S.now))/DAY+1)/7);co
  return `<div class="title" style="font-size:30px;line-height:1.1">${head}</div><div class="sub" style="margin-top:6px">Same days of the week.</div>
  <div class="row" style="gap:14px;justify-content:center;margin:20px 0 16px"><div style="width:132px;opacity:.5"><div class="cap" style="text-align:center;margin-bottom:6px">Last</div>${gridHtml(lastL,'#B48CFF',0,'#B48CFF',{fade:.5})}</div><div style="width:132px"><div class="cap" style="text-align:center;margin-bottom:6px">This</div>${gridHtml(nowL,'#B48CFF',0,'#B48CFF')}</div></div>
  <div class="col" style="gap:8px">${rows.map(r=>`<button class="li" data-a="insc|${r.c.id}"><span class="d" style="background:${catCol(r.i)}"></span><span class="n">${esc(r.c.name)}</span><span class="a" style="color:${r.d>0?AMBER:r.d<0?SAVE:'var(--ink3)'}">${r.d>0?'↑ '+money(r.d):r.d<0?'↓ '+money(-r.d):'same'}</span></button>`).join('')}</div>`}
-SCREENS.insights=()=>{if(!UI._insInit){UI._insInit=1;UI.hot.scale='week'}const v=UI.ins||'when';return `${SEG([['when','When'],['rep','Repeats'],['cmp','Vs last week']],v,'insseg')}${v==='when'?insWhen():v==='rep'?insRep():insCmp()}`};
+SCREENS.insights=()=>{if(!UI._insInit){UI._insInit=1;UI.hot.scale='week'}const v=UI.ins||'when';return `${SEG([['when','When'],['rep','Repeats'],['cmp','Last week']],v,'insseg')}${v==='when'?insWhen():v==='rep'?insRep():insCmp()}`};
 
 /* ---------- Teaching the grid: label it, let people tap it, show what a payment does to it ---------- */
 SHEETS.gridhow=({tour})=>{const pl=planned();const box=pl?boxVal(flexW()):boxVal(Math.max(100,Math.ceil(Math.max(wkTot(0),wkTot(1))/50)*50));const n=10;const lvl=pl?Math.max(n,Math.min(100,flexL()/flexW()*100)):60;
@@ -1379,7 +1381,7 @@ SHEETS.gridhow=({tour})=>{const pl=planned();const box=pl?boxVal(flexW()):boxVal
 H.gridhow=()=>{openSheet('gridhow',{});return false};
 /* at the moment of paying: say how many boxes go */
 const _payFlow2=FLOWS.pay;
-FLOWS.pay=F=>{let h=_payFlow2(F);if(F.step===1||F.step===undefined){const amt=amtOf(F.d.kp);h=h.replace(/1 box (=|≈) ₹(\d+)/,(m,e,v)=>`${Math.max(1,Math.min(100,Math.round(amt/(+v||1))))} boxes go · 1 box ≈ ₹${v}`)}return h};
+FLOWS.pay=F=>{let h=_payFlow2(F);if(F.step===1||F.step===undefined){const amt=amtOf(F.d.kp);h=h.replace(/1 mark (=|≈) ₹(\d+)/,(m,e,v)=>`${Math.max(1,Math.min(100,Math.round(amt/(+v||1))))} marks go · 1 mark ≈ ₹${v}`)}return h};
 
 /* ---------- One-off payments: outside the weekly plan ---------- */
 const OOCH=['Trip','Gift','Repair','Fees','Medical','Event'];
@@ -1387,7 +1389,7 @@ function doOneOff(amt,payee,fromSav){const fs=fromSav?Math.min(amt,Math.max(0,S.
 const _payFlow3=FLOWS.pay;
 FLOWS.pay=F=>{const d=F.d;if(F.step>0||!d.ask)return _payFlow3(F);const amt=amtOf(d.kp);
  if(d.ask===1){let h=_payFlow3(F);
-  const tile=`<button class="tile ${d.oneoff?'on':''}" style="border-style:dashed;${d.oneoff?'border-color:#B48CFF;background:#B48CFF22':''}" data-a="poneoff"><b><i style="background:#B48CFF"></i>One-off</b><small>outside your plan</small></button>`;
+  const tile=`<button class="tile ${d.oneoff?'on':''}" style="border-style:dashed;${d.oneoff?'border-color:#B48CFF;background:#B48CFF22':''}" data-a="poneoff"><b><i style="background:#B48CFF"></i>One-off</b><small>not part of your week</small></button>`;
   h=/data-a="(pto\|__more|tmore)"/.test(h)?h.replace(/<button class="tile[^"]*"[^>]*data-a="(pto\|__more|tmore)"/,m=>tile+m):h.replace(/(<div class="tgrid"[^>]*>[\s\S]*?)(<\/div>)/,`$1${tile}$2`);
   if(d.oneoff)h=h.replace(/<button class="btn d" data-a="x">Pick one<\/button>/,`<button class="btn" data-a="oonext">Next</button>`).replace(/data-a="(pnext|tadd)">(Next|Add [^<]*)<\/button>/,`data-a="oonext">Next</button>`);
   return h}
@@ -1403,7 +1405,7 @@ H.oonext2=()=>{const d=UI.flow.d;if(!planned()||S.free<=0){H.oofinal(['plan']);r
 H.oofinal=a=>{const d=UI.flow.d,amt=amtOf(d.kp);const t=doOneOff(amt,(d.ooname||'One-off').trim(),a[0]==='sav');closeFlow();say(a[0]==='sav'?money(t.src.fromSavings)+' taken from savings.':'One-off added. Your week is untouched.');return false};
 const _txScreen=SCREENS.txn;
 SCREENS.txn=p=>{const t=S.txns.find(x=>x.id===p.id);if(!t||t.kind!=='oneoff')return _txScreen(p);const dt=new Date(t.t);
- return `<button class="back" data-a="back">‹ Back</button><div class="cap">${esc(t.payee)} · one-off</div><div class="title" style="font-size:46px;margin-top:4px">${money(t.amt)}</div><div class="card" style="margin:16px 0;display:grid;gap:10px">${[['When',fmtDay(dt)+', '+fmtTime(dt)],['Paid from',t.src&&t.src.fromSavings?'Savings':'Outside your plan']].map(r=>`<div class="row sp"><span class="mut">${r[0]}</span><b>${esc(r[1])}</b></div>`).join('')}</div><button class="btn o" data-a="rm|${t.id}">Delete</button>`};
+ return `<button class="back" data-a="back">‹ Back</button><div class="cap">${esc(t.payee)} · one-off</div><div class="title" style="font-size:46px;margin-top:4px">${money(t.amt)}</div><div class="card" style="margin:16px 0;display:grid;gap:10px">${[['When',fmtDay(dt)+', '+fmtTime(dt)],['Paid from',t.src&&t.src.fromSavings?'Savings':'Not part of your week']].map(r=>`<div class="row sp"><span class="mut">${r[0]}</span><b>${esc(r[1])}</b></div>`).join('')}</div><button class="btn o" data-a="rm|${t.id}">Delete</button>`};
 
 /* ---------- UPI linked: use the balance to make a plan (skippable, two short screens) ---------- */
 H.obverify=a=>{const d=obD();if(a[0]==='fail'){d.fail=true;return}d.fail=false;d.upiBal=6500;d.pct=20;d.s='ubal'};
@@ -1419,20 +1421,20 @@ H.ubcal=()=>{const d=UI.flow.d;d.cal=!d.cal};
 window.TIPS=true;const TS={};
 const ACC={g:'#62DCB4',a:'#F08A3C',v:'#B48CFF',b:'#5AA9FF'};
 const TIPDEF={
- paid:{cap:'Your first spend',t:'That is one spend.',b:'The boxes it took are gone from your week. What is left is on Home.',c:ACC.g},
+ paid:{cap:'Your first spend',t:'That is one spend.',b:'The marks it took fade out of your week. What is left is on Home.',c:ACC.g},
  unsorted:{cap:'A payment needs a place',t:'Pick its category once.',b:'Trickle remembers it, so next time it sorts itself.',c:ACC.a},
  credit:{cap:'Money came in',t:'Say what it is.',b:'Income, one-off money, or not yours. Your UPI link spotted it.',c:ACC.g},
- plan:{cap:'Your plan',t:'Your plan is set.',b:()=>`${money(S.W)} a week, shared across your categories. Change any limit in Spending.`,c:ACC.g},
- income:{cap:'Income',t:'Income is split.',b:'Part is saved, the rest is for spending. You can change the split any time.',c:ACC.b},
+ plan:{cap:'Your week',t:'Your weekly amount is set.',b:()=>`${money(S.W)} a week. Everything you log comes out of it.`,c:ACC.g},
+ income:{cap:'Income',t:'Part is kept.',b:'Part is kept, the rest is for spending. You can change it any time.',c:ACC.b},
  oneoff:{cap:'One-off',t:'One-offs stay outside your week.',b:'They show in History but never change what is left.',c:ACC.v},
  bill:{cap:'Subscription',t:'A little is set aside each week.',b:'So the bill never surprises you.',c:ACC.a},
  goal:{cap:'Goal',t:'Goals fill as you save.',b:'Money you move into one grows its ring. Free savings stay unassigned.',c:ACC.g},
- ahead:{cap:'Pace',t:'Amber means ahead of pace.',b:'Nothing is wrong. At this speed the week runs out early.',c:ACC.a},
- over:{cap:'Pace',t:'You went over.',b:'Savings covered the rest. It is a signal, not a failure.',c:ACC.a},
- spending:{cap:'Spending',t:'Where it went.',b:'Each bar is a category this week. Tap one to see its boxes.',c:ACC.a},
+ ahead:{cap:'Spending fast',t:'Amber means you are spending fast.',b:'Nothing is wrong. At this speed the week runs out early.',c:ACC.a},
+ over:{cap:'Over',t:'You used the whole week.',b:'Savings covered the rest. It is a signal, not a failure.',c:ACC.a},
+ spending:{cap:'Spending',t:'Where it went.',b:'Each bar is a category this week. Tap one to see where it went.',c:ACC.a},
  money:{cap:'Money',t:'Money in, and what you keep.',b:'Income is split into spending and saving. Goals live under Savings.',c:ACC.b},
  insights:{cap:'Insights',t:'Patterns, not a list.',b:'See when your money goes and what repeats. Tap a spot for the amount.',c:ACC.v},
- cat:{cap:'A category',t:'One category, one gauge.',b:'Its 100 boxes are its weekly limit. Boxes go as you spend.',c:ACC.g}
+ cat:{cap:'A category',t:'One category, one gauge.',b:'Its 100 marks are its weekly amount. Marks fade as you spend.',c:ACC.g}
 };
 SHEETS.tip=({k})=>{const d=TIPDEF[k];const b=typeof d.b==='function'?d.b():d.b;
  return `<div style="width:44px;height:5px;border-radius:3px;background:${d.c};box-shadow:0 0 14px ${d.c}88;margin-bottom:14px"></div><div class="cap">${d.cap}</div><div class="title" style="font-size:27px;margin:4px 0 10px">${d.t}</div><p class="sub" style="margin:0 0 20px;font-size:16px">${b}</p><button class="btn" data-a="closesheet">Got it</button>`};
@@ -1461,6 +1463,103 @@ window.afterRender=()=>{if(_ar3)_ar3();if(!window.TIPS||!S||!UI)return;
  if(k&&!TS[k]){TS[k]=1;openSheet('tip',{k})}};
 
 const _ru=resetUI;resetUI=function(){_ru();UI.hot.mode='rupees'};
+
+/* ===== v15.3: changes from the Architecture & Strategy Document (V15-21 to V15-30, PROPOSED until Tarun confirms) =====
+   1 Weekly allowance, not category budgets (wallet mode)   2 Home = Tier 1 only: one gauge, one number, one button
+   3 Fixed 100-mark gauge in 5 blocks of 20, ghosted spent marks, always empties   4 Small spends roll up silently
+   5 Plain language: marks, weekly amount, Log expense   6 Model B switch: "Scan & pay" button (Test B)
+   Loaded BEFORE ui15d.js so the Home-picture test harness wraps this Home. */
+window.HOMEBTN='log';
+function payLabel(){return window.HOMEBTN==='scan'?'Scan & pay':'Log expense'}
+/* marks left: spending is rounded DOWN to whole marks, so spends under 1% wait in a quiet buffer (rollup) */
+function marksLeft(L,W){if(!(W>0))return 0;const sp=(1-Math.max(0,Math.min(W,L))/W)*100;return Math.max(0,Math.min(100,100-Math.floor(sp+1e-9)))}
+function rollupPending(L,W){const m=100-marksLeft(L,W);return Math.max(0,Math.round((W-Math.max(0,L))-m*W/100))}
+const GHOST='#8A94A6';
+const blk=h=>h.replace('<div class="lg" ','<div class="lg blk" ');
+
+/* ---------- the weekly amount (wallet) ---------- */
+function zeroCats(){S.wallet=true;S.cats.forEach(c=>{c.amt=0;c.full=0;c.left=0});
+ const sp=weekSpentAll(S,0,1);S.bufAmt=S.bufFull=S.flexW;S.bufLeft=Math.max(0,S.flexW-sp)}
+function makeAllowance(wk){wk=Math.max(5,r5b(wk));UI.flow=null;
+ startUpgrade({s:'done',qW:wk,balN:Math.round(wk*4.3),lasts:4.3,sav:0,fromInc:true,share:'eq',amts:{},bills:S.bills.map(b=>[b.name,b.amt,b.every,b.dueDay,b.nextDue]),qB:S.bills.map(b=>b.name),limits:true,noBal:true,method:'none',pin:APP_PIN||''});
+ H.obfinish();zeroCats()}
+function setAllowance(wk){wk=Math.max(5,r5b(wk));if(!planned()){makeAllowance(wk);return}
+ S.W=wk;S.flexW=Math.max(0,wk-S.fixedW);if(S.wallet){S.bufAmt=S.bufFull=S.flexW;S.bufLeft=Math.max(0,S.flexW-weekSpentAll(S,0,1))}else if(typeof recomputePlan==='function')recomputePlan(true)}
+const ALLOWPRE=[500,1000,1500,2000];
+const allowKeys=d=>`<div class="row wrap" style="gap:8px;margin:14px 0 6px">${ALLOWPRE.map(v=>`<button class="chip ${amtOf(d.kp)===v?'on':''}" data-a="allowpre|${v}">${money(v)}</button>`).join('')}</div><div style="margin:8px 0;display:flex;justify-content:center">${amtDots('₹'+(d.kp||'0'))}</div>${keypad('kp')}`;
+H.allowpre=a=>{const d=UI.flow.d;d.kp=String(a[0])};
+FLOWS.allow=F=>{const d=F.d,amt=amtOf(d.kp);
+ return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="title" style="margin-top:8px">How much can you spend each week?</div><div class="sub" style="margin-top:6px">A rough number is fine. You can change it.</div>${allowKeys(d)}</div><div class="mfoot"><button class="btn ${amt?'':'d'}" data-a="${amt?'allowdone':'x'}">Done</button></div>`};
+H.allowdone=()=>{const d=UI.flow.d,amt=amtOf(d.kp);if(!amt)return false;const first=!planned();setAllowance(amt);UI.flow=null;say(first?'Weekly amount set to '+money(S.W)+'.':'Weekly amount is '+money(S.W)+'.');return false};
+H.startplan=()=>{openFlow('allow',{kp:''});return false};
+
+/* onboarding gets one more question, skippable: "How much can you spend each week?" */
+const _obgo=H.obgo;
+H.obgo=a=>{const d=obD();if(a[0]==='done'&&!d.upgrade&&!d.uinc&&d.s==='cats'){d.s='allow';d.kp='';return}return _obgo(a)};
+const _obbasics=H.obbasics;
+H.obbasics=()=>{const d=obD();if(!d.cats.length)d.cats=[...BASIC6];if(d.uinc||d.upgrade)return _obbasics();d.s='allow';d.kp=''};
+H.obaw=a=>{const d=obD();if(a[0]==='skip'){d.limits=false;toEnd(d);return false}const amt=amtOf(d.kp);if(!amt)return false;d.limits=false;H.obfinish();makeAllowance(amt);say('Weekly amount set to '+money(S.W)+'.');return false};
+const _onbX=FLOWS.onb;
+FLOWS.onb=F=>{if(F.d.s==='allow'&&!F.d.upgrade){const d=F.d,amt=amtOf(d.kp);
+  return blobs('blue','bottom',.9)+`<div class="mbody" style="padding-top:64px"><button class="back" data-a="obgo|cats">‹ Back</button><div class="cap">Step 3 of 3</div><div class="title" style="margin-top:4px">How much can you spend each week?</div><div class="sub" style="margin-top:6px">A rough number is fine.</div>${allowKeys(d)}</div><div class="mfoot" style="padding-bottom:46px"><button class="btn ${amt?'':'d'}" data-a="${amt?'obaw|go':'x'}">Done</button><button class="btn q" data-a="obaw|skip">Skip</button></div><div class="sdots">${[1,2,3].map(i=>`<i class="${i===3?'on':''}"></i>`).join('')}</div>`}
+ return _onbX(F)};
+
+/* ---------- Home: Tier 1 only (hero number, one gauge, one action) ---------- */
+function nextAct(){
+ if(S.flags&&S.flags.linkLost)return {t:'Refresh your UPI link',a:'settings|acct',c:'amber'};
+ if(S.pending.length)return {t:'Last week is ready',a:'openweek',c:'amber'};
+ if(S.credits&&S.credits.length){const c=S.credits[0];return {t:money(c.amt)+' came in from '+c.from,a:'assign|'+c.id,c:'green'}}
+ if(S.unsorted.length)return {t:S.unsorted.length+(S.unsorted.length>1?' payments need':' payment needs')+' a category',a:'push|sort',c:'amber'};
+ const b=billSoon()[0];if(b)return {t:b,a:'goto|spending',c:'amber'};
+ if(!planned())return {t:'Set your weekly amount',a:'startplan',c:'plan'};
+ return null}
+SCREENS.home=()=>{const nt=nextAct(),pl=planned();let title,grid,cap='';
+ if(pl){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),lvl=marksLeft(L,W),empty=L<=0;
+  let st='';if(typeof paceInfo==='function'){const p=paceInfo();if(S.touched||empty)st="This week's amount is used up.";else if(p&&p.over)st='Spending fast this week.'}
+  title=`<span class="hero" style="font-size:46px;line-height:1">${money(L)}</span><span class="sub" style="margin-left:10px;font-size:18px">left this week</span>${st?`<div class="sub" style="margin-top:8px;color:${AMBER}">${st}</div>`:''}`;
+  grid=blk(gridHtml(lvl,(typeof paceHex==='function')?paceHex():SPEND,100-lvl,GHOST,{w:300,fade:.6}))+(empty?`<div style="height:3px;background:${AMBER};margin:8px 4px 0;border-radius:2px;box-shadow:0 0 14px ${AMBER}"></div>`:'');
+  cap=`<span class="row sp" style="align-items:center"><span></span><button class="chip" data-a="gridhow">1 mark = 1% ≈ ${money(boxVal(W))} ⓘ</button></span>`}
+ else{const tot=wkTot(0);
+  title=tot?`<span class="hero" style="font-size:46px;line-height:1">${money(tot)}</span><span class="sub" style="margin-left:10px;font-size:18px">spent this week</span>`:`<span class="title" style="font-size:30px">Nothing logged yet.</span>`;
+  grid=blk(gridHtml(0,SPEND,100,GHOST,{w:300,fade:.4}))}
+ const row=!nt?'':nt.c==='plan'?`<button class="li" style="padding:17px 18px;background:linear-gradient(135deg,rgba(140,243,206,.26),rgba(61,187,148,.2));border:1.5px solid #62DCB4;box-shadow:0 0 26px rgba(98,220,180,.3)" data-a="${nt.a}"><span class="n" style="font-size:18px;color:#8CF3CE"><b>${nt.t}</b></span><span class="t" style="color:#8CF3CE">›</span></button>`
+  :`<button class="li" data-a="${nt.a}"><span class="d" style="background:${nt.c==='green'?SAVE:'var(--amber)'}"></span><span class="n">${esc(nt.t)}</span><span class="t">›</span></button>`;
+ return `<div class="row sp" style="margin-top:2px"><span></span><button class="chip" data-a="settings">⚙</button></div>
+ <div style="margin-top:14px">${title}</div>
+ <div style="margin:20px 8px 12px" data-a="gridhow">${grid}</div><div style="margin:0 10px 16px">${cap}</div>
+ ${row}
+ <div style="position:sticky;bottom:0;margin-top:22px;padding-top:10px;background:transparent"><button class="btn" data-a="${window.HOMEBTN==='scan'?'payscan':'pay'}">${payLabel()}</button></div>`};
+
+SHEETS.gridhow=({tour})=>{const pl=planned();
+ if(!pl)return `<div class="cap">How to read it</div><div class="title" style="font-size:28px;margin:4px 0 14px">100 marks. That will be your week.</div><div style="display:flex;justify-content:center">${blk(gridHtml(0,SPEND,100,GHOST,{w:220,fade:.3}))}</div><p class="sub" style="margin:14px 0 18px">Set a weekly amount. Each mark is 1% of it. Spending fades marks out.</p><button class="btn" data-a="closesheet">Got it</button>`;
+ const W=Math.max(1,flexW()),L=Math.max(0,flexL()),box=boxVal(W),lvl=marksLeft(L,W),pend=rollupPending(L,W),n=10;
+ return `<div class="cap">${tour?'Your week':'How to read it'}</div><div class="title" style="font-size:28px;margin:4px 0 14px">100 marks. That is your week.</div>
+ <div style="display:flex;justify-content:center">${blk(gridHtml(Math.max(0,lvl-n),paceHex(),n,'#F5F7FA',{w:220}))}</div>
+ <p class="sub" style="margin:14px 0 8px">Each mark is 1% of ${money(W)}, about ${money(box)}. Spend ${money(box*n)} and the dashed ${n} marks fade out.</p>
+ <p class="sub" style="margin:0 0 18px">Small spends collect quietly until they add up to one mark${pend>0?`. Collecting now: ${money(pend)}`:''}. Marks come back on Monday.</p><button class="btn" data-a="closesheet">Got it</button>`};
+
+/* Model B (Test B): a "Scan & pay" button that opens a Trickle scan step first (prototype only: nothing is scanned) */
+H.payscan=()=>{openPay({scan:true});return false};
+const _payX=FLOWS.pay;
+function walletConfirm(F){const d=F.d,amt=amtOf(d.kp),W=Math.max(1,flexW()),L=Math.max(0,flexL()),over=Math.max(0,amt-L);
+ const now=marksLeft(L,W),after=marksLeft(Math.max(0,L-amt),W),goes=now-after,col=(typeof paceHex==='function')?paceHex():SPEND,lowbal=S.flags.lowBalance&&S.p.mode==='upi';
+ const words=over>0?`That is more than this week's amount. The rest comes from savings.`:`${money(L-amt)} left after this.`;
+ return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">Logging</div><div class="title" style="font-size:28px;margin:4px 0 2px">${money(amt)} · ${esc(tgtName(d.target))}</div><div class="sub" style="margin-bottom:8px">To ${esc(d.payee||'Someone')}</div>
+ <div id="pgrid" style="margin:8px 8px 0">${blk(over>0?gridHtml(0,col,100,AMBER,{w:290}):gridHtml(after,col,goes,'#F5F7FA',{w:290}))}</div>
+ <div style="margin:12px 0 4px"><span class="chipscale">${over>0?'All 100 marks go':goes<1?'Under 1 mark, saved up quietly':goes+(goes===1?' mark goes':' marks go')} · 1 mark ≈ ${money(boxVal(W))}</span></div>
+ ${over>0?`<div class="title" style="font-size:32px;color:var(--amber);margin-top:8px">${money(over)} over.</div>`:''}<div class="sub" style="margin-top:4px">${words}</div>
+ ${lowbal?`<div class="banner" style="margin-top:12px"><b style="color:var(--amber)">Your account shows ${money(40)}.</b> <span class="sub">This may not go through.</span></div>`:''}</div>
+ <div class="mfoot"><div class="row" style="gap:10px"><button class="btn o" style="flex:1" data-a="pback">Back</button><button class="btn" style="flex:1.3" data-a="pgo">${S.p.mode==='manual'||d.paid?'Add':'Pay'} ${money(amt)}</button></div></div>`}
+FLOWS.pay=F=>{const d=F.d;if(S.wallet&&F.step===1&&d.target&&d.target.type==='cat')return walletConfirm(F);if(d.scan&&!d.scanned)return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="title" style="margin-top:8px">Scan the shop's QR</div><div style="margin:26px auto;width:240px;height:240px;border-radius:24px;border:2px dashed #62DCB4;display:flex;align-items:center;justify-content:center"><span class="sub">Point at the QR</span></div></div><div class="mfoot"><button class="btn" data-a="payscanned">Scan</button></div>`;
+ return _payX(F)};
+H.payscanned=()=>{UI.flow.d.scanned=true};
+
+/* ---------- Money: with a weekly amount and no income, show the amount and let it change ---------- */
+const _moneyX=SCREENS.money;
+SCREENS.money=()=>{if(S.wallet&&!(S.incomes||[]).length&&(UI.mn||'inc')==='inc')return `<div class="sec">${SEG([['inc','Money in'],['sav','Savings']],'inc','mnseg')}<div class="title">${money(S.W)} a week to spend.</div><div class="sub" style="margin:8px 0 22px">Your weekly amount.</div><button class="btn" data-a="startplan">Change amount</button><div class="col" style="gap:8px;margin-top:12px"><button class="btn q" data-a="v15addinc">Add money you get</button></div></div>`;return _moneyX()};
+H.v15addinc=()=>{openFlow('inc',{step:0,kp:''});return false};
+
+const _mpi=makePlanFromIncome;makePlanFromIncome=function(r){_mpi(r);zeroCats()};
 
 /* ===== Test harness: the same Home state drawn four ways, for 5-second comprehension tests (not part of the product) ===== */
 window.HOMEVIS='grid';
@@ -1507,6 +1606,7 @@ const EVENTS=()=>{const c0=S.cats[0],big=S.cats.find(c=>c.name==='Outings')||S.c
   ['Offer: fit budget to real weeks',()=>{UI.sheet={id:'refit',p:{}}}],
   ['Lock the app',()=>{H.lock()}]]},
  {h:'Home picture (for 5-second tests)',items:[['Grid',()=>{window.HOMEVIS='grid';go('home')}],['Bar',()=>{window.HOMEVIS='bar';go('home')}],['Days',()=>{window.HOMEVIS='days';go('home')}],['Words',()=>{window.HOMEVIS='words';go('home')}]]},
+ {h:'Home button (Test B)',items:[['Log expense (Model A)',()=>{window.HOMEBTN='log';go('home')}],['Scan & pay (Model B)',()=>{window.HOMEBTN='scan';go('home')}]]},
  {h:'First-time tips',items:[['Show every tip again',()=>{Object.keys(TS).forEach(k=>delete TS[k]);say('Tips will show again.')}],['Turn tips on or off',()=>{window.TIPS=!window.TIPS;say(window.TIPS?'Tips on.':'Tips off.')}]]},
  {h:'Pop-ups (always skippable)',items:[['Link UPI?',()=>openAsk('link')],['Add a spend?',()=>openAsk('add')],['Payments need a place',()=>openAsk('sort')],['Set a limit?',()=>openAsk('limit')],['Make a plan?',()=>openAsk('plan')],['Add your income?',()=>openAsk('income')],['After a week: here is how you spend',()=>{if(S.firstDay){S.now=new Date(S.firstDay.getTime()+8*DAY)}openAsk('planoffer')}],['Add a goal?',()=>openAsk('goal')],['Remind about bills?',()=>openAsk('notif')],['Add a PIN?',()=>openAsk('pin')],['Bring in older spends?',()=>openAsk('import')],['Last week recap (no budget)',()=>openAsk('recap')]]},
  {h:'Goals',items:[

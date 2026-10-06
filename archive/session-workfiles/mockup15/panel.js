@@ -27,6 +27,7 @@ const EVENTS=()=>{const c0=S.cats[0],big=S.cats.find(c=>c.name==='Outings')||S.c
   ['Offer: fit budget to real weeks',()=>{UI.sheet={id:'refit',p:{}}}],
   ['Lock the app',()=>{H.lock()}]]},
  {h:'Home picture (for 5-second tests)',items:[['Grid',()=>{window.HOMEVIS='grid';go('home')}],['Bar',()=>{window.HOMEVIS='bar';go('home')}],['Days',()=>{window.HOMEVIS='days';go('home')}],['Words',()=>{window.HOMEVIS='words';go('home')}]]},
+ {h:'Home button (Test B)',items:[['Log expense (Model A)',()=>{window.HOMEBTN='log';go('home')}],['Scan & pay (Model B)',()=>{window.HOMEBTN='scan';go('home')}]]},
  {h:'First-time tips',items:[['Show every tip again',()=>{Object.keys(TS).forEach(k=>delete TS[k]);say('Tips will show again.')}],['Turn tips on or off',()=>{window.TIPS=!window.TIPS;say(window.TIPS?'Tips on.':'Tips off.')}]]},
  {h:'Pop-ups (always skippable)',items:[['Link UPI?',()=>openAsk('link')],['Add a spend?',()=>openAsk('add')],['Payments need a place',()=>openAsk('sort')],['Set a limit?',()=>openAsk('limit')],['Make a plan?',()=>openAsk('plan')],['Add your income?',()=>openAsk('income')],['After a week: here is how you spend',()=>{if(S.firstDay){S.now=new Date(S.firstDay.getTime()+8*DAY)}openAsk('planoffer')}],['Add a goal?',()=>openAsk('goal')],['Remind about bills?',()=>openAsk('notif')],['Add a PIN?',()=>openAsk('pin')],['Bring in older spends?',()=>openAsk('import')],['Last week recap (no budget)',()=>openAsk('recap')]]},
  {h:'Goals',items:[
