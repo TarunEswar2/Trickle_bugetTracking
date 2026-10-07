@@ -19,7 +19,7 @@ Idea (Tarun's note, 7 Oct): open Trickle, scan the shop's QR, Trickle opens the 
 3. The user, not the app, says whether the payment went through. The UPI app's answer, if any, is shown as a hint.
 4. A payment that failed is still recorded as a record the user can correct.
 
-## Built in the v16 mockup (V16-32 to V16-34, proposed)
+## First build in the v16 mockup (V16-32 to V16-34), replaced by the no-result flow below
 Home (Android, "Scan & pay" mode): Scan & pay, with Log by hand underneath. Scan, optional amount, category (remembered per shop), confirm "Open your UPI app", hand-off screen (simulated), "Did it go through?" with three answers.
 | Answer | What Trickle does |
 |---|---|
@@ -40,3 +40,6 @@ Trickle passes the merchant's `upi://pay` link unchanged to a UPI app, logs the 
 - **Amount.** A static QR has no amount, so Trickle must ask for it to log the spend. Adding `am=75.00` to a static link is ordinary and keeps it unsigned; a dynamic QR already carries its amount. If the user changes the amount inside the UPI app, Trickle's record will differ until edited.
 - **Not confirmed.** Whether banks or UPI apps decline intents from an unregistered app (generic risk codes exist); personal-QR behaviour; per-merchant limits (sources conflict: ₹2,000 against ₹40,000 for unverified merchants).
 - **Cost of no result.** Failed payments stay in the record until removed. A reasonable guard is a one-tap "Didn't pay? Remove" shown when the user comes back to Trickle (the app coming to the foreground is not a UPI result).
+
+## Built in the mockup (7 Oct, V16-35)
+Scan & pay, then: shop QR (name, and amount if the QR has one), category (remembered per shop), "Open your UPI app", simulated UPI app, back to Trickle. The spend is logged when Trickle hands over. Result screen: "Added to your week", the amount, shop and category, what is left of the allowance, a line about savings only if savings paid part of it, and **Didn't pay? Remove**, which deletes the record and returns the money (including any taken from savings). No "Did it go through?" question, no failed or unconfirmed states.

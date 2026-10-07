@@ -173,6 +173,7 @@ body{font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
 .batt .bms{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:rgba(7,10,18,.5)}
 .gc{display:block;padding:15px 16px}.gc .pct{font-family:var(--display);font-weight:800;font-size:17px}
 #glow .blobs{opacity:.4!important}
+.okring circle{animation:drawc .7s var(--ease) .1s both}.okring path{animation:drawp .5s var(--ease) .55s both}@keyframes drawc{from{stroke-dashoffset:264}to{stroke-dashoffset:0}}@keyframes drawp{from{stroke-dashoffset:64}to{stroke-dashoffset:0}}
 </style></head><body>
 <div class="app"><div class="stage"><div id="frame"><div id="phone"><div class="notch"></div><div class="status"><span id="clk"></span><span>●●● 5G ▮</span></div><div id="glow"></div><div id="view"></div><div id="tabbar"></div><div id="layer"></div></div></div></div>
 <aside class="panel" id="panel"></aside></div>

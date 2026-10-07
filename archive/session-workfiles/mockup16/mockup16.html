@@ -173,6 +173,7 @@ body{font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
 .batt .bms{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:rgba(7,10,18,.5)}
 .gc{display:block;padding:15px 16px}.gc .pct{font-family:var(--display);font-weight:800;font-size:17px}
 #glow .blobs{opacity:.4!important}
+.okring circle{animation:drawc .7s var(--ease) .1s both}.okring path{animation:drawp .5s var(--ease) .55s both}@keyframes drawc{from{stroke-dashoffset:264}to{stroke-dashoffset:0}}@keyframes drawp{from{stroke-dashoffset:64}to{stroke-dashoffset:0}}
 </style></head><body>
 <div class="app"><div class="stage"><div id="frame"><div id="phone"><div class="notch"></div><div class="status"><span id="clk"></span><span>●●● 5G ▮</span></div><div id="glow"></div><div id="view"></div><div id="tabbar"></div><div id="layer"></div></div></div></div>
 <aside class="panel" id="panel"></aside></div>
@@ -2000,7 +2001,7 @@ function walletConfirm(F){const d=F.d,amt=amtOf(d.kp),W=Math.max(1,flexW()),L=Ma
  ${over>0?`<div class="title" style="font-size:26px;color:var(--amber);margin-top:16px">${money(over)} over.</div><div class="sub" style="margin-top:4px">More than this week has left. Savings cover the rest.</div>`:''}
  ${warn?`<div class="banner" style="margin-top:14px"><span style="color:var(--amber);font-weight:700">${esc(warn)}</span></div>`:''}${aw&&!warn?`<div class="banner" style="margin-top:14px;border-color:rgba(205,182,255,.4);background:rgba(205,182,255,.08)"><span style="color:#CDB6FF;font-weight:700">${esc(aw.t)}</span></div>`:''}
  ${lowbal?`<div class="banner" style="margin-top:12px"><b style="color:var(--amber)">Your account shows ${money(40)}.</b> <span class="sub">This may not go through.</span></div>`:''}</div>
- <div class="mfoot"><div class="row" style="gap:10px"><button class="btn o" style="flex:1" data-a="pback">Back</button><button class="btn" style="flex:1.3" data-a="pgo">${S.p.mode==='manual'||d.paid?'Add':'Pay'} ${money(amt)}</button></div></div>`}
+ <div class="mfoot"><div class="row" style="gap:10px"><button class="btn o" style="flex:1" data-a="pback">Back</button><button class="btn" style="flex:1.3" data-a="pgo">Add ${money(amt)}</button></div></div>`}
 
 /* ---------- Insights: When (hour, day, part of the month), Repeats, Trend; each with its evidence ---------- */
 H.rhmode=a=>{UI.rh=a[0];UI.rhSel=null};H.inssel=a=>{UI.rhSel=+a[0]};
@@ -2074,56 +2075,39 @@ SCREENS.goal=({id})=>{const g=S.goals.find(x=>x.id===id);if(!g)return '';const c
   const top=UI.stack&&UI.stack.length?UI.stack[UI.stack.length-1].id:'';const sig=[UI.tab,top,UI.ins,UI.sp,UI.mn,UI.rh].join('|');if(sig===last)return;last=sig;
   [...v.children].slice(0,9).forEach((c,i)=>c.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:420,delay:i*45,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}))}}
 
-/* ===== v16.3: Trickle as a scan-and-hand-off helper (Android). It never reads a bank account.
-   Scan a shop QR in Trickle, pay in your own UPI app, come back, say whether it went through. ===== */
+/* ===== v16.3: Trickle as a scan-and-hand-off helper (Android). No result is read from the UPI app (V16-35).
+   Scan a shop QR, Trickle logs the spend and hands the link unchanged to the user's UPI app. If the payment fails the user removes the record. ===== */
 window.PLATFORM='android';
 function payLabel(){return 'Log expense'}
 const QRS=[{pn:'Sharma Tea Stall',am:null},{pn:'Mess',am:75},{pn:'Campus Cafe',am:null},{pn:'Xerox Shop',am:20},{pn:'Cafe Coffee Corner',am:null}];
 H.payscanned=()=>{const d=UI.flow.d,q=QRS[(UI._qr=(UI._qr||0)+1)%QRS.length];d.scanned=true;d.payee=q.pn;d.via='scan';
  if(q.am){d.kp=String(q.am);d.ask=1}else d.ask=0;const m=S.memory[q.pn];if(m&&S.cats.some(c=>c.id===m)){d.oneoff=false;if(planned()){d.toK=m;d.target={type:'cat',id:m}}else d.cid=m}};
-/* by-hand category screen in "no allowance" mode adds at once; in a scan it goes on to the hand-off */
-{const _tadd=H.tadd;H.tadd=()=>{const F=UI.flow,d=F.d;if(d.scan){const cid=d.cid||(d.target&&d.target.id);if(!cid)return false;d.target={type:'cat',id:cid};F.step=2;return}return _tadd()}}
-{const _pgo=H.pgo;H.pgo=()=>{const F=UI.flow;if(F.d.scan){F.step=2;return}return _pgo()}}
-H.scanback=()=>{UI.flow.step=F1()};const F1=()=>planned()?1:0;
-H.scanres=a=>{const F=UI.flow;F.d.hint=a[0];F.step=4};
-H.scandid=a=>{const F=UI.flow,d=F.d;
- if(a[0]==='no'){const amt=amtOf(d.kp);(S.failedTx=S.failedTx||[]).unshift({id:'f'+(S.idc++),t:S.now.getTime(),payee:d.payee||'Someone',amt,cat:d.target&&d.target.id});F.step=5;return}
- scanLog(a[0]==='yes'?'confirmed':'unconfirmed')};
-function scanLog(status){payFinish(true);const t=UI.flow.d.result&&UI.flow.d.result.txn;if(t){t.via='scan';t.status=status;t.source='upi_intent'}}
+/* the spend is logged the moment Trickle hands over to the UPI app */
+function scanHandOff(){const F=UI.flow,d=F.d;d.before=Math.max(0,flexL());payFinish(true);const t=d.result&&d.result.txn;if(t){t.via='scan';t.source='upi_intent'}F.step=2}
+{const _tadd=H.tadd;H.tadd=()=>{const F=UI.flow,d=F.d;if(d.scan){const cid=d.cid||(d.target&&d.target.id);if(!cid)return false;d.target={type:'cat',id:cid};scanHandOff();return}return _tadd()}}
+/* Trickle never pays: by hand it just adds the spend */
+{H.pgo=()=>{const d=UI.flow.d;if(d.scan){scanHandOff();return}d.paid=true;payFinish(true)}}
+H.scanback=()=>{UI.flow.step=planned()?1:0};
+H.scanreturn=()=>{UI.flow.step=3};
+H.scanremove=()=>{const d=UI.flow.d,t=d.result&&d.result.txn;if(t){const sd=(t.src&&t.src.savingsDetail)||{};Object.keys(sd).forEach(k=>{if(k==='free')S.free+=sd[k];else{const g=S.goals.find(x=>x.id===k);if(g)g.saved+=sd[k]}});removeTxn(S,t.id)}closeFlow();say('Removed. Nothing is taken from your week.');return false};
+
+const savWhere=(res)=>{const sd=res.savingsDetail||{};return Object.keys(sd).filter(k=>sd[k]>0).map(k=>({n:k==='free'?'Free savings':((S.goals.find(g=>g.id===k)||{}).name||'A goal'),v:sd[k]}))};
 const _pay17=FLOWS.pay;
 FLOWS.pay=F=>{const d=F.d,amt=amtOf(d.kp);
- if(d.scan&&d.scanned){
-  if(F.step===2)return `<div class="mbody"><button class="back" data-a="scanback">‹ Back</button><div class="cap">${esc(d.payee||'Someone')} · ${money(amt)}</div><div class="title" style="margin-top:6px">Pay in your UPI app</div><div class="sub" style="margin-top:6px">Trickle opens it for you. Finish there, then come back. Trickle never sees your bank.</div>
-   <div class="card" style="margin-top:22px"><div class="cap">Your UPI app (simulated)</div><div class="h2" style="margin-top:8px">${money(amt)} to ${esc(d.payee||'Someone')}</div><div class="sm" style="margin-top:4px">Pick what happens in this prototype.</div><div class="col" style="gap:8px;margin-top:14px"><button class="btn s" data-a="scanres|paid">Payment goes through</button><button class="btn s q" data-a="scanres|failed">Payment fails</button><button class="btn s q" data-a="scanres|closed">I close the app</button></div></div></div>`;
-  if(F.step===4){const hint={paid:'Your UPI app said it was paid.',failed:'Your UPI app said it failed.',closed:'Your UPI app did not say.'}[d.hint]||'';
-   return `<div class="mbody" style="padding-top:70px"><div class="cap">${esc(d.payee||'Someone')} · ${money(amt)}</div><div class="title" style="margin-top:6px">Did it go through?</div><div class="sub" style="margin-top:8px">${hint} You tell Trickle. It does not look at your bank.</div></div>
-   <div class="mfoot"><div class="col" style="gap:10px"><button class="btn" data-a="scandid|yes">Yes, it went through</button><button class="btn q" data-a="scandid|no">No, it failed</button><button class="btn q" data-a="scandid|unsure">Not sure yet</button></div></div>`}
-  if(F.step===5)return `<div class="mbody" style="padding-top:70px"><div class="title">Not added.</div><div class="sub" style="margin-top:8px">Nothing was taken from your week. It stays in History if you want to try again.</div></div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn" data-a="scanagain">Try again</button><button class="btn q" data-a="pclose">Done</button></div></div>`}
+ if(d.scan&&d.scanned&&F.step===2)return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">${esc(d.payee||'Someone')} · ${money(amt)}</div><div class="title" style="margin-top:6px">Pay in your UPI app</div><div class="sub" style="margin-top:6px">Trickle has added it to your week and opened your UPI app. Finish there, then come back.</div>
+  <div class="card" style="margin-top:22px"><div class="cap">Your UPI app (simulated)</div><div class="h2" style="margin-top:8px">${money(amt)} to ${esc(d.payee||'Someone')}</div><div class="sm" style="margin-top:6px">Prototype only. Trickle cannot see what happens in here.</div><button class="btn s" style="margin-top:14px;width:100%" data-a="scanreturn">Back to Trickle</button></div></div>`;
+ if(F.step===3&&d.result&&!d.fail&&planned()&&d.target&&d.target.type==='cat'){const R=d.result,res=R.res||{},t=R.txn,W=Math.max(1,flexW()),L=Math.max(0,flexL()),sv=savWhere(res),col=(typeof paceHex==='function')?paceHex():'#5FE3B8',before=Math.min(W,(d.before!=null?d.before:L+amt)),warn=limWarn(d.target.id,d.payee,amt);
+  return `<div class="mbody" style="text-align:center;padding-top:56px"><svg class="okring" width="92" height="92" viewBox="0 0 92 92" aria-hidden="true"><circle cx="46" cy="46" r="42" fill="rgba(95,227,184,.10)" stroke="#5FE3B8" stroke-width="3" stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="0"/><path d="M28 47l12 12 24-27" fill="none" stroke="#5FE3B8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="64" stroke-dashoffset="0"/></svg>
+  <div class="title" style="font-size:26px;margin-top:18px">${d.scan?'Added to your week':'Added'}</div><div class="hero" style="font-size:56px;margin-top:8px">${money(amt)}</div><div class="sub" style="margin-top:8px">${esc(d.payee||'Someone')} · ${esc(tgtName(d.target))}</div>
+  <div class="card" style="text-align:left;margin-top:28px"><div class="row sp" style="align-items:baseline"><span class="cap">Left this week</span><span class="sm">of ${money(W)}</span></div><div class="hero" style="font-size:34px;margin:6px 0 14px">${money(L)}</div>${battery(L,W,{col,prev:before/W,sm:true})}</div>
+  ${sv.length?`<div class="banner" style="margin-top:14px;text-align:left"><b style="color:var(--amber)">${money(res.savings)} came from your savings.</b><div class="sm" style="margin-top:4px">${sv.map(x=>esc(x.n)+' '+money(x.v)).join(' · ')}</div></div>`:''}
+  ${warn?`<div class="banner" style="margin-top:14px;text-align:left"><span style="color:var(--amber);font-weight:700">${esc(warn)}</span></div>`:''}
+  ${d.scan?`<div class="sm" style="margin-top:16px">Not sure it went through? Check your UPI app.</div>`:''}</div>
+  <div class="mfoot"><div class="col" style="gap:8px"><button class="btn" data-a="pclose">Done</button>${d.scan?`<button class="btn q" data-a="scanremove">Didn't pay? Remove</button>`:''}</div></div>`}
  let h=_pay17(F);
  if(d.scan&&d.scanned&&F.step===1)h=h.replace(/(<button class="btn" style="flex:1.3" data-a="pgo">)[^<]*/,'$1Open your UPI app');
  return h};
-H.scanagain=()=>{UI.flow.step=2};
-
-/* a payment that was not confirmed asks again, later */
-{const _na=nextAct;nextAct=function(){const uc=S.txns.find(t=>t.status==='unconfirmed');if(uc)return {t:`Did ${money(uc.amt)} at ${uc.payee} go through?`,a:'didgo|'+uc.id,c:'amber'};return _na()}}
-SHEETS.didgo=({id})=>{const t=S.txns.find(x=>x.id===id);if(!t)return '';return `<div class="cap">${esc(t.payee)}</div><div class="title" style="font-size:26px;margin:4px 0 6px">Did ${money(t.amt)} go through?</div><div class="sub">Check your UPI app if you are not sure.</div><div class="col" style="gap:10px;margin-top:18px"><button class="btn" data-a="didres|${t.id}|yes">Yes, it did</button><button class="btn q" data-a="didres|${t.id}|no">No, it failed</button></div>`};
-H.didgo=a=>{openSheet('didgo',{id:a[0]});return false};
-H.didres=a=>{const t=S.txns.find(x=>x.id===a[0]);UI.sheet=null;if(!t)return false;
- if(a[1]==='yes'){t.status='confirmed';say('Confirmed.')}
- else{(S.failedTx=S.failedTx||[]).unshift({id:'f'+(S.idc++),t:t.t,payee:t.payee,amt:t.amt,cat:t.ref});removeTxn(S,t.id);say('Taken out of your week.')}return false};
-SHEETS.failtx=({id})=>{const f=(S.failedTx||[]).find(x=>x.id===id);if(!f)return '';return `<div class="cap">Did not go through</div><div class="title" style="font-size:26px;margin:4px 0 6px">${esc(f.payee)} · ${money(f.amt)}</div><div class="sub">Nothing was taken from your week.</div><div class="col" style="gap:10px;margin-top:18px"><button class="btn" data-a="failadd|${f.id}">I did pay, add it</button><button class="btn q" data-a="faildel|${f.id}">Delete this</button></div>`};
-H.failtx=a=>{openSheet('failtx',{id:a[0]});return false};
-H.failadd=a=>{const f=(S.failedTx||[]).find(x=>x.id===a[0]);UI.sheet=null;if(!f)return false;const cid=f.cat&&S.cats.some(c=>c.id===f.cat)?f.cat:S.cats[0].id;const r=doPay(S,{amt:f.amt,target:{type:'cat',id:cid},payee:f.payee,paid:true});r.txn.via='scan';r.txn.status='confirmed';S.failedTx=S.failedTx.filter(x=>x!==f);say('Added.');return false};
-H.faildel=a=>{S.failedTx=(S.failedTx||[]).filter(x=>x.id!==a[0]);UI.sheet=null;return false};
-
-/* History shows the ones that did not go through, muted, and the ones still to confirm */
-spHist=function(){const full=UI.spAll,N=full?80:8;const items=S.txns.slice(0,N).concat((S.failedTx||[]).map(f=>({id:f.id,t:f.t,payee:f.payee,amt:f.amt,kind:'failed'}))).sort((a,b)=>b.t-a.t).slice(0,N);
- if(!items.length)return `<div class="title" style="font-size:22px">Nothing yet.</div>`;const groups={};items.forEach(t=>{const k=new Date(t.t).toDateString();(groups[k]=groups[k]||[]).push(t)});
- return Object.keys(groups).map(k=>{const d=new Date(k),dl=Math.floor((new Date(S.now.toDateString())-d)/DAY),name=dl===0?'Today':dl===1?'Yesterday':fmtDay(d),tot=groups[k].filter(isSp).reduce((a,t)=>a+t.amt,0);
-  return `<div class="row sp" style="margin:16px 0 6px"><span class="cap">${name}</span>${tot?`<span class="cap">${money(tot)}</span>`:''}</div><div class="col" style="gap:6px">${groups[k].map(t=>{const failed=t.kind==='failed',unc=t.status==='unconfirmed';
-   const cn=failed?'Did not go through':unc?'To confirm':t.kind==='cat'?catName(t.ref):t.kind==='unsorted'?'Needs a category':t.kind==='fixed'?'Subscription':t.kind==='oneoff'?'One-off':'Goal';
-   const act=failed?'failtx|'+t.id:unc?'didgo|'+t.id:'push|txn|'+J({id:t.id}).replace(/\|/g,'');
-   return `<button class="li" style="${failed?'opacity:.62':''}" data-a="${act}"><span class="d" style="${failed?'border:1.5px solid #8F9AAB;background:none':t.kind==='unsorted'||unc?`border:1.5px dashed ${AMBER};background:none`:`background:${t.kind==='fixed'?FIXC:t.kind==='goal'?SAVE:t.kind==='oneoff'?'#B48CFF':catColor2(t.ref)}`}"></span><span class="n" style="line-height:1.25">${esc(t.payee)}<span class="mut" style="display:block;font-weight:500;font-size:12px;${unc?'color:'+AMBER:''}">${cn}</span></span><span class="a" style="${failed?'text-decoration:line-through;color:var(--ink3)':''}">${money(t.amt)}</span></button>`}).join('')}</div>`}).join('')+(!full&&S.txns.length>8?`<button class="li" style="margin-top:12px" data-a="spall"><span class="n mut">Show all</span><span class="t">›</span></button>`:'')};
+{const _pf=payFinish;payFinish=function(ok,why){try{UI.flow.d.before=Math.max(0,flexL())}catch(e){}return _pf(ok,why)}}
 
 /* ===== control panel ===== */
 function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,0).getTime(),label:'Allowance',amt:S.p.income,note:''}];if(S.p.six)seedSix();else if(S.p.W>0){S.planSet=true;S.cats.forEach(c=>c.full=c.amt);S.bufFull=S.bufAmt;S.firstDay=new Date(S.now.getTime()-S.p.weeks*7*DAY)}resetUI();window._celeLock=false;render();fitPhone()}
@@ -2169,7 +2153,7 @@ const EVENTS=()=>{const c0=S.cats[0],big=S.cats.find(c=>c.name==='Outings')||S.c
   ['Add ₹500 to a goal',()=>{if(!g0)return say('No active goal.');g0.saved=Math.min(g0.target,g0.saved+500);g0.hist[11]=(g0.hist[11]||0)+500;reachedCheck(S);say('₹500 added to '+g0.name+'.')}]]}
 ]};
 function maybeWeek(){if(S.pending.length){openWeekPop()}}
-const FLAGS=[['bankDecline','Bank declines the next payment'],['bankSlow','Bank is slow (waiting state)'],['lowBalance','Account balance is low'],['linkLost','UPI link needs a refresh']];
+const FLAGS=[['linkLost','UPI link needs a refresh']];
 function renderPanel(){const el=$('#panel');if(!el||!S)return;const sp=spentThisWeek(S);
  const potRows=[['Money left this week',money(flexLeft(S))+' of '+money(S.flexW)],['Buffer left',money(S.bufLeft)+' of '+money(S.bufAmt)],['Spent this week',money(sp)],['Fixed reserve',money(S.bills.reduce((a,b)=>a+b.reserve,0))],['Goals saved',money(S.goals.filter(g=>g.state!=='done').reduce((a,g)=>a+g.saved,0))],['Free savings',money(S.free)],['Unsorted payments',String(S.unsorted.length)],['Unsorted credits',String(S.credits.length)]];
  const flexSum=S.cats.reduce((a,c)=>a+c.amt,0)+S.bufAmt;const okInv=flexSum===S.flexW;

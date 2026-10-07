@@ -68,3 +68,5 @@ Decisions V16-24…V16-30. Code: `mockup16/ui16c.js` (savings, goal, welcome, mo
 
 ## v16.3 (7 Oct 2026, later): scan-and-hand-off helper
 Decisions V16-31…V16-34; `mockup16/ui16d.js`; note in `docs/claude/upi_intent_helper.md`. Switch in the side panel group "Scan & pay helper (Test B)": Home button mode and platform (Android, iOS). Statuses `confirmed`, `unconfirmed` on transactions; `S.failedTx` holds attempts that did not go through (never counted). History shows both. Home asks about an unconfirmed payment first.
+
+**Update, 7 Oct (V16-35):** the scan flow no longer asks "Did it go through?". The spend is logged at the hand-off and can be removed from the result screen. `S.failedTx`, the unconfirmed state and their History rows are gone. The result screen of every logged spend is new: check ring, "Added", amount, shop and category, left this week with the bar, a savings line only when savings were used.

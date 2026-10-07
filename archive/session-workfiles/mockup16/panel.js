@@ -42,7 +42,7 @@ const EVENTS=()=>{const c0=S.cats[0],big=S.cats.find(c=>c.name==='Outings')||S.c
   ['Add ₹500 to a goal',()=>{if(!g0)return say('No active goal.');g0.saved=Math.min(g0.target,g0.saved+500);g0.hist[11]=(g0.hist[11]||0)+500;reachedCheck(S);say('₹500 added to '+g0.name+'.')}]]}
 ]};
 function maybeWeek(){if(S.pending.length){openWeekPop()}}
-const FLAGS=[['bankDecline','Bank declines the next payment'],['bankSlow','Bank is slow (waiting state)'],['lowBalance','Account balance is low'],['linkLost','UPI link needs a refresh']];
+const FLAGS=[['linkLost','UPI link needs a refresh']];
 function renderPanel(){const el=$('#panel');if(!el||!S)return;const sp=spentThisWeek(S);
  const potRows=[['Money left this week',money(flexLeft(S))+' of '+money(S.flexW)],['Buffer left',money(S.bufLeft)+' of '+money(S.bufAmt)],['Spent this week',money(sp)],['Fixed reserve',money(S.bills.reduce((a,b)=>a+b.reserve,0))],['Goals saved',money(S.goals.filter(g=>g.state!=='done').reduce((a,g)=>a+g.saved,0))],['Free savings',money(S.free)],['Unsorted payments',String(S.unsorted.length)],['Unsorted credits',String(S.credits.length)]];
  const flexSum=S.cats.reduce((a,c)=>a+c.amt,0)+S.bufAmt;const okInv=flexSum===S.flexW;

@@ -112,7 +112,7 @@ function walletConfirm(F){const d=F.d,amt=amtOf(d.kp),W=Math.max(1,flexW()),L=Ma
  ${over>0?`<div class="title" style="font-size:26px;color:var(--amber);margin-top:16px">${money(over)} over.</div><div class="sub" style="margin-top:4px">More than this week has left. Savings cover the rest.</div>`:''}
  ${warn?`<div class="banner" style="margin-top:14px"><span style="color:var(--amber);font-weight:700">${esc(warn)}</span></div>`:''}${aw&&!warn?`<div class="banner" style="margin-top:14px;border-color:rgba(205,182,255,.4);background:rgba(205,182,255,.08)"><span style="color:#CDB6FF;font-weight:700">${esc(aw.t)}</span></div>`:''}
  ${lowbal?`<div class="banner" style="margin-top:12px"><b style="color:var(--amber)">Your account shows ${money(40)}.</b> <span class="sub">This may not go through.</span></div>`:''}</div>
- <div class="mfoot"><div class="row" style="gap:10px"><button class="btn o" style="flex:1" data-a="pback">Back</button><button class="btn" style="flex:1.3" data-a="pgo">${S.p.mode==='manual'||d.paid?'Add':'Pay'} ${money(amt)}</button></div></div>`}
+ <div class="mfoot"><div class="row" style="gap:10px"><button class="btn o" style="flex:1" data-a="pback">Back</button><button class="btn" style="flex:1.3" data-a="pgo">Add ${money(amt)}</button></div></div>`}
 
 /* ---------- Insights: When (hour, day, part of the month), Repeats, Trend; each with its evidence ---------- */
 H.rhmode=a=>{UI.rh=a[0];UI.rhSel=null};H.inssel=a=>{UI.rhSel=+a[0]};
