@@ -1,0 +1,47 @@
+# v16 spec (7 Oct 2026)
+
+Build: `archive/session-workfiles/mockup16/` (`python3 build.py`, output `mockup16.html`). v15.3 stays in `mockup15/` for comparison. Decisions V16-1…V16-14 in `v14_decisions.md` (V16-1 to V16-5 are Tarun's words, the rest are PROPOSED).
+
+## The model
+1. Money in is split: some is saved, the rest is for spending.
+2. The spending part is spread over the days it has to last. That gives a **weekly allowance** (Monday to Sunday; the first week only gets the days that are left).
+3. Every spend comes out of that one allowance. There are no pots per category and nothing is taken from other categories.
+4. Every spend carries a category (a tag). The weekly statistic is which category took the most. Insights are built from the same data.
+5. After a week or two, a **limit** can be set on one category (an amount a week, or a number of times) or on one shop (times or an amount). A limit is a nudge; it never moves or blocks money.
+6. If the allowance runs out, savings cover the rest (D-22 kept) and the week review says so.
+
+Engine changes (`engine.js`): every state is a wallet (`S.wallet`, category `amt/left` are 0, the whole flexible part sits in the buffer); `S.limits` and `S.limNo` added; the other-categories step of the cascade is deleted; `recomputePlan` no longer gives categories a floor of ₹5 in wallet mode; the obfinish route recomputes the allowance from incomes.
+
+## Screens
+| Tab / flow | What it shows | Picture |
+|---|---|---|
+| Home | "₹N left · 3 days to go", the gauge, chip "1 mark = 1% ≈ ₹N", one row only if something needs doing (link, last week, money waiting, payments to sort, bill, limit reached, allowance changing, add money, limit suggestion), one button | Gauge of 100 marks in 5 blocks of 20; marks that go flash and fade; the number counts to its new value |
+| Spending · Categories | "Food took the most.", ₹ and share, period (this week, last week, 30 days), a limit suggestion card when there is one, ranked rows with a limit bar where a limit exists, Limits, Subscriptions | One stacked bar, one segment per category |
+| Spending · History | Day groups with day totals; each spend shows its category | none |
+| One category | This week's ₹ and share, its limit or "Set a limit", the shops in it | 8 weekly bars with an average line |
+| Money · Money in | "₹N a week to spend", save and spend split, money in list, one-off money | Two-part split bar |
+| Money · Savings | unchanged from v15 | Segmented ring |
+| Insights · Rhythm | "Tuesdays are your biggest day", "Mostly in the evening", 4 weeks or this week, tap a day | Seven weekday bars |
+| Insights · Repeats | the shop visited most, up to four shops, tap one to set a limit | 14-day tick strip per shop |
+| Insights · Trend | "₹330 more than last week", same days, running total | Smooth cumulative lines with the allowance line |
+| Week review | verdict, "₹X of ₹Y", the category that took the most, a line if a limit was passed | Stacked bar |
+| Pay | How much, For what (shop chips if known), confirm: "N marks go", ₹ left after, a note if a limit would be passed | Gauge with the marks that go |
+| Limit sheet | kind (₹ or times a week), number, "A limit is a nudge. Nothing is taken away." | none |
+| Add money | How much money you get, how much will you save, how many days it should last (allowance card updates) | Split bar, allowance card |
+| Onboarding | link or by hand, how much money you get (Skip), then the add-money steps | none |
+
+## Charts: rules used
+- One picture per screen and one job per picture; the finding is written above the picture.
+- The Home gauge only empties. Savings use a ring that fills. Everything else is a bar or a line, which are read by length and position.
+- One colour per category, the same everywhere (eight hues, repeated after eight). Amber means "a limit is reached or the week is used up". Green is "left" on the gauge and "this week" on the trend. Orange is "spend" on bars.
+- Rupees only. Percent is used for share and for the 1% mark.
+
+## Measured (density.js, 55 core states, phone size)
+Average 25.8 words per screen (v15.3: 22.7); 23 of 55 over 25 words (v15.3: 17); none taller than the phone. Home states: 10 to 27 words. The heavy ones are Spending categories (50 with a suggestion card and five rows), Plan until when (47), Pick a date (89). These are Tier 2 screens; Home and Insights are within about 25. Random-tap fuzz tests (60 and 90 taps over 7 profiles plus fresh and track-only accounts), side-panel event sweep over four profiles, and the first-time tips test all pass.
+
+## Not built, on purpose
+- Limits per category stay a nudge; there is no hard stop.
+- No hand-typed weekly amount (V16-1). A student with no income can add money for one week.
+- No category management screen (rename, merge, delete). Categories come from the six defaults, the pay flow ("+ Other") and detected payments.
+- Savings screen is unchanged.
+- Figma is still at the v14 look.

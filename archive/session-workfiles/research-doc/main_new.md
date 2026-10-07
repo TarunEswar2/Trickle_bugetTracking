@@ -26,6 +26,7 @@ Compiled 6 Oct 2026. This file is generated: the analysis (Parts 0 to 12, about 
 11. Are the visualisations wrong?
 12. What will a new user do, and can they understand what they are asked?
 13. The Architecture & Strategy Document (6 Oct): what it says, what was applied, what stays open
+14. v16 (7 Oct): Tarun's spending model, and what it changes in the diagnosis
 
 **Appendices (reference material; most are generated from the repo or copied verbatim, with their source named)**
 A. Boards and artifacts · B. File map · C. Quote bank · D. Source list · E. Density audit
@@ -909,6 +910,55 @@ Measured: Home states 11 to 23 words (6 of 7 meet the 20-word Tier 1 limit), who
 
 ### 13.5 What this part adds to the diagnosis
 The document repeats the three causes of Part 11 and 12 (picture, words, sequence) and adds a fourth, which this record had only touched on: **the product's centre was the wrong object.** Four in six students have no budget, and v14 and v15 still made category budgets the first thing a new user does. The weekly amount is a smaller ask. It is also a hypothesis: H5 in Appendix T ("students want a plan at all") is what Test C is meant to settle. The document is not evidence of its own claims; it is a proposal, and its numbers are targets. The one claim to be careful with is that the problem can be solved without the data route (H2 and H3).
+
+---
+
+## 14. v16 (7 Oct 2026): Tarun's spending model, and what it changes in the diagnosis
+
+### 14.1 What Tarun decided
+Tarun's words, kept close to how he said them [T, 7 Oct]:
+1. The spending model is simple: **income splits into budget (spending) and savings, and a weekly allowance is calculated.**
+2. **Transactions are always tracked with categories.** Weekly, a statistic says which category took the most. Insights can be shown too.
+3. **After a week or two, if a category has a lot of money spent, a limit can be set, only on that category.** If a category or a shop has too many visits, a limit can be set on it.
+4. The user does not have to keep track of every category, and **the need to take money from other categories is removed.** This removes a lot of complexity.
+5. **Categories are not the main part of the app, "a major flaw up until now".**
+6. Make the screens satisfying and sleek, improve the data visualisations, improve other flows by thinking them through logically. Make v16.
+This also lifts the feature freeze of V15-30 (his call) and replaces the typed weekly amount of v15.3 (V15-21): the allowance is only ever worked out from money in (V16-1).
+
+### 14.2 How this answers the causes found earlier
+| Cause (Parts 8, 11, 12, 13) | What v16 does | State |
+|---|---|---|
+| The product's centre was the wrong object (categories and budgets first; 4 of 6 interviewees have no budget) | One allowance. Categories are tags and one statistic. Onboarding does not ask for them. No pools, no cascade across categories (removed from the engine) | Built; untested with students |
+| The first useful output arrived late (Part 12.4) | Two questions, then three short steps in which the allowance forms on screen. The first spend shows its category in the weekly statistic at once | Built; time to first "I see" not measured |
+| Eight visual grammars (Part 11.2) | One picture per job, kept to what is read by length and position (bars, lines) except the gauge and the savings ring. The 10×10 grid is used only on Home and at the pay confirm | Built; the gauge still needs Test A |
+| Direction of fill flipped between screens (Part 11.3) | Gauge only empties; bars grow with spending; the savings ring fills | Built |
+| Unit differed per grid | Gauge: 1 mark is 1% of the week. No other grid | Built |
+| Jargon and missing context (Part 12.2) | "Allowance", "limit", "mark" are the only model words; "plan", "split", "pace", "buffer", "budget" were swept out of every screen the fuzz test reached (a text search for them found none left) | Built; the copy probe is still to run |
+| Limits asked for before the user knew their spending | A limit is offered only after 7 days, only where the data says it matters, and is a nudge | Built; thresholds are a guess |
+
+### 14.3 The charts, and why each was chosen
+| Job | Picture | Reason |
+|---|---|---|
+| Am I okay? | Gauge of 100 marks, marks that leave flash and fade, number counts down | Keeps the pay-moment idea (loss is visible); one direction |
+| Where did it go? | One stacked bar, one segment per category, finding written above | Share of a whole read by length; no key needed because the ranked rows below carry the colours |
+| When do I spend? | Seven weekday bars, tap one for its amount, 4-week average or this week | The old hot grid asked the reader to decode three dimensions; this asks one |
+| What do I keep buying? | A 14-day strip of ticks per shop | Shows "again and again" as a pattern in time, not just a count |
+| More than last week? | Two running totals as smooth lines with the allowance as a dashed line | The comparison two faded grids tried to make; a running total can be read at a glance |
+| One category over time | Eight weekly bars with an average line | Answers "is this normal for me?" |
+| Money in | Two-part bar (save, spend) and the allowance card | Replaces a grid for a two-part split |
+Not tested with students: all of these. They are drawn so that the finding is stated in words above the picture, so a failure of the picture should not leave the screen unreadable.
+
+### 14.4 New hypotheses (add to Appendix T)
+| # | Hypothesis | Test | If false |
+|---|---|---|---|
+| H18 | Students understand that their weekly allowance comes from "money in, minus what I save, over the days it must last" | P.6 task: add money, then explain the number in your own words | Show the arithmetic once, or let the allowance be typed |
+| H19 | A limit offered after a week is wanted and kept; a limit offered earlier is ignored | P.8 diary: set on day 8 against day 1 | Remove suggestions; keep limits as a menu item |
+| H20 | Category tags assigned at the moment of paying are accurate enough for a weekly statistic | Diary: share of spends left unsorted or mis-filed | Add auto-sorting by shop (memory is built) or drop the statistic |
+| H21 | "Which category took the most" is a statistic students find useful and not judging | P.6 probe after the first week review (O4) | Replace with a neutral list |
+| H22 | Stacked bar, weekday bars and trend lines are read correctly without a key | P.5 second test, covered titles | Add labels or return to ranked lists |
+
+### 14.5 What is measured and what is not
+Measured on the build [M]: density (average 25.8 words per core screen against 22.7 in v15.3; 23 of 55 over 25; none taller than the phone), random-tap fuzz tests, a side-panel event sweep over four profiles, the first-time tips test, and a text sweep for retired words. These show that nothing crashes and that the screens are not heavier in any dramatic way; they say nothing about whether a student understands them. Tests A, B and C (Part 13.4) should now run on v16.
 
 ---
 
