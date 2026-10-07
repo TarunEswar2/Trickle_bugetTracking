@@ -64,3 +64,7 @@ Decisions V16-24…V16-30. Code: `mockup16/ui16c.js` (savings, goal, welcome, mo
 - Savings: hero total, 12-month area line from the goal histories (ends at today's total; hidden if there is no history), "in goals / free" line, goal cards with notched bars, goal screen with monthly bars.
 - Greeting on Home; welcome line on the first screen; settle-in, count-up and drain motion.
 - Measured: density 29.3 words per core screen (v16.1: 27.0; v15.3: 22.7), 27 of 55 over 25, none taller than the phone. The rise comes from the richer Savings and Goal screens and the greeting. Fuzz, tips and side-panel sweeps pass.
+
+
+## v16.3 (7 Oct 2026, later): scan-and-hand-off helper
+Decisions V16-31…V16-34; `mockup16/ui16d.js`; note in `docs/claude/upi_intent_helper.md`. Switch in the side panel group "Scan & pay helper (Test B)": Home button mode and platform (Android, iOS). Statuses `confirmed`, `unconfirmed` on transactions; `S.failedTx` holds attempts that did not go through (never counted). History shows both. Home asks about an unconfirmed payment first.

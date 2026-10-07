@@ -217,3 +217,6 @@ Added timing insights (hour, weekday, part of the month), heads-ups at the user'
 
 ## Latest (7 Oct 2026, last): v16.2
 Calmer visual system (mint, peach, amber, violet; Plus Jakarta Sans and Figtree; glass surfaces; settle, count and drain motion), a greeting on Home, and a savings redesign (12-month growth line, goal cards with notches, goal screen with monthly bars). Design system page "Trickle Night Calm" in `archive/session-workfiles/designsystem3/`. Decisions V16-24…V16-30. Figma is still at the v14 look; push it only on Tarun's word.
+
+## Latest (7 Oct 2026, v16.3)
+Scan-and-hand-off helper built in the mockup (V16-31…34): scan, pay in your own UPI app, say whether it went through; failed and unconfirmed states; Android only. Feasibility notes with what was and was not verified in `docs/claude/upi_intent_helper.md`. **Open question for Tarun:** retire "Link UPI" and payment detection in favour of this? **Next:** the real-phone spike.

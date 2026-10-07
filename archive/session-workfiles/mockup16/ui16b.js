@@ -95,7 +95,8 @@ SCREENS.home=()=>{const nt=nextAct(),pl=planned();let top,viz,cap='';
   :`<button class="li" data-a="${nt.a}"><span class="d" style="background:${nt.c==='green'?SAVE:nt.c==='violet'?'#B48CFF':'var(--amber)'}"></span><span class="n">${esc(nt.t)}</span><span class="t">›</span></button>`;
  return `<div class="row sp" style="margin-top:2px"><span class="greet">${greet()}</span><button class="chip" data-a="settings">⚙</button></div>
  <div style="margin-top:14px">${top}</div>${viz}${aw?'':cap}${aw}${row?`<div style="margin-top:12px">${row}</div>`:''}
- <div style="position:sticky;bottom:0;margin-top:22px;padding-top:10px;background:transparent"><button class="btn" data-a="${window.HOMEBTN==='scan'?'payscan':'pay'}">${payLabel()}</button></div>`};
+ <div style="position:sticky;bottom:0;margin-top:22px;padding-top:10px;background:transparent">${scanOn()?`<button class="btn" data-a="payscan">Scan & pay</button><button class="btn q" style="margin-top:6px" data-a="pay">Log by hand</button>`:`<button class="btn" data-a="pay">Log expense</button>`}</div>`};
+const scanOn=()=>window.HOMEBTN==='scan'&&(window.PLATFORM||'android')==='android';
 SHEETS.gridhow=()=>{const pl=planned(),W=Math.max(1,flexW());
  return `<div class="cap">How to read it</div><div class="title" style="font-size:26px;margin:4px 0 16px">${pl?'Green is what is left.':'This fills once you add your money.'}</div>
  <div style="margin:6px 2px 30px">${battery(W*.62,W,{tick:.45,sm:false})}</div>

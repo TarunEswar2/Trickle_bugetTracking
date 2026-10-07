@@ -503,3 +503,16 @@ Tarun: "work on visuals and the design system to make it very soothing, very sat
 | V16-28 | Welcome | A greeting on Home ("Good evening") and a line on the first screen ("A calmer way to see your money."). | Tarun: welcoming | none | PROPOSED |
 | V16-29 | Savings | **Savings is a story.** Hero total with "up ₹320 this month"; a 12-month area line that ends at today's total; each goal is a card with its own colour, a bar with quarter notches, "₹10,500 of ₹30,000" and "Ready Feb 2028". The segmented ring is retired. Goal screen adds "₹19,500 to go, about ₹1,160 a month keeps you on track" and 12 bars of monthly additions. | Tarun; ring was unreadable (his screenshot) | Test A style read: "how close is the laptop?" | CONFIRMED (Tarun); design PROPOSED |
 | V16-30 | Colour | Goals get their own hues (sky, violet, mint, sand, rose) so two goals can be told apart. | V16-29 | none | PROPOSED |
+
+
+## v16.3 (7 Oct 2026, later): Trickle as a scan-and-hand-off helper
+Tarun: usable on Android; if the payment fails on the wallet the user can update the record by hand, so information is still logged; open Trickle, scan the QR, pay on the wallet, it either fails or passes, Trickle passes it manually; Trickle is not reading a bank account and is just a helper. Details and checks: `docs/claude/upi_intent_helper.md`.
+
+| ID | Domain | Decision | Evidence | Validation gate | Status |
+|---|---|---|---|---|---|
+| V16-31 | Tracking | **Trickle is a helper, not a reader.** Open Trickle, scan the shop QR, pay in your own UPI app, come back, say whether it went through. Trickle never reads a bank account. Android first; iOS logs by hand. A failed payment is still recorded and can be corrected by hand. | Tarun, 7 Oct; feasibility checks in `upi_intent_helper.md` | Real-phone spike, then Test B | CONFIRMED (Tarun) |
+| V16-32 | Tracking | **Three states, set by the user.** Yes goes through: logged, confirmed. Not sure yet: logged and counted, "unconfirmed", Home asks again. No: not counted, kept in History as "Did not go through" with "I did pay, add it" and "Delete". | Same; the UPI app's own answer is unreliable | P.8 diary: how often "not sure"? | PROPOSED |
+| V16-33 | Home | On Android in "Scan & pay" mode Home shows **Scan & pay** with **Log by hand** under it. On iOS only Log expense. The mode is a switch in the side panel, default off. | Same | Test B | PROPOSED |
+| V16-34 | Tracking | **Scanned QR fills what it can:** the shop name (category remembered for that shop) and the amount if the QR has one. | UPI link spec | Spike | PROPOSED |
+
+**Open question for Tarun:** the hard rule in `CLAUDE.md` says tracking is "direct UPI account linkage or manual entry". The helper model replaces linkage. Should "Link UPI" in onboarding, the "payments seen on your link" detection and the linked-balance split be retired in favour of Scan & pay plus Log by hand? Until he answers, both exist in the mockup.
