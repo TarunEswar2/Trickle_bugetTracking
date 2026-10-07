@@ -32,3 +32,11 @@ Source label stored: `upi_intent`, status `confirmed | unconfirmed | failed`.
 - Spike on a real Android phone: GPay, PhonePe, Paytm, BHIM; static, dynamic and personal QR; unchanged against rebuilt link; how often a result comes back; which statuses; taps and seconds against paying directly (Test B).
 - Whether students will start payments in Trickle at all (H2).
 - Google Play financial-services declaration for an app that starts payments.
+
+## No-result variant (Tarun, 7 Oct; V16-35)
+Trickle passes the merchant's `upi://pay` link unchanged to a UPI app, logs the spend at once, and the user removes it if the payment fails. Checked by web search on 7 Oct (abstract level):
+- **Works in principle.** UPI apps register to listen for these links and open on a pre-filled pay screen (NPCI linking spec). Launching needs no result callback. On Android 11 and above the manifest needs a `<queries>` entry for the `upi` scheme to see installed UPI apps (a manifest line, not a registration).
+- **Unchanged pass-through avoids the main risk.** Reports of intent failures point to altered or malformed links (for example `am=10` instead of `am=10.00`, bad encoding, missing merchant fields). A static QR has no `tr`; the scanning UPI app fills it in, so Trickle need not.
+- **Amount.** A static QR has no amount, so Trickle must ask for it to log the spend. Adding `am=75.00` to a static link is ordinary and keeps it unsigned; a dynamic QR already carries its amount. If the user changes the amount inside the UPI app, Trickle's record will differ until edited.
+- **Not confirmed.** Whether banks or UPI apps decline intents from an unregistered app (generic risk codes exist); personal-QR behaviour; per-merchant limits (sources conflict: ₹2,000 against ₹40,000 for unverified merchants).
+- **Cost of no result.** Failed payments stay in the record until removed. A reasonable guard is a one-tap "Didn't pay? Remove" shown when the user comes back to Trickle (the app coming to the foreground is not a UPI result).

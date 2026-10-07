@@ -516,3 +516,8 @@ Tarun: usable on Android; if the payment fails on the wallet the user can update
 | V16-34 | Tracking | **Scanned QR fills what it can:** the shop name (category remembered for that shop) and the amount if the QR has one. | UPI link spec | Spike | PROPOSED |
 
 **Open question for Tarun:** the hard rule in `CLAUDE.md` says tracking is "direct UPI account linkage or manual entry". The helper model replaces linkage. Should "Link UPI" in onboarding, the "payments seen on your link" detection and the linked-balance split be retired in favour of Scan & pay plus Log by hand? Until he answers, both exist in the mockup.
+
+
+| ID | Domain | Decision | Evidence | Validation gate | Status |
+|---|---|---|---|---|---|
+| V16-35 | Tracking | **No result from the UPI app is needed.** Trickle passes the merchant's link unchanged to the user's UPI app. It logs the spend and, if the payment fails, the user removes it in Trickle. This replaces the "Did it go through?" question of V16-32 once built (the mockup still has the question). | Tarun, 7 Oct; checks in `upi_intent_helper.md` section "No-result variant" | Real-phone spike: how many failed payments stay in the record? | CONFIRMED (Tarun) |
