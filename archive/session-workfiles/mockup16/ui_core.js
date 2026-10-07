@@ -11,7 +11,7 @@ function fromOk([L,a,b]){const l=Math.pow(L+.3963377774*a+.2158037573*b,3),m=Mat
 function shiftL(h,dl,dc=0){const [L,a,b]=toOk(h);const C=Math.hypot(a,b),H=Math.atan2(b,a);const C2=Math.max(0,C+dc);return fromOk([Math.min(1,Math.max(0,L+dl)),C2*Math.cos(H),C2*Math.sin(H)])}
 const _dc={};const depth=h=>_dc[h]||(_dc[h]=[shiftL(h,.10,-.015),shiftL(h,-.11,0)]);
 const boxBg=h=>{const [a,b]=depth(h);return `linear-gradient(145deg,${a},${h} 50%,${b})`};
-const BLOB={blue:{b:['#2b2fa0','#3b6fb8','#2f7f78'],t:['#3f74b8','#2f7f78','#2b2fa0']},green:{b:['#0b5d24','#1f9d4a','#2fbf6a'],t:['#0b5d24','#1f9d4a','#2fbf6a']},amber:{b:['#6e3205','#c4690f','#f08a3c'],t:['#6e3205','#c4690f','#f08a3c']},violet:{b:['#2b2fa0','#6a4bc4','#b48cff'],t:['#2b2fa0','#6a4bc4','#b48cff']},teal:{b:['#0b4d55','#1f9d9a','#62dcb4'],t:['#0b4d55','#1f9d9a','#62dcb4']},rose:{b:['#5a1f4a','#b0457a','#ff7eb6'],t:['#5a1f4a','#b0457a','#ff7eb6']}};
+const BLOB={blue:{b:['#1d2b6e','#2c5c9a','#1f6f6a'],t:['#2c5c9a','#1f6f6a','#1d2b6e']},green:{b:['#0b4d3a','#1b8a6a','#3fbf9a'],t:['#0b4d3a','#1b8a6a','#3fbf9a']},amber:{b:['#5a3a12','#b0742a','#e0a050'],t:['#5a3a12','#b0742a','#e0a050']},violet:{b:['#262a78','#5a46a8','#9a82e0'],t:['#262a78','#5a46a8','#9a82e0']},teal:{b:['#0b4047','#1a8585','#52c9a8'],t:['#0b4047','#1a8585','#52c9a8']},rose:{b:['#4a2040','#9a4570','#e07aa8'],t:['#4a2040','#9a4570','#e07aa8']}};
 const TABGLOW={income:'blue',spending:'rose',savings:'teal',insights:'violet'};
 const FLOWGLOW={pay:'blue',inc:'blue',oneoff:'blue',money:'blue',move:'teal',subadd:'violet',incend:'blue'};
 function blobs(kind,pos,op){const c=(BLOB[kind]||BLOB.blue)[pos==='top'?'t':'b'];const o=op==null?.9:op;const y=pos==='top';

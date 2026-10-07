@@ -4,8 +4,8 @@
 
 /* ---------- allowance bar (a battery: green is what is left) ---------- */
 function weekIdeal(){const from=S.weekFrom||wk0(),end=wk0()+7*DAY;return Math.max(0,Math.min(1,(end-S.now.getTime())/Math.max(DAY,end-from)))}
-function battery(L,W,o){o=o||{};const f=W>0?Math.max(0,Math.min(1,L/W)):0,col=o.col||'#3CF05D',prev=o.prev==null?f:Math.max(0,Math.min(1,o.prev));const goes=o.goes?Math.min(f,o.goes/W):0;
- return `<div class="batt${o.sm?' sm':''}"><i class="bfill" style="--from:${(prev*100).toFixed(1)}%;--to:${(f*100).toFixed(1)}%;width:${(f*100).toFixed(1)}%;background:${boxBg(col)};box-shadow:0 0 26px ${col}55,inset 0 1px 0 rgba(255,255,255,.4)"></i>${goes?`<i class="bgo" style="left:${((f-goes)*100).toFixed(1)}%;width:${(goes*100).toFixed(1)}%"></i>`:''}${o.tick!=null?`<i class="btick" style="left:${(o.tick*100).toFixed(1)}%"><b>even pace</b></i>`:''}</div>`}
+function battery(L,W,o){o=o||{};const f=W>0?Math.max(0,Math.min(1,L/W)):0,col=o.col||'#5FE3B8',prev=o.prev==null?f:Math.max(0,Math.min(1,o.prev));const goes=o.goes?Math.min(f,o.goes/W):0;
+ return `<div class="batt${o.sm?' sm':''}"><i class="bfill" style="--from:${(prev*100).toFixed(1)}%;--to:${(f*100).toFixed(1)}%;width:${(f*100).toFixed(1)}%;background:${boxBg(col)};box-shadow:0 0 26px ${col}55,inset 0 1px 0 rgba(255,255,255,.4)"></i>${goes?`<i class="bgo" style="left:${((f-goes)*100).toFixed(1)}%;width:${(goes*100).toFixed(1)}%"></i>`:''}${o.ms?[25,50,75].map(p=>`<i class="bms" style="left:${p}%"></i>`).join(''):''}${o.tick!=null?`<i class="btick" style="left:${(o.tick*100).toFixed(1)}%"><b>even pace</b></i>`:''}</div>`}
 
 /* ---------- timing statistics ---------- */
 const bandLabel=i=>{const s=(6+2*i)%24,e=(s+2)%24,h=x=>(x%12)||12,sf=x=>(x>=12&&x<24)?'pm':'am';return `${h(s)}${sf(s)===sf(e)?'':' '+sf(s)}–${h(e)} ${sf(e)}`};
@@ -85,7 +85,7 @@ function nextAct(){
  return null}
 SCREENS.home=()=>{const nt=nextAct(),pl=planned();let top,viz,cap='';
  if(pl){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),empty=L<=0,sig=S.key+'|'+wk0(),f=L/W,prev=(UI._bw&&UI._bw.sig===sig)?UI._bw.f:f;UI._bw={sig,f};
-  const col=(typeof paceHex==='function')?paceHex():'#3CF05D',dl=daysToGo();let st='';if(typeof paceInfo==='function'){const p=paceInfo();if(S.touched||empty)st="This week's amount is used up.";else if(p&&p.over)st='Spending fast this week.'}
+  const col=(typeof paceHex==='function')?paceHex():'#5FE3B8',dl=daysToGo();let st='';if(typeof paceInfo==='function'){const p=paceInfo();if(S.touched||empty)st="This week's amount is used up.";else if(p&&p.over)st='Spending fast this week.'}
   top=`<span class="hero cu" data-v="${Math.round(L)}" style="font-size:56px">${money(L)}</span><span class="sub" style="margin-left:10px;font-size:18px">left</span><div class="sub" style="margin-top:6px;font-size:16px">of your ${money(W)} weekly allowance</div>${st?`<div class="sub" style="margin-top:6px;color:${AMBER}">${st}</div>`:''}`;
   viz=`<div style="margin:24px 2px 32px" data-a="gridhow">${battery(L,W,{col,prev,tick:weekIdeal()})}</div>`;
   cap=`<div class="row sp" style="align-items:center;margin:0 4px 16px"><span class="sub">${empty?'Nothing left to spend':'About '+money(L/dl)+' a day for '+(dl===1?'today':dl+' days')}</span><button class="chip" data-a="gridhow">ⓘ</button></div>`}
@@ -93,7 +93,7 @@ SCREENS.home=()=>{const nt=nextAct(),pl=planned();let top,viz,cap='';
   viz=`<div style="margin:24px 2px 32px" data-a="gridhow"><div class="batt idle"></div></div>`}
  const aw=pl?awCard():'';const row=(!nt||(nt.low&&aw))?'':nt.html?nt.html:nt.c==='plan'?`<button class="li cta" data-a="${nt.a}"><span class="n"><b>${nt.t}</b></span><span class="t">›</span></button>`
   :`<button class="li" data-a="${nt.a}"><span class="d" style="background:${nt.c==='green'?SAVE:nt.c==='violet'?'#B48CFF':'var(--amber)'}"></span><span class="n">${esc(nt.t)}</span><span class="t">›</span></button>`;
- return `<div class="row sp" style="margin-top:2px"><span></span><button class="chip" data-a="settings">⚙</button></div>
+ return `<div class="row sp" style="margin-top:2px"><span class="greet">${greet()}</span><button class="chip" data-a="settings">⚙</button></div>
  <div style="margin-top:14px">${top}</div>${viz}${aw?'':cap}${aw}${row?`<div style="margin-top:12px">${row}</div>`:''}
  <div style="position:sticky;bottom:0;margin-top:22px;padding-top:10px;background:transparent"><button class="btn" data-a="${window.HOMEBTN==='scan'?'payscan':'pay'}">${payLabel()}</button></div>`};
 SHEETS.gridhow=()=>{const pl=planned(),W=Math.max(1,flexW());
@@ -103,7 +103,7 @@ SHEETS.gridhow=()=>{const pl=planned(),W=Math.max(1,flexW());
  <div class="row sp" style="margin-top:18px"><button class="lnk" data-a="why|bar">Why a bar?</button><button class="btn s" data-a="closesheet" style="width:auto">Got it</button></div>`};
 
 /* ---------- pay confirm: the same bar, with the part that leaves hatched ---------- */
-function walletConfirm(F){const d=F.d,amt=amtOf(d.kp),W=Math.max(1,flexW()),L=Math.max(0,flexL()),over=Math.max(0,amt-L),lowbal=S.flags.lowBalance&&S.p.mode==='upi',col=(typeof paceHex==='function')?paceHex():'#3CF05D';
+function walletConfirm(F){const d=F.d,amt=amtOf(d.kp),W=Math.max(1,flexW()),L=Math.max(0,flexL()),over=Math.max(0,amt-L),lowbal=S.flags.lowBalance&&S.p.mode==='upi',col=(typeof paceHex==='function')?paceHex():'#5FE3B8';
  const warn=limWarn(d.target&&d.target.id,d.payee,amt),aw=awareness();
  return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">${esc(tgtName(d.target))} · ${esc(d.payee||'Someone')}</div><div style="margin-top:6px"><span class="hero" style="font-size:44px">${money(amt)}</span></div>
  <div style="margin:30px 2px 30px">${battery(L,W,{col:over>0?AMBER:col,goes:Math.min(amt,L),prev:L/W})}</div>
@@ -115,7 +115,7 @@ function walletConfirm(F){const d=F.d,amt=amtOf(d.kp),W=Math.max(1,flexW()),L=Ma
 
 /* ---------- Insights: When (hour, day, part of the month), Repeats, Trend; each with its evidence ---------- */
 H.rhmode=a=>{UI.rh=a[0];UI.rhSel=null};H.inssel=a=>{UI.rhSel=+a[0]};
-function barsChart(vals,labels,sel,o){o=o||{};const mx=Math.max(1,...vals),H0=o.h||170;return `<div class="dbars" style="height:${H0+40}px">${vals.map((v,i)=>{const h=Math.max(v>0?8:3,Math.round(v/mx*H0));const on=i===sel;return `<button class="db ${on?'on':''}" data-a="inssel|${i}"><span class="bar" style="height:${h}px;${v>0?`background:${boxBg(on?'#3CF05D':SPEND)}`:''}"></span><span class="lab ${o.today===i?'td':''}">${labels[i]||''}</span></button>`}).join('')}</div>`}
+function barsChart(vals,labels,sel,o){o=o||{};const mx=Math.max(1,...vals),H0=o.h||170;return `<div class="dbars" style="height:${H0+40}px">${vals.map((v,i)=>{const h=Math.max(v>0?8:3,Math.round(v/mx*H0));const on=i===sel;return `<button class="db ${on?'on':''}" data-a="inssel|${i}"><span class="bar" style="height:${h}px;${v>0?`background:${boxBg(on?'#5FE3B8':SPEND)}`:''}"></span><span class="lab ${o.today===i?'td':''}">${labels[i]||''}</span></button>`}).join('')}</div>`}
 function insWhen(){const m=UI.rh||'hour';let body='';
  const chips=`<div class="row" style="gap:8px;margin:14px 0 6px">${[['hour','Time of day'],['day','Day'],['month','Month']].map(c=>`<button class="chip ${m===c[0]?'on':''}" data-a="rhmode|${c[0]}">${c[1]}</button>`).join('')}</div>`;
  const foot=`<div class="row sp" style="margin-top:6px"><button class="lnk" style="font-size:14px" data-a="why|${m}">Why this?</button><button class="lnk" style="font-size:14px;color:var(--ink3)" data-a="${S.nudgeOff?'nudgeon':'nudgeoff'}">Heads-ups: ${S.nudgeOff?'off':'on'}</button></div>`;
@@ -141,3 +141,5 @@ TIPDEF.paid={cap:'Your first spend',t:'That is one spend.',b:'The green bar shri
 TIPDEF.cat={cap:'A category',t:'Eight weeks of one category.',b:'The last bar is this week. A limit is optional and only a nudge.',c:ACC.g};
 TIPDEF.insights={cap:'Insights',t:'When your money goes.',b:'The hour, the day and the part of the month you spend most. Tap Why this? for the research.',c:ACC.v};
 TIPDEF.spending={cap:'Spending',t:'Where it went.',b:'Every spend has a category. The biggest comes first. Tap one to set a limit if you want.',c:ACC.a};
+
+function greet(){const h=S.now.getHours();return h<5?'Late night':h<12?'Good morning':h<17?'Good afternoon':h<21?'Good evening':'Good night'}

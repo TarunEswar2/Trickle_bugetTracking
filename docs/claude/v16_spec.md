@@ -57,3 +57,10 @@ Decisions V16-15…V16-23. Code: `mockup16/ui16b.js`; the grid code is no longer
 - **"Why this?"**: `SHEETS.why`, text in `EVID`, sources in `SRC` (nine papers; see RESEARCH.md Part 15.2).
 - **Panel**: group "Awareness (v16.1)" to jump to 15 minutes before the busiest hour, to Thursday 3 pm, to make today the busiest day, to turn heads-ups on. The Home-picture test group is gone (the grid is gone).
 - **Measured**: density 26.7 words per core screen; Home 23 words in normal states, 31 to 35 when a heads-up and an action row both show; Insights When 33. Fuzz, tips and side-panel sweeps pass.
+
+
+## v16.2 (7 Oct 2026, later still): visual system and savings
+Decisions V16-24…V16-30. Code: `mockup16/ui16c.js` (savings, goal, welcome, motion), the v16.2 block at the end of `shell.html` (tokens and components), palette constants swapped in `engine.js`, `ui_core.js` and the other files. The design system page is `designsystem3/index.html`.
+- Savings: hero total, 12-month area line from the goal histories (ends at today's total; hidden if there is no history), "in goals / free" line, goal cards with notched bars, goal screen with monthly bars.
+- Greeting on Home; welcome line on the first screen; settle-in, count-up and drain motion.
+- Measured: density 29.3 words per core screen (v16.1: 27.0; v15.3: 22.7), 27 of 55 over 25, none taller than the phone. The rise comes from the richer Savings and Goal screens and the greeting. Fuzz, tips and side-panel sweeps pass.

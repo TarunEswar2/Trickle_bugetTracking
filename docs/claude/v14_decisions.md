@@ -489,3 +489,17 @@ Tarun's instructions are CONFIRMED; how I carried them out is PROPOSED. V16-17 r
 | V16-21 | Awareness | **Weekly guess check.** From Wednesday, if there are 3 spends this week, a low-priority row offers "Guess this week's spending": a slider, then the real number, with neutral wording. Guesses are stored (this is the O1 measure of the research plan). | RESEARCH.md Part 13.1 (O1); not an established intervention | Test C; the sheet says it is untested | PROPOSED |
 | V16-22 | Awareness | **Daily guide:** "About ₹N a day for D days" under the bar (what is left divided by the days left, today included). | [P] interviewees think in ₹100 to 150 a day (RESEARCH.md Part 2) | Test A: can a student say if they can afford ₹150 today? | PROPOSED |
 | V16-23 | Process | **Evidence rules:** none of the cited studies is about students and money, and the app says so; a citation is used only after its existence was checked. Cleveland & McGill (1984) and Olafsson & Pagel (2018) were not re-checked and are marked so. | RESEARCH.md Part 15.2 | Review before any claim goes in a report | PROPOSED |
+
+
+## v16.2 (7 Oct 2026, later still): calmer visual system, savings as a story
+Tarun: "work on visuals and the design system to make it very soothing, very satisfying, very welcoming; clearly readable; very modern and sleek and professional; improve the savings visuals." His direction is CONFIRMED; my choices are PROPOSED. System page: https://claude.ai/artifact (published as "Trickle Night Calm"), source `archive/session-workfiles/designsystem3/index.html`.
+
+| ID | Domain | Decision | Evidence | Validation gate | Status |
+|---|---|---|---|---|---|
+| V16-24 | Visual system | **Night, calmer.** Neon green and orange replaced by mint #5FE3B8 (money you have), peach #F4A261 (spending), amber #EDB458 (careful), violet (suggestions). Glow lowered. All text colours at least 6:1 on the ground; smallest text 12px; body 16px. | Tarun, 7 Oct; contrast measured | Contrast table on the system page | CONFIRMED (Tarun); values PROPOSED |
+| V16-25 | Type | **Plus Jakarta Sans** for numbers and headlines, Figtree for reading, tabular digits. Replaces Bricolage Grotesque. | Tarun: modern, sleek, professional | 5-second read on Home | PROPOSED |
+| V16-26 | Surfaces | Glass cards and rows (white 4–6% fill, 1px line), radii 12/18/24/30, blurred tab bar, one soft shadow for cards only. | same | none | PROPOSED |
+| V16-27 | Motion | Screens settle in (first nine blocks rise and fade, 45ms apart), the big number counts, the bar drains after a payment; one easing curve; off with reduced-motion. | Tarun: satisfying | none | PROPOSED |
+| V16-28 | Welcome | A greeting on Home ("Good evening") and a line on the first screen ("A calmer way to see your money."). | Tarun: welcoming | none | PROPOSED |
+| V16-29 | Savings | **Savings is a story.** Hero total with "up ₹320 this month"; a 12-month area line that ends at today's total; each goal is a card with its own colour, a bar with quarter notches, "₹10,500 of ₹30,000" and "Ready Feb 2028". The segmented ring is retired. Goal screen adds "₹19,500 to go, about ₹1,160 a month keeps you on track" and 12 bars of monthly additions. | Tarun; ring was unreadable (his screenshot) | Test A style read: "how close is the laptop?" | CONFIRMED (Tarun); design PROPOSED |
+| V16-30 | Colour | Goals get their own hues (sky, violet, mint, sand, rose) so two goals can be told apart. | V16-29 | none | PROPOSED |

@@ -214,3 +214,6 @@ Tarun set the spending model: income splits into saving and spending, a weekly a
 
 ## Latest (7 Oct 2026, later): v16.1
 Added timing insights (hour, weekday, part of the month), heads-ups at the user's own busy times, a daily guide, a weekly guess check, and a "Why this?" sheet on every insight with checked citations (RESEARCH.md Part 15). The 100-mark grid is retired in favour of an allowance bar that shows the allowance and what is left together (V16-17). Decisions V16-15…V16-23. Nothing is tested with students. Test A should compare this bar with the v15.3 grid. Open: the thresholds for "busy" (mine), and Cleveland & McGill and Olafsson & Pagel were not re-checked.
+
+## Latest (7 Oct 2026, last): v16.2
+Calmer visual system (mint, peach, amber, violet; Plus Jakarta Sans and Figtree; glass surfaces; settle, count and drain motion), a greeting on Home, and a savings redesign (12-month growth line, goal cards with notches, goal screen with monthly bars). Design system page "Trickle Night Calm" in `archive/session-workfiles/designsystem3/`. Decisions V16-24…V16-30. Figma is still at the v14 look; push it only on Tarun's word.
