@@ -29,7 +29,11 @@ const EVENTS=()=>{const c0=S.cats[0],big=S.cats.find(c=>c.name==='Outings')||S.c
   ['Clear all limits',()=>{S.limits=[];S.limNo={};say('Limits cleared.')}]]},
  {h:'Lock',items:[
   ['Lock the app',()=>{H.lock()}]]},
- {h:'Home picture (for 5-second tests)',items:[['Grid',()=>{window.HOMEVIS='grid';go('home')}],['Bar',()=>{window.HOMEVIS='bar';go('home')}],['Days',()=>{window.HOMEVIS='days';go('home')}],['Words',()=>{window.HOMEVIS='words';go('home')}]]},
+ {h:'Awareness (v16.1)',items:[
+  ['Time: 15 min before my busiest hour',()=>{const h=statsHour();const hr=6+2*h.pk;S.now=new Date(S.now.getFullYear(),S.now.getMonth(),S.now.getDate(),hr-1,45);say('It is '+S.now.toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit'})+'.')}],
+  ['Time: Thursday 3 pm (guess check)',()=>{S.now=new Date(startOfWeek(S.now).getTime()+3*DAY+15*36e5);say('Thursday afternoon.')}],
+  ['Make today my biggest day',()=>{const c=S.cats[0];for(let k=1;k<=4;k++){const t=simSpend(c.id,'Heavy day',250,0);t.t=S.now.getTime()-k*7*DAY-36e5}say('Today is now your biggest day.')}],
+  ['Heads-ups on',()=>{S.nudgeOff=false;say('On.')}]]},
  {h:'Home button (Test B)',items:[['Log expense (Model A)',()=>{window.HOMEBTN='log';go('home')}],['Scan & pay (Model B)',()=>{window.HOMEBTN='scan';go('home')}]]},
  {h:'First-time tips',items:[['Show every tip again',()=>{Object.keys(TS).forEach(k=>delete TS[k]);say('Tips will show again.')}],['Turn tips on or off',()=>{window.TIPS=!window.TIPS;say(window.TIPS?'Tips on.':'Tips off.')}]]},
  {h:'Pop-ups (always skippable)',items:[['Link UPI?',()=>openAsk('link')],['Add a spend?',()=>openAsk('add')],['Payments need a place',()=>openAsk('sort')],['Make a plan?',()=>openAsk('plan')],['Add your income?',()=>openAsk('income')],['After a week: here is how you spend',()=>{if(S.firstDay){S.now=new Date(S.firstDay.getTime()+8*DAY)}openAsk('planoffer')}],['Add a goal?',()=>openAsk('goal')],['Remind about bills?',()=>openAsk('notif')],['Add a PIN?',()=>openAsk('pin')],['Bring in older spends?',()=>openAsk('import')],['Last week recap (no budget)',()=>openAsk('recap')]]},

@@ -45,3 +45,15 @@ Average 25.8 words per screen (v15.3: 22.7); 23 of 55 over 25 words (v15.3: 17);
 - No category management screen (rename, merge, delete). Categories come from the six defaults, the pay flow ("+ Other") and detected payments.
 - Savings screen is unchanged.
 - Figma is still at the v14 look.
+
+
+## v16.1 (7 Oct 2026, later)
+Decisions V16-15…V16-23. Code: `mockup16/ui16b.js`; the grid code is no longer reached (a random-tap run over 80 steps and 7 profiles never showed one).
+
+- **Allowance bar** (`battery()`): one rounded bar, full = the weekly allowance, green = what is left, white tick = where an even pace would be, amber when ahead of it. The fill drains with an animation when a payment is made. Home reads "₹607 left", "of your ₹1,072 weekly allowance", "About ₹202 a day for 3 days". The pay confirm shows the same bar with the part that leaves hatched, "Left now" and "Left after".
+- **Insights · When**: chips Time of day, Day, Month. Time of day: 12 two-hour bars (6 am to 6 am) over 4 weeks, peak highlighted, tap a bar for its amount. Day: 7 weekday bars, average of 4 weeks. Month: 3 bars, average spend per day in days 1–10, 11–20, 21–end over up to 90 days. Each ends with "Why this?" and the Heads-ups switch.
+- **Heads-up**: `awareness()`; card on Home, line on the pay confirm; muted by "Stop heads-ups".
+- **Guess check**: sheet with a slider, then the reveal; stored in `S.guesses`.
+- **"Why this?"**: `SHEETS.why`, text in `EVID`, sources in `SRC` (nine papers; see RESEARCH.md Part 15.2).
+- **Panel**: group "Awareness (v16.1)" to jump to 15 minutes before the busiest hour, to Thursday 3 pm, to make today the busiest day, to turn heads-ups on. The Home-picture test group is gone (the grid is gone).
+- **Measured**: density 26.7 words per core screen; Home 23 words in normal states, 31 to 35 when a heads-up and an action row both show; Insights When 33. Fuzz, tips and side-panel sweeps pass.

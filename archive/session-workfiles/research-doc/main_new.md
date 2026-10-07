@@ -27,6 +27,7 @@ Compiled 6 Oct 2026. This file is generated: the analysis (Parts 0 to 12, about 
 12. What will a new user do, and can they understand what they are asked?
 13. The Architecture & Strategy Document (6 Oct): what it says, what was applied, what stays open
 14. v16 (7 Oct): Tarun's spending model, and what it changes in the diagnosis
+15. Insights and awareness: what the research supports, and what it does not
 
 **Appendices (reference material; most are generated from the repo or copied verbatim, with their source named)**
 A. Boards and artifacts · B. File map · C. Quote bank · D. Source list · E. Density audit
@@ -937,6 +938,7 @@ This also lifts the feature freeze of V15-30 (his call) and replaces the typed w
 | Limits asked for before the user knew their spending | A limit is offered only after 7 days, only where the data says it matters, and is a nudge | Built; thresholds are a guess |
 
 ### 14.3 The charts, and why each was chosen
+*Update, later on 7 Oct: the gauge of marks in the first row was retired by Tarun (V16-17) and replaced by an allowance bar; the weekday chart gained hour and month-part views. See Part 15.*
 | Job | Picture | Reason |
 |---|---|---|
 | Am I okay? | Gauge of 100 marks, marks that leave flash and fade, number counts down | Keeps the pay-moment idea (loss is visible); one direction |
@@ -959,6 +961,62 @@ Not tested with students: all of these. They are drawn so that the finding is st
 
 ### 14.5 What is measured and what is not
 Measured on the build [M]: density (average 25.8 words per core screen against 22.7 in v15.3; 23 of 55 over 25; none taller than the phone), random-tap fuzz tests, a side-panel event sweep over four profiles, the first-time tips test, and a text sweep for retired words. These show that nothing crashes and that the screens are not heavier in any dramatic way; they say nothing about whether a student understands them. Tests A, B and C (Part 13.4) should now run on v16.
+
+---
+
+## 15. Insights and awareness: what the research supports, and what it does not
+
+### 15.1 What Tarun asked for [T, 7 Oct]
+1. Show **when** spending happens: the time of day with the highest spending, and what part of the month it happens in. (The weekday was added because it is the same kind of pattern.)
+2. **Insights must be research-backed.**
+3. The grid is **still not intuitive**; change it; use intuitive visualisations.
+4. Home shows **both the weekly allowance and what is left**.
+5. **Group relevant information properly.**
+6. If a person spends a lot on a given day or hour, Home can say "today is when you spend most, be more aware".
+7. Improve insights and awareness methods.
+
+### 15.2 Citations checked on 7 Oct 2026
+Method: a web search for each reference, reading the title, authors, journal, year and the abstract-level summary the search returned. I did **not** read the full papers. "Checked" below means the paper exists and says what the row says it says at abstract level.
+| Source | Checked | What it supports here | What it does not support |
+|---|---|---|---|
+| Wood, Quinn & Kashy (2002), J. Personality and Social Psychology 83(6), 1281–1297 | Exists. Diary study; habitual behaviour is done in stable contexts, with little thought | Spending at the same hour or place repeats as habit | I did not find the often-quoted "43%" in the summary, so it is not used. Not about money |
+| Nahum-Shani et al. (2018), Annals of Behavioral Medicine 52(6), 446–462 | Exists. Defines just-in-time adaptive interventions: the right support at the right time | A heads-up should arrive at the moment it is needed | Health behaviours, not spending |
+| Gollwitzer & Sheeran (2006), Advances in Experimental Social Psychology 38, 69–119 | Exists. 94 tests, average effect d = 0.65 on goal attainment | If-then plans ("if it is lunchtime, I check what is left"); a limit on times is such a plan | Not about spending |
+| Dai, Milkman & Riis (2014), Management Science 60(10) | Exists. Goal-directed behaviour rises after temporal landmarks such as a new week, month or semester | Monday and the start of the month as fresh starts | Dieting, gym and goals, not money |
+| Stephens (2003), American Economic Review 93(1), 406–422 | Exists. Spending, including food away from home, rises on the day a regular Social Security cheque arrives, though the date is known | Spending jumps when money arrives | Older adults on benefit payments, not students |
+| Shapiro (2005), Journal of Public Economics 89(2–3), 303–325 | Exists. Calorie intake fell 10 to 15 percent over the food-stamp month | Spending and consumption can slide across a month | Food-stamp households; about food intake, not purchases |
+| Karlan, McConnell, Mullainathan & Zinman (2016), Management Science 62(12), 3393–3411 | Exists. Reminders increased saving in field experiments with three banks; specific reminders worked better | Reminders work when they are specific | Saving accounts, not spending |
+| Karlsson, Loewenstein & Seppi (2009), Journal of Risk and Uncertainty | Exists. Investors checked accounts more often when markets rose than when they fell | Why wording stays calm; people avoid bad news | Investors, not students |
+| Franconeri, Padilla, Shah, Zacks & Hullman (2021), Psychological Science in the Public Interest 22(3), 110–161 | Exists. Review of what works in visual data communication | Choosing bars and lines, stating the finding in words | I have not read which specific rules it gives |
+| Spence & Lewandowsky (1991), Applied Cognitive Psychology 5 | Exists. Pie and bar displays were about equally good and both beat a table | A single proportion display beats a table of numbers | It does **not** show bars beat pies |
+| Cleveland & McGill (1984), Journal of the American Statistical Association 79(387), 531–554 | **Not re-checked this session** (carried over from the strategy document) | Position and length are read more accurately than angle and area | |
+| Olafsson & Pagel (2018), NBER Working Paper 23945 | **Not re-checked this session** (carried over) | People look at their accounts less when finances are strained | |
+**Summary of the evidence.** There is solid published work on habits, timing of prompts, if-then plans, fresh starts, reminders, avoidance of bad news and chart reading. There is **no published study I found that tests these ideas on students' spending in an app.** Every insight in the app says so ("Evidence: Indirect") and names what the studies do not cover. This is the honest meaning of "research-backed" here: the design follows established findings, and whether it works for Trickle's users is for Tests A to C to show.
+
+### 15.3 What each insight and awareness method is, and the evidence behind it
+| Method | What the user sees | Evidence in 15.2 | Strength |
+|---|---|---|---|
+| Time of day | Twelve 2-hour bars, peak highlighted, "You spend most around 8–10 pm" | Wood; Nahum-Shani | Indirect |
+| Day of week | Seven bars, average of 4 weeks | Wood; Dai | Indirect |
+| Part of the month | Three bars (days 1–10, 11–20, 21–end) with average ₹ a day | Stephens; Shapiro; Dai | Indirect |
+| Heads-up | One card on Home and a line at pay, only at the user's own busy hour, day or month part; one tap to stop | Nahum-Shani; Gollwitzer; Karlan; Karlsson | Indirect |
+| Daily guide | "About ₹202 a day for 3 days" | Interviews [P]; design reasoning | Design reasoning |
+| Allowance bar | One bar, both numbers written beside it, tick for even pace | Cleveland & McGill (not re-checked); Franconeri | Good, untested here |
+| Where it went | One stacked bar with the finding written above | Spence & Lewandowsky; Franconeri | Good |
+| Repeats, trend | Tick strips; running total against last week | Wood; Gollwitzer; Franconeri | Indirect; design reasoning |
+| Guess check | Slider, then the real number | None directly; it is the measure O1 of the strategy document | Untested |
+| Limits (v16) | Optional; per category or shop; a nudge | Gollwitzer (if-then); Karlsson (calm wording) | Indirect |
+
+### 15.4 The thresholds are mine
+When a time, day or part of the month counts as "busy" is not set by any study. Rules used: the busiest 2-hour band is at least 20% of the last 4 weeks of spending (an even spread over 12 bands would be about 8%); the busiest weekday is at least 1.25 times the weekday average; the busiest third of the month is at least 1.2 times the other two. A heads-up needs at least 8 spends. These are open to override (V16-20) and are exactly what a diary (P.8) should tune.
+
+### 15.5 The grid
+Tarun's verdict (7 Oct) is that the grid is still not intuitive. Part 11.8 had already found the grid "probably partly wrong". It is retired everywhere (V16-17). v15.3, still published, keeps it so Test A can compare "grid" and "bar" on the same state. The replacement is the most familiar picture for "how much of this is left": a bar, with the allowance and what is left written beside it. The one idea added to a plain progress bar is the tick for an even pace, which has to be learned once (the ⓘ sheet explains it) and is the thing Test A should probe first.
+
+### 15.6 What this changes in the test plan
+- **Test A** compares the bar (v16.1) with the grid (v15.3) on the same five states, with the question "Could you buy lunch for ₹150 today?" and "What is the white line?"
+- **Test C** diary adds: the guess check (O1) on days 3 and 7; "did the heads-up come at a useful time?" each time one appears; "did it feel like blame?" (O4).
+- **A new probe** for each "Why this?" sheet: do students open it, and does it raise or lower trust?
 
 ---
 
