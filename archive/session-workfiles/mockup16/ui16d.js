@@ -17,6 +17,9 @@ H.scanremove=()=>{const d=UI.flow.d,t=d.result&&d.result.txn;if(t){const sd=(t.s
 const savWhere=(res)=>{const sd=res.savingsDetail||{};return Object.keys(sd).filter(k=>sd[k]>0).map(k=>({n:k==='free'?'Free savings':((S.goals.find(g=>g.id===k)||{}).name||'A goal'),v:sd[k]}))};
 const _pay17=FLOWS.pay;
 FLOWS.pay=F=>{const d=F.d,amt=amtOf(d.kp);
+ if(d.scan&&!d.scanned)return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="title" style="margin-top:8px">Scan the shop's QR</div><div class="sub" style="margin-top:6px">Trickle only helps you pay. It never sees your bank.</div>
+  <div class="vf"><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><b class="scanline"></b><span class="sub">Point at the QR</span></div></div>
+  <div class="mfoot"><div class="col" style="gap:8px"><button class="btn" data-a="payscanned">Scan (simulated)</button><button class="btn q" data-a="paybyhand">No QR? Add by hand</button></div></div>`;
  if(d.scan&&d.scanned&&F.step===2)return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">${esc(d.payee||'Someone')} · ${money(amt)}</div><div class="title" style="margin-top:6px">Pay in your UPI app</div><div class="sub" style="margin-top:6px">Trickle has added it to your week and opened your UPI app. Finish there, then come back.</div>
   <div class="card" style="margin-top:22px"><div class="cap">Your UPI app (simulated)</div><div class="h2" style="margin-top:8px">${money(amt)} to ${esc(d.payee||'Someone')}</div><div class="sm" style="margin-top:6px">Prototype only. Trickle cannot see what happens in here.</div><button class="btn s" style="margin-top:14px;width:100%" data-a="scanreturn">Back to Trickle</button></div></div>`;
  if(F.step===3&&d.result&&!d.fail&&planned()&&d.target&&d.target.type==='cat'){const R=d.result,res=R.res||{},t=R.txn,W=Math.max(1,flexW()),L=Math.max(0,flexL()),sv=savWhere(res),col=(typeof paceHex==='function')?paceHex():'#5FE3B8',before=Math.min(W,(d.before!=null?d.before:L+amt)),warn=limWarn(d.target.id,d.payee,amt);
@@ -28,6 +31,8 @@ FLOWS.pay=F=>{const d=F.d,amt=amtOf(d.kp);
   ${d.scan?`<div class="sm" style="margin-top:16px">Not sure it went through? Check your UPI app.</div>`:''}</div>
   <div class="mfoot"><div class="col" style="gap:8px"><button class="btn" data-a="pclose">Done</button>${d.scan?`<button class="btn q" data-a="scanremove">Didn't pay? Remove</button>`:''}</div></div>`}
  let h=_pay17(F);
- if(d.scan&&d.scanned&&F.step===1)h=h.replace(/(<button class="btn" style="flex:1.3" data-a="pgo">)[^<]*/,'$1Open your UPI app');
+ if(d.scan&&d.scanned&&F.step===1)h=h.replace(/(<button class="btn" style="flex:1.3" data-a="pgo">)[^<]*/,'$1Open UPI app');
  return h};
 {const _pf=payFinish;payFinish=function(ok,why){try{UI.flow.d.before=Math.max(0,flexL())}catch(e){}return _pf(ok,why)}}
+
+H.paybyhand=()=>{const d=UI.flow.d;d.scan=false;d.scanned=false;d.via=null};

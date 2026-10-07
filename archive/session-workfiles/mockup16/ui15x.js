@@ -3,7 +3,7 @@
    3 Fixed 100-mark gauge in 5 blocks of 20, ghosted spent marks, always empties   4 Small spends roll up silently
    5 Plain language: marks, weekly amount, Log expense   6 Model B switch: "Scan & pay" button (Test B)
    Loaded BEFORE ui15d.js so the Home-picture test harness wraps this Home. */
-window.HOMEBTN='log';
+window.HOMEBTN='scan';
 function payLabel(){return window.HOMEBTN==='scan'?'Scan & pay':'Log expense'}
 /* marks left: spending is rounded DOWN to whole marks, so spends under 1% wait in a quiet buffer (rollup) */
 function marksLeft(L,W){if(!(W>0))return 0;const sp=(1-Math.max(0,Math.min(W,L))/W)*100;return Math.max(0,Math.min(100,100-Math.floor(sp+1e-9)))}

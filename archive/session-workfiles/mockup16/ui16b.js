@@ -95,7 +95,7 @@ SCREENS.home=()=>{const nt=nextAct(),pl=planned();let top,viz,cap='';
   :`<button class="li" data-a="${nt.a}"><span class="d" style="background:${nt.c==='green'?SAVE:nt.c==='violet'?'#B48CFF':'var(--amber)'}"></span><span class="n">${esc(nt.t)}</span><span class="t">›</span></button>`;
  return `<div class="row sp" style="margin-top:2px"><span class="greet">${greet()}</span><button class="chip" data-a="settings">⚙</button></div>
  <div style="margin-top:14px">${top}</div>${viz}${aw?'':cap}${aw}${row?`<div style="margin-top:12px">${row}</div>`:''}
- <div style="position:sticky;bottom:0;margin-top:22px;padding-top:10px;background:transparent">${scanOn()?`<button class="btn" data-a="payscan">Scan & pay</button><button class="btn q" style="margin-top:6px" data-a="pay">Log by hand</button>`:`<button class="btn" data-a="pay">Log expense</button>`}</div>`};
+ <div style="position:sticky;bottom:0;margin-top:22px;padding-top:10px;background:transparent"><button class="btn" data-a="${scanOn()?'payscan':'pay'}">Log expense</button></div>`};
 const scanOn=()=>window.HOMEBTN==='scan'&&(window.PLATFORM||'android')==='android';
 SHEETS.gridhow=()=>{const pl=planned(),W=Math.max(1,flexW());
  return `<div class="cap">How to read it</div><div class="title" style="font-size:26px;margin:4px 0 16px">${pl?'Green is what is left.':'This fills once you add your money.'}</div>
@@ -109,7 +109,7 @@ function walletConfirm(F){const d=F.d,amt=amtOf(d.kp),W=Math.max(1,flexW()),L=Ma
  return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">${esc(tgtName(d.target))} · ${esc(d.payee||'Someone')}</div><div style="margin-top:6px"><span class="hero" style="font-size:44px">${money(amt)}</span></div>
  <div style="margin:30px 2px 30px">${battery(L,W,{col:over>0?AMBER:col,goes:Math.min(amt,L),prev:L/W})}</div>
  <div class="row sp"><span><span class="cap">Left now</span><div class="h2">${money(L)}</div></span><span style="text-align:right"><span class="cap">Left after</span><div class="h2" style="${over>0?'color:var(--amber)':''}">${money(Math.max(0,L-amt))}</div></span></div>
- ${over>0?`<div class="title" style="font-size:26px;color:var(--amber);margin-top:16px">${money(over)} over.</div><div class="sub" style="margin-top:4px">More than this week has left. Savings cover the rest.</div>`:''}
+ ${over<=0&&L>0?`<div class="sub" style="margin-top:14px;text-align:center">${amt<=L/daysToGo()?`That is ${Math.max(1,Math.round(amt/(L/daysToGo())*100))}% of today's ${money(L/daysToGo())}.`:`More than today's ${money(L/daysToGo())}.`}</div>`:''} ${over>0?`<div class="title" style="font-size:26px;color:var(--amber);margin-top:16px">${money(over)} over.</div><div class="sub" style="margin-top:4px">More than this week has left. Savings cover the rest.</div>`:''}
  ${warn?`<div class="banner" style="margin-top:14px"><span style="color:var(--amber);font-weight:700">${esc(warn)}</span></div>`:''}${aw&&!warn?`<div class="banner" style="margin-top:14px;border-color:rgba(205,182,255,.4);background:rgba(205,182,255,.08)"><span style="color:#CDB6FF;font-weight:700">${esc(aw.t)}</span></div>`:''}
  ${lowbal?`<div class="banner" style="margin-top:12px"><b style="color:var(--amber)">Your account shows ${money(40)}.</b> <span class="sub">This may not go through.</span></div>`:''}</div>
  <div class="mfoot"><div class="row" style="gap:10px"><button class="btn o" style="flex:1" data-a="pback">Back</button><button class="btn" style="flex:1.3" data-a="pgo">Add ${money(amt)}</button></div></div>`}

@@ -43,3 +43,7 @@ Trickle passes the merchant's `upi://pay` link unchanged to a UPI app, logs the 
 
 ## Built in the mockup (7 Oct, V16-35)
 Scan & pay, then: shop QR (name, and amount if the QR has one), category (remembered per shop), "Open your UPI app", simulated UPI app, back to Trickle. The spend is logged when Trickle hands over. Result screen: "Added to your week", the amount, shop and category, what is left of the allowance, a line about savings only if savings paid part of it, and **Didn't pay? Remove**, which deletes the record and returns the money (including any taken from savings). No "Did it go through?" question, no failed or unconfirmed states.
+
+## Home now has one button (V16-36)
+Log expense opens the scanner. Scan, amount if the QR has none, category, confirm ("Open UPI app"), simulated UPI app, back to Trickle, result with Remove. By hand is a link on the scanner. Side-panel switch can send Log expense straight to by hand, and a platform switch (iOS has no scanner).
+Things the flow needs that are easy to miss: payments with no QR (friends by phone number, cash, other apps) still need the by-hand path; coming back to Trickle is not automatic, so the spend is logged at hand-off and a notification ("Added ₹75. ₹532 left") would give the stats even if the user never returns; each extra Trickle screen before the UPI app costs taps, so the category and the confirm could share one screen.
