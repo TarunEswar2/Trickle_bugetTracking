@@ -74,7 +74,7 @@ function planLines(){const out=[];if(!S.planSet)return out;const t=S.now.getTime
 function autoWeek(){if(!S.planSet||!S.pending.length)return false;let tot=0;const last=S.pending[S.pending.length-1];S.pending.slice().forEach(p=>{tot+=Math.max(0,p.un);applyPending(S,p,{to:'savings'})});S.pending=[];openWeekReview({week:new Date(last.week).getTime(),snap:last.snap||S.cats.map(c=>[c.id,c.name,c.amt]),bufAmt:last.bufAmt||0,from:last.from||null,moved:tot});return true}
 /* ---- pace: green when on pace, amber when ahead of it ---- */
 function paceInfo(){if(!S.planSet)return null;const tot=S.cats.reduce((a,c)=>a+c.amt,0)+S.bufAmt;if(tot<=0)return null;const left=S.cats.reduce((a,c)=>a+c.left,0)+S.bufLeft;const spent=1-left/tot;const from=S.weekFrom||wk0(),end=wk0()+7*DAY;const ideal=Math.max(0,Math.min(1,(S.now.getTime()-from)/Math.max(DAY,end-from)));return {spent,ideal,left:left/tot,over:left<=0||!!S.touched||spent>ideal+0.10}}
-const paceHex=()=>{const p=paceInfo();return p&&p.over?'#F4A261':'#5FE3B8'};
+const paceHex=()=>STATECOL[homeState()];
 function homeGlow(){const p=paceInfo();if(!p)return S.track?'blue':'';return p.over?'amber':'green'}
 /* ---- end of week: the ideal week next to what happened ---- */
 function openWeekReview(x){UI.popup=Object.assign({id:'weekreview',bg:groundCss},x);UI.flow=null;UI.sheet=null;render()}

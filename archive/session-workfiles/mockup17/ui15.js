@@ -68,7 +68,7 @@ SHEETS.v15inc=()=>`<div class="h2">Your incomes</div>${incomesHtml()}`;
 H.v15incs=()=>{openSheet('v15inc');return false};
 function mnInc(){const l=S.incomes||[];const now=S.now.getTime();const run=l.filter(i=>!i.end||i.end+DAY>now);
  const one=`<button class="li" data-a="oneoff"><span class="n mut">One-off money</span><span class="t">›</span></button>`;
- if(!l.length&&!planned())return `<div class="title">Money in.</div><div class="sub" style="margin:8px 0 22px">Add it, split it. Only if you want.</div><button class="btn" data-a="v15addinc">Add income</button><div style="margin-top:12px">${one}</div>`;
+ if(!l.length&&!planned())return `<div class="title">Pocket money & income.</div><div class="sub" style="margin:8px 0 22px">Money you get, like pocket money or a stipend.</div><button class="btn" data-a="v15addinc">Add income</button><div style="margin-top:12px">${one}</div>`;
  if(!l.length)return `<div class="title">${money(S.W)} a week to spend.</div><div class="sub" style="margin:8px 0 22px">Planned by hand.</div><button class="btn" data-a="v15addinc">Add income</button><div style="margin-top:12px">${one}</div>`;
  if(!run.length)return `<div class="title">Your income ended.</div><div class="sub" style="margin:8px 0 22px">Add more to keep a plan going.</div><button class="btn" data-a="v15addinc">Add income</button><div class="col" style="gap:8px;margin-top:12px"><button class="li" data-a="v15incs"><span class="n">Your incomes</span><span class="t">${l.length} ›</span></button>${one}</div>`;
  const wk=planned()?S.W:Math.round(planRate());const sav=run.reduce((a,i)=>a+i.sav,0),sp=run.reduce((a,i)=>a+i.sp,0),tot=Math.max(1,sav+sp),pct=Math.round(sav/tot*100);
@@ -79,7 +79,7 @@ function mnSav(){const act=S.goals.filter(g=>g.state!=='done');
  if(!act.length&&S.free<=0)return `<div class="title" style="margin-top:6px">Saving for something?</div><div class="sub" style="margin:8px 0 22px">Name it. Pick an amount.</div><button class="btn" data-a="v15goal">Add a goal</button>`;
  const sv=act.reduce((a,g)=>a+Math.min(g.saved,g.target),0)+Math.max(0,S.free);
  return `<div class="title">${money(sv)} saved.</div>${act.length?`<div style="display:flex;justify-content:center;margin:12px 0">${segRing(S.goals,240)}</div>`:''}<div class="col" style="gap:8px">${act.slice(0,3).map(g=>`<button class="li" data-a="push|goal|${J({id:g.id})}"><span class="n">${esc(g.name)}</span><span class="t">${Math.round(Math.min(1,g.saved/g.target)*100)}%</span></button>`).join('')}<button class="btn q" data-a="v15goal">+ Add a goal</button></div>`}
-SCREENS.money=()=>{const v=UI.mn||'inc';return `<div class="sec">${SEG([['inc','Money in'],['sav','Savings']],v,'mnseg')}${v==='inc'?mnInc():mnSav()}</div>`};
+SCREENS.money=()=>{const v=UI.mn||'inc';return `<div class="sec">${SEG([['inc','Income'],['sav','Savings']],v,'mnseg')}${v==='inc'?mnInc():mnSav()}</div>`};
 
 /* ---------- Making a plan is adding income ---------- */
 const _incFlow=FLOWS.inc;

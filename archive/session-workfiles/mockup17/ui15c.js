@@ -13,7 +13,7 @@ const TIPDEF={
  ahead:{cap:'Spending fast',t:'Amber means you are spending fast.',b:'Nothing is wrong. At this speed the week runs out early.',c:ACC.a},
  over:{cap:'Over',t:'You used the whole week.',b:'Savings covered the rest. It is a signal, not a failure.',c:ACC.a},
  spending:{cap:'Spending',t:'Where it went.',b:'Each bar is a category this week. Tap one to see where it went.',c:ACC.a},
- money:{cap:'Money',t:'Money in, and what you keep.',b:'Money in splits into saving and spending.',c:ACC.b},
+ money:{cap:'Money',t:'Money you get, and what you keep.',b:'What you get is split into saving and spending.',c:ACC.b},
  insights:{cap:'Insights',t:'Patterns, not a list.',b:'See when your money goes and what repeats. Tap a spot for the amount.',c:ACC.v},
  cat:{cap:'A category',t:'One category, one gauge.',b:'Its 100 marks are its weekly amount. Marks fade as you spend.',c:ACC.g}
 };

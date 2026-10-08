@@ -984,7 +984,7 @@ const ASKS={
  sort:()=>{const n=S.unsorted.length||2;return {cap:'Spends',q:n+(n===1?' payment needs':' payments need')+' a place.',hint:'One tap each. Trickle remembers.',yes:'Sort now',no:'Later',ok:()=>{UI.popup=null;UI.tab='spending';push('sort');return 1}}},
  limit:(P)=>{const c=(P&&P.cid&&S.cats.find(x=>x.id===P.cid))||S.cats.filter(x=>!x.amt).sort((a,b)=>(weekSpentBy(S,b.id,1)+weekSpentBy(S,b.id,0))-(weekSpentBy(S,a.id,1)+weekSpentBy(S,a.id,0)))[0]||S.cats[0];const w=Math.max(1,Math.round(weekSpentBy(S,c.id,1)||weekSpentBy(S,c.id,0)||(S.flexW||200)/Math.max(1,S.cats.length)));const sug=Math.max(5,Math.round(w/5)*5);return {cap:c.name,q:'A weekly limit for '+c.name+'?',hint:'You usually spend about '+money(sug)+'.',yes:'Set '+money(sug),no:'Not now',ok:()=>{c.amt=sug;c.left=Math.max(0,sug-weekSpentBy(S,c.id,0));say('Limit set for '+c.name+'.');if(typeof syncFull==='function')syncFull()}}},
  plan:()=>({cap:'Plan',q:'Make a plan?',hint:'Say what you spend in a week. Trickle splits it by category.',yes:'Make a plan',no:'Not now',ok:()=>{UI.popup=null;openFlow('inc',{step:0,kp:''});return 1}}),
- income:()=>({cap:'Money in',q:'Add your income?',hint:'Split it between spending and saving.',yes:'Add income',no:'Not now',ok:()=>{UI.popup=null;openFlow('inc',{step:0,kp:''});return 1}}),
+ income:()=>({cap:'Income',q:'Add your income?',hint:'Split it between spending and saving.',yes:'Add income',no:'Not now',ok:()=>{UI.popup=null;openFlow('inc',{step:0,kp:''});return 1}}),
  planoffer:()=>{const w=S.firstDay&&(S.now-S.firstDay)/DAY<10?0:1;const rows=S.cats.map(c=>[c,Math.round(weekSpentBy(S,c.id,0)+weekSpentBy(S,c.id,1))]).filter(r=>r[1]>0).sort((a,b)=>b[1]-a[1]).slice(0,3);const tot=Math.round(weekSpentAll(S,0,1)+weekSpentAll(S,1,1));
   return {cap:'So far',q:'Here is how you spend.',hint:'Want to make a plan?',extra:'<div class="col" style="gap:6px;margin-top:14px">'+rows.map((r,i)=>'<div class="li" style="cursor:default"><span class="d" style="background:'+boxBg(catCol(catIdx(r[0].id)))+'"></span><span class="n">'+esc(r[0].name)+'</span><span class="a">'+money(r[1])+'</span></div>').join('')+'</div>',yes:'Make a plan',no:'Not now',ok:()=>{UI.popup=null;openFlow('inc',{step:0,kp:''});return 1}}},
  goal:()=>({cap:'Goals',q:'Saving for something?',hint:'Name it. Pick an amount.',yes:'Add a goal',no:'Not now',ok:()=>{UI.popup=null;openSheet('addgoal',{});return 1}}),
@@ -1048,7 +1048,7 @@ H.tnolimit=a=>{const c=S.cats.find(x=>x.id===a[0]);c.amt=0;c.left=0;say('Limit r
 function invite(cap,title,sub,label,k){return `<div class="sec" style="padding-top:40px"><div class="cap">${cap}</div><div class="title" style="margin-top:6px">${title}</div><p class="sub" style="margin:10px 0 22px">${sub}</p><div class="col" style="gap:10px"><button class="btn" data-a="askopen|${k}">${label}</button></div><p class="sm" style="margin-top:14px">You can keep tracking without it.</p>${k==='income'?`<div style="margin-top:22px"><button class="btn o s" data-a="oneoff">Add one-off money</button><p class="sm" style="margin-top:8px">Like a friend paying you back.</p></div>`:''}</div>`}
 H.oneoff=()=>{openFlow('oneoff',{step:0,kp:''});return false};
 const _inc=SCREENS.income,_sav=SCREENS.savings;
-SCREENS.income=()=>S.noInc?invite('Money in','No income added.','Add money you get and split it between spending and saving. Only if you want.','Add income','income'):_inc();
+SCREENS.income=()=>S.noInc?invite('Income','No income added.','Add money you get and split it between spending and saving. Only if you want.','Add income','income'):_inc();
 SCREENS.savings=()=>(S.track||S.noInc)&&!S.goals.length&&S.free<=0?invite('Savings','Saving for something?','Name it and pick an amount. Trickle shows how close you are.','Add a goal','goal'):_sav();
 /* ---- pay / add a spend while tracking ---- */
 const _payF=FLOWS.pay;
@@ -1064,7 +1064,7 @@ H.startplan=()=>{openFlow('inc',{step:0,kp:''});return false};
 function maybeOfferPlan(){if(!S.track||S.planSet||UI.popup||UI.flow||UI.sheet)return;if(!S.firstDay||(S.now-S.firstDay)/DAY<7||S.txns.length<4)return;const at=S.askedAt&&S.askedAt.planoffer;if(at&&(S.now.getTime()-at)/DAY<28)return;openAsk('planoffer')}
 /* ---- income: separate from the plan ---- */
 FLOWS.inc=F=>{const d=F.d;const a=amtOf(d.kp);const pct=d.pct===undefined?20:d.pct;const sav=Math.round(a*pct/100/10)*10,sp=a-sav;
- if(F.step===0)return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">Money in</div><div class="title" style="margin-top:4px">How much came in?</div><div style="margin:10px 0;display:flex;justify-content:center">${amtDots('₹'+(d.kp||'0'))}</div>${keypad('kp')}</div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn ${a>0?'':'d'}" data-a="${a>0?'incnext':'x'}">Next</button><button class="btn q" data-a="pclose">Not now</button></div></div>`;
+ if(F.step===0)return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">Income</div><div class="title" style="margin-top:4px">How much came in?</div><div style="margin:10px 0;display:flex;justify-content:center">${amtDots('₹'+(d.kp||'0'))}</div>${keypad('kp')}</div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn ${a>0?'':'d'}" data-a="${a>0?'incnext':'x'}">Next</button><button class="btn q" data-a="pclose">Not now</button></div></div>`;
  if(F.step===2){const t0=day0(),end=snapEnd(d.end||t0+27*DAY),days=daysIn(t0,end),wk=Math.max(5,r5b(sp/days*7)),left=daysIn(t0,wk0()+6*DAY),share=r5b(sp/days*left);
   return `<div class="mbody"><button class="back" data-a="incback">‹ Back</button><div class="cap">${money(sp)} to spend</div><div class="title" style="margin-top:4px">Until when?</div><p class="sub">Plans end on a Sunday. The money is split by day.</p>
   <div class="row wrap" style="gap:8px;margin:14px 0 10px">${PRESETS.map((p,i)=>`<button class="chip ${end===presetEnd(p)?'on':''}" data-a="incpre|${i}">${p[0]}</button>`).join('')}</div>
@@ -1190,7 +1190,7 @@ function planLines(){const out=[];if(!S.planSet)return out;const t=S.now.getTime
 function autoWeek(){if(!S.planSet||!S.pending.length)return false;let tot=0;const last=S.pending[S.pending.length-1];S.pending.slice().forEach(p=>{tot+=Math.max(0,p.un);applyPending(S,p,{to:'savings'})});S.pending=[];openWeekReview({week:new Date(last.week).getTime(),snap:last.snap||S.cats.map(c=>[c.id,c.name,c.amt]),bufAmt:last.bufAmt||0,from:last.from||null,moved:tot});return true}
 /* ---- pace: green when on pace, amber when ahead of it ---- */
 function paceInfo(){if(!S.planSet)return null;const tot=S.cats.reduce((a,c)=>a+c.amt,0)+S.bufAmt;if(tot<=0)return null;const left=S.cats.reduce((a,c)=>a+c.left,0)+S.bufLeft;const spent=1-left/tot;const from=S.weekFrom||wk0(),end=wk0()+7*DAY;const ideal=Math.max(0,Math.min(1,(S.now.getTime()-from)/Math.max(DAY,end-from)));return {spent,ideal,left:left/tot,over:left<=0||!!S.touched||spent>ideal+0.10}}
-const paceHex=()=>{const p=paceInfo();return p&&p.over?'#F4A261':'#5FE3B8'};
+const paceHex=()=>STATECOL[homeState()];
 function homeGlow(){const p=paceInfo();if(!p)return S.track?'blue':'';return p.over?'amber':'green'}
 /* ---- end of week: the ideal week next to what happened ---- */
 function openWeekReview(x){UI.popup=Object.assign({id:'weekreview',bg:groundCss},x);UI.flow=null;UI.sheet=null;render()}
@@ -1398,7 +1398,7 @@ SHEETS.v15inc=()=>`<div class="h2">Your incomes</div>${incomesHtml()}`;
 H.v15incs=()=>{openSheet('v15inc');return false};
 function mnInc(){const l=S.incomes||[];const now=S.now.getTime();const run=l.filter(i=>!i.end||i.end+DAY>now);
  const one=`<button class="li" data-a="oneoff"><span class="n mut">One-off money</span><span class="t">›</span></button>`;
- if(!l.length&&!planned())return `<div class="title">Money in.</div><div class="sub" style="margin:8px 0 22px">Add it, split it. Only if you want.</div><button class="btn" data-a="v15addinc">Add income</button><div style="margin-top:12px">${one}</div>`;
+ if(!l.length&&!planned())return `<div class="title">Pocket money & income.</div><div class="sub" style="margin:8px 0 22px">Money you get, like pocket money or a stipend.</div><button class="btn" data-a="v15addinc">Add income</button><div style="margin-top:12px">${one}</div>`;
  if(!l.length)return `<div class="title">${money(S.W)} a week to spend.</div><div class="sub" style="margin:8px 0 22px">Planned by hand.</div><button class="btn" data-a="v15addinc">Add income</button><div style="margin-top:12px">${one}</div>`;
  if(!run.length)return `<div class="title">Your income ended.</div><div class="sub" style="margin:8px 0 22px">Add more to keep a plan going.</div><button class="btn" data-a="v15addinc">Add income</button><div class="col" style="gap:8px;margin-top:12px"><button class="li" data-a="v15incs"><span class="n">Your incomes</span><span class="t">${l.length} ›</span></button>${one}</div>`;
  const wk=planned()?S.W:Math.round(planRate());const sav=run.reduce((a,i)=>a+i.sav,0),sp=run.reduce((a,i)=>a+i.sp,0),tot=Math.max(1,sav+sp),pct=Math.round(sav/tot*100);
@@ -1409,7 +1409,7 @@ function mnSav(){const act=S.goals.filter(g=>g.state!=='done');
  if(!act.length&&S.free<=0)return `<div class="title" style="margin-top:6px">Saving for something?</div><div class="sub" style="margin:8px 0 22px">Name it. Pick an amount.</div><button class="btn" data-a="v15goal">Add a goal</button>`;
  const sv=act.reduce((a,g)=>a+Math.min(g.saved,g.target),0)+Math.max(0,S.free);
  return `<div class="title">${money(sv)} saved.</div>${act.length?`<div style="display:flex;justify-content:center;margin:12px 0">${segRing(S.goals,240)}</div>`:''}<div class="col" style="gap:8px">${act.slice(0,3).map(g=>`<button class="li" data-a="push|goal|${J({id:g.id})}"><span class="n">${esc(g.name)}</span><span class="t">${Math.round(Math.min(1,g.saved/g.target)*100)}%</span></button>`).join('')}<button class="btn q" data-a="v15goal">+ Add a goal</button></div>`}
-SCREENS.money=()=>{const v=UI.mn||'inc';return `<div class="sec">${SEG([['inc','Money in'],['sav','Savings']],v,'mnseg')}${v==='inc'?mnInc():mnSav()}</div>`};
+SCREENS.money=()=>{const v=UI.mn||'inc';return `<div class="sec">${SEG([['inc','Income'],['sav','Savings']],v,'mnseg')}${v==='inc'?mnInc():mnSav()}</div>`};
 
 /* ---------- Making a plan is adding income ---------- */
 const _incFlow=FLOWS.inc;
@@ -1578,7 +1578,7 @@ const TIPDEF={
  ahead:{cap:'Spending fast',t:'Amber means you are spending fast.',b:'Nothing is wrong. At this speed the week runs out early.',c:ACC.a},
  over:{cap:'Over',t:'You used the whole week.',b:'Savings covered the rest. It is a signal, not a failure.',c:ACC.a},
  spending:{cap:'Spending',t:'Where it went.',b:'Each bar is a category this week. Tap one to see where it went.',c:ACC.a},
- money:{cap:'Money',t:'Money in, and what you keep.',b:'Money in splits into saving and spending.',c:ACC.b},
+ money:{cap:'Money',t:'Money you get, and what you keep.',b:'What you get is split into saving and spending.',c:ACC.b},
  insights:{cap:'Insights',t:'Patterns, not a list.',b:'See when your money goes and what repeats. Tap a spot for the amount.',c:ACC.v},
  cat:{cap:'A category',t:'One category, one gauge.',b:'Its 100 marks are its weekly amount. Marks fade as you spend.',c:ACC.g}
 };
@@ -1712,7 +1712,8 @@ function limUse(l,w){const [f,t]=w||inWin('week');const list=txIn(f,t).filter(x=
 const limName=l=>l.scope==='cat'?catName(l.ref):l.ref;
 const limText=l=>l.kind==='amt'?`${money(limUse(l))} of ${money(l.cap)}`:`${limUse(l)} of ${l.cap} time${l.cap===1?'':'s'}`;
 function limState(l){const u=limUse(l);if(u>l.cap)return 'over';if(u>=l.cap)return 'at';return u>=l.cap*.8&&u>0?'near':'ok'}
-const limCol=(l,col)=>{const s=limState(l);return s==='ok'?col:AMBER};
+const RED='#F26B6B';const limTone=l=>{const s=limState(l);return s==='over'||s==='at'?RED:s==='near'?AMBER:''};
+const limCol=(l,col)=>{const s=limState(l);return s==='ok'?col:limTone(l)};
 function limDefault(scope,ref,kind){const now=S.now.getTime();const list=txIn(now-14*DAY,now+1).filter(t=>scope==='cat'?t.kind==='cat'&&t.ref===ref:t.payee===ref);
  if(kind==='amt'){const w=list.reduce((a,t)=>a+t.amt,0)/2;return Math.max(10,r5b(w*.85)||50)}return Math.max(1,Math.round(list.length/2)||1)}
 function limWarn(catId,payee,amt){const out=[];(S.limits||[]).forEach(l=>{
@@ -1742,7 +1743,7 @@ H.limsave=()=>{const p=UI.sheet.p,cap=amtOf(p.lv);if(!cap)return false;
 H.limrm=a=>{S.limits=S.limits.filter(l=>l.id!==a[0]);UI.sheet=null;say('Limit removed.');return false};
 H.limno=a=>{S.limNo[a[0]]=true;UI.sheet=null};
 H.limsno=a=>{S.limNo[a[0]]=true};
-SHEETS.limits=()=>`<div class="h2" style="margin-bottom:12px">Your limits</div><div class="col" style="gap:8px">${S.limits.map(l=>{const col=l.scope==='cat'?catCol(catIdx(l.ref)):'#B48CFF';return `<button class="li" style="display:block;padding:12px 14px" data-a="limedit|${l.id}"><span class="row sp"><span class="n" style="flex:none"><i style="width:10px;height:10px;border-radius:50%;background:${col};display:inline-block;margin-right:10px"></i>${esc(limName(l))}</span><span class="t" style="${limState(l)==='ok'?'':'color:'+AMBER}">${limText(l)}</span></span>${limBar(l,col)}</button>`}).join('')}</div>`;
+SHEETS.limits=()=>`<div class="h2" style="margin-bottom:12px">Your limits</div><div class="col" style="gap:8px">${S.limits.map(l=>{const col=l.scope==='cat'?catCol(catIdx(l.ref)):'#B48CFF';return `<button class="li" style="display:block;padding:12px 14px" data-a="limedit|${l.id}"><span class="row sp"><span class="n" style="flex:none"><i style="width:10px;height:10px;border-radius:50%;background:${col};display:inline-block;margin-right:10px"></i>${esc(limName(l))}</span><span class="t" style="${limTone(l)?'color:'+limTone(l):''}">${limText(l)}</span></span>${limBar(l,col)}</button>`}).join('')}</div>`;
 H.v16limits=()=>{openSheet('limits');return false};
 function limBar(l,col){const u=limUse(l),r=Math.min(1,u/Math.max(1,l.cap));const c=limCol(l,col);
  if(l.kind==='times'&&l.cap<=8){return `<span class="ticks">${Array.from({length:l.cap},(_,i)=>`<i style="${i<u?`background:${boxBg(c)}`:''}"></i>`).join('')}</span>`}
@@ -1812,7 +1813,7 @@ function spCats(){const sc=UI.sc||'week',[f,t]=inWin(sc);const rows=catTotals(f,
  const top=rows[0],sg=sc==='week'?suggestions()[0]:null;
  const show=UI.spAll?rows:rows.slice(0,5);
  const li=show.map(r=>{const l=(S.limits||[]).find(x=>x.scope==='cat'&&x.ref===r.id);const go=r.id==='_u'?'push|sort':`push|cat|${J({id:r.id})}`;
-  return `<button class="li" style="display:block;padding:12px 14px" data-a="${go}"><span class="row sp"><span class="n" style="flex:none"><i style="width:10px;height:10px;border-radius:50%;background:${r.col};display:inline-block;margin-right:10px"></i>${esc(r.name)}</span><span class="t" style="max-width:none"><b style="color:var(--ink)">${money(r.amt)}</b></span></span>${l&&sc==='week'?`<span class="row sp" style="margin-top:8px;gap:10px"><span style="flex:1">${limBar(l,r.col)}</span><span class="sm" style="${limState(l)==='ok'?'':'color:'+AMBER}">${limText(l)}</span></span>`:''}</button>`}).join('');
+  return `<button class="li" style="display:block;padding:12px 14px" data-a="${go}"><span class="row sp"><span class="n" style="flex:none"><i style="width:10px;height:10px;border-radius:50%;background:${r.col};display:inline-block;margin-right:10px"></i>${esc(r.name)}</span><span class="t" style="max-width:none"><b style="color:var(--ink)">${money(r.amt)}</b></span></span>${l&&sc==='week'?`<span class="row sp" style="margin-top:8px;gap:10px"><span style="flex:1">${limBar(l,r.col)}</span><span class="sm" style="${limTone(l)?'color:'+limTone(l):''}">${limText(l)}</span></span>`:''}</button>`}).join('');
  return `<div class="title" style="font-size:28px;line-height:1.1">${rows.length>1?esc(top.name)+' took the most.':'All of it went on '+esc(top.name)+'.'}</div><div class="sub" style="margin-top:6px">${money(top.amt)} · ${pct0(top.share)}% of ${money(T)}</div>
  <div style="margin:18px 0 0">${stackBar(rows)}</div>${chips}
  ${sg?`<button class="li" style="margin-bottom:10px" data-a="limsug|${sg.key}"><span class="d" style="background:#8D97A3"></span><span class="n">${esc(sg.short)}</span><span class="t">›</span></button>`:''}
@@ -1829,7 +1830,7 @@ SCREENS.cat=SCREENS.tcat=({id})=>{const c=S.cats.find(x=>x.id===id);if(!c)return
  return `<button class="back" data-a="back">‹ Spending</button><div class="row" style="gap:10px;align-items:center"><i style="width:14px;height:14px;border-radius:50%;background:${boxBg(col)};box-shadow:0 0 12px ${col}88"></i><div class="title" style="font-size:30px">${esc(c.name)}</div></div>
  <div style="margin-top:14px"><span class="hero" style="font-size:42px">${money(mine)}</span><span class="sub" style="margin-left:8px">this week${all&&mine?` · ${pct0(share)}% of spending`:''}</span></div>
  <div style="margin:18px 0 6px">${weeksBars(vals,col)}</div><div class="row sp sm" style="margin-bottom:16px"><span>8 weeks ago</span><span>This week</span></div>
- ${lim?`<button class="li" style="display:block;padding:12px 14px" data-a="limedit|${lim.id}"><span class="row sp"><span class="n">Limit</span><span class="t" style="${limState(lim)==='ok'?'':'color:'+AMBER}">${limText(lim)}</span></span>${limBar(lim,col)}</button>`:`<button class="li" data-a="limset|cat|${id}|amt"><span class="d" style="background:#B48CFF"></span><span class="n">Set a limit</span><span class="t">optional ›</span></button>`}
+ ${lim?`<button class="li" style="display:block;padding:12px 14px" data-a="limedit|${lim.id}"><span class="row sp"><span class="n">Limit</span><span class="t" style="${limTone(lim)?'color:'+limTone(lim):''}">${limText(lim)}</span></span>${limBar(lim,col)}</button>`:`<button class="li" data-a="limset|cat|${id}|amt"><span class="d" style="background:#B48CFF"></span><span class="n">Set a limit</span><span class="t">optional ›</span></button>`}
  ${sl.length?`<div class="cap" style="margin:18px 0 8px">Where</div><div class="col" style="gap:8px">${sl.map(p=>`<button class="li" data-a="limset|shop|${esc(p)}|times"><span class="n">${esc(p)}</span><span class="t">${shops[p].n}× · ${money(shops[p].amt)}</span></button>`).join('')}</div>`:''}
  <div style="position:sticky;bottom:0;margin-top:18px;padding-top:10px"><button class="btn" data-a="pay|${id}">${payLabel()}</button></div>`};
 
@@ -1849,7 +1850,7 @@ function shopList(){const now=S.now.getTime(),m={};txIn(now-30*DAY,now+1).filter
 function insRep(){const L=shopList();if(!L.length)return `<div class="title" style="font-size:24px">Nothing repeats yet.</div><div class="sub" style="margin-top:8px">Places you visit again and again show up here.</div>`;const top=L[0],mx=Math.max(...L.map(l=>l.n));
  return `<div class="title" style="font-size:26px;line-height:1.15">${esc(top.payee)} is where you go most.</div><div class="sub" style="margin-top:6px">${top.n} visits in 30 days, ${money(top.amt)} in all.</div>
  <div class="col" style="gap:8px;margin-top:18px">${L.slice(0,5).map(l=>{const lim=(S.limits||[]).find(x=>x.scope==='shop'&&x.ref===l.payee);
-  return `<button class="li" style="display:block;padding:12px 14px" data-a="${lim?'limedit|'+lim.id:'limset|shop|'+esc(l.payee)+'|times'}"><span class="row sp"><span class="n" style="flex:none">${esc(l.payee)}</span><span class="t" style="max-width:none"><b style="color:var(--ink)">${l.n} visits</b> · ${money(l.amt)}</span></span><span class="mbar" style="margin-top:9px"><i style="width:${Math.max(8,l.n/mx*100)}%;background:${boxBg(SPEND)}"></i></span>${lim?`<span class="sm" style="display:block;margin-top:8px;${limState(lim)!=='ok'?'color:'+AMBER:''}">Limit ${lim.kind==='times'?lim.cap+(lim.cap===1?' visit':' visits'):money(lim.cap)} a week. This week: ${lim.kind==='times'?limUse(lim):money(limUse(lim))}.</span>`:''}</button>`}).join('')}</div><div class="sub" style="margin-top:12px;font-size:13px">Tap a place to set a limit.</div>`}
+  return `<button class="li" style="display:block;padding:12px 14px" data-a="${lim?'limedit|'+lim.id:'limset|shop|'+esc(l.payee)+'|times'}"><span class="row sp"><span class="n" style="flex:none">${esc(l.payee)}</span><span class="t" style="max-width:none"><b style="color:var(--ink)">${l.n} visits</b> · ${money(l.amt)}</span></span><span class="mbar" style="margin-top:9px"><i style="width:${Math.max(8,l.n/mx*100)}%;background:${boxBg(SPEND)}"></i></span>${lim?`<span class="sm" style="display:block;margin-top:8px;${limTone(lim)?'color:'+limTone(lim):''}">Limit ${lim.kind==='times'?lim.cap+(lim.cap===1?' visit':' visits'):money(lim.cap)} a week. This week: ${lim.kind==='times'?limUse(lim):money(limUse(lim))}.</span>`:''}</button>`}).join('')}</div><div class="sub" style="margin-top:12px;font-size:13px">Tap a place to set a limit.</div>`}
 function insCmp(){const now=S.now.getTime(),ws=wk0(),td=dowIdx(now);const day=(f,k)=>txIn(f+k*DAY,f+(k+1)*DAY).reduce((a,x)=>a+x.amt,0);
  const cur=[],last=[];let c=0,l=0;for(let k=0;k<7;k++){c+=day(ws,k);cur.push(c);l+=day(ws-7*DAY,k);last.push(l)}
  if(!last[6]||!cur[td])return `<div class="title" style="font-size:24px">Not enough yet.</div><div class="sub" style="margin-top:8px">Needs a spend this week and last week.</div>`;
@@ -2281,6 +2282,9 @@ H.hslog=()=>{const a=UI.hsAdd,amt=amtOf(a.kp);if(!amt||!a.cat)return false;const
 H.hschip=a=>{const c=quickChips()[+a[0]];if(!c)return false;const before=Math.max(0,flexL()),r=doPay(S,{amt:c.amt,target:{type:'cat',id:c.ref},payee:c.payee,paid:true});r.txn.via='widget';hsFlash(r.txn,Math.min(c.amt,before))};
 H.hsundo=()=>{if(UI.hsLast){removeTxn(S,UI.hsLast);UI.hsLast=null;UI.hsDelta=0}};
 
+/* three states: green on track, amber below the Recommended line, red nothing left or savings touched */
+function homeState(){const p=typeof paceInfo==='function'?paceInfo():null;if(S.touched||flexL()<=0)return 'out';return p&&p.over?'fast':'ok'}
+const STATECOL={ok:'#6FD3AE',fast:'#E6B24F',out:'#F26B6B'};
 /* ===== v17: from the first user-testing reviews (8 Oct): the structure was bad, too many tabs, too much "AI look", sentences too complex.
    Three tabs. Each tab is a short list that leads to detail screens (two levels, no tabs inside tabs). Flat visual style. Plain words. ===== */
 window.TABS=[['home','Home'],['spending','Spending'],['money','Money']];
@@ -2292,15 +2296,15 @@ const sec17=t=>`<div class="cap" style="margin:22px 0 8px">${t}</div>`;
 /* ---------- Home ---------- */
 function nextAct17(){const n=nextAct();if(n&&!n.low)return n;const a=awareness();if(a)return {t:a.t,a:'why|'+a.k+'|home',c:'tip'};return n}
 SCREENS.home=()=>{const nt=nextAct17(),pl=planned();let top,viz,cap='';
- if(pl){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),empty=L<=0,f=L/W,col=(typeof paceHex==='function')?paceHex():'#6FD3AE',dl=daysToGo();let st='';if(typeof paceInfo==='function'){const p=paceInfo();if(S.touched||empty)st='Nothing left this week.';else if(p&&p.over)st='Spending fast.'}
-  top=`<div class="hero" style="font-size:52px;line-height:1.05">${money(L)}</div><div class="sub" style="margin-top:6px;font-size:16px">left of ${money(W)} this week</div>${st?`<div style="margin-top:6px;color:${AMBER};font-weight:600">${st}</div>`:''}`;
+ if(pl){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),empty=L<=0,f=L/W,hs=homeState(),col=STATECOL[hs],dl=daysToGo();const st=hs==='out'?(S.touched?'Over this week. Savings used.':'Nothing left this week.'):hs==='fast'?'Spending a bit fast.':'';
+  top=`<div class="hero" style="font-size:52px;line-height:1.05;color:${hs==='out'?col:'var(--ink)'}">${money(L)}</div><div class="sub" style="margin-top:6px;font-size:16px">left of ${money(W)} this week</div>${st?`<div style="margin-top:6px;color:${col};font-weight:600">${st}</div>`:''}`;
   viz=`<div style="margin:22px 0 30px" data-a="gridhow">${battery(L,W,{col,tick:weekIdeal(),label:'Recommended'})}</div>`;
   cap=empty?'':`<div class="row sp" style="align-items:center;margin:0 0 16px"><span class="sub">${money(L/dl)} a day for ${dl===1?'today':dl+' days'}</span><button class="chip" data-a="gridhow">?</button></div>`}
  else{const tot=wkTot(0);top=tot?`<div class="hero" style="font-size:52px;line-height:1.05">${money(tot)}</div><div class="sub" style="margin-top:6px;font-size:16px">spent this week</div>`:`<div class="title" style="font-size:28px">Nothing logged yet.</div>`;viz=`<div style="margin:22px 0 30px"><div class="batt idle"></div></div>`}
  const row=!nt?'':nt.html?nt.html:nt.c==='plan'?`<button class="li cta" data-a="${nt.a}"><span class="n"><b>${nt.t}</b></span><span class="t">›</span></button>`:`<button class="li" data-a="${nt.a}"><span class="d" style="background:${nt.c==='green'?SAVE:nt.c==='tip'?'#8D97A3':'var(--amber)'}"></span><span class="n">${esc(nt.t)}</span><span class="t">›</span></button>`;
  return `<div class="row sp" style="margin-top:2px"><span></span><button class="chip" data-a="settings">Settings</button></div><div style="margin-top:14px">${top}</div>${viz}${cap}${row}
  <div style="position:sticky;bottom:0;margin-top:22px;padding-top:10px"><button class="btn" data-a="${scanOn()?'payscan':'pay'}">Log expense</button></div>`};
-SHEETS.gridhow=()=>{const W=Math.max(1,flexW());return `<div class="title" style="font-size:24px;margin-bottom:14px">How to read the bar</div><div style="margin:6px 0 34px">${battery(W*.62,W,{tick:.45,label:'Recommended'})}</div><div class="col" style="gap:10px"><div class="sub">The bar is what you have left this week.</div><div class="sub">The line is what we recommend you have left by now.</div><div class="sub">Below the line? You are spending fast.</div></div><div class="row sp" style="margin-top:18px"><button class="lnk" data-a="why|bar">Why a bar?</button><button class="btn s" data-a="closesheet" style="width:auto">OK</button></div>`};
+SHEETS.gridhow=()=>{const W=Math.max(1,flexW());return `<div class="title" style="font-size:24px;margin-bottom:14px">How to read the bar</div><div style="margin:6px 0 34px">${battery(W*.62,W,{tick:.45,label:'Recommended'})}</div><div class="col" style="gap:10px"><div class="sub">The bar is what you have left this week.</div><div class="sub">The line is what we recommend you have left by now.</div><div class="sub"><b style="color:#6FD3AE">Green</b>: on track. <b style="color:#E6B24F">Yellow</b>: below the line, spending fast. <b style="color:#F26B6B">Red</b>: nothing left.</div></div><div class="row sp" style="margin-top:18px"><button class="lnk" data-a="why|bar">Why a bar?</button><button class="btn s" data-a="closesheet" style="width:auto">OK</button></div>`};
 
 /* ---------- Spending: one list. Patterns and records are one tap down ---------- */
 function cmpNow(){const now=S.now.getTime(),ws=wk0(),td=dowIdx(now),day=(f,k)=>txIn(f+k*DAY,f+(k+1)*DAY).reduce((a,x)=>a+x.amt,0);let c=0,l=0;for(let k=0;k<=td;k++){c+=day(ws,k);l+=day(ws-7*DAY,k)}if(!c||!l)return null;const d=c-l;return Math.abs(d)<Math.max(20,l*.08)?'About the same':d>0?money(d)+' more':money(-d)+' less'}
@@ -2317,8 +2321,8 @@ SCREENS.history=()=>back17('Spending')+`<div class="title" style="margin-bottom:
 SCREENS.money=()=>{const l=S.incomes||[],now=S.now.getTime(),run=l.filter(i=>!i.end||i.end+DAY>now),mo=S.bills.filter(b=>!b.ended&&!b.paused&&!(b.trialUntil&&now<b.trialUntil)).reduce((a,b)=>a+perMonth(b),0),sav=savedTotal(S);
  const inTxt=run.length?`${money(run.reduce((a,i)=>a+i.amt,0))} · ${run.length===1?'until '+shortD(run[0].end):run.length+' running'}`:planned()?'Not added yet':'Add what you get';
  return `<div class="title" style="margin-bottom:8px">Money</div>${planned()?`<div class="hero" style="font-size:40px;margin-top:12px">${money(S.W)}</div><div class="sub" style="margin:4px 0 4px">to spend each week</div>`:`<div class="sub" style="margin:8px 0">Add your money. Trickle works out your week.</div>`}
- <div class="col" style="gap:8px;margin-top:18px">${row17('Money in',inTxt,'push|incomes')}${row17('Savings',money(sav)+(S.goals.filter(g=>g.state!=='done').length?` · ${S.goals.filter(g=>g.state!=='done').length} goal${S.goals.filter(g=>g.state!=='done').length>1?'s':''}`:''),'push|savings')}${row17('Subscriptions',S.bills.filter(b=>!b.ended).length?`${money(mo)} a month`:'None yet','v15bills')}${row17('One-off money','A friend pays back, a gift','oneoff')}</div>`};
-SCREENS.incomes=()=>back17('Money')+`<div class="title" style="margin-bottom:12px">Money in</div>`+mnInc();
+ <div class="col" style="gap:8px;margin-top:18px">${row17('Pocket money & income',inTxt,'push|incomes')}${row17('Savings',money(sav)+(S.goals.filter(g=>g.state!=='done').length?` · ${S.goals.filter(g=>g.state!=='done').length} goal${S.goals.filter(g=>g.state!=='done').length>1?'s':''}`:''),'push|savings')}${row17('Subscriptions',S.bills.filter(b=>!b.ended).length?`${money(mo)} a month`:'None yet','v15bills')}${row17('One-off money','A friend pays back, a gift','oneoff')}</div>`};
+SCREENS.incomes=()=>back17('Money')+`<div class="title" style="margin-bottom:12px">Pocket money & income</div>`+mnInc();
 SCREENS.savings=()=>back17('Money')+`<div class="title" style="margin-bottom:12px">Savings</div>`+mnSav();
 H.mnseg=()=>{};
 

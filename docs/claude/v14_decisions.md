@@ -556,3 +556,9 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 | V17-4 | Copy | **Short and plain.** One idea per sentence, 8 words or fewer, no coined terms. The tick on the bar says **Recommended** (Tarun's example). Heads-ups are one plain row, not a card. | Review: "sentences are too complex" | Copy lint (words per sentence, banned words) and the "what does this mean?" probe | Tarun's example CONFIRMED; rules PROPOSED |
 | V17-5 | UX | **Fewer things per screen.** Home shows at most one row. Patterns that lack data say what is needed, not an empty chart. | Review: "work on the UX more" (no detail given) | Ask the testers which screens | PROPOSED |
 | V17-6 | Process | **Test the structure before adding anything.** Tree test, first-click test and the 5-second test on v17, with the same testers if possible. No new features until then. | RESEARCH.md Part 10 | Tarun | PROPOSED |
+
+### V17-7, V17-8 (8 Oct, from Tarun's review of v17)
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V17-7 | Overspend colour | Tarun: "no color indicator for overspending". Home now has three states: green on track, yellow below the Recommended line, red nothing left or savings used. Limits turn yellow when near and red when reached. The number and a plain sentence say the same thing (colour is never the only signal). | Five-second test: can a student say whether they are over? Check colour-blind legibility. | PROPOSED |
+| V17-8 | Wording: "Money in" | Tarun: "hard to understand". Renamed to "Pocket money & income" (hub, title) and "Income" (tab, flows). | Tree test: where would you add your pocket money? | PROPOSED |

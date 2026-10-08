@@ -45,7 +45,7 @@ H.tnolimit=a=>{const c=S.cats.find(x=>x.id===a[0]);c.amt=0;c.left=0;say('Limit r
 function invite(cap,title,sub,label,k){return `<div class="sec" style="padding-top:40px"><div class="cap">${cap}</div><div class="title" style="margin-top:6px">${title}</div><p class="sub" style="margin:10px 0 22px">${sub}</p><div class="col" style="gap:10px"><button class="btn" data-a="askopen|${k}">${label}</button></div><p class="sm" style="margin-top:14px">You can keep tracking without it.</p>${k==='income'?`<div style="margin-top:22px"><button class="btn o s" data-a="oneoff">Add one-off money</button><p class="sm" style="margin-top:8px">Like a friend paying you back.</p></div>`:''}</div>`}
 H.oneoff=()=>{openFlow('oneoff',{step:0,kp:''});return false};
 const _inc=SCREENS.income,_sav=SCREENS.savings;
-SCREENS.income=()=>S.noInc?invite('Money in','No income added.','Add money you get and split it between spending and saving. Only if you want.','Add income','income'):_inc();
+SCREENS.income=()=>S.noInc?invite('Income','No income added.','Add money you get and split it between spending and saving. Only if you want.','Add income','income'):_inc();
 SCREENS.savings=()=>(S.track||S.noInc)&&!S.goals.length&&S.free<=0?invite('Savings','Saving for something?','Name it and pick an amount. Trickle shows how close you are.','Add a goal','goal'):_sav();
 /* ---- pay / add a spend while tracking ---- */
 const _payF=FLOWS.pay;
@@ -61,7 +61,7 @@ H.startplan=()=>{openFlow('inc',{step:0,kp:''});return false};
 function maybeOfferPlan(){if(!S.track||S.planSet||UI.popup||UI.flow||UI.sheet)return;if(!S.firstDay||(S.now-S.firstDay)/DAY<7||S.txns.length<4)return;const at=S.askedAt&&S.askedAt.planoffer;if(at&&(S.now.getTime()-at)/DAY<28)return;openAsk('planoffer')}
 /* ---- income: separate from the plan ---- */
 FLOWS.inc=F=>{const d=F.d;const a=amtOf(d.kp);const pct=d.pct===undefined?20:d.pct;const sav=Math.round(a*pct/100/10)*10,sp=a-sav;
- if(F.step===0)return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">Money in</div><div class="title" style="margin-top:4px">How much came in?</div><div style="margin:10px 0;display:flex;justify-content:center">${amtDots('₹'+(d.kp||'0'))}</div>${keypad('kp')}</div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn ${a>0?'':'d'}" data-a="${a>0?'incnext':'x'}">Next</button><button class="btn q" data-a="pclose">Not now</button></div></div>`;
+ if(F.step===0)return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">Income</div><div class="title" style="margin-top:4px">How much came in?</div><div style="margin:10px 0;display:flex;justify-content:center">${amtDots('₹'+(d.kp||'0'))}</div>${keypad('kp')}</div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn ${a>0?'':'d'}" data-a="${a>0?'incnext':'x'}">Next</button><button class="btn q" data-a="pclose">Not now</button></div></div>`;
  if(F.step===2){const t0=day0(),end=snapEnd(d.end||t0+27*DAY),days=daysIn(t0,end),wk=Math.max(5,r5b(sp/days*7)),left=daysIn(t0,wk0()+6*DAY),share=r5b(sp/days*left);
   return `<div class="mbody"><button class="back" data-a="incback">‹ Back</button><div class="cap">${money(sp)} to spend</div><div class="title" style="margin-top:4px">Until when?</div><p class="sub">Plans end on a Sunday. The money is split by day.</p>
   <div class="row wrap" style="gap:8px;margin:14px 0 10px">${PRESETS.map((p,i)=>`<button class="chip ${end===presetEnd(p)?'on':''}" data-a="incpre|${i}">${p[0]}</button>`).join('')}</div>
