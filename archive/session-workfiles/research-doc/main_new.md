@@ -28,6 +28,7 @@ Compiled 6 Oct 2026. This file is generated: the analysis (Parts 0 to 12, about 
 13. The Architecture & Strategy Document (6 Oct): what it says, what was applied, what stays open
 14. v16 (7 Oct): Tarun's spending model, and what it changes in the diagnosis
 15. Insights and awareness: what the research supports, and what it does not
+16. The first reviews after user testing (8 Oct)
 
 **Appendices (reference material; most are generated from the repo or copied verbatim, with their source named)**
 A. Boards and artifacts · B. File map · C. Quote bank · D. Source list · E. Density audit
@@ -1017,6 +1018,38 @@ Tarun's verdict (7 Oct) is that the grid is still not intuitive. Part 11.8 had a
 - **Test A** compares the bar (v16.1) with the grid (v15.3) on the same five states, with the question "Could you buy lunch for ₹150 today?" and "What is the white line?"
 - **Test C** diary adds: the guess check (O1) on days 3 and 7; "did the heads-up come at a useful time?" each time one appears; "did it feel like blame?" (O4).
 - **A new probe** for each "Why this?" sheet: do students open it, and does it raise or lower trust?
+
+---
+
+## 16. The first reviews after user testing (8 Oct 2026)
+
+### 16.1 What was said
+Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information architecture [is] very bad; there are too many tabs; work on the UX more; the interface looks very AI generated; the sentences are too complex, like even pace can just be recommended."
+**Not known:** how many people, who they were, which build, what tasks they did, what exactly was bad about the structure, which screens were meant by "UX". These must be asked before the next round; without them the reviews say what to fix but not how to measure the fix.
+The reviews agree with what Part 8 and Part 12 found from the inside: structure (H-ORIENT), words (H-WORDS). They add a new cause that this record had not considered: **the look itself**.
+
+### 16.2 Information architecture: what was wrong, what changed
+| In v16 | Why it reads as bad | In v17 |
+|---|---|---|
+| Four tabs: Home, Spending, Money, Insights | Four equal places for a student to guess between; Insights is a reading of Spending | Three tabs: Home, Spending, Money |
+| Tabs inside tabs: Categories or History; Money in or Savings; When, Repeats or Trend | A second row of choices on every screen; nobody knows which level they are on | One list per tab; details open one level down with a Back link |
+| Subscriptions hidden under Spending, limits under a row, savings under Money, insights apart | Related things in different places | Spending holds where it went, patterns and records. Money holds money in, savings, subscriptions, one-off money |
+| Home carried a number, a bar, a daily figure, a heads-up card and a row | Several things asking for attention | Home: what is left, one row, one button |
+**Where each item lives now (12 items for the tree test):** what is left this week (Home); log a spend (Home); biggest category this week (Spending); busiest time of day (Spending, Patterns); most visited shop (Spending, Patterns); this week against last (Spending, Patterns); every spend I made (Spending, Records); spending limits (Spending, Records); money I get (Money); my savings and goals (Money); my subscriptions (Money); a friend paid me back (Money, One-off money).
+This structure is **my proposal from the reviews**. It has not been tested.
+
+### 16.3 "Looks very AI generated": what in v16 probably caused it
+My reading, not tester words. Features of v16 that are common in generated interfaces: a dark screen with soft coloured glow behind it; gradient fills on buttons and bars; glass-like translucent cards with blur; a very large hero number; a pill-shaped bar with a glow; a violet "heads-up" card; a greeting line; a check mark that draws itself; numbers that count up; mint and violet on near-black; every block a rounded card; small capital-letter labels with wide spacing; one display face and one body face.
+v17 removes or flattens all of these: solid fills, no glow, glass, blur or background blobs, no entrance or counting animation, one typeface, one accent colour, flat bars, rows instead of cards, the heads-up as a plain row. What it does **not** yet have is a distinctive identity of its own; flat is plain, not necessarily recognisable. That is a design question for Tarun (a different base colour than dark, a hand-made detail, real photography or illustration from his own work).
+
+### 16.4 Words
+Rules: one idea per sentence, 8 words or fewer, nothing the user has not met. "Even pace" became **Recommended** (his example): the tick on the bar is the recommended amount left by now. "Weekly allowance" became "left of ₹1,626 this week". Long evidence sheets stay behind "Why this?" but are to be cut down to one short line each in the next pass.
+
+### 16.5 How to check the fix
+1. **Tree test** (no screens, only the structure as a text list): 12 questions such as "Where would you see what you spend most on?" Measure the share who pick the right place first. Aim: 80% or more on each.
+2. **First-click test** on the v17 Home and Spending screens: "Where would you tap to add something you bought?"
+3. **Same testers if possible**, v16 then v17, and ask the two questions again: how many tabs feel right, and does it feel like a real app.
+4. **Record who, how many, which build and what they did**, so the next review is evidence and not only opinion.
 
 ---
 

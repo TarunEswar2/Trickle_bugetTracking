@@ -1,6 +1,9 @@
 # Trickle — handover
 
-## START HERE (8 Oct 2026)
+## v17 (8 Oct, after the first user-testing reviews)
+Reviews said: information architecture very bad, too many tabs, UX needs work, looks AI generated, sentences too complex (e.g. "even pace" should just be "Recommended"). Response: `archive/session-workfiles/mockup17/` (fork of v16.4; `python3 build.py`): 3 tabs (Home, Spending, Money); Home is one number, one bar, one row; flat plain look (one accent, no glow or gradients); short copy. Decisions V17-1…V17-6, all PROPOSED; "Recommended" label is Tarun's own words. Tests (fuzz, panel, tips) pass; not tested with students. Next: get tester details from Tarun, run a tree test on the new structure before more screen work. v16.4 stays as the build testers saw.
+
+## START HERE (8 Oct 2026, v16.4 notes)
 **Where it stands.** v16.4 mockup (https://claude.ai/artifact/4F7qgfEx3WGPLTJtycosDN, source `archive/session-workfiles/mockup16/`): one weekly allowance worked out from money in; every spend tagged with a category; optional limits per category or shop; allowance bar instead of the grid; timing insights (hour, weekday, part of month) each with a "Why this?" evidence sheet; heads-ups at the user's own busy times; savings as a growth story; the calmer design system (https://claude.ai/artifact/Ra1d8t1H3no2RSZ3uxtbn3); and the scan-and-hand-off pay flow with data kept on the device.
 **Nothing has been tested with students and nothing about UPI has been tried on a phone.** The UPI claims in the docs come from web searches read at abstract level; the spike will replace them with measurements.
 **Read in this order:** `CLAUDE.md` (CURRENT STATE at the end), `docs/claude/v16_spec.md`, the v16 sections at the end of `docs/claude/v14_decisions.md`, `docs/claude/upi_intent_helper.md`, `docs/claude/upi_spike_spec.md`, then `RESEARCH.md` Parts 0, 10, 13, 15.

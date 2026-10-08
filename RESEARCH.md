@@ -28,6 +28,7 @@ Compiled 6 Oct 2026. This file is generated: the analysis (Parts 0 to 12, about 
 13. The Architecture & Strategy Document (6 Oct): what it says, what was applied, what stays open
 14. v16 (7 Oct): Tarun's spending model, and what it changes in the diagnosis
 15. Insights and awareness: what the research supports, and what it does not
+16. The first reviews after user testing (8 Oct)
 
 **Appendices (reference material; most are generated from the repo or copied verbatim, with their source named)**
 A. Boards and artifacts · B. File map · C. Quote bank · D. Source list · E. Density audit
@@ -1017,6 +1018,38 @@ Tarun's verdict (7 Oct) is that the grid is still not intuitive. Part 11.8 had a
 - **Test A** compares the bar (v16.1) with the grid (v15.3) on the same five states, with the question "Could you buy lunch for ₹150 today?" and "What is the white line?"
 - **Test C** diary adds: the guess check (O1) on days 3 and 7; "did the heads-up come at a useful time?" each time one appears; "did it feel like blame?" (O4).
 - **A new probe** for each "Why this?" sheet: do students open it, and does it raise or lower trust?
+
+---
+
+## 16. The first reviews after user testing (8 Oct 2026)
+
+### 16.1 What was said
+Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information architecture [is] very bad; there are too many tabs; work on the UX more; the interface looks very AI generated; the sentences are too complex, like even pace can just be recommended."
+**Not known:** how many people, who they were, which build, what tasks they did, what exactly was bad about the structure, which screens were meant by "UX". These must be asked before the next round; without them the reviews say what to fix but not how to measure the fix.
+The reviews agree with what Part 8 and Part 12 found from the inside: structure (H-ORIENT), words (H-WORDS). They add a new cause that this record had not considered: **the look itself**.
+
+### 16.2 Information architecture: what was wrong, what changed
+| In v16 | Why it reads as bad | In v17 |
+|---|---|---|
+| Four tabs: Home, Spending, Money, Insights | Four equal places for a student to guess between; Insights is a reading of Spending | Three tabs: Home, Spending, Money |
+| Tabs inside tabs: Categories or History; Money in or Savings; When, Repeats or Trend | A second row of choices on every screen; nobody knows which level they are on | One list per tab; details open one level down with a Back link |
+| Subscriptions hidden under Spending, limits under a row, savings under Money, insights apart | Related things in different places | Spending holds where it went, patterns and records. Money holds money in, savings, subscriptions, one-off money |
+| Home carried a number, a bar, a daily figure, a heads-up card and a row | Several things asking for attention | Home: what is left, one row, one button |
+**Where each item lives now (12 items for the tree test):** what is left this week (Home); log a spend (Home); biggest category this week (Spending); busiest time of day (Spending, Patterns); most visited shop (Spending, Patterns); this week against last (Spending, Patterns); every spend I made (Spending, Records); spending limits (Spending, Records); money I get (Money); my savings and goals (Money); my subscriptions (Money); a friend paid me back (Money, One-off money).
+This structure is **my proposal from the reviews**. It has not been tested.
+
+### 16.3 "Looks very AI generated": what in v16 probably caused it
+My reading, not tester words. Features of v16 that are common in generated interfaces: a dark screen with soft coloured glow behind it; gradient fills on buttons and bars; glass-like translucent cards with blur; a very large hero number; a pill-shaped bar with a glow; a violet "heads-up" card; a greeting line; a check mark that draws itself; numbers that count up; mint and violet on near-black; every block a rounded card; small capital-letter labels with wide spacing; one display face and one body face.
+v17 removes or flattens all of these: solid fills, no glow, glass, blur or background blobs, no entrance or counting animation, one typeface, one accent colour, flat bars, rows instead of cards, the heads-up as a plain row. What it does **not** yet have is a distinctive identity of its own; flat is plain, not necessarily recognisable. That is a design question for Tarun (a different base colour than dark, a hand-made detail, real photography or illustration from his own work).
+
+### 16.4 Words
+Rules: one idea per sentence, 8 words or fewer, nothing the user has not met. "Even pace" became **Recommended** (his example): the tick on the bar is the recommended amount left by now. "Weekly allowance" became "left of ₹1,626 this week". Long evidence sheets stay behind "Why this?" but are to be cut down to one short line each in the next pass.
+
+### 16.5 How to check the fix
+1. **Tree test** (no screens, only the structure as a text list): 12 questions such as "Where would you see what you spend most on?" Measure the share who pick the right place first. Aim: 80% or more on each.
+2. **First-click test** on the v17 Home and Spending screens: "Where would you tap to add something you bought?"
+3. **Same testers if possible**, v16 then v17, and ask the two questions again: how many tabs feel right, and does it feel like a real app.
+4. **Record who, how many, which build and what they did**, so the next review is evidence and not only opinion.
 
 ---
 
@@ -4747,6 +4780,73 @@ Tarun's instructions are CONFIRMED; how I carried them out is PROPOSED. V16-17 r
 | V16-21 | Awareness | **Weekly guess check.** From Wednesday, if there are 3 spends this week, a low-priority row offers "Guess this week's spending": a slider, then the real number, with neutral wording. Guesses are stored (this is the O1 measure of the research plan). | RESEARCH.md Part 13.1 (O1); not an established intervention | Test C; the sheet says it is untested | PROPOSED |
 | V16-22 | Awareness | **Daily guide:** "About ₹N a day for D days" under the bar (what is left divided by the days left, today included). | [P] interviewees think in ₹100 to 150 a day (RESEARCH.md Part 2) | Test A: can a student say if they can afford ₹150 today? | PROPOSED |
 | V16-23 | Process | **Evidence rules:** none of the cited studies is about students and money, and the app says so; a citation is used only after its existence was checked. Cleveland & McGill (1984) and Olafsson & Pagel (2018) were not re-checked and are marked so. | RESEARCH.md Part 15.2 | Review before any claim goes in a report | PROPOSED |
+
+
+##### v16.2 (7 Oct 2026, later still): calmer visual system, savings as a story
+Tarun: "work on visuals and the design system to make it very soothing, very satisfying, very welcoming; clearly readable; very modern and sleek and professional; improve the savings visuals." His direction is CONFIRMED; my choices are PROPOSED. System page: https://claude.ai/artifact (published as "Trickle Night Calm"), source `archive/session-workfiles/designsystem3/index.html`.
+
+| ID | Domain | Decision | Evidence | Validation gate | Status |
+|---|---|---|---|---|---|
+| V16-24 | Visual system | **Night, calmer.** Neon green and orange replaced by mint #5FE3B8 (money you have), peach #F4A261 (spending), amber #EDB458 (careful), violet (suggestions). Glow lowered. All text colours at least 6:1 on the ground; smallest text 12px; body 16px. | Tarun, 7 Oct; contrast measured | Contrast table on the system page | CONFIRMED (Tarun); values PROPOSED |
+| V16-25 | Type | **Plus Jakarta Sans** for numbers and headlines, Figtree for reading, tabular digits. Replaces Bricolage Grotesque. | Tarun: modern, sleek, professional | 5-second read on Home | PROPOSED |
+| V16-26 | Surfaces | Glass cards and rows (white 4–6% fill, 1px line), radii 12/18/24/30, blurred tab bar, one soft shadow for cards only. | same | none | PROPOSED |
+| V16-27 | Motion | Screens settle in (first nine blocks rise and fade, 45ms apart), the big number counts, the bar drains after a payment; one easing curve; off with reduced-motion. | Tarun: satisfying | none | PROPOSED |
+| V16-28 | Welcome | A greeting on Home ("Good evening") and a line on the first screen ("A calmer way to see your money."). | Tarun: welcoming | none | PROPOSED |
+| V16-29 | Savings | **Savings is a story.** Hero total with "up ₹320 this month"; a 12-month area line that ends at today's total; each goal is a card with its own colour, a bar with quarter notches, "₹10,500 of ₹30,000" and "Ready Feb 2028". The segmented ring is retired. Goal screen adds "₹19,500 to go, about ₹1,160 a month keeps you on track" and 12 bars of monthly additions. | Tarun; ring was unreadable (his screenshot) | Test A style read: "how close is the laptop?" | CONFIRMED (Tarun); design PROPOSED |
+| V16-30 | Colour | Goals get their own hues (sky, violet, mint, sand, rose) so two goals can be told apart. | V16-29 | none | PROPOSED |
+
+
+##### v16.3 (7 Oct 2026, later): Trickle as a scan-and-hand-off helper
+Tarun: usable on Android; if the payment fails on the wallet the user can update the record by hand, so information is still logged; open Trickle, scan the QR, pay on the wallet, it either fails or passes, Trickle passes it manually; Trickle is not reading a bank account and is just a helper. Details and checks: `docs/claude/upi_intent_helper.md`.
+
+| ID | Domain | Decision | Evidence | Validation gate | Status |
+|---|---|---|---|---|---|
+| V16-31 | Tracking | **Trickle is a helper, not a reader.** Open Trickle, scan the shop QR, pay in your own UPI app, come back, say whether it went through. Trickle never reads a bank account. Android first; iOS logs by hand. A failed payment is still recorded and can be corrected by hand. | Tarun, 7 Oct; feasibility checks in `upi_intent_helper.md` | Real-phone spike, then Test B | CONFIRMED (Tarun) |
+| V16-32 | Tracking | **(Superseded by V16-35 in the mockup.)** **Three states, set by the user.** Yes goes through: logged, confirmed. Not sure yet: logged and counted, "unconfirmed", Home asks again. No: not counted, kept in History as "Did not go through" with "I did pay, add it" and "Delete". | Same; the UPI app's own answer is unreliable | P.8 diary: how often "not sure"? | PROPOSED |
+| V16-33 | Home | On Android in "Scan & pay" mode Home shows **Scan & pay** with **Log by hand** under it. On iOS only Log expense. The mode is a switch in the side panel, default off. | Same | Test B | PROPOSED |
+| V16-34 | Tracking | **Scanned QR fills what it can:** the shop name (category remembered for that shop) and the amount if the QR has one. | UPI link spec | Spike | PROPOSED |
+
+**Open question for Tarun:** the hard rule in `CLAUDE.md` says tracking is "direct UPI account linkage or manual entry". The helper model replaces linkage. Should "Link UPI" in onboarding, the "payments seen on your link" detection and the linked-balance split be retired in favour of Scan & pay plus Log by hand? Until he answers, both exist in the mockup.
+
+
+| ID | Domain | Decision | Evidence | Validation gate | Status |
+|---|---|---|---|---|---|
+| V16-35 | Tracking | **No result from the UPI app is needed.** Trickle passes the merchant's link unchanged to the user's UPI app. It logs the spend and, if the payment fails, the user removes it in Trickle. This replaces the "Did it go through?" question of V16-32 once built (the mockup still has the question). | Tarun, 7 Oct; checks in `upi_intent_helper.md` section "No-result variant" | Real-phone spike: how many failed payments stay in the record? | CONFIRMED (Tarun) |
+
+**Built 7 Oct (V16-35):** the mockup now follows the no-result flow. Scan, optional amount, category, "Open your UPI app", a simulated UPI app, back to Trickle. The spend is logged at the hand-off. The result screen says "Added to your week", shows what is left of the allowance, and offers "Didn't pay? Remove", which puts the money back. "Where it came from" now appears only when savings paid part of it ("₹293 came from your savings"). By-hand logging just adds the spend and never says "Paid"; the simulated bank outcomes (decline, slow, low balance) were removed from the side panel. V16-33 stands (Scan & pay with Log by hand; iOS without scan).
+
+| V16-36 | Home, Pay | **Log expense opens a QR scanner first** (a simulation in the mockup). Then the amount (only if the QR has none), then the friction screens (category, then a confirm with the bar, "left after", how much of today's share it is, heads-up and limit notes), then **Open UPI app**, the user's UPI app, back to Trickle, and the result screen with the stats. "No QR? Add by hand" is a link on the scanner. On iOS Log expense goes straight to by hand. Replaces the separate "Scan & pay" and "Log by hand" buttons of V16-33. | Tarun, 7 Oct | Test B (taps and seconds against paying directly) | CONFIRMED (Tarun) |
+
+##### v16.4 (8 Oct 2026): local-only data, a seamless scan flow, how shops get tagged
+| ID | Domain | Decision | Evidence | Validation gate | Status |
+|---|---|---|---|---|---|
+| V16-37 | Privacy | **All data stays on the device.** Nothing about spends, shops or money is sent anywhere. Aim: no account, no sync, no analytics. | Tarun, 8 Oct | Manifest check at build: no INTERNET permission if no server is used | CONFIRMED (Tarun) |
+| V16-38 | Pay flow | **The paying flow must be as seamless as possible, and friction screens appear dynamically after the scan.** Built as: a scan goes to at most two screens before UPI. The amount screen appears only if the QR has no amount. Then one combined screen: category chips (suggested one preselected), the bar with what leaves, left after, today's share, and heads-up or limit notes only when they apply. One tap on "Open UPI app". A known shop with a fixed amount is one screen. | Tarun, 8 Oct | Test B: taps and seconds against paying directly | CONFIRMED (Tarun); screen rules PROPOSED |
+| V16-39 | Tagging | **Tag a shop without asking the user.** Tarun suggested a server holding shop and tag pairs. Proposed instead, in this order, all on the device: what the user picked for this shop before; words in the shop name; the merchant code (`mc`) in the QR mapped to a category. If none fits the user picks once and it is remembered. A server is not needed for this, and a lookup server would learn which shops each user visits (see `upi_intent_helper.md`). | Tarun's idea; privacy reasoning; how many real QR codes carry `mc` is not yet known | Spike: share of scanned QRs that tag themselves | OPEN: Tarun to choose |
+
+##### v16.5 (8 Oct 2026): apps that make their own payment, a quick-log widget, subscriptions with an end
+Tarun reports (8 Oct) that the hand-off spike works for merchants. The numbers are not yet in the repo (`docs/claude/upi_spike_report.md` is still to be written). Tarun's three ideas below are built in the mockup for review.
+
+| ID | Domain | Decision | Evidence | Validation gate | Status |
+|---|---|---|---|---|---|
+| V16-40 | Capture | **Payments made inside other apps (Zomato, Swiggy, shopping apps) are not captured automatically.** Trickle is not in their payment path, they pick the UPI app themselves, and the options for catching them are risky or unverified (see `upi_intent_helper.md`). They are logged by hand, as fast as possible (V16-41). Two experiments are listed in the spike spec but nothing depends on them. | Tarun's question, 8 Oct; searches of PayU, PhonePe, Paytm, Razorpay and Juspay docs | Spike experiments E1 and E2 | OPEN: Tarun to confirm; E2 (reading notifications) needs his yes or no |
+| V16-41 | Quick log | **A home-screen widget for fast logging.** Shows what is left of the allowance, a Scan button, up to three one-tap chips for the user's own repeat spends (shop and usual amount), and a plus for anything else. A chip logs at once with an Undo. A "Hide amounts" switch protects the screen from onlookers. | Tarun, 8 Oct | Test B variant: seconds to log a repeat spend | PROPOSED (Tarun's idea; mockup preview built) |
+| V16-42 | Subscriptions | **A subscription can have an end.** When adding or editing: keeps going; **I plan to cancel** (a cancel-by date, with a reminder); **free trial** (an end date, nothing set aside until then, first payment on that date); **fixed term** (valid until a date, payments stop after it). The detail view shows the next payment, valid-until and cancel-by dates; **I have cancelled it** moves it to a Cancelled list with "about ₹X a month back". The list shows the monthly and yearly total. Home reminds within 3 days of a date. Trickle only reminds; the user cancels in the other app or in UPI autopay. | Tarun, 8 Oct | P.8 diary: did a reminder cause a cancellation? | PROPOSED (Tarun's idea; built for review) |
+Bug fixed with this change: adding or editing a subscription (or income) reset this week's spending, because the allowance refilled. The allowance now keeps what this week's spends took out.
+
+| V16-43 | Widget | **The widget never opens Trickle.** It shows the amount left and its reduction as you log, lets you assign a category in one tap, enter an amount (presets ₹10, 20, 50, 100 and a keypad) and log it, with an Undo. A tap on a repeat-spend chip logs it at once. Scan is not in the widget (it needs the camera, so it lives in the app). Replaces the Scan, plus and "tap to open" parts of V16-41. | Tarun, 8 Oct | Test B variant: seconds to log a repeat spend and a new one from the home screen | CONFIRMED (Tarun); layout PROPOSED |
+
+##### v17 (8 Oct 2026): the first reviews after user testing
+Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information architecture [is] very bad; there are too many tabs; work on the UX more; the interface looks very AI generated; the sentences are too complex, like even pace can just be recommended." Number of testers, who they were, which build they saw, and what they were asked to do were not stated (to ask). v16 stays as the build they saw; v17 (`archive/session-workfiles/mockup17/`) is the response. All of the changes below are PROPOSED until Tarun confirms; "Recommended" for the tick label is his example.
+
+| ID | Domain | Decision | Evidence | Validation gate | Status |
+|---|---|---|---|---|---|
+| V17-1 | Information architecture | **Three tabs: Home, Spending, Money.** Each tab is a short list that opens detail screens one level down. No tabs inside tabs. | Reviews: "information architecture very bad", "too many tabs" | Tree test (RESEARCH.md Part 16.4): at least 80% find each of 12 items | PROPOSED |
+| V17-2 | Information architecture | **Where things live.** Home: what is left, one row, Log expense. Spending: where it went this week, then **Patterns** (busiest time, most visited, this week and last; the old Insights tab) and **Records** (all spends, limits). Money: money in, savings, subscriptions, one-off money. | Same | Same | PROPOSED |
+| V17-3 | Look | **Flat and plain.** No gradients, glow, glass, blur, blobs or entrance animation; one typeface (Public Sans); one accent; flat bars and rows instead of cards with shadows. | Review: "looks very AI generated"; my own list of what read as generated in v16 (RESEARCH.md Part 16.3) | 5-second look test with the question "Who made this?" is not scientific; ask "does it feel like a real app?" and compare v16 and v17 | PROPOSED |
+| V17-4 | Copy | **Short and plain.** One idea per sentence, 8 words or fewer, no coined terms. The tick on the bar says **Recommended** (Tarun's example). Heads-ups are one plain row, not a card. | Review: "sentences are too complex" | Copy lint (words per sentence, banned words) and the "what does this mean?" probe | Tarun's example CONFIRMED; rules PROPOSED |
+| V17-5 | UX | **Fewer things per screen.** Home shows at most one row. Patterns that lack data say what is needed, not an empty chart. | Review: "work on the UX more" (no detail given) | Ask the testers which screens | PROPOSED |
+| V17-6 | Process | **Test the structure before adding anything.** Tree test, first-click test and the 5-second test on v17, with the same testers if possible. No new features until then. | RESEARCH.md Part 10 | Tarun | PROPOSED |
 
 
 ---
