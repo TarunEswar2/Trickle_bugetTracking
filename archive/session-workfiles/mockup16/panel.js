@@ -29,6 +29,10 @@ const EVENTS=()=>{const c0=S.cats[0],big=S.cats.find(c=>c.name==='Outings')||S.c
   ['Clear all limits',()=>{S.limits=[];S.limNo={};say('Limits cleared.')}]]},
  {h:'Lock',items:[
   ['Lock the app',()=>{H.lock()}]]},
+ {h:'Widget and subscriptions (v16.5)',items:[
+  ['Show the home screen with the widget',()=>{UI.flow=null;UI.sheet=null;UI.hsLast=null;UI.popup={id:'homescreen'}}],
+  ['A trial ends in 2 days',()=>{S.bills.push({id:'b'+(S.idc++),name:'Hotstar',amt:299,every:'month',dueDay:1,reserve:0,nextDue:new Date(S.now.getTime()+2*DAY),paid:[],trialUntil:S.now.getTime()+2*DAY});say('Hotstar trial added.')}],
+  ['Cancel-by date is tomorrow',()=>{const b=S.bills.find(x=>!x.ended);if(!b)return say('No subscription.');b.endPlan=S.now.getTime()+DAY;say('Cancel-by set for '+b.name+'.')}]]},
  {h:'Awareness (v16.1)',items:[
   ['Time: 15 min before my busiest hour',()=>{const h=statsHour();const hr=6+2*h.pk;S.now=new Date(S.now.getFullYear(),S.now.getMonth(),S.now.getDate(),hr-1,45);say('It is '+S.now.toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit'})+'.')}],
   ['Time: Thursday 3 pm (guess check)',()=>{S.now=new Date(startOfWeek(S.now).getTime()+3*DAY+15*36e5);say('Thursday afternoon.')}],

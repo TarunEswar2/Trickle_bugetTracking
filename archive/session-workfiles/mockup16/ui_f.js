@@ -100,10 +100,13 @@ function planRate(){const t=S.now.getTime();return (S.incomes||[]).filter(i=>i.e
 /* money is split by day: the current week only gets the days that are left of it */
 function weekScale(){const t=S.now.getTime(),w0=wk0(),w1=w0+6*DAY;let num=0,den=0;(S.incomes||[]).filter(i=>i.end&&i.end+DAY>t).forEach(i=>{const a=Math.max(i.start,w0),b=Math.min(i.end,w1);den+=perDay(i)*7;if(b>=a)num+=perDay(i)*daysIn(a,b)});return den>0?Math.min(1,num/den):1}
 function applyWeekScale(){if(!S.planSet)return;S.cats.forEach(c=>{if(c.full==null)c.full=c.amt});if(S.bufFull==null)S.bufFull=S.bufAmt;const sc=weekScale();S.weekScale=sc;
- S.cats.forEach(c=>{c.amt=sc<1?(c.full>0?Math.max(5,r5b(c.full*sc)):0):c.full;c.left=Math.max(0,c.amt-weekSpentBy(S,c.id,0))});S.bufAmt=sc<1?r5b(S.bufFull*sc):S.bufFull;S.bufLeft=S.bufAmt;
+ S.cats.forEach(c=>{c.amt=sc<1?(c.full>0?Math.max(5,r5b(c.full*sc)):0):c.full;c.left=Math.max(0,c.amt-weekSpentBy(S,c.id,0))});S.bufAmt=sc<1?r5b(S.bufFull*sc):S.bufFull;S.bufLeft=S.wallet?Math.max(0,S.bufAmt-walletSpent()):S.bufAmt;
  const t=S.now.getTime(),act=(S.incomes||[]).filter(i=>i.end&&i.end+DAY>t);S.weekFrom=act.length?Math.max(wk0(),Math.min(...act.map(i=>i.start))):wk0()}
 function recomputePlan(force){const W=r5b(planRate());if(!S.planSet||W<=0)return false;if(W===S.W&&!force)return false;S.cats.forEach(c=>{if(c.full==null)c.full=c.amt});const old=S.cats.reduce((x,c)=>x+c.full,0)||1,flex=Math.max(10,W-S.fixedW);const sc=(flex*0.85)/old;S.cats.forEach(c=>{c.full=S.wallet?0:Math.max(5,r5b(c.full*sc))});const sum=S.cats.reduce((x,c)=>x+c.full,0);S.W=W;S.flexW=Math.max(sum,flex);S.bufFull=S.flexW-sum;applyWeekScale();S.planSig=W;S.planFromIncome=true;logE(S,'Weekly plan is now ₹'+W);return true}
 function planTick(){if(S.planSet&&S.incomes&&recomputePlan())say('Your weekly plan changed to '+money(S.W)+'.')}
 H.incdone=()=>{const r=addIncome(UI.flow.d,false);closeFlow();say('Added. '+money(r.sav)+' saved.');return false};
 H.incaddplan=()=>{const r=addIncome(UI.flow.d,true);recomputePlan(true);closeFlow();say('Added. Weekly plan is '+money(S.W)+'.');return false};
 H.incplan=()=>{const d=UI.flow.d;const r=addIncome(d,true);const wk=Math.max(5,r5b(r.sp/daysIn(day0(),r.end)*7));UI.flow=null;startUpgrade({s:'q2',qW:wk,fromInc:true});return false};
+
+/* what this week's spends have taken out of the allowance (a spend that spilled into savings only counts its part) */
+function walletSpent(){const ws=startOfWeek(S.now).getTime();return S.txns.filter(t=>t.t>=ws&&(t.kind==='cat'||t.kind==='unsorted')).reduce((a,t)=>a+(t.src&&t.src.buffer!=null?t.src.buffer:t.amt),0)}

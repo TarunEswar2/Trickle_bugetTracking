@@ -178,6 +178,22 @@ body{font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
 .vf .c{position:absolute;width:38px;height:38px;border:3px solid #5FE3B8;border-radius:12px}.vf .tl{left:14px;top:14px;border-right:0;border-bottom:0}.vf .tr{right:14px;top:14px;border-left:0;border-bottom:0}.vf .bl{left:14px;bottom:14px;border-right:0;border-top:0}.vf .br{right:14px;bottom:14px;border-left:0;border-top:0}
 .vf .scanline{position:absolute;left:22px;right:22px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#5FE3B8,transparent);box-shadow:0 0 14px #5FE3B8;animation:scanmove 2.2s ease-in-out infinite alternate}
 @keyframes scanmove{from{top:16%}to{top:84%}}
+
+/* ===== v16.5: simulated home screen ===== */
+.hs{position:absolute;inset:0;padding:14px 20px 26px;display:flex;flex-direction:column;gap:14px;background:radial-gradient(80% 50% at 20% 0%,rgba(92,112,255,.35),transparent 70%),radial-gradient(70% 50% at 100% 30%,rgba(64,200,178,.28),transparent 70%),linear-gradient(180deg,#0C1224,#070A12)}
+.hs-top{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--ink2);padding:0 10px}
+.hs-clock{display:flex;flex-direction:column;gap:2px;margin-top:6px}.hs-clock b{font-family:var(--display);font-size:56px;font-weight:700;letter-spacing:-.03em;line-height:1}.hs-clock span{color:var(--ink2);font-size:15px}
+.hs-wid{border-radius:28px;padding:16px 16px 16px;background:rgba(18,24,38,.72);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.1);box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.hs-eye{background:none;border:0;color:var(--ink3);font:inherit;font-size:12.5px;cursor:pointer}
+.hs-left{display:block;width:100%;text-align:left;background:none;border:0;color:inherit;font:inherit;padding:6px 0 0;cursor:pointer}
+.hs-row{display:flex;gap:8px;margin-top:14px}
+.hs-btn{font:inherit;border:0;border-radius:16px;height:50px;padding:0 10px;color:var(--ink);background:rgba(255,255,255,.09);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15;min-width:0;flex:1}
+.hs-btn b{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.hs-btn i{font-style:normal;font-size:13px;color:var(--ink2);font-weight:700}
+.hs-btn.pri{background:linear-gradient(135deg,#A9F4DF,#4FC9A8);color:#04251D;font-weight:800;font-size:15px;flex:1.1}.hs-btn.sq{flex:0 0 50px;font-size:24px;font-weight:500}
+.hs-small{width:176px;border-radius:24px;padding:12px 12px 12px 14px;background:rgba(18,24,38,.72);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between;gap:6px}.hs-small .hs-left{padding:0;width:auto}.hs-small .hs-btn{height:44px}
+.hs-apps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 8px;margin-top:auto}.hs-apps span{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:var(--ink2)}.hs-apps i{width:52px;height:52px;border-radius:16px;display:block}
+.hs-close{height:46px;border:0;border-radius:16px;background:rgba(255,255,255,.08);color:var(--ink);font:inherit;font-weight:600;cursor:pointer;margin-top:6px}
+.hs-toast{position:absolute;left:18px;right:18px;bottom:190px;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(30,38,56,.96);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:11px 14px;font-size:14px}.hs-toast button{background:none;border:0;color:#9AF1D6;font:inherit;font-weight:700;cursor:pointer}
 </style></head><body>
 <div class="app"><div class="stage"><div id="frame"><div id="phone"><div class="notch"></div><div class="status"><span id="clk"></span><span>●●● 5G ▮</span></div><div id="glow"></div><div id="view"></div><div id="tabbar"></div><div id="layer"></div></div></div></div>
 <aside class="panel" id="panel"></aside></div>

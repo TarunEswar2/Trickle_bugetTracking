@@ -50,7 +50,7 @@ const weeksPer=4.3;
 const r5=x=>Math.round(x/5)*5;
 const startOfWeek=d=>{const x=new Date(d);x.setHours(0,0,0,0);const k=(x.getDay()+6)%7;return new Date(x.getTime()-k*DAY)};
 const NOW0=new Date(2026,9,2,17,30,0); // Fri 2 Oct 2026, 5:30 pm
-function billWeekly(b){if(b.paused)return 0;const per=b.every==='week'?1:b.every==='month'?weeksPer:b.every==='3 months'?13:52;return b.amt/per}
+function billWeekly(b){if(b.paused||b.ended)return 0;if(b.trialUntil&&typeof S!=='undefined'&&S&&S.now&&S.now.getTime()<b.trialUntil)return 0;const per=b.every==='week'?1:b.every==='month'?weeksPer:b.every==='3 months'?13:52;return b.amt/per}
 function nextDueAfter(b){const d=new Date(b.nextDue);if(b.every==='week')return new Date(d.getTime()+7*DAY);if(b.every==='3 months')return new Date(d.getFullYear(),d.getMonth()+3,d.getDate());if(b.every==='year')return new Date(d.getFullYear()+1,d.getMonth(),d.getDate());return new Date(d.getFullYear(),d.getMonth()+1,b.dueDay||d.getDate())}
 function newState(key){
  const P=PROFILES[key],rnd=mulberry(key.charCodeAt(0)*977+13);let id=1;const S={key,p:P,now:new Date(NOW0),idc:1,
@@ -85,6 +85,7 @@ function newState(key){
  S.cats.sort((a,b)=>b.amt-a.amt);S.cats.forEach((c,i)=>c.order=i);
  if(P.fresh){S.txns=[];S.bills.forEach(b=>b.paid=[])}
  /* v16: one weekly allowance. Categories are tags, not pots; limits are optional and per category or per shop */
+ if(key==='Y'&&S.bills[1])S.bills[1].endPlan=S.now.getTime()+3*DAY;if(key==='T'&&S.bills[0])S.bills[0].validUntil=S.now.getTime()+120*DAY;
  S.wallet=true;S.limits=[];S.limNo={};S.cats.forEach(c=>{c.amt=0;c.full=0;c.left=0});S.bufAmt=S.flexW;S.bufFull=S.flexW;S.bufLeft=P.fresh?S.flexW:Math.max(0,S.flexW-spentThisWeek(S));
  const byName=n=>(S.cats.find(c=>c.name===n)||{}).id;const L=(scope,ref,kind,cap)=>{if(ref)S.limits.push({id:'l'+(S.idc++),scope,ref,kind,cap})};
  if(key==='T')L('cat',byName('Chai & coffee'),'amt',150);if(key==='Y')L('shop','Maggi Point','times',3);if(key==='N')L('cat',byName('Eating out'),'amt',400);
@@ -161,7 +162,7 @@ function weekEnd(S,{to,goalIds}){ // to: 'savings'|'next'
 function addGoal(S,{name,target,byMonths}){const g={id:'g'+(S.idc++),name,target,saved:0,byMonths:byMonths||0,createdMonthsAgo:0,state:'active',hist:new Array(12).fill(0),celebrated:false};S.goals.push(g);logE(S,`Goal added: ${name}`);return g}
 function markDone(S,id){const g=S.goals.find(x=>x.id===id);if(!g)return;if(g.saved>0){S.free+=g.saved}g.saved=0;g.state='done';g.doneOn=new Date(S.now);logE(S,`${g.name} marked done`)}
 function advanceDays(S,n){for(let i=0;i<n;i++){const before=startOfWeek(S.now).getTime();S.now=new Date(S.now.getTime()+DAY);S.now.setHours(9,0);
-  S.bills.forEach(b=>{if(S.now>=b.nextDue){if(b.paused){b.nextDue=nextDueAfter(b);return}if(S.p.mode==='upi'){const r=cascade(S,b.amt,{type:'fixed',id:b.id});S.txns.unshift({id:'t'+(S.idc++),t:b.nextDue.getTime()+36e5*10,payee:b.name,amt:b.amt,kind:'fixed',ref:b.id,via:'detected',src:r});b.paid.push(b.nextDue.getTime());b.nextDue=nextDueAfter(b);logE(S,`${b.name} was paid (₹${b.amt})`)}else{b.dueNow=true}}});
+  S.bills.forEach(b=>{if(b.ended)return;if(S.now>=b.nextDue){if(b.validUntil&&b.nextDue.getTime()>b.validUntil){b.ended=S.now.getTime();return}if(b.paused){b.nextDue=nextDueAfter(b);return}if(S.p.mode==='upi'){const r=cascade(S,b.amt,{type:'fixed',id:b.id});S.txns.unshift({id:'t'+(S.idc++),t:b.nextDue.getTime()+36e5*10,payee:b.name,amt:b.amt,kind:'fixed',ref:b.id,via:'detected',src:r});b.paid.push(b.nextDue.getTime());b.nextDue=nextDueAfter(b);logE(S,`${b.name} was paid (₹${b.amt})`)}else{b.dueNow=true}}});
   if(startOfWeek(S.now).getTime()!==before){const un=unspentNow(S);S.pending.push({un,week:new Date(before),touched:!!S.touched,touchedAmt:S.touchedAmt||0,snap:S.cats.map(c=>[c.id,c.name,c.amt]),bufAmt:S.bufAmt,from:S.weekFrom||null});S.touched=false;S.touchedAmt=0;S.cats.forEach(c=>{if(c.full!=null)c.amt=c.full;c.left=c.amt});if(S.bufFull!=null)S.bufAmt=S.bufFull;S.bufLeft=S.bufAmt;S.weekScale=1;S.weekFrom=null;S.bills.forEach(b=>{b.reserve=Math.min(b.reserve+Math.round(billWeekly(b)),b.amt*1.2)});logE(S,'A new week began')}}}
 function billsRefill(S){S.bills.forEach(b=>{b.reserve=Math.round(billWeekly(b)*3)})}
 /* derived views */

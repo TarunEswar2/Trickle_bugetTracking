@@ -55,3 +55,17 @@ Things the flow needs that are easy to miss: payments with no QR (friends by pho
 **If a shared list is still wanted later:** ship it as a static file inside app updates, or download the whole file (not per-shop lookups), so the server never learns which shop was scanned. Contributions from users would reveal visits and would need to be opt-in, delayed, and published only after several users agree.
 **Other things local-only needs:** backup and restore (an encrypted export file; decide whether Android's automatic cloud backup is on or off); phone change; delete all data; the PIN lock (exists). Research without analytics also needs a consented way for students to share their diary data (export file or form) for Tests A to C.
 **Open check:** how many real merchant QR codes carry `mc`. Android notification permission (for a "Added ₹75, ₹532 left" note) is optional.
+
+## Payments made inside other apps (Zomato, Swiggy, shopping apps), 8 Oct
+Those apps build the payment themselves. Searches of the PayU, PhonePe, Paytm, Razorpay and Juspay developer docs (abstract level) show the usual pattern: the app asks Android which apps can handle `upi://pay`, usually against a list of known UPI package names declared in its manifest on Android 11 and above, shows them in its own checkout, and launches the chosen one. Confirmation then comes to the merchant's server, not the app. Trickle is not in that path.
+| Option | What it would do | Honest status |
+|---|---|---|
+| Log by hand, fast | Home-screen widget chips, a notification action, an end-of-day "anything outside Trickle today?" nudge | Works, no permissions beyond the widget. V16-41 |
+| Declare Trickle as a handler of `upi://pay` and forward to the real UPI app | Trickle sees the payment link (shop, amount) from any app and logs it, then hands the link on | **Unverified and risky.** Merchants that use package lists would not show Trickle; Paytm's docs say its smart intent shows only payment-ready apps; Trickle would have to relay the result back to the caller or the shop's app may show "cancelled"; if forwarding fails the payment is blocked. No Google Play policy text was found either way. Test only as experiment E1 |
+| Read other apps' payment notifications (notification access) | Would log "Paid ₹250 to Zomato" from GPay's own notification | Not SMS, but the same spirit as reading messages: a sensitive special permission, easily seen as intrusive, Play policy unverified. Needs Tarun's explicit decision. Experiment E2, not recommended |
+| Account Aggregator or bank reading | | Not available to this project |
+Conclusion: do not promise automatic capture of in-app payments. Promise fast logging.
+## Home-screen widget (V16-41)
+Android app widget. Feasible in general; nothing here was checked against current Android or Flutter documentation. Design: small (what is left, a plus) and medium (what is left with the bar, Scan, three chips, a plus). Privacy: amounts can be hidden; no data leaves the device. iOS widgets later and unverified.
+## Subscriptions (V16-42)
+Data on each subscription: next payment date, optional `endPlan` (cancel by), `trialUntil`, `validUntil`, `ended`. Weekly set-aside is zero during a trial, after it ends, when paused or cancelled.
