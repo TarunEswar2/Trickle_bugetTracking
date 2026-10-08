@@ -49,20 +49,37 @@ function quickChips(){const lim=S.now.getTime()-60*DAY,by={};S.txns.filter(t=>t.
  const L=Object.values(by).filter(x=>x.n>=2).sort((a,b)=>b.n-a.n).slice(0,3).map(x=>({payee:x.payee,ref:x.ref,n:x.n,amt:+Object.keys(x.amts).sort((a,b)=>x.amts[b]-x.amts[a])[0]}));
  if(L.length<3){const used=new Set(L.map(x=>x.ref));S.cats.forEach(c=>{if(L.length<3&&!used.has(c.id)){const l=S.txns.filter(t=>t.kind==='cat'&&t.ref===c.id);if(l.length){L.push({payee:c.name,amt:Math.max(5,r5(l.reduce((a,t)=>a+t.amt,0)/l.length)),ref:c.id,n:0});used.add(c.id)}}})}return L}
 const shortN=p=>{const w=p.split(' ')[0];return w.length>8?w.slice(0,7)+'…':w};
-POPUPS.homescreen=P=>{const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hide=UI.hsHide,am=v=>hide?'₹•••':money(v),chips=quickChips(),col=(typeof paceHex==='function')?paceHex():'#5FE3B8',last=UI.hsLast&&S.txns.find(t=>t.id===UI.hsLast);
+function topCats(){const lim=S.now.getTime()-60*DAY,m={};S.txns.filter(t=>t.kind==='cat'&&t.t>=lim).forEach(t=>{m[t.ref]=(m[t.ref]||0)+1});return S.cats.map(c=>c.id).sort((a,b)=>(m[b]||0)-(m[a]||0)).slice(0,5)}
+POPUPS.homescreen=P=>{const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hide=UI.hsHide,am=v=>hide?'₹•••':money(v),col=(typeof paceHex==='function')?paceHex():'#5FE3B8',add=UI.hsAdd,dl=UI.hsDelta;
+ const eye=`<button class="hs-eye" data-a="hseye">${hide?'Show amounts':'Hide amounts'}</button>`;
+ let wid;
+ if(add){const amt=amtOf(add.kp),after=Math.max(0,L-amt),cats=topCats(),sel=add.cat,warn=sel&&amt?limWarn(sel,'Quick add',amt):'';
+  wid=`<div class="hs-wid"><div class="row sp"><span class="cap">Add a spend</span>${eye}</div>
+  <div class="row sp" style="align-items:baseline;margin-top:4px"><span class="hero" style="font-size:44px">${hide?'₹•••':'₹'+(add.kp||'0')}</span><span class="sm" style="text-align:right">${amt?`<span style="color:var(--ink3)">${am(L)}</span> → <b style="color:var(--ink)">${am(after)}</b> left`:`${am(L)} left`}</span></div>
+  <div class="hs-chips">${[10,20,50,100].map(v=>`<button class="hs-c ${amt===v?'on':''}" data-a="hsamt|${v}">₹${v}</button>`).join('')}</div>
+  <div class="hs-kp">${['1','2','3','4','5','6','7','8','9','','0','⌫'].map(k=>k?`<button data-a="hsk|${k}">${k}</button>`:'<span></span>').join('')}</div>
+  <div class="hs-chips" style="margin-top:10px">${cats.map(id=>{const c=S.cats.find(x=>x.id===id),i=catIdx(id);return `<button class="hs-c ${sel===id?'on':''}" data-a="hscat|${id}"><i style="background:${catCol(i)}"></i>${esc(c.name)}</button>`}).join('')}</div>
+  ${warn?`<div class="sm" style="color:var(--amber);margin-top:8px">${esc(warn)}</div>`:''}
+  <div class="hs-row"><button class="hs-btn" style="flex:.6;height:46px" data-a="hscancel">Cancel</button><button class="hs-btn pri ${amt&&sel?'':'dis'}" style="height:46px" data-a="${amt&&sel?'hslog':'x'}">Log ${amt?money(amt):''}</button></div></div>`}
+ else{const chips=quickChips();
+  wid=`<div class="hs-wid"><div class="row sp"><span class="cap">Trickle</span>${eye}</div>
+  <div class="hs-amt"><span class="hero" style="font-size:40px">${am(L)}</span><span class="sub" style="margin-left:8px">left of ${am(W)}</span>${dl&&!hide?`<span class="hs-delta">−${money(dl)}</span>`:''}</div>
+  ${hide?'<div style="height:12px"></div>':`<div style="margin:12px 0 4px">${battery(L,W,{col,sm:true,prev:dl?Math.min(1,(L+dl)/W):undefined})}</div>`}
+  ${UI.hsLast?`<div class="hs-note"><span>Added ${hide?'':money(S.txns.find(t=>t.id===UI.hsLast)?S.txns.find(t=>t.id===UI.hsLast).amt:0)+' · '}${esc((S.txns.find(t=>t.id===UI.hsLast)||{}).payee||'')}</span><button data-a="hsundo">Undo</button></div>`:''}
+  <div class="hs-row">${chips.map((c,i)=>`<button class="hs-btn" data-a="hschip|${i}"><b>${esc(shortN(c.payee))}</b><i>${hide?'':money(c.amt)}</i></button>`).join('')}<button class="hs-btn pri" style="flex:.8" data-a="hsadd">+ Add</button></div></div>`}
  return `<div class="hs"><div class="hs-top"><span>${fmtTime(S.now)}</span><span>5G ▮</span></div>
- ${last?`<div class="hs-toast"><span>Added ${money(last.amt)} · ${esc(last.payee)}</span><button data-a="hsundo">Undo</button></div>`:''}
- <div class="hs-clock"><b>${fmtTime(S.now)}</b><span>${fmtDay(S.now)}</span></div>
- <div class="hs-wid"><div class="row sp"><span class="cap">Trickle</span><button class="hs-eye" data-a="hseye">${hide?'Show amounts':'Hide amounts'}</button></div>
-  <button class="hs-left" data-a="hsopen"><span class="hero" style="font-size:40px">${am(L)}</span><span class="sub" style="margin-left:8px">left of ${am(W)}</span></button>
-  ${hide?'<div style="height:12px"></div>':`<div style="margin:12px 0 4px">${battery(L,W,{col,sm:true})}</div>`}
-  <div class="hs-row"><button class="hs-btn pri" data-a="hsscan">Scan</button>${chips.map((c,i)=>`<button class="hs-btn" data-a="hschip|${i}"><b>${esc(shortN(c.payee))}</b><i>${hide?'':money(c.amt)}</i></button>`).join('')}<button class="hs-btn sq" data-a="hsplus">+</button></div></div>
- <div class="hs-small"><button class="hs-left" data-a="hsopen"><span class="hero" style="font-size:26px">${am(L)}</span><span class="sub"> left</span></button><button class="hs-btn sq pri" data-a="hsscan">+</button></div>
- <div class="hs-apps">${['Phone','Messages','Camera','Photos'].map((n,i)=>`<span><i style="background:hsl(${i*43+210},35%,38%)"></i>${n}</span>`).join('')}</div>
- <button class="hs-close" data-a="hsclose">Back to Trickle</button><div class="sm" style="text-align:center;margin-top:8px">Simulated Android home screen</div></div>`};
+ ${add?'':`<div class="hs-clock"><b>${fmtTime(S.now)}</b><span>${fmtDay(S.now)}</span></div>`}${wid}
+ ${add?'':`<div class="hs-small"><span class="hero" style="font-size:26px">${am(L)}</span><span class="sub"> left</span></div><div class="hs-apps">${['Phone','Messages','Camera','Photos'].map((n,i)=>`<span><i style="background:hsl(${i*43+210},35%,38%)"></i>${n}</span>`).join('')}</div>`}
+ <button class="hs-close" data-a="hsclose">Leave the home screen</button><div class="sm" style="text-align:center;margin-top:6px">Simulated Android home screen. The widget never opens Trickle.</div></div>`};
+const hsReset=()=>{UI.hsAdd=null;UI.hsLast=null;UI.hsDelta=0};
 H.hseye=()=>{UI.hsHide=!UI.hsHide};
-H.hsopen=()=>{UI.popup=null;UI.hsLast=null;go('home');return true};H.hsclose=H.hsopen;
-H.hsscan=()=>{UI.popup=null;UI.hsLast=null;openPay({scan:true});return false};
-H.hsplus=()=>{UI.popup=null;UI.hsLast=null;openPay({});return false};
-H.hschip=a=>{const c=quickChips()[+a[0]];if(!c)return false;const r=doPay(S,{amt:c.amt,target:{type:'cat',id:c.ref},payee:c.payee,paid:true});r.txn.via='widget';UI.hsLast=r.txn.id;clearTimeout(H._hsT);H._hsT=setTimeout(()=>{UI.hsLast=null;if(UI.popup&&UI.popup.id==='homescreen')render()},6000)};
-H.hsundo=()=>{if(UI.hsLast){removeTxn(S,UI.hsLast);UI.hsLast=null}};
+H.hsclose=()=>{UI.popup=null;hsReset();go('home');return true};
+H.hsadd=()=>{const c=topCats();UI.hsAdd={kp:'',cat:c[0]||null}};
+H.hscancel=()=>{UI.hsAdd=null};
+H.hsk=a=>{const k=a[0];let v=UI.hsAdd.kp||'';if(k==='⌫')v=v.slice(0,-1);else if(v.length<5)v=(v==='0'?'':v)+k;UI.hsAdd.kp=v};
+H.hsamt=a=>{UI.hsAdd.kp=String(a[0])};
+H.hscat=a=>{UI.hsAdd.cat=a[0]};
+function hsFlash(t,amt){UI.hsLast=t.id;UI.hsDelta=amt;clearTimeout(H._hsT);H._hsT=setTimeout(()=>{UI.hsLast=null;UI.hsDelta=0;if(UI.popup&&UI.popup.id==='homescreen')render()},6000)}
+H.hslog=()=>{const a=UI.hsAdd,amt=amtOf(a.kp);if(!amt||!a.cat)return false;const before=Math.max(0,flexL()),r=doPay(S,{amt,target:{type:'cat',id:a.cat},payee:(S.cats.find(c=>c.id===a.cat)||{}).name||'Quick add',paid:true});r.txn.via='widget';UI.hsAdd=null;hsFlash(r.txn,Math.min(amt,before))};
+H.hschip=a=>{const c=quickChips()[+a[0]];if(!c)return false;const before=Math.max(0,flexL()),r=doPay(S,{amt:c.amt,target:{type:'cat',id:c.ref},payee:c.payee,paid:true});r.txn.via='widget';hsFlash(r.txn,Math.min(c.amt,before))};
+H.hsundo=()=>{if(UI.hsLast){removeTxn(S,UI.hsLast);UI.hsLast=null;UI.hsDelta=0}};
