@@ -220,3 +220,6 @@ Calmer visual system (mint, peach, amber, violet; Plus Jakarta Sans and Figtree;
 
 ## Latest (7 Oct 2026, v16.3)
 Scan-and-hand-off helper built in the mockup (V16-31…34): scan, pay in your own UPI app, say whether it went through; failed and unconfirmed states; Android only. Feasibility notes with what was and was not verified in `docs/claude/upi_intent_helper.md`. **Open question for Tarun:** retire "Link UPI" and payment detection in favour of this? **Next:** the real-phone spike.
+
+## Latest (8 Oct 2026, v16.4)
+Local-only data (V16-37, Tarun). Seamless scan flow (V16-38): amount only if the QR has none, then one combined screen with suggested category, the bar and notes, then UPI. On-device tagging chain (V16-39, **Tarun to choose**: his shop-and-tag server against local rules; reasoning in `docs/claude/upi_intent_helper.md`). Next: the real-phone spike, including how many QR codes carry `mc`; backup and restore design.
