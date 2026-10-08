@@ -4,6 +4,7 @@ Trickle is a UPI-based budgeting app for students, designed by Tarun (MDes proje
 The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 
 ## Read first, in this order
+000. `docs/claude/v16_spec.md` and the v16 sections at the end of `docs/claude/v14_decisions.md` (V16-1…V16-39): the current model and every decision, with who made it and its status.
 00. `RESEARCH.md` (repo root) — the whole record v1 to v15: research, decisions, data requirements, and why the work has not converged. Read Part 0 and Part 10 first.
 0. `HANDOVER.md` — where the last session stopped and the exact next step.
 1. `docs/claude/v14_decisions.md` — the authoritative decision log and the visualisation queue.
@@ -12,8 +13,11 @@ The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 4. `docs/claude/project_master_synthesis.md` — everything before v14 and why it drifted.
 
 ## Hard rules
-- **No SMS tracking, anywhere.** Tracking is direct UPI account linkage or manual entry
-  (plus an Excel/CSV import placeholder). Never mention or simulate SMS parsing.
+- **No SMS tracking, anywhere.** Never mention or simulate SMS parsing. Tracking is manual entry
+  and, since v16.3, a **scan-and-hand-off helper** (scan the shop QR in Trickle, pay in your own UPI app, V16-31/35/36).
+  Direct UPI account linkage still exists in the mockup; whether to retire it is an open question for Tarun.
+- **All data stays on the device** (V16-37). No analytics, no sync, no server that learns shops or spends.
+  Tag shops on the device (V16-39 proposed). A shop-to-tag server was Tarun's idea; the privacy cost is in `docs/claude/upi_intent_helper.md`.
 - **Tarun makes every decision.** Draw options, ask, log the answer in
   `docs/claude/v14_decisions.md`, then move on. Do not decide on his behalf.
 - **One visualisation at a time.** He supplies inspiration images at each step.
@@ -22,8 +26,9 @@ The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 - **Never design for one seed with five fixed categories.** Test every option across a
   pool of students (income ₹3k–25k, 2–20+ custom categories, month 1 vs month 6).
 - **The user can always say no** (every question has an easy Skip) and **every question is short and plain** (one per screen, ~8 words, no jargon). Money-model inputs like balance and budget are optional; category tracking is the bare minimum (B-1…B-11).
-- No coins/dots as a general money unit. Categories are fuel gauges (10×10 grid,
-  liquid fill from the bottom). Squares/circles only for the pay/friction "crumble".
+- No coins/dots as a general money unit. **The 10×10 grid is retired (V16-17, Tarun).** Home uses an allowance bar
+  (green = what is left, tick = even pace); other pictures are in `docs/claude/v16_spec.md` and the design system page.
+- **Only cite a study after checking it exists, and say what it does not cover** (RESEARCH.md Part 15).
 
 ## Where things are
 - `docs/` — export of the claude.ai Project docs (specs, audits, decisions, research).
@@ -51,3 +56,13 @@ v15 (5 Oct 2026): audit in `docs/claude/v15_audit.md`, spec in `docs/claude/v15_
 **v16 (7 Oct):** Tarun's spending model is in `archive/session-workfiles/mockup16/` (spec `docs/claude/v16_spec.md`, decisions V16-1…V16-14). Income -> saving + weekly allowance; every spend has a category (a tag, not a pot); limits are optional, per category or shop, after a week or two; nothing is taken from other categories. **Current build is v16** https://claude.ai/artifact/4F7qgfEx3WGPLTJtycosDN; v15.3 stays in `mockup15/` for comparison. Tests A, B, C should run on v16.
 
 **v16.1 (7 Oct, later):** the grid is retired (Tarun's decision); Home uses an allowance bar showing the weekly allowance and what is left; Insights has hour/day/month timing; heads-ups at the user's own busy times; every insight has a "Why this?" sheet with citations checked on 7 Oct (RESEARCH.md Part 15). Only cite a study after checking it exists, and say what it does not cover.
+
+## CURRENT STATE (8 Oct 2026) — read this before the older notes above
+- **Build:** v16.4, `archive/session-workfiles/mockup16/` (`python3 build.py` makes `mockup16.html`), published at https://claude.ai/artifact/4F7qgfEx3WGPLTJtycosDN. Tests in `mockup16/tests/` (see its README). v15.3 stays in `mockup15/` for the grid-against-bar comparison (Test A).
+- **Design system:** "Trickle Night Calm", https://claude.ai/artifact/Ra1d8t1H3no2RSZ3uxtbn3, source `archive/session-workfiles/designsystem3/index.html`. The older Night and Instrument systems above are history.
+- **Model (Tarun):** income splits into saving and a weekly allowance; every spend has a category as a tag; limits optional per category or shop; nothing is taken from other categories; categories are not the centre.
+- **Pay flow (Tarun):** Log expense opens a QR scanner; amount only if the QR has none; one combined screen (category chips, bar, notes); Open UPI app; the spend is logged at hand-off; "Didn't pay? Remove" on the result screen. No result is read from the UPI app.
+- **Status labels:** decisions are PROPOSED until Tarun confirms; Tarun's own words are CONFIRMED. Every new decision needs ID, domain, evidence, validation gate, status.
+- **Open for Tarun:** retire "Link UPI" and payment detection? Shop tagging: his server idea or on-device rules (V16-39)? Make Scan the default Home flow everywhere? Thresholds for heads-ups and limit suggestions (mine).
+- **Next:** build and run the UPI spike (`docs/claude/upi_spike_spec.md`); then Tests A, B, C on v16 (RESEARCH.md Part 13.4 and Part 15.6); backup and restore design; Figma is still at the v14 look (push only when Tarun asks).
+- **Do not:** claim anything is tested with students; claim UPI behaviour that the spike has not shown; add features before the spike and tests report.
