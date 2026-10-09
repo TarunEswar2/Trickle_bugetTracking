@@ -601,3 +601,8 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 | ID | Domain | Evidence | Validation gate | Status |
 |---|---|---|---|---|
 | V17-23 | Tooling | Tarun: "remove the skill, it's bad, I don't like it". Deleted `.claude/skills/human-interfaces/` and `mockup17/tests/antiai_states.js`. V17-18 no longer has a skill behind it. Recoverable from git commit 825d5aa if wanted. | None | CONFIRMED (Tarun) |
+
+### V17-24 (9 Oct, Tarun): a goal needs no amount and no date. CONFIRMED (his words).
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V17-24 | Goals | Tarun: "the goal doesn't need to have a set limit like emergency fund, even duration is optional". The Add a goal sheet now has "No set amount" (default for Emergency fund) or "Set an amount"; the date is optional ("No date" is the default). A goal with no amount shows what is saved, no bar and no percent, and never counts as reached. The emergency fund suggestion of about 3 months of spending is shown as a hint, not set for the user. Money can still be added and moved. | Do testers create an emergency fund without being asked for an amount? | CONFIRMED (Tarun) |

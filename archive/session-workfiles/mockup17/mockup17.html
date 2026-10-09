@@ -437,7 +437,7 @@ function removeTxn(S,id){const t=S.txns.find(x=>x.id===id);if(!t)return;if(t.kin
  if(t.src&&t.src.buffer)S.bufLeft=Math.min(S.bufAmt,S.bufLeft+t.src.buffer);S.txns=S.txns.filter(x=>x.id!==id);S.unsorted=S.unsorted.filter(x=>x!==id);logE(S,`Removed ${t.payee}`)}
 function previewCascade(S,amt,target){const T={cats:JSON.parse(JSON.stringify(S.cats)),bills:JSON.parse(JSON.stringify(S.bills)),goals:JSON.parse(JSON.stringify(S.goals)),free:S.free,bufLeft:S.bufLeft};return cascade(T,amt,target)}
 function targetLeft(S,t){if(t.type==='cat')return S.cats.find(c=>c.id===t.id).left;if(t.type==='goal')return S.goals.find(g=>g.id===t.id).saved;if(t.type==='fixed')return S.bills.find(b=>b.id===t.id).reserve;if(t.type==='free')return S.free;return 0}
-function targetBase(S,t){if(t.type==='cat')return S.cats.find(c=>c.id===t.id).amt;if(t.type==='goal')return S.goals.find(g=>g.id===t.id).target;if(t.type==='fixed')return S.bills.find(b=>b.id===t.id).amt;return 1}
+function targetBase(S,t){if(t.type==='cat')return S.cats.find(c=>c.id===t.id).amt;if(t.type==='goal')return S.goals.find(g=>g.id===t.id).target||1;if(t.type==='fixed')return S.bills.find(b=>b.id===t.id).amt;return 1}
 
 function applyPending(S,p,{to,goalIds}){const un=p.un;if(un>0){if(to==='savings'){const ids=(goalIds&&goalIds.length?goalIds:S.goals.filter(g=>g.state!=='done').map(g=>g.id));if(!ids.length)S.free+=un;else{const share=Math.floor(un/ids.length);let given=0;ids.forEach((id,i)=>{const g=S.goals.find(x=>x.id===id);const a=i===ids.length-1?un-given:share;g.saved+=a;g.hist[11]=(g.hist[11]||0)+a;given+=a})}}
  else{const n=S.cats.length+1;const share=Math.floor(un/n);let g2=0;S.cats.forEach(c=>{c.left+=share;g2+=share});S.bufLeft+=un-g2}}
@@ -751,8 +751,8 @@ H.mtab=a=>{const d=UI.flow.d;d.tab=a[0];d.toK=null;d.to=null};
 H.mto=a=>{const d=UI.flow.d;const t=moveTiles(d).find(x=>x.k===a[0]);d.toK=a[0];d.to=t.t};
 H.mdo=()=>{const F=UI.flow,d=F.d;const src=d.from;const have=src.type==='free'?S.free:S.goals.find(g=>g.id===src.id).saved;const amt=Math.min(amtOf(d.kp),have);const before={};S.goals.forEach(g=>before[g.id]=goalEta(g));
  const got=moveMoney(S,src,d.to,amt);const lines=[];
- if(src.type==='goal'){const g=S.goals.find(x=>x.id===src.id);lines.push(`${g.name} is now ${Math.round(g.saved/g.target*100)}% there.`)}
- if(d.to.type==='goal'){const g=S.goals.find(x=>x.id===d.to.id);lines.push(`${g.name} is now ${Math.round(g.saved/g.target*100)}% there.`)}
+ if(src.type==='goal'){const g=S.goals.find(x=>x.id===src.id);lines.push(gThere(g))}
+ if(d.to.type==='goal'){const g=S.goals.find(x=>x.id===d.to.id);lines.push(gThere(g))}
  if(d.to.type==='cat')lines.push(`${labelOf(S,d.to)} gets ${money(got)} more this week.`);if(d.to.type==='buffer')lines.push(`Your buffer is ${money(got)} bigger this week.`);
  d.res={got,toName:labelOf2(S,d.to),lines};F.step=1;setTimeout(checkCele,30)};
 /* ===== INSIGHTS ===== */
@@ -776,7 +776,7 @@ const _hs=H.hsel;H.hsel=a=>{if(cur().id==='insights')UI.hot.isel=+a[0];else UI.h
 /* ===== PAY FLOW ===== */
 function recentPayees(){const seen=[];S.txns.forEach(t=>{if(t.kind==='cat'&&!seen.includes(t.payee))seen.push(t.payee)});return seen.slice(0,4)}
 function payTiles(d){if(d.tab==='b')return S.cats.map((c,i)=>({k:c.id,n:c.name,w:wordLeft(c.left,c.amt),col:catCol(i),t:{type:'cat',id:c.id}})).concat(S.bills.map(b=>({k:b.id,n:b.name,w:'subscription',col:FIXC,t:{type:'fixed',id:b.id}})));
- return S.goals.filter(g=>g.state!=='done').map((g,i)=>({k:g.id,n:g.name,w:Math.round(g.saved/g.target*100)+'% there',col:GG[i%3],t:{type:'goal',id:g.id},g:1})).concat(S.free>0?[{k:'free',n:'Free savings',w:'not given yet',col:'#7C8F89',t:{type:'free'},g:1}]:[])}
+ return S.goals.filter(g=>g.state!=='done').map((g,i)=>({k:g.id,n:g.name,w:g.target>0?Math.round(g.saved/g.target*100)+'% there':money(g.saved)+' saved',col:GG[i%3],t:{type:'goal',id:g.id},g:1})).concat(S.free>0?[{k:'free',n:'Free savings',w:'not given yet',col:'#7C8F89',t:{type:'free'},g:1}]:[])}
 function openPay(d){const F={id:'pay',step:0,d:Object.assign({kp:'',tab:'b',payee:null,paid:S.p.mode==='manual'},d||{})};if(F.d.preTarget){F.d.target=F.d.preTarget;F.d.toK=F.d.preTarget.id||'free';F.d.tab=['goal','free'].includes(F.d.preTarget.type)?'s':'b';if(F.d.preAmt){F.d.kp=F.d.preAmt;F.step=1}}UI.flow=F;render()}
 H.pay=a=>{const d={};if(a[0]){d.target={type:'cat',id:a[0]};d.toK=a[0]}openPay(d);return false};
 function tgtName(t){return t.type==='free'?'Free savings':labelOf(S,t)}
@@ -2133,11 +2133,11 @@ function areaSvg(vals,col){const W=346,H=176,pl=10,pr=16,pt=20,pb=30,n=vals.leng
 
 function mnSav(){const act=S.goals.filter(g=>g.state!=='done');
  if(!act.length&&S.free<=0)return `<div class="title" style="margin-top:6px">Saving for something?</div><div class="sub" style="margin:8px 0 22px">Name it. Pick an amount. Watch it grow.</div><button class="btn" data-a="v15goal">Add a goal</button>`;
- const {ser,M,T}=savingsSeries(),grew=ser.filter((v,i)=>i&&v!==ser[i-1]).length>=2,inGoals=act.reduce((a,g)=>a+Math.min(g.saved,g.target),0),free=Math.max(0,S.free),thisM=M[11];
+ const {ser,M,T}=savingsSeries(),grew=ser.filter((v,i)=>i&&v!==ser[i-1]).length>=2,inGoals=act.reduce((a,g)=>a+(g.target>0?Math.min(g.saved,g.target):g.saved),0),free=Math.max(0,S.free),thisM=M[11];
  return `<div><span class="hero" style="font-size:46px">${money(T)}</span><div class="sub" style="margin-top:6px;font-size:16px">saved${thisM>0?` · up ${money(thisM)} this month`:''}</div></div>
  ${grew?`<div style="margin:20px 0 4px">${areaSvg(ser,'#7CE7C4')}</div>`:''}
  <div class="sm" style="margin:${grew?'4px':'14px'} 2px 18px">${money(inGoals)} in goals${free>0?` · ${money(free)} free`:''}</div>
- <div class="col" style="gap:10px">${act.map(g=>{const col=goalCol(g),p=Math.min(1,g.saved/g.target);return `<button class="li gc" style="--glow:${col}66" data-a="push|goal|${J({id:g.id})}"><span class="row sp" style="margin-bottom:12px"><span class="n" style="flex:none;font-size:16px"><i style="width:10px;height:10px;border-radius:50%;background:${col};display:inline-block;margin-right:10px;box-shadow:0 0 10px ${col}88"></i>${esc(g.name)}</span><span class="pct" style="color:${col}">${Math.round(p*100)}%</span></span>${battery(g.saved,g.target,{col,sm:true,ms:true})}<span class="row sp sm" style="margin-top:10px"><span>${money(g.saved)} of ${money(g.target)}</span><span>${g.state==='reached'?'Reached':'Ready '+goalEta(g)}</span></span></button>`}).join('')}
+ <div class="col" style="gap:10px">${act.map(g=>{const col=goalCol(g),p=g.target>0?Math.min(1,g.saved/g.target):0;if(!(g.target>0))return `<button class="li" style="display:block;padding:14px 16px" data-a="push|goal|${J({id:g.id})}"><span class="row sp"><span class="n" style="flex:none;font-size:16px"><i style="width:10px;height:10px;border-radius:50%;background:${col};display:inline-block;margin-right:10px"></i>${esc(g.name)}</span><span class="hero" style="font-size:20px">${money(g.saved)}</span></span><span class="sm" style="display:block;margin-top:6px">No set amount</span></button>`;return `<button class="li gc" style="--glow:${col}66" data-a="push|goal|${J({id:g.id})}"><span class="row sp" style="margin-bottom:12px"><span class="n" style="flex:none;font-size:16px"><i style="width:10px;height:10px;border-radius:50%;background:${col};display:inline-block;margin-right:10px;box-shadow:0 0 10px ${col}88"></i>${esc(g.name)}</span><span class="pct" style="color:${col}">${Math.round(p*100)}%</span></span>${battery(g.saved,g.target,{col,sm:true,ms:true})}<span class="row sp sm" style="margin-top:10px"><span>${money(g.saved)} of ${money(g.target)}</span><span>${g.state==='reached'?'Reached':'Ready '+goalEta(g)}</span></span></button>`}).join('')}
  <button class="btn q" data-a="v15goal">+ Add a goal</button></div>`}
 
 /* ---------- a goal ---------- */
@@ -2519,6 +2519,21 @@ H.fundgo=a=>{const amt=+a[1];if(amt>0)moveMoney(S,{type:'free'},{type:'goal',id:
   if(free>=1)c={tag:'Savings',t:`${money(free)} is saved. Give it a job.`,sub:g.length?'Put it in a goal.':'Start an emergency fund.',a:g.length?'choosegoal':'efund',cta:'Choose',hot:true};
   else if(planned()&&S.goals.length===0)c={tag:'Savings',t:'Start an emergency fund',sub:`About 3 months of spending: ${money(efTarget())}.`,a:'efund',cta:'Add a goal'};
   if(c){const rest=out.filter(x=>x.tag!=='Soon');return [c,...rest].slice(0,7)}return out}}
+
+/* ===== goals do not need an amount or a date (Tarun, 9 Oct). An emergency fund can just grow. ===== */
+function gThere(g){return g.target>0?`${g.name} is now ${Math.round(Math.min(1,g.saved/g.target)*100)}% there.`:`${g.name} now has ${money(g.saved)}.`}
+{const _ge=goalEta;goalEta=function(g){return g.target>0?_ge(g):'whenever you like'}}
+H.efund=()=>{openSheet('addgoal',{name:'Emergency fund',open:true,kp:'',by:0});return false};
+SHEETS.addgoal=p=>{if(p.open===undefined)p.open=p.name==='Emergency fund';if(p.by===undefined)p.by=0;if(p.kp===undefined)p.kp=p.open?'':'6000';const a=amtOf(p.kp),need=a&&p.by?Math.ceil(a/p.by/10)*10:0;
+ return `<div class="h2">Add a goal</div><div class="row wrap" style="margin:10px 0">${['Emergency fund','Trip','Laptop','Phone','Bike','Course'].map(n=>`<button class="chip ${p.name===n?'on':''}" data-a="gname|${n}">${n}</button>`).join('')}</div>
+ <div class="cap" style="margin:6px 0 6px">Amount (optional)</div><div class="row wrap"><button class="chip ${p.open?'on':''}" data-a="gopen|1">No set amount</button><button class="chip ${p.open?'':'on'}" data-a="gopen|0">Set an amount</button></div>
+ ${p.open?`<div class="sub" style="margin:10px 0">${p.name==='Emergency fund'?`It just grows. A common target is about 3 months of spending, ${money(efTarget())}.`:'It just grows. You can set an amount later.'}</div>`:`<div class="field" style="font-size:30px;margin-top:10px">₹ ${esc(p.kp||'0')}</div><div class="cap" style="margin:12px 0 6px">By when (optional)</div><div class="row wrap">${[[0,'No date'],[6,'6 months'],[12,'1 year'],[24,'2 years']].map(o=>`<button class="chip ${p.by===o[0]?'on':''}" data-a="gby|${o[0]}">${o[1]}</button>`).join('')}</div><div class="sub" style="margin:10px 0">${need?`Save about ${money(need)} a month to get there.`:'No date, so it takes what is left.'}</div>${keypad('kp')}`}
+ <div style="height:8px"></div><button class="btn ${p.open||a?'':'d'}" data-a="${p.open||a?'goaladd':'x'}">Add goal</button>`};
+H.gopen=a=>{const p=UI.sheet.p;p._set=true;p.open=a[0]==='1';if(!p.open&&!p.kp)p.kp=p.name==='Emergency fund'?String(efTarget()):'6000'};
+{H.gname=a=>{const p=UI.sheet.p;p.name=a[0];if(!p._set)p.open=a[0]==='Emergency fund'}}
+H.goaladd=()=>{const p=UI.sheet.p,t=p.open?0:amtOf(p.kp);if(!p.open&&!t)return false;const n=S.goals.length;addGoal(S,{name:p.name,target:t,byMonths:t?(p.by||0):0});UI.sheet=null;say(`${p.name} added.`);if(S.goals.length>n&&S.free>=1){const g=S.goals[S.goals.length-1];openSheet('fundgoal',{id:g.id})};return false};
+{const _sg=SCREENS.goal;SCREENS.goal=p=>{const g=S.goals.find(x=>x.id===p.id);if(!g||g.target>0)return _sg(p);const col=goalCol(g);
+ return `<button class="back" data-a="back">‹ Savings</button><div class="title" style="font-size:30px">${esc(g.name)}</div><div class="sub" style="margin-top:6px">No set amount. It just grows.</div><div style="margin-top:20px"><span class="hero" style="font-size:42px">${money(g.saved)}</span><span class="sub" style="margin-left:8px">saved</span></div><div class="cap" style="margin:22px 0 8px">Added each month</div>${weeksBars((g.hist||[]).map(v=>Math.max(0,v)),col)}<div class="row sp sm" style="margin:8px 0 22px"><span>A year ago</span><span>This month</span></div><div class="col" style="gap:10px"><button class="btn" data-a="movefrom|${g.id}">Add money</button><button class="btn q" data-a="sheet|goaledit|${J({id:g.id})}">Edit</button></div>`}}
 
 /* ===== control panel ===== */
 function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,0).getTime(),label:'Allowance',amt:S.p.income,note:''}];if(S.p.six)seedSix();else if(S.p.W>0){S.planSet=true;S.cats.forEach(c=>c.full=c.amt);S.bufFull=S.bufAmt;S.firstDay=new Date(S.now.getTime()-S.p.weeks*7*DAY)}resetUI();window._celeLock=false;render();fitPhone()}

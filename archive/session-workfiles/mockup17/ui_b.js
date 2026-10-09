@@ -101,8 +101,8 @@ H.mtab=a=>{const d=UI.flow.d;d.tab=a[0];d.toK=null;d.to=null};
 H.mto=a=>{const d=UI.flow.d;const t=moveTiles(d).find(x=>x.k===a[0]);d.toK=a[0];d.to=t.t};
 H.mdo=()=>{const F=UI.flow,d=F.d;const src=d.from;const have=src.type==='free'?S.free:S.goals.find(g=>g.id===src.id).saved;const amt=Math.min(amtOf(d.kp),have);const before={};S.goals.forEach(g=>before[g.id]=goalEta(g));
  const got=moveMoney(S,src,d.to,amt);const lines=[];
- if(src.type==='goal'){const g=S.goals.find(x=>x.id===src.id);lines.push(`${g.name} is now ${Math.round(g.saved/g.target*100)}% there.`)}
- if(d.to.type==='goal'){const g=S.goals.find(x=>x.id===d.to.id);lines.push(`${g.name} is now ${Math.round(g.saved/g.target*100)}% there.`)}
+ if(src.type==='goal'){const g=S.goals.find(x=>x.id===src.id);lines.push(gThere(g))}
+ if(d.to.type==='goal'){const g=S.goals.find(x=>x.id===d.to.id);lines.push(gThere(g))}
  if(d.to.type==='cat')lines.push(`${labelOf(S,d.to)} gets ${money(got)} more this week.`);if(d.to.type==='buffer')lines.push(`Your buffer is ${money(got)} bigger this week.`);
  d.res={got,toName:labelOf2(S,d.to),lines};F.step=1;setTimeout(checkCele,30)};
 /* ===== INSIGHTS ===== */

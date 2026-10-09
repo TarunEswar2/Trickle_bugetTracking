@@ -177,7 +177,7 @@ function removeTxn(S,id){const t=S.txns.find(x=>x.id===id);if(!t)return;if(t.kin
  if(t.src&&t.src.buffer)S.bufLeft=Math.min(S.bufAmt,S.bufLeft+t.src.buffer);S.txns=S.txns.filter(x=>x.id!==id);S.unsorted=S.unsorted.filter(x=>x!==id);logE(S,`Removed ${t.payee}`)}
 function previewCascade(S,amt,target){const T={cats:JSON.parse(JSON.stringify(S.cats)),bills:JSON.parse(JSON.stringify(S.bills)),goals:JSON.parse(JSON.stringify(S.goals)),free:S.free,bufLeft:S.bufLeft};return cascade(T,amt,target)}
 function targetLeft(S,t){if(t.type==='cat')return S.cats.find(c=>c.id===t.id).left;if(t.type==='goal')return S.goals.find(g=>g.id===t.id).saved;if(t.type==='fixed')return S.bills.find(b=>b.id===t.id).reserve;if(t.type==='free')return S.free;return 0}
-function targetBase(S,t){if(t.type==='cat')return S.cats.find(c=>c.id===t.id).amt;if(t.type==='goal')return S.goals.find(g=>g.id===t.id).target;if(t.type==='fixed')return S.bills.find(b=>b.id===t.id).amt;return 1}
+function targetBase(S,t){if(t.type==='cat')return S.cats.find(c=>c.id===t.id).amt;if(t.type==='goal')return S.goals.find(g=>g.id===t.id).target||1;if(t.type==='fixed')return S.bills.find(b=>b.id===t.id).amt;return 1}
 
 function applyPending(S,p,{to,goalIds}){const un=p.un;if(un>0){if(to==='savings'){const ids=(goalIds&&goalIds.length?goalIds:S.goals.filter(g=>g.state!=='done').map(g=>g.id));if(!ids.length)S.free+=un;else{const share=Math.floor(un/ids.length);let given=0;ids.forEach((id,i)=>{const g=S.goals.find(x=>x.id===id);const a=i===ids.length-1?un-given:share;g.saved+=a;g.hist[11]=(g.hist[11]||0)+a;given+=a})}}
  else{const n=S.cats.length+1;const share=Math.floor(un/n);let g2=0;S.cats.forEach(c=>{c.left+=share;g2+=share});S.bufLeft+=un-g2}}
