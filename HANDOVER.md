@@ -1,5 +1,8 @@
 # Trickle — handover
 
+## v17.2 (9 Oct): UPI linking retired (Tarun, V17-17)
+No link step in onboarding, no "came in from" credits, no payment detection, no account linking in Settings. Code: `mockup17/ui17c.js` plus panel and test edits. The open question (1) below is closed.
+
 ## v17.1 (9 Oct, second round of feedback)
 Home: swipeable insight and recommendation cards (tap opens the graph), Log expense plus Add money buttons. Tabs: Home, Spending, Savings (Money tab removed). Spending: compact categories, recent spends, subscriptions, limits. Month insight is a calendar. Time-of-day chart rebuilt. Widget logs a spend or adds money (amount, save %, duration). Decisions V17-9…V17-16, PROPOSED. Code: `mockup17/ui17b.js`. Tests pass; nothing tested with students.
 

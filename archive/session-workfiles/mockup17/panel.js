@@ -7,20 +7,12 @@ const EVENTS=()=>{const c0=S.cats[0],big=S.cats.find(c=>c.name==='Outings')||S.c
   ['+3 days',()=>{advanceDays(S,3);say('Three days later.');maybeWeek();planTick();maybeOfferPlan();maybeOfferSub()}],
   ['Sunday 8 pm: week-end pop-up',()=>{const sun=new Date(startOfWeek(S.now).getTime()+6*DAY+20*36e5);if(S.now<sun)S.now=sun;openWeekPop();UI.flow=null;UI.sheet=null}],
   ['New week starts (Monday)',()=>{const n=nextMonday(S.now);const days=Math.round((n-S.now)/DAY);advanceDays(S,Math.max(1,days));say('A new week began.');maybeWeek()}]]},
- {h:'Payments seen on your link',items:[
-  [upi?'Known place: ₹60 at '+(S.txns.find(t=>t.kind==='cat')?.payee||'Tea Stall'):'(manual mode: nothing is seen)',()=>{if(!upi)return say('You track by hand, so Trickle sees nothing. Use Pay → Add a spend.');const t=S.txns.find(x=>x.kind==='cat');if(!t)return say('No known places yet.');S.memory[t.payee]=S.memory[t.payee]||t.ref;detectPayment(S,t.payee,60);say(`Seen: ₹60 at ${t.payee}, filed automatically.`)}],
-  ['New place: ₹450 at Mystery Cafe',()=>{if(!upi)return say('You track by hand, so Trickle sees nothing.');detectPayment(S,'Mystery Cafe',450);say('A payment needs a category.')}],
-  ['New place: ₹180 at Blue Tokai',()=>{if(!upi)return say('You track by hand, so Trickle sees nothing.');detectPayment(S,'Blue Tokai',180);say('A payment needs a category.')}]]},
  {h:'Spending',items:[
   ['Small spend: ₹60 in '+c0.name,()=>{doPay(S,{amt:60,target:{type:'cat',id:c0.id},payee:'Quick spend'});say('₹60 spent.')}],
   ['Overspend: ₹312 in '+big.name+' (uses the allowance)',()=>{doPay(S,{amt:312,target:{type:'cat',id:big.id},payee:'Big night'});say('₹312 spent.')}],
   ['Big overspend: ₹'+Math.round(S.flexW*.9)+' in '+big.name+' (reaches savings)',()=>{doPay(S,{amt:Math.round(S.flexW*.9),target:{type:'cat',id:big.id},payee:'Big night'});say('Savings were touched.')}],
   ['Use up the week (allowance to 0)',()=>{S.bufLeft=0;say('Nothing left this week.')}]]},
- {h:'Money in',items:[
-  ['A ₹'+S.p.income.toLocaleString('en-IN')+' credit arrives (unsorted)',()=>{addCredit(S,'Allowance transfer',S.p.income);say('A credit is waiting in Income.')}],
-  ['A friend repays ₹200 (unsorted)',()=>{addCredit(S,'Rahul',200);say('A credit is waiting in Income.')}]]},
  {h:'Bills',items:[
-  ['A repeat payment looks like a subscription',()=>{const t=detectPayment(S,'Netflix',199);t.t=S.now.getTime()-30*DAY;detectPayment(S,'Netflix',199);maybeOfferSub()}],
   ['A bill is due tomorrow',()=>{const b=S.bills[0];if(!b)return say('This profile has no fixed bills.');b.nextDue=new Date(S.now.getTime()+DAY);b.dueNow=false;say(b.name+' is due tomorrow.')}],
   ['A bill is due now (unpaid)',()=>{const b=S.bills[0];if(!b)return say('This profile has no fixed bills.');b.dueNow=true;b.nextDue=new Date(S.now);say(b.name+' is due.')}]]},
  {h:'Limits (v16)',items:[
@@ -40,7 +32,7 @@ const EVENTS=()=>{const c0=S.cats[0],big=S.cats.find(c=>c.name==='Outings')||S.c
   ['Heads-ups on',()=>{S.nudgeOff=false;say('On.')}]]},
  {h:'Scan & pay helper (Test B)',items:[['Log expense opens a scanner',()=>{window.HOMEBTN='scan';go('home')}],['Log expense goes straight to by hand',()=>{window.HOMEBTN='log';go('home')}],['Platform: Android',()=>{window.PLATFORM='android';go('home')}],['Platform: iOS (no scan)',()=>{window.PLATFORM='ios';go('home')}]]},
  {h:'First-time tips',items:[['Show every tip again',()=>{Object.keys(TS).forEach(k=>delete TS[k]);say('Tips will show again.')}],['Turn tips on or off',()=>{window.TIPS=!window.TIPS;say(window.TIPS?'Tips on.':'Tips off.')}]]},
- {h:'Pop-ups (always skippable)',items:[['Link UPI?',()=>openAsk('link')],['Add a spend?',()=>openAsk('add')],['Payments need a place',()=>openAsk('sort')],['Make a plan?',()=>openAsk('plan')],['Add your income?',()=>openAsk('income')],['After a week: here is how you spend',()=>{if(S.firstDay){S.now=new Date(S.firstDay.getTime()+8*DAY)}openAsk('planoffer')}],['Add a goal?',()=>openAsk('goal')],['Remind about bills?',()=>openAsk('notif')],['Add a PIN?',()=>openAsk('pin')],['Bring in older spends?',()=>openAsk('import')],['Last week recap (no budget)',()=>openAsk('recap')]]},
+ {h:'Pop-ups (always skippable)',items:[['Add a spend?',()=>openAsk('add')],['Payments need a place',()=>openAsk('sort')],['Make a plan?',()=>openAsk('plan')],['Add your income?',()=>openAsk('income')],['After a week: here is how you spend',()=>{if(S.firstDay){S.now=new Date(S.firstDay.getTime()+8*DAY)}openAsk('planoffer')}],['Add a goal?',()=>openAsk('goal')],['Remind about bills?',()=>openAsk('notif')],['Add a PIN?',()=>openAsk('pin')],['Bring in older spends?',()=>openAsk('import')],['Last week recap (no budget)',()=>openAsk('recap')]]},
  {h:'Goals',items:[
   ['A goal reaches its target',()=>{if(!g0)return say('No active goal.');g0.saved=g0.target;g0.hist[11]=(g0.hist[11]||0)+Math.max(0,g0.target-g0.saved);reachedCheck(S);logE(S,g0.name+' reached its target')}],
   ['Add ₹500 to a goal',()=>{if(!g0)return say('No active goal.');g0.saved=Math.min(g0.target,g0.saved+500);g0.hist[11]=(g0.hist[11]||0)+500;reachedCheck(S);say('₹500 added to '+g0.name+'.')}]]}

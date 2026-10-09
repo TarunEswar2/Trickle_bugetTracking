@@ -15,7 +15,7 @@ The project was reset in v14 to a facts-first, one-decision-at-a-time process.
 ## Hard rules
 - **No SMS tracking, anywhere.** Never mention or simulate SMS parsing. Tracking is manual entry
   and, since v16.3, a **scan-and-hand-off helper** (scan the shop QR in Trickle, pay in your own UPI app, V16-31/35/36).
-  Direct UPI account linkage still exists in the mockup; whether to retire it is an open question for Tarun.
+  Direct UPI account linkage is retired (V17-17, Tarun, 9 Oct): Trickle never reads a bank or UPI account, and nothing is detected; money in is added by the user.
 - **All data stays on the device** (V16-37). No analytics, no sync, no server that learns shops or spends.
   Tag shops on the device (V16-39 proposed). A shop-to-tag server was Tarun's idea; the privacy cost is in `docs/claude/upi_intent_helper.md`.
 - **Tarun makes every decision.** Draw options, ask, log the answer in
@@ -64,6 +64,6 @@ v15 (5 Oct 2026): audit in `docs/claude/v15_audit.md`, spec in `docs/claude/v15_
 - **Model (Tarun):** income splits into saving and a weekly allowance; every spend has a category as a tag; limits optional per category or shop; nothing is taken from other categories; categories are not the centre.
 - **Pay flow (Tarun):** Log expense opens a QR scanner; amount only if the QR has none; one combined screen (category chips, bar, notes); Open UPI app; the spend is logged at hand-off; "Didn't pay? Remove" on the result screen. No result is read from the UPI app.
 - **Status labels:** decisions are PROPOSED until Tarun confirms; Tarun's own words are CONFIRMED. Every new decision needs ID, domain, evidence, validation gate, status.
-- **Open for Tarun:** retire "Link UPI" and payment detection? Shop tagging: his server idea or on-device rules (V16-39)? Make Scan the default Home flow everywhere? Thresholds for heads-ups and limit suggestions (mine).
+- **Open for Tarun:** Shop tagging: his server idea or on-device rules (V16-39)? Make Scan the default Home flow everywhere? Thresholds for heads-ups and limit suggestions (mine).
 - **Next:** build and run the UPI spike (`docs/claude/upi_spike_spec.md`); then Tests A, B, C on v16 (RESEARCH.md Part 13.4 and Part 15.6); backup and restore design; Figma is still at the v14 look (push only when Tarun asks).
 - **Do not:** claim anything is tested with students; claim UPI behaviour that the spike has not shown; add features before the spike and tests report.
