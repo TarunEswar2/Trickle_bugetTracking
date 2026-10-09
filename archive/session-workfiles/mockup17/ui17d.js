@@ -48,6 +48,7 @@ HI.gnametxt=(a,el)=>{UI.sheet.p.name=el.value;return false};
 {const _ga2=H.goaladd;H.goaladd=()=>{const p=UI.sheet.p;p.name=(p.name||'').trim();if(!p.name){say('Give the goal a name.');return false}return _ga2()}}
 /* edit: name, amount and date can all change later */
 SHEETS.goaledit=p=>{const g=S.goals.find(x=>x.id===p.id);if(!g)return '';if(p.name===undefined){p.name=g.name;p.open=!(g.target>0);p.kp=g.target>0?String(g.target):'';p.by=g.byMonths||0}
+ if(p.tgt){p.open=false;if(!p.kp)p.kp='6000';p.tgt=0}
  const a=amtOf(p.kp),need=a&&p.by?Math.ceil(a/p.by/10)*10:0;
  return `<div class="h2">Edit goal</div><input class="field" style="width:100%;font-size:18px;margin:10px 0 8px" value="${esc(p.name)}" data-i="gnametxt" maxlength="24" autocomplete="off">
  <div class="cap" style="margin:6px 0 6px">Amount (optional)</div><div class="row wrap"><button class="chip ${p.open?'on':''}" data-a="geopen|1">No set amount</button><button class="chip ${p.open?'':'on'}" data-a="geopen|0">Set an amount</button></div>
