@@ -1,5 +1,5 @@
 /* ===== v16.2: calmer visuals. Savings as a story (it grows), goals with milestones, gentle motion ===== */
-const GOALCOLS=['#8FA3B8','#8FA3B8','#86B9A0','#D3AB62','#D2A98A'];
+const GOALCOLS=['#7CC8FF','#B79CFF','#5FE3B8','#FFD27A','#FF9EC4'];
 const goalCol=g=>GOALCOLS[Math.max(0,S.goals.indexOf(g))%GOALCOLS.length];
 
 /* ---------- savings over the last 12 months ---------- */
@@ -16,7 +16,7 @@ function mnSav(){const act=S.goals.filter(g=>g.state!=='done');
  if(!act.length&&S.free<=0)return `<div class="title" style="margin-top:6px">Saving for something?</div><div class="sub" style="margin:8px 0 22px">Name it. Pick an amount. Watch it grow.</div><button class="btn" data-a="v15goal">Add a goal</button>`;
  const {ser,M,T}=savingsSeries(),grew=ser.filter((v,i)=>i&&v!==ser[i-1]).length>=2,inGoals=act.reduce((a,g)=>a+Math.min(g.saved,g.target),0),free=Math.max(0,S.free),thisM=M[11];
  return `<div><span class="hero" style="font-size:46px">${money(T)}</span><div class="sub" style="margin-top:6px;font-size:16px">saved${thisM>0?` · up ${money(thisM)} this month`:''}</div></div>
- ${grew?`<div style="margin:20px 0 4px">${areaSvg(ser,'#86B9A0')}</div>`:''}
+ ${grew?`<div style="margin:20px 0 4px">${areaSvg(ser,'#7CE7C4')}</div>`:''}
  <div class="sm" style="margin:${grew?'4px':'14px'} 2px 18px">${money(inGoals)} in goals${free>0?` · ${money(free)} free`:''}</div>
  <div class="col" style="gap:10px">${act.map(g=>{const col=goalCol(g),p=Math.min(1,g.saved/g.target);return `<button class="li gc" style="--glow:${col}66" data-a="push|goal|${J({id:g.id})}"><span class="row sp" style="margin-bottom:12px"><span class="n" style="flex:none;font-size:16px"><i style="width:10px;height:10px;border-radius:50%;background:${col};display:inline-block;margin-right:10px;box-shadow:0 0 10px ${col}88"></i>${esc(g.name)}</span><span class="pct" style="color:${col}">${Math.round(p*100)}%</span></span>${battery(g.saved,g.target,{col,sm:true,ms:true})}<span class="row sp sm" style="margin-top:10px"><span>${money(g.saved)} of ${money(g.target)}</span><span>${g.state==='reached'?'Reached':'Ready '+goalEta(g)}</span></span></button>`}).join('')}
  <button class="btn q" data-a="v15goal">+ Add a goal</button></div>`}

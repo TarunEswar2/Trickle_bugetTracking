@@ -7,7 +7,7 @@ window.TABS=[['home','Home'],['spending','Spending'],['savings','Savings']];
 window.TABALIAS={income:['savings'],money:['savings'],insights:['spending']};
 
 /* ---------- Home: swipeable insight cards ---------- */
-const mini17=(vals,sel)=>{const mx=Math.max(1,...vals);return `<span class="mini17">${vals.map((v,i)=>`<i style="height:${Math.max(3,Math.round(v/mx*34))}px;background:${i===sel?'#86B9A0':'#4A525C'}"></i>`).join('')}</span>`};
+const mini17=(vals,sel)=>{const mx=Math.max(1,...vals);return `<span class="mini17">${vals.map((v,i)=>`<i style="height:${Math.max(3,Math.round(v/mx*34))}px;background:${i===sel?'#6FD3AE':'#4A525C'}"></i>`).join('')}</span>`};
 function cards17(){const out=[];
  suggestions().slice(0,2).forEach(s=>out.push({tag:'Limit',t:s.short,sub:s.text,a:'limsug|'+s.key,cta:'Set a limit'}));
  const n=nextAct();if(n&&!n.low&&!n.html&&n.c!=='plan')out.push({tag:'Now',t:n.t,sub:'',a:n.a,cta:'Open',hot:n.c==='amber'});
@@ -30,7 +30,7 @@ H.addmoney17=()=>{openFlow('inc',{step:0,kp:''});return false};
 
 /* ---------- charts: bars with a baseline, an average line and aligned labels ---------- */
 function barsChart(vals,labels,sel,o){o=o||{};const n=vals.length,mx=Math.max(1,...vals),H0=o.h||150,avg=vals.reduce((a,v)=>a+v,0)/n;
- const cols=vals.map((v,i)=>{const h=v>0?Math.max(6,Math.round(v/mx*H0)):2,on=i===sel;return `<button class="c17" data-a="inssel|${i}" style="height:${H0}px"><i style="height:${h}px;background:${on?'#86B9A0':v>0?'#D2A98A':'#2A313A'}"></i></button>`}).join('');
+ const cols=vals.map((v,i)=>{const h=v>0?Math.max(6,Math.round(v/mx*H0)):2,on=i===sel;return `<button class="c17" data-a="inssel|${i}" style="height:${H0}px"><i style="height:${h}px;background:${on?'#6FD3AE':v>0?'#E9A15C':'#2A313A'}"></i></button>`}).join('');
  const labs=labels.map((l,i)=>l?`<span class="${o.today===i?'td':''}" style="left:${(o.edge?i/n:(i+.5)/n)*100}%;${o.edge?'':'transform:translateX(-50%)'}">${l}</span>`:'').join('');
  return `<div class="ch17"><div class="plot" style="height:${H0}px;grid-template-columns:repeat(${n},1fr)">${cols}<u style="bottom:${Math.round(avg/mx*H0)}px"></u></div><div class="axis">${labs}</div><div class="sm" style="margin-top:6px">Dashed line is your average.</div></div>`}
 
@@ -41,7 +41,7 @@ function monthCal(){const off=UI.mcOff||0,m0=new Date(S.now.getFullYear(),S.now.
  const sel=UI.mcSel!=null&&UI.mcSel>=1&&UI.mcSel<=dim?UI.mcSel:(pk||null);
  let cells='';for(let i=0;i<first;i++)cells+='<i></i>';
  for(let n=1;n<=dim;n++){const v=by[key(n)]||0,fut=new Date(m0.getFullYear(),m0.getMonth(),n).getTime()>tdy.getTime(),isT=new Date(m0.getFullYear(),m0.getMonth(),n).getTime()===tdy.getTime();
-  const a=v?(.16+.7*v/mx):0;cells+=`<button class="cl17${sel===n?' sel':''}${isT?' td':''}${fut?' fut':''}" style="${v?`background:rgba(210,169,138,${a.toFixed(2)})`:''}" data-a="${fut?'x':'mcsel|'+n}">${n}</button>`}
+  const a=v?(.16+.7*v/mx):0;cells+=`<button class="cl17${sel===n?' sel':''}${isT?' td':''}${fut?' fut':''}" style="${v?`background:rgba(233,161,92,${a.toFixed(2)})`:''}" data-a="${fut?'x':'mcsel|'+n}">${n}</button>`}
  const day=new Date(m0.getFullYear(),m0.getMonth(),sel||1),list=S.txns.filter(t=>isSp(t)&&new Date(t.t).toDateString()===day.toDateString());
  const dtxt=sel?`<div class="row sp" style="margin-top:14px;align-items:baseline"><b>${fmtDay(day)}</b><span class="hero" style="font-size:26px">${money(by[key(sel)]||0)}</span></div><div class="sm" style="margin-top:4px">${list.length?list.slice(0,3).map(t=>esc(t.payee)+' '+money(t.amt)).join(' · ')+(list.length>3?` · ${list.length-3} more`:''):'No spends.'}</div>`:'';
  return `<div class="row sp" style="margin:14px 0 8px;align-items:center"><button class="chip" style="${off<=-3?'opacity:.3;pointer-events:none':''}" data-a="mcnav|-1">‹</button><b>${m0.toLocaleDateString('en-IN',{month:'long',year:'numeric'})}</b><button class="chip" style="${off>=0?'opacity:.3;pointer-events:none':''}" data-a="mcnav|1">›</button></div>

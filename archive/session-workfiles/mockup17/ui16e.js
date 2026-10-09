@@ -5,7 +5,7 @@ const ENDKINDS=[['none','Keeps going'],['cancel','I plan to cancel'],['trial','F
 function endDefault(kind,sf){const t=day0();if(kind==='trial')return t+7*DAY;if(kind==='term')return t+180*DAY;if(kind==='cancel')return Math.max(t,(sf.due||t+7*DAY)-DAY);return t}
 function calEnd(sf){const t0=day0(),cm=sf.cm2||0,m0=new Date(new Date(t0).getFullYear(),new Date(t0).getMonth()+cm,1),first=(m0.getDay()+6)%7,dim=new Date(m0.getFullYear(),m0.getMonth()+1,0).getDate();let cells='';for(let i=0;i<first;i++)cells+='<i></i>';
  for(let n=1;n<=dim;n++){const ts=new Date(m0.getFullYear(),m0.getMonth(),n).getTime(),dis=ts<t0||ts>t0+900*DAY,sel=ts===sf.endDate,today=ts===t0;
-  const st=`height:36px;border:0;border-radius:12px;font:inherit;font-size:14px;font-weight:${sel||today?700:500};color:${dis?'#3b4350':sel?'#04251D':'var(--ink)'};background:${sel?'linear-gradient(135deg,#86B9A0,#86B9A0)':'transparent'};${today&&!sel?'box-shadow:inset 0 0 0 1.5px #86B9A0;':''}`;
+  const st=`height:36px;border:0;border-radius:12px;font:inherit;font-size:14px;font-weight:${sel||today?700:500};color:${dis?'#3b4350':sel?'#04251D':'var(--ink)'};background:${sel?'linear-gradient(135deg,#A9F4DF,#4FC9A8)':'transparent'};${today&&!sel?'box-shadow:inset 0 0 0 1.5px #5FE3B8;':''}`;
   cells+=dis?`<span style="${st};display:flex;align-items:center;justify-content:center">${n}</span>`:`<button style="${st}" data-a="sfday2|${ts}">${n}</button>`}
  return `<div class="card" style="padding:10px 8px"><div class="row sp" style="margin:0 4px 6px"><button class="chip" style="${cm<=0?'opacity:.3;pointer-events:none':''}" data-a="sfmon2|-1">‹</button><b>${m0.toLocaleDateString('en-IN',{month:'long',year:'numeric'})}</b><button class="chip" data-a="sfmon2|1">›</button></div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:12px;color:var(--ink3);margin-bottom:4px">${DOW.map(d=>`<span>${d[0]}</span>`).join('')}</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px">${cells}</div></div>`}
 function endForm(sf){const k=sf.endKind||'none',lab={cancel:'Cancel by',trial:'Trial ends on',term:'Valid until'}[k],note={cancel:'Trickle reminds you a few days before. Cancel it yourself in the app or in UPI autopay.',trial:`Nothing is set aside until it ends. Then ${money(amtOf(sf.amt))} each time.`,term:'Payments stop after this date.'}[k];
@@ -50,7 +50,7 @@ function quickChips(){const lim=S.now.getTime()-60*DAY,by={};S.txns.filter(t=>t.
  if(L.length<3){const used=new Set(L.map(x=>x.ref));S.cats.forEach(c=>{if(L.length<3&&!used.has(c.id)){const l=S.txns.filter(t=>t.kind==='cat'&&t.ref===c.id);if(l.length){L.push({payee:c.name,amt:Math.max(5,r5(l.reduce((a,t)=>a+t.amt,0)/l.length)),ref:c.id,n:0});used.add(c.id)}}})}return L}
 const shortN=p=>{const w=p.split(' ')[0];return w.length>8?w.slice(0,7)+'…':w};
 function topCats(){const lim=S.now.getTime()-60*DAY,m={};S.txns.filter(t=>t.kind==='cat'&&t.t>=lim).forEach(t=>{m[t.ref]=(m[t.ref]||0)+1});return S.cats.map(c=>c.id).sort((a,b)=>(m[b]||0)-(m[a]||0)).slice(0,5)}
-POPUPS.homescreen=P=>{const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hide=UI.hsHide,am=v=>hide?'₹•••':money(v),col=(typeof paceHex==='function')?paceHex():'#86B9A0',add=UI.hsAdd,dl=UI.hsDelta;
+POPUPS.homescreen=P=>{const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hide=UI.hsHide,am=v=>hide?'₹•••':money(v),col=(typeof paceHex==='function')?paceHex():'#5FE3B8',add=UI.hsAdd,dl=UI.hsDelta;
  const eye=`<button class="hs-eye" data-a="hseye">${hide?'Show amounts':'Hide amounts'}</button>`;
  let wid;
  if(add){const amt=amtOf(add.kp),after=Math.max(0,L-amt),cats=topCats(),sel=add.cat,warn=sel&&amt?limWarn(sel,'Quick add',amt):'';
@@ -69,7 +69,7 @@ POPUPS.homescreen=P=>{const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hide=UI.
   <div class="hs-row">${chips.map((c,i)=>`<button class="hs-btn" data-a="hschip|${i}"><b>${esc(shortN(c.payee))}</b><i>${hide?'':money(c.amt)}</i></button>`).join('')}<button class="hs-btn pri" style="flex:.8" data-a="hsadd">+ Add</button></div></div>`}
  return `<div class="hs"><div class="hs-top"><span>${fmtTime(S.now)}</span><span>5G ▮</span></div>
  ${add?'':`<div class="hs-clock"><b>${fmtTime(S.now)}</b><span>${fmtDay(S.now)}</span></div>`}${wid}
- ${add?'':`<div class="hs-small"><span class="hero" style="font-size:26px">${am(L)}</span><span class="sub"> left</span></div><div class="hs-apps">${['Phone','Messages','Camera','Photos'].map((n,i)=>`<span><i style="background:#2A313A"></i>${n}</span>`).join('')}</div>`}
+ ${add?'':`<div class="hs-small"><span class="hero" style="font-size:26px">${am(L)}</span><span class="sub"> left</span></div><div class="hs-apps">${['Phone','Messages','Camera','Photos'].map((n,i)=>`<span><i style="background:hsl(${i*43+210},35%,38%)"></i>${n}</span>`).join('')}</div>`}
  <button class="hs-close" data-a="hsclose">Leave the home screen</button><div class="sm" style="text-align:center;margin-top:6px">Simulated Android home screen. The widget never opens Trickle.</div></div>`};
 const hsReset=()=>{UI.hsAdd=null;UI.hsLast=null;UI.hsDelta=0};
 H.hseye=()=>{UI.hsHide=!UI.hsHide};

@@ -11,7 +11,7 @@ function fromOk([L,a,b]){const l=Math.pow(L+.3963377774*a+.2158037573*b,3),m=Mat
 function shiftL(h,dl,dc=0){const [L,a,b]=toOk(h);const C=Math.hypot(a,b),H=Math.atan2(b,a);const C2=Math.max(0,C+dc);return fromOk([Math.min(1,Math.max(0,L+dl)),C2*Math.cos(H),C2*Math.sin(H)])}
 const _dc={};const depth=h=>_dc[h]||(_dc[h]=[shiftL(h,.10,-.015),shiftL(h,-.11,0)]);
 const boxBg=h=>h;
-const BLOB={blue:{b:['#1d2b6e','#2c5c9a','#1f6f6a'],t:['#2c5c9a','#1f6f6a','#1d2b6e']},green:{b:['#0b4d3a','#6E9E87','#86B9A0'],t:['#0b4d3a','#6E9E87','#86B9A0']},amber:{b:['#5a3a12','#b0742a','#D3AB62'],t:['#5a3a12','#b0742a','#D3AB62']},violet:{b:['#262a78','#5a46a8','#8FA3B8'],t:['#262a78','#5a46a8','#8FA3B8']},teal:{b:['#0b4047','#1a8585','#86B9A0'],t:['#0b4047','#1a8585','#86B9A0']},rose:{b:['#4a2040','#9a4570','#D2A98A'],t:['#4a2040','#9a4570','#D2A98A']}};
+const BLOB={blue:{b:['#1d2b6e','#2c5c9a','#1f6f6a'],t:['#2c5c9a','#1f6f6a','#1d2b6e']},green:{b:['#0b4d3a','#1b8a6a','#3fbf9a'],t:['#0b4d3a','#1b8a6a','#3fbf9a']},amber:{b:['#5a3a12','#b0742a','#e0a050'],t:['#5a3a12','#b0742a','#e0a050']},violet:{b:['#262a78','#5a46a8','#9a82e0'],t:['#262a78','#5a46a8','#9a82e0']},teal:{b:['#0b4047','#1a8585','#52c9a8'],t:['#0b4047','#1a8585','#52c9a8']},rose:{b:['#4a2040','#9a4570','#e07aa8'],t:['#4a2040','#9a4570','#e07aa8']}};
 const TABGLOW={income:'blue',spending:'rose',savings:'teal',insights:'violet'};
 const FLOWGLOW={pay:'blue',inc:'blue',oneoff:'blue',money:'blue',move:'teal',subadd:'violet',incend:'blue'};
 function blobs(kind,pos,op){return "";const c=(BLOB[kind]||BLOB.blue)[pos==='top'?'t':'b'];const o=op==null?.9:op;const y=pos==='top';
@@ -19,7 +19,7 @@ function blobs(kind,pos,op){return "";const c=(BLOB[kind]||BLOB.blue)[pos==='top
 function setGlow(kind){const g=document.getElementById('glow');if(!g)return;const k=kind||'';if(g.dataset.k!==k){g.dataset.k=k;g.innerHTML=k?blobs(k,'bottom',.55):''}}
 const groundCss="#0F1215";
 const meshCss=s=>{const [tl,tr,r,br,base]=s;return `radial-gradient(60% 60% at 18% 24%,rgba(255,255,255,.16),transparent 62%),linear-gradient(180deg,transparent 46%,${base} 100%),radial-gradient(55% 55% at 100% 56%,${r},transparent 72%),radial-gradient(60% 60% at 100% 0%,${tr},transparent 72%),radial-gradient(60% 60% at 0% 0%,${tl},transparent 72%),radial-gradient(60% 60% at 88% 100%,${br},transparent 72%),linear-gradient(90deg,${tl},${tr})`};
-const MESH_GOAL=['#F6FC5A','#86B9A0','#42F5E1','#86B9A0','#0E1C17'],MESH_PAYDAY=['#FCDC45','#F6FC5A','#86B9A0','#86B9A0','#10201A'],MESH_DUSK=['#8FA3B8','#8FA3B8','#6C6FD1','#3E4B8A','#101322'];
+const MESH_GOAL=['#F6FC5A','#3CEFA3','#42F5E1','#00A55F','#0E1C17'],MESH_PAYDAY=['#FCDC45','#F6FC5A','#3CEFA3','#00A55F','#10201A'],MESH_DUSK=['#B48CFF','#5AA9FF','#6C6FD1','#3E4B8A','#101322'];
 function gridHtml(level,hex,ghost,gcol,o){o=o||{};let s='<div class="lg" '+(o.w?`style="width:${o.w}px;margin:0 auto"`:'')+'>';level=Math.max(0,Math.min(100,Math.round(level)));ghost=Math.max(0,Math.min(100-level,Math.round(ghost||0)));
  for(let i=0;i<100;i++){const row=Math.floor(i/10),c=i%10,k=(9-row)*10+c;
   if(k<level){const top=k>=level-10;s+=`<i style="background:${boxBg(hex)};box-shadow:${top?'0 0 14px '+hex+'66,':''}inset 0 1px 0 rgba(255,255,255,.35)"></i>`}
@@ -37,7 +37,7 @@ function segRing(goals,sz,center){const act=goals.filter(g=>g.state!=='done');co
  act.forEach((g,i)=>{const share=g.target/tot,gap=act.length>1?.014:0,len=Math.max(.001,share-gap),frac=Math.min(1,g.saved/g.target);const col=GG[i%3],[a,b]=depth(col);
   o+=`<defs><linearGradient id="sg${i}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><circle cx="${sz/2}" cy="${sz/2}" r="${r}" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="22" stroke-dasharray="${len*C} ${C}" stroke-dashoffset="${-start*C}" transform="rotate(-90 ${sz/2} ${sz/2})"/><circle cx="${sz/2}" cy="${sz/2}" r="${r}" fill="none" stroke="url(#sg${i})" stroke-width="22" stroke-dasharray="${Math.max(0,len*frac*C)} ${C}" stroke-dashoffset="${-start*C}" transform="rotate(-90 ${sz/2} ${sz/2})"/>`;start+=share});
  return o+(center?`<text x="${sz/2}" y="${sz/2+10}" text-anchor="middle" fill="#F5F7FA" style="font-family:var(--display);font-weight:800;font-size:40px">${center}</text>`:'')+'</svg>'}
-const wordLeft=(l,a)=>a<=0?'-':l<=0?'empty':l/a>.6?'plenty':l/a>.3?'some':'low';
+const wordLeft=(l,a)=>a<=0?'—':l<=0?'empty':l/a>.6?'plenty':l/a>.3?'some':'low';
 const fmtDay=d=>d.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
 const fmtTime=d=>d.toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit',hour12:true}).replace(' ','').toLowerCase().replace('am',' am').replace('pm',' pm');
 const DOW=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
