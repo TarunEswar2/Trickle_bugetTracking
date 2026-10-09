@@ -2535,6 +2535,32 @@ H.goaladd=()=>{const p=UI.sheet.p,t=p.open?0:amtOf(p.kp);if(!p.open&&!t)return f
 {const _sg=SCREENS.goal;SCREENS.goal=p=>{const g=S.goals.find(x=>x.id===p.id);if(!g||g.target>0)return _sg(p);const col=goalCol(g);
  return `<button class="back" data-a="back">‹ Savings</button><div class="title" style="font-size:30px">${esc(g.name)}</div><div class="sub" style="margin-top:6px">No set amount. It just grows.</div><div style="margin-top:20px"><span class="hero" style="font-size:42px">${money(g.saved)}</span><span class="sub" style="margin-left:8px">saved</span></div><div class="cap" style="margin:22px 0 8px">Added each month</div>${weeksBars((g.hist||[]).map(v=>Math.max(0,v)),col)}<div class="row sp sm" style="margin:8px 0 22px"><span>A year ago</span><span>This month</span></div><div class="col" style="gap:10px"><button class="btn" data-a="movefrom|${g.id}">Add money</button><button class="btn q" data-a="sheet|goaledit|${J({id:g.id})}">Edit</button></div>`}}
 
+/* ===== v17.7 (9 Oct): editable goal name and target; custom categories back on the pay screen; clearer first nudge ===== */
+HI.gnametxt=(a,el)=>{UI.sheet.p.name=el.value;return false};
+{const _as=SHEETS.addgoal;SHEETS.addgoal=p=>{let h=_as(p);
+  h=h.replace('<div class="cap" style="margin:6px 0 6px">Amount (optional)</div>',`<input class="field" style="width:100%;font-size:18px;margin:2px 0 8px" placeholder="Name your goal" value="${esc(p.name||'')}" data-i="gnametxt" maxlength="24" autocomplete="off"><div class="cap" style="margin:6px 0 6px">Amount (optional)</div>`);
+  return h.replace(/<div class="h2">Add a goal<\/div>/,'<div class="h2">Add a goal</div>')}}
+{const _ga2=H.goaladd;H.goaladd=()=>{const p=UI.sheet.p;p.name=(p.name||'').trim();if(!p.name){say('Give the goal a name.');return false}return _ga2()}}
+/* edit: name, amount and date can all change later */
+SHEETS.goaledit=p=>{const g=S.goals.find(x=>x.id===p.id);if(!g)return '';if(p.name===undefined){p.name=g.name;p.open=!(g.target>0);p.kp=g.target>0?String(g.target):'';p.by=g.byMonths||0}
+ const a=amtOf(p.kp),need=a&&p.by?Math.ceil(a/p.by/10)*10:0;
+ return `<div class="h2">Edit goal</div><input class="field" style="width:100%;font-size:18px;margin:10px 0 8px" value="${esc(p.name)}" data-i="gnametxt" maxlength="24" autocomplete="off">
+ <div class="cap" style="margin:6px 0 6px">Amount (optional)</div><div class="row wrap"><button class="chip ${p.open?'on':''}" data-a="geopen|1">No set amount</button><button class="chip ${p.open?'':'on'}" data-a="geopen|0">Set an amount</button></div>
+ ${p.open?'':`<div class="field" style="font-size:30px;margin-top:10px">₹ ${esc(p.kp||'0')}</div><div class="cap" style="margin:12px 0 6px">By when (optional)</div><div class="row wrap">${[[0,'No date'],[6,'6 months'],[12,'1 year'],[24,'2 years']].map(o=>`<button class="chip ${p.by===o[0]?'on':''}" data-a="geby|${o[0]}">${o[1]}</button>`).join('')}</div><div class="sub" style="margin:10px 0">${need?`Save about ${money(need)} a month to get there.`:''}</div>${keypad('kp')}`}
+ <div class="col" style="gap:8px;margin-top:12px"><button class="btn ${p.open||a?'':'d'}" data-a="${p.open||a?'gesave':'x'}">Save</button><button class="btn q" data-a="gdone|${g.id}">Mark done</button><button class="btn o" data-a="gdel|${g.id}">Delete goal</button><div class="sm">Deleting returns its money to free savings.</div></div>`};
+H.geopen=a=>{const p=UI.sheet.p;p.open=a[0]==='1';if(!p.open&&!p.kp)p.kp='6000'};
+H.geby=a=>{UI.sheet.p.by=+a[0]};
+H.gesave=()=>{const p=UI.sheet.p,g=S.goals.find(x=>x.id===p.id);if(!g)return false;const nm=(p.name||'').trim();if(!nm){say('Give the goal a name.');return false}g.name=nm;g.target=p.open?0:amtOf(p.kp);g.byMonths=g.target?(p.by||0):0;if(g.target>0&&g.saved<g.target&&g.state==='reached')g.state='active';reachedCheck(S);UI.sheet=null;say('Goal saved.');return false};
+/* the goal screen shows the open-goal "Set an amount" next to Edit through the same sheet; nothing else to change */
+/* pay screen: "+ New" opens the category search, where a new name can be created */
+{const _ap=applyPick;applyPick=function(act,arg,id){if(act==='scan'){const d=UI.flow.d;d.cid=id;d.target={type:'cat',id};d.toK=id;d.catWhy='';UI.sheet=null;return}return _ap(act,arg,id)}}
+{const _sc=scanConfirm;scanConfirm=function(F){let h=_sc(F);if(h.indexOf('data-a="scanmore"')>=0)return h.replace('data-a="scanmore">More</button>','data-a="scanmore">More or new</button>');
+  const i=h.lastIndexOf('data-a="scancat|');if(i<0)return h;const j=h.indexOf('</button>',i)+9;return h.slice(0,j)+'<button class="chip" data-a="scanmore">+ New</button>'+h.slice(j)}}
+/* first nudge for someone with no money added yet */
+{const _c2=cards17;cards17=function(){const out=_c2();if(planned())return out;const rest=out.filter(x=>x.tag!=='Next'&&x.tag!=='Soon');
+  return [{tag:'Start here',t:'Add the money you have',sub:'Split it into spending and saving. Then choose how long it should last.',a:'addmoney17',cta:'Add money',hot:true},...rest].slice(0,7)}}
+{const _fi2=FLOWS.inc;FLOWS.inc=F=>{const h=_fi2(F);return F.step===0?h.replace('<div class="sub" style="margin-top:6px">Rough is fine.</div>','<div class="sub" style="margin-top:6px">Rough is fine. You will split it into spending and saving, then choose how long it lasts.</div>'):h}}
+
 /* ===== control panel ===== */
 function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,0).getTime(),label:'Allowance',amt:S.p.income,note:''}];if(S.p.six)seedSix();else if(S.p.W>0){S.planSet=true;S.cats.forEach(c=>c.full=c.amt);S.bufFull=S.bufAmt;S.firstDay=new Date(S.now.getTime()-S.p.weeks*7*DAY)}resetUI();window._celeLock=false;render();fitPhone()}
 function ev(name,fn){return {name,fn}}
