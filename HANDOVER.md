@@ -1,5 +1,8 @@
 # Trickle — handover
 
+## v17.1 (9 Oct, second round of feedback)
+Home: swipeable insight and recommendation cards (tap opens the graph), Log expense plus Add money buttons. Tabs: Home, Spending, Savings (Money tab removed). Spending: compact categories, recent spends, subscriptions, limits. Month insight is a calendar. Time-of-day chart rebuilt. Widget logs a spend or adds money (amount, save %, duration). Decisions V17-9…V17-16, PROPOSED. Code: `mockup17/ui17b.js`. Tests pass; nothing tested with students.
+
 ## v17 (8 Oct, after the first user-testing reviews)
 Reviews said: information architecture very bad, too many tabs, UX needs work, looks AI generated, sentences too complex (e.g. "even pace" should just be "Recommended"). Response: `archive/session-workfiles/mockup17/` (fork of v16.4; `python3 build.py`): 3 tabs (Home, Spending, Money); Home is one number, one bar, one row; flat plain look (one accent, no glow or gradients); short copy. Decisions V17-1…V17-6, all PROPOSED; "Recommended" label is Tarun's own words. Tests (fuzz, panel, tips) pass; not tested with students. Next: get tester details from Tarun, run a tree test on the new structure before more screen work. v16.4 stays as the build testers saw.
 

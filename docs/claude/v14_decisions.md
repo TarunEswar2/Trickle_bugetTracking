@@ -562,3 +562,15 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 |---|---|---|---|---|
 | V17-7 | Overspend colour | Tarun: "no color indicator for overspending". Home now has three states: green on track, yellow below the Recommended line, red nothing left or savings used. Limits turn yellow when near and red when reached. The number and a plain sentence say the same thing (colour is never the only signal). | Five-second test: can a student say whether they are over? Check colour-blind legibility. | PROPOSED |
 | V17-8 | Wording: "Money in" | Tarun: "hard to understand". Renamed to "Pocket money & income" (hub, title) and "Income" (tab, flows). | Tree test: where would you add your pocket money? | PROPOSED |
+
+### V17-9 to V17-16 (9 Oct, from the second round of user feedback). All PROPOSED until Tarun confirms.
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V17-9 | Insights on Home | Feedback: insights as swipeable cards on Home, tap shows the graph; every recommendation and insight on Home. Cards: urgent item, limit suggestion, heads-up, time of day, day, month, repeats, this week vs last. Spending no longer has a Patterns section. | First-click test: where would you look to see when you spend most? | PROPOSED |
+| V17-10 | Limit suggestion | Feedback: "set limit for category must be a recommendation on home page". Now a Home card ("Limit for Food?") that opens the limit sheet. Thresholds are still mine (RESEARCH.md 15.4). | Do testers accept or dismiss it? | PROPOSED |
+| V17-11 | Spending tab | Categories compressed to the top 4 (all on tap); Recent spends shown on the tab; Subscriptions and Limits are rows here. | Tree test: where do you cancel a subscription? | PROPOSED |
+| V17-12 | Tabs | Money tab removed. Tabs are Home, Spending, Savings. Subscriptions moved to Spending; one-off money is no longer a row (a link inside Add money); income is a row inside Savings. | Tree test on 12 items | PROPOSED |
+| V17-13 | Add money | A button next to Log expense on Home. Opens the income flow: amount, how much to save, for how long (or just add it). | Taps to add money vs v16 | PROPOSED |
+| V17-14 | Widget | Two actions: Spend (amount, category) and Money (amount, save %, duration). Never opens the app. Adding a running income can replace the weekly amount; the widget says so first. | Widget walkthrough with 3 testers | PROPOSED |
+| V17-15 | Month insight | Calendar of the month, days shaded by spend, tap a day for its spends, month back and forward. Replaces the days 1-10 / 11-20 / 21-end bars. | 5-second test: which day did you spend most? | PROPOSED |
+| V17-16 | Chart fix | Time-of-day and weekday charts rebuilt: a baseline, an average line, labels aligned to the bars, a "Try this" line. Category screen says "3 visits", not "3×". | Can testers read the busiest hour? | PROPOSED |

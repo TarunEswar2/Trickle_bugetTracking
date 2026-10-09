@@ -10,6 +10,6 @@ await click('[data-a="payscan"]');await click('[data-a="paybyhand"]');await p.ev
 log.push('afterpay',await tip(),await p.evaluate(()=>JSON.stringify({tq:TQ,ts:TS})));await p.screenshot({path:'tip1.png'});await closeIf();log.push('next',await tip());await closeIf();log.push('then',await tip());
 await click('[data-a="startplan"]');await p.evaluate(()=>{UI.flow.d.kp='9000'});await p.evaluate(()=>render());await click('[data-a="incnext"]');await click('[data-a="incnext2"]');await click('[data-a="incfinish"]');await p.waitForTimeout(600);
 log.push('plan',await tip());await closeIf();
-for(const t of ['spending','money']){await click(`#tabbar [data-a="tab|${t}"]`);log.push(t,await tip());await closeIf()}
+for(const t of ['spending','savings']){await click(`#tabbar [data-a="tab|${t}"]`);log.push(t,await tip());await closeIf()}
 await click('#tabbar [data-a="tab|home"]');log.push('home2',await tip());
 console.log(JSON.stringify(log));console.log(errs);await b.close()})()
