@@ -23,7 +23,7 @@ const CATLIB={
  'Gadgets':{m:['Croma','Amazon'],h:[16],avg:400},
  'Clothes':{m:['Westside','Myntra'],h:[17],avg:450}
 };
-const COLORS=['#9DB8CE','#7F9DB5','#657F96','#52697E','#445768'],REST='#C98B5A',BUFC='#9AA4B0',FIXC='#8D7A66',SPEND='#C98B5A',SAVE='#6FB08F',AMBER='#C9973B',GG=['#6FB08F','#5A9478','#4F8E73'];
+const COLORS=['#5AA9FF','#CDB6FF','#FF7EB6','#F2D65B','#4FD1E6'],REST='#F6B27C',BUFC='#9AA4B0',FIXC='#8D7A66',SPEND='#F4A261',SAVE='#62DCB4',AMBER='#EDB458',GG=['#62DCB4','#3FAE8C','#9BE8CF'];
 const catColor=i=>i<5?COLORS[i]:REST;
 const PROFILES={
  V:{key:'V',name:'Vaishak',blurb:'₹3k a month · 2 categories · tracks by hand',mode:'manual',income:3000,savingsShare:300,lasts:4.3,bal:2100,weeks:12,

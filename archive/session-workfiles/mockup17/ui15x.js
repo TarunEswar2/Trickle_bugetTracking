@@ -37,7 +37,7 @@ SCREENS.home=()=>{const nt=nextAct(),pl=planned();let title,grid,cap='';
  else{const tot=wkTot(0);
   title=tot?`<span class="hero" style="font-size:46px;line-height:1">${money(tot)}</span><span class="sub" style="margin-left:10px;font-size:18px">spent this week</span>`:`<span class="title" style="font-size:30px">Nothing logged yet.</span>`;
   grid=blk(gridHtml(0,SPEND,100,GHOST,{w:300,fade:.4}))}
- const row=!nt?'':nt.c==='plan'?`<button class="li" style="padding:17px 18px;background:linear-gradient(135deg,rgba(140,243,206,.26),rgba(61,187,148,.2));border:1.5px solid #6FB08F;box-shadow:0 0 26px rgba(98,220,180,.3)" data-a="${nt.a}"><span class="n" style="font-size:18px;color:#6FB08F"><b>${nt.t}</b></span><span class="t" style="color:#6FB08F">›</span></button>`
+ const row=!nt?'':nt.c==='plan'?`<button class="li" style="padding:17px 18px;background:linear-gradient(135deg,rgba(140,243,206,.26),rgba(61,187,148,.2));border:1.5px solid #62DCB4;box-shadow:0 0 26px rgba(98,220,180,.3)" data-a="${nt.a}"><span class="n" style="font-size:18px;color:#8CF3CE"><b>${nt.t}</b></span><span class="t" style="color:#8CF3CE">›</span></button>`
   :`<button class="li" data-a="${nt.a}"><span class="d" style="background:${nt.c==='green'?SAVE:'var(--amber)'}"></span><span class="n">${esc(nt.t)}</span><span class="t">›</span></button>`;
  return `<div class="row sp" style="margin-top:2px"><span></span><button class="chip" data-a="settings">⚙</button></div>
  <div style="margin-top:14px">${title}</div>
@@ -65,7 +65,7 @@ function walletConfirm(F){const d=F.d,amt=amtOf(d.kp),W=Math.max(1,flexW()),L=Ma
  ${over>0?`<div class="title" style="font-size:32px;color:var(--amber);margin-top:8px">${money(over)} over.</div>`:''}<div class="sub" style="margin-top:4px">${words}</div>
  ${lowbal?`<div class="banner" style="margin-top:12px"><b style="color:var(--amber)">Your account shows ${money(40)}.</b> <span class="sub">This may not go through.</span></div>`:''}</div>
  <div class="mfoot"><div class="row" style="gap:10px"><button class="btn o" style="flex:1" data-a="pback">Back</button><button class="btn" style="flex:1.3" data-a="pgo">${S.p.mode==='manual'||d.paid?'Add':'Pay'} ${money(amt)}</button></div></div>`}
-FLOWS.pay=F=>{const d=F.d;if(S.wallet&&F.step===1&&d.target&&d.target.type==='cat')return walletConfirm(F);if(d.scan&&!d.scanned)return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="title" style="margin-top:8px">Scan the shop's QR</div><div style="margin:26px auto;width:240px;height:240px;border-radius:24px;border:2px dashed #6FB08F;display:flex;align-items:center;justify-content:center"><span class="sub">Point at the QR</span></div></div><div class="mfoot"><button class="btn" data-a="payscanned">Scan</button></div>`;
+FLOWS.pay=F=>{const d=F.d;if(S.wallet&&F.step===1&&d.target&&d.target.type==='cat')return walletConfirm(F);if(d.scan&&!d.scanned)return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="title" style="margin-top:8px">Scan the shop's QR</div><div style="margin:26px auto;width:240px;height:240px;border-radius:24px;border:2px dashed #62DCB4;display:flex;align-items:center;justify-content:center"><span class="sub">Point at the QR</span></div></div><div class="mfoot"><button class="btn" data-a="payscanned">Scan</button></div>`;
  return _payX(F)};
 H.payscanned=()=>{UI.flow.d.scanned=true};
 
