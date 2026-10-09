@@ -1,5 +1,7 @@
 # Trickle — handover
 
+## v17.4 (9 Oct, later): Tarun said the colours and corners were too harsh, keep the rest. So v17.3 is back with softer colours and 10 to 12 px corners, plus: savings that need action (Home card, Savings tab card, goal then fund flow, emergency fund suggestion) and "Recommended: set a limit" under category names on Spending. V17-19…21. Code: `mockup17/ui17d.js`. The paragraph below about falling back is superseded.
+
 ## FALLBACK (9 Oct): Tarun rejected v17.3 ("nope fall back"). The mockup source is back at v17.2 (commit 1b49268). v17.3 visuals are kept in commit c9a19c5 and can be restored with `git checkout c9a19c5 -- archive/session-workfiles/mockup17`. Ask Tarun what he did not like before trying again. The skill `.claude/skills/human-interfaces/` is kept.
 
 ## (rejected) v17.3 (9 Oct): the 30 "looks vibecoded" tells removed; skill `.claude/skills/human-interfaces/` (V17-18)

@@ -25,7 +25,7 @@ function inPage(rootSel){
     if(cs.textShadow!=='none')add('5 drop shadow',name(e)+' text');
     if((cs.backdropFilter&&cs.backdropFilter!=='none')||/blur/.test(cs.filter))add('8 glass or blur',name(e));
     const br=parseFloat(cs.borderTopLeftRadius)||0;const circle=Math.abs(r.width-r.height)<3&&br>=Math.min(r.width,r.height)/2-1;
-    if(br>10&&!circle&&!e.closest('#phone,.phone,.frame')&&r.width<900)add('19 soft corner radius',name(e)+' '+br+'px');
+    if(br>14&&!circle&&!e.closest('#phone,.phone,.frame')&&r.width<900)add('19 soft corner radius',name(e)+' '+br+'px');
     if(parseFloat(cs.borderLeftWidth)>=3&&parseFloat(cs.borderTopWidth)<1&&parseFloat(cs.borderLeftWidth)>parseFloat(cs.borderRightWidth))add('11 coloured left stripe',name(e));
     if(cs.animationName&&cs.animationName!=='none')add('25/28 animation',name(e)+' '+cs.animationName);
     const ff=cs.fontFamily.split(',')[0].replace(/["']/g,'').trim().toLowerCase();if(BAD_FONTS.includes(ff))add('10 default AI font',ff);

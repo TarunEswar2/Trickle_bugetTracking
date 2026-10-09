@@ -1,6 +1,6 @@
 /* ===== v15.2: first-time tips. Each one appears once, the first time the thing happens, and is easy to dismiss ===== */
 window.TIPS=true;const TS={};
-const ACC={g:'#62DCB4',a:'#F4A261',v:'#B48CFF',b:'#5AA9FF'};
+const ACC={g:'#86B9A0',a:'#D2A98A',v:'#8FA3B8',b:'#8FA3B8'};
 const TIPDEF={
  paid:{cap:'Your first spend',t:'That is one spend.',b:'The marks it took fade out of your week. What is left is on Home.',c:ACC.g},
  unsorted:{cap:'A payment needs a place',t:'Pick its category once.',b:'Trickle remembers it, so next time it sorts itself.',c:ACC.a},

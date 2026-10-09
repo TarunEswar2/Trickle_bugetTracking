@@ -35,7 +35,7 @@ The 30 tells below are from an Instagram reel ("30 reasons your site looks vibec
 | 16 | Checkmark bullets | Plain bullets or no bullets. |
 | 17 | Three pricing tiers | Only if there are really three plans. Otherwise one price. |
 | 18 | No real product demos | Show actual screens with realistic data. |
-| 19 | Soft, large corner radius | 4 to 8 px on controls and cards. Pills only for true tags. |
+| 19 | Soft, large corner radius | 8 to 12 px on controls and cards (Tarun found 6 to 8 px too harsh). Avoid 16 px and up, and pills except for true tags. |
 | 20 | Purple and black | Choose a palette from the product's own meaning. Avoid the purple-on-near-black default. |
 | 21 | No skeleton loaders | Where data loads, show a placeholder with the final layout. (Not applicable to a fully local app with no waiting.) |
 | 22 | Radial glowing orbs | No background decoration. |
@@ -45,7 +45,7 @@ The 30 tells below are from an Instagram reel ("30 reasons your site looks vibec
 | 26 | No terms | Include a Terms page, even a short honest draft. |
 | 27 | No privacy policy | Include a Privacy page that says what is stored, where, and what is never read. |
 | 28 | Hover animations (lift, scale, glow) | A plain colour change at most. Mobile has no hover anyway. |
-| 29 | Neon colours | Reduce saturation. Aim for saturation under about 0.7 at mid lightness. |
+| 29 | Neon colours | Reduce saturation. Aim for saturation under about 0.7 at mid lightness. Do not overcorrect: Tarun found a dull terracotta and slate palette too harsh, so keep tones soft, not just muted. |
 | 30 | Basic pastel colours | Do not use the default pastel set. Take muted, slightly dull tones with a clear lightness order. |
 
 ## Positive rules (our additions, from the Trickle v17 work)
