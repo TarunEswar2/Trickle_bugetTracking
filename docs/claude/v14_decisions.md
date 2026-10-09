@@ -596,3 +596,8 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 | ID | Domain | Evidence | Validation gate | Status |
 |---|---|---|---|---|
 | V17-22 | Visual language | Tarun: "roll back the visual language, just remove glows and shadows". The look is v17.2 again (original colours, gradients, corners, title screen). The only visual change is that glows and shadows are removed. Kept: all features from v17.4 (savings that need action, "Recommended: set a limit", Privacy and Terms in Settings). This overrides V17-18 and V17-19 for visuals. The human-interfaces skill stays as a reference, and its audit will now report gradients, colours and radii that Tarun chose to keep. | None needed for the instruction. | CONFIRMED (Tarun) |
+
+### V17-23 (9 Oct, Tarun): remove the human-interfaces skill. CONFIRMED.
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V17-23 | Tooling | Tarun: "remove the skill, it's bad, I don't like it". Deleted `.claude/skills/human-interfaces/` and `mockup17/tests/antiai_states.js`. V17-18 no longer has a skill behind it. Recoverable from git commit 825d5aa if wanted. | None | CONFIRMED (Tarun) |

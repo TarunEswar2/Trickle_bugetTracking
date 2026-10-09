@@ -1,10 +1,12 @@
 # Trickle — handover
 
+## Skill removed (9 Oct): Tarun disliked it, so `.claude/skills/human-interfaces/` and the audit states file are deleted (still in git commit 825d5aa).
+
 ## v17.5 (9 Oct): visual language rolled back to v17.2, only glows and shadows removed (Tarun, V17-22). Features of v17.4 kept. The v17.3 restyle is in commit c9a19c5, the softer version in 825d5aa.
 
 ## v17.4 (9 Oct, later): Tarun said the colours and corners were too harsh, keep the rest. So v17.3 is back with softer colours and 10 to 12 px corners, plus: savings that need action (Home card, Savings tab card, goal then fund flow, emergency fund suggestion) and "Recommended: set a limit" under category names on Spending. V17-19…21. Code: `mockup17/ui17d.js`. The paragraph below about falling back is superseded.
 
-## FALLBACK (9 Oct): Tarun rejected v17.3 ("nope fall back"). The mockup source is back at v17.2 (commit 1b49268). v17.3 visuals are kept in commit c9a19c5 and can be restored with `git checkout c9a19c5 -- archive/session-workfiles/mockup17`. Ask Tarun what he did not like before trying again. The skill `.claude/skills/human-interfaces/` is kept.
+## FALLBACK (9 Oct): Tarun rejected v17.3 ("nope fall back"). The mockup source is back at v17.2 (commit 1b49268). v17.3 visuals are kept in commit c9a19c5 and can be restored with `git checkout c9a19c5 -- archive/session-workfiles/mockup17`. Ask Tarun what he did not like before trying again. (The human-interfaces skill was removed on 9 Oct at Tarun's request.)
 
 ## (rejected) v17.3 (9 Oct): the 30 "looks vibecoded" tells removed; skill `.claude/skills/human-interfaces/` (V17-18)
 Flat, no shadows, tight radii, one muted accent, no purple or rainbow, plain wordmark title, Privacy and Terms in Settings. Audit: see the skill. Palette now lives in `engine.js` (SPEND, SAVE, AMBER, PAL16) and the CSS variables at the end of `shell.html`.

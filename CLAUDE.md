@@ -58,7 +58,6 @@ v15 (5 Oct 2026): audit in `docs/claude/v15_audit.md`, spec in `docs/claude/v15_
 **v16.1 (7 Oct, later):** the grid is retired (Tarun's decision); Home uses an allowance bar showing the weekly allowance and what is left; Insights has hour/day/month timing; heads-ups at the user's own busy times; every insight has a "Why this?" sheet with citations checked on 7 Oct (RESEARCH.md Part 15). Only cite a study after checking it exists, and say what it does not cover.
 
 ## CURRENT STATE (9 Oct 2026) — read this before the older notes above
-- **UI rule (Tarun chose the v17.2 look with glows and shadows removed, V17-22; the skill is a reference, not a requirement):** before changing any visuals, read `.claude/skills/human-interfaces/SKILL.md` and run its audit (`archive/session-workfiles/mockup17/tests/antiai_states.js` is the Trickle states file). V17-18.
 - **Newest build: v17** (`archive/session-workfiles/mockup17/`, 3 tabs, flat plain look, short copy; V17-1…6 PROPOSED; response to the first user-testing reviews; see HANDOVER.md). v16.4 below is the build testers saw.
 - **Build:** v16.4, `archive/session-workfiles/mockup16/` (`python3 build.py` makes `mockup16.html`), published at https://claude.ai/artifact/4F7qgfEx3WGPLTJtycosDN. Tests in `mockup16/tests/` (see its README). v15.3 stays in `mockup15/` for the grid-against-bar comparison (Test A).
 - **Design system:** "Trickle Night Calm", https://claude.ai/artifact/Ra1d8t1H3no2RSZ3uxtbn3, source `archive/session-workfiles/designsystem3/index.html`. The older Night and Instrument systems above are history.
