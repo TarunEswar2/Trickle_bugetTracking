@@ -4,7 +4,7 @@
 
 /* ---------- allowance bar (a battery: green is what is left) ---------- */
 function weekIdeal(){const from=S.weekFrom||wk0(),end=wk0()+7*DAY;return Math.max(0,Math.min(1,(end-S.now.getTime())/Math.max(DAY,end-from)))}
-function battery(L,W,o){o=o||{};const f=W>0?Math.max(0,Math.min(1,L/W)):0,col=o.col||'#5FE3B8',prev=o.prev==null?f:Math.max(0,Math.min(1,o.prev));const goes=o.goes?Math.min(f,o.goes/W):0;
+function battery(L,W,o){o=o||{};const f=W>0?Math.max(0,Math.min(1,L/W)):0,col=o.col||'#6FB08F',prev=o.prev==null?f:Math.max(0,Math.min(1,o.prev));const goes=o.goes?Math.min(f,o.goes/W):0;
  return `<div class="batt${o.sm?' sm':''}"><i class="bfill" style="--from:${(prev*100).toFixed(1)}%;--to:${(f*100).toFixed(1)}%;width:${(f*100).toFixed(1)}%;background:${boxBg(col)};box-shadow:0 0 26px ${col}55,inset 0 1px 0 rgba(255,255,255,.4)"></i>${goes?`<i class="bgo" style="left:${((f-goes)*100).toFixed(1)}%;width:${(goes*100).toFixed(1)}%"></i>`:''}${o.ms?[25,50,75].map(p=>`<i class="bms" style="left:${p}%"></i>`).join(''):''}${o.tick!=null?`<i class="btick" style="left:${(o.tick*100).toFixed(1)}%"><b>${o.label||'Recommended'}</b></i>`:''}</div>`}
 
 /* ---------- timing statistics ---------- */
@@ -27,7 +27,7 @@ function awareness(){if(S.nudgeOff||!planned())return null;const L=Math.max(0,fl
  const h=statsHour();if(h.ok){const sN=6+2*h.pk,hh=S.now.getHours()+S.now.getMinutes()/60,hN=hh<6?hh+24:hh;if(hN>=sN-1&&hN<sN+2)return {k:'hour',t:`${bandLabel(h.pk)} is when you spend most.`,s:tail}}
  const d=statsDay();if(d.ok&&dowIdx(S.now.getTime())===d.pk)return {k:'day',t:`${FULLDAY[d.pk]}s are your biggest day.`,s:`Typical: ${money(d.vals[d.pk])}. ${tail}`};
  const m=statsMonth();if(m.ok&&phaseNow()===m.pk)return {k:'month',t:`${PHASE[m.pk]} is when you spend most.`,s:`Typically ${money(m.vals[m.pk])} a day. ${tail}`};return null}
-function awCard(){const a=awareness();if(!a)return '';return `<div class="card aw"><div class="row sp"><span class="cap" style="color:#CDB6FF">Heads-up</span><button class="lnk" style="font-size:13px" data-a="why|${a.k}|home">Why?</button></div><div style="font-weight:700;font-size:17px;margin-top:6px;line-height:1.25">${esc(a.t)}</div><div class="sm" style="margin-top:4px">${esc(a.s)}</div></div>`}
+function awCard(){const a=awareness();if(!a)return '';return `<div class="card aw"><div class="row sp"><span class="cap" style="color:#8FA3B8">Heads-up</span><button class="lnk" style="font-size:13px" data-a="why|${a.k}|home">Why?</button></div><div style="font-weight:700;font-size:17px;margin-top:6px;line-height:1.25">${esc(a.t)}</div><div class="sm" style="margin-top:4px">${esc(a.s)}</div></div>`}
 
 /* ---------- guess check (a weekly awareness exercise; it also measures O1 in the research plan) ---------- */
 const guessDue=()=>planned()&&dowIdx(S.now.getTime())>=2&&!(S.guesses||[]).some(g=>g.w===wk0())&&txIn(wk0(),S.now.getTime()+1).length>=3;
@@ -85,14 +85,14 @@ function nextAct(){
  return null}
 SCREENS.home=()=>{const nt=nextAct(),pl=planned();let top,viz,cap='';
  if(pl){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),empty=L<=0,sig=S.key+'|'+wk0(),f=L/W,prev=(UI._bw&&UI._bw.sig===sig)?UI._bw.f:f;UI._bw={sig,f};
-  const col=(typeof paceHex==='function')?paceHex():'#5FE3B8',dl=daysToGo();let st='';if(typeof paceInfo==='function'){const p=paceInfo();if(S.touched||empty)st="This week's amount is used up.";else if(p&&p.over)st='Spending fast this week.'}
+  const col=(typeof paceHex==='function')?paceHex():'#6FB08F',dl=daysToGo();let st='';if(typeof paceInfo==='function'){const p=paceInfo();if(S.touched||empty)st="This week's amount is used up.";else if(p&&p.over)st='Spending fast this week.'}
   top=`<span class="hero cu" data-v="${Math.round(L)}" style="font-size:56px">${money(L)}</span><span class="sub" style="margin-left:10px;font-size:18px">left</span><div class="sub" style="margin-top:6px;font-size:16px">of your ${money(W)} weekly allowance</div>${st?`<div class="sub" style="margin-top:6px;color:${AMBER}">${st}</div>`:''}`;
   viz=`<div style="margin:24px 2px 32px" data-a="gridhow">${battery(L,W,{col,prev,tick:weekIdeal()})}</div>`;
   cap=`<div class="row sp" style="align-items:center;margin:0 4px 16px"><span class="sub">${empty?'Nothing left to spend':'About '+money(L/dl)+' a day for '+(dl===1?'today':dl+' days')}</span><button class="chip" data-a="gridhow">ⓘ</button></div>`}
  else{const tot=wkTot(0);top=tot?`<span class="hero" style="font-size:56px">${money(tot)}</span><div class="sub" style="margin-top:6px;font-size:16px">spent this week</div>`:`<span class="title" style="font-size:30px">Nothing logged yet.</span>`;
   viz=`<div style="margin:24px 2px 32px" data-a="gridhow"><div class="batt idle"></div></div>`}
  const aw=pl?awCard():'';const row=(!nt||(nt.low&&aw))?'':nt.html?nt.html:nt.c==='plan'?`<button class="li cta" data-a="${nt.a}"><span class="n"><b>${nt.t}</b></span><span class="t">›</span></button>`
-  :`<button class="li" data-a="${nt.a}"><span class="d" style="background:${nt.c==='green'?SAVE:nt.c==='violet'?'#B48CFF':'var(--amber)'}"></span><span class="n">${esc(nt.t)}</span><span class="t">›</span></button>`;
+  :`<button class="li" data-a="${nt.a}"><span class="d" style="background:${nt.c==='green'?SAVE:nt.c==='violet'?'#8FA3B8':'var(--amber)'}"></span><span class="n">${esc(nt.t)}</span><span class="t">›</span></button>`;
  return `<div class="row sp" style="margin-top:2px"><span class="greet">${greet()}</span><button class="chip" data-a="settings">⚙</button></div>
  <div style="margin-top:14px">${top}</div>${viz}${aw?'':cap}${aw}${row?`<div style="margin-top:12px">${row}</div>`:''}
  <div style="position:sticky;bottom:0;margin-top:22px;padding-top:10px;background:transparent"><button class="btn" data-a="${scanOn()?'payscan':'pay'}">Log expense</button></div>`};
@@ -104,19 +104,19 @@ SHEETS.gridhow=()=>{const pl=planned(),W=Math.max(1,flexW());
  <div class="row sp" style="margin-top:18px"><button class="lnk" data-a="why|bar">Why a bar?</button><button class="btn s" data-a="closesheet" style="width:auto">Got it</button></div>`};
 
 /* ---------- pay confirm: the same bar, with the part that leaves hatched ---------- */
-function walletConfirm(F){const d=F.d,amt=amtOf(d.kp),W=Math.max(1,flexW()),L=Math.max(0,flexL()),over=Math.max(0,amt-L),lowbal=S.flags.lowBalance&&S.p.mode==='upi',col=(typeof paceHex==='function')?paceHex():'#5FE3B8';
+function walletConfirm(F){const d=F.d,amt=amtOf(d.kp),W=Math.max(1,flexW()),L=Math.max(0,flexL()),over=Math.max(0,amt-L),lowbal=S.flags.lowBalance&&S.p.mode==='upi',col=(typeof paceHex==='function')?paceHex():'#6FB08F';
  const warn=limWarn(d.target&&d.target.id,d.payee,amt),aw=awareness();
  return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">${esc(tgtName(d.target))} · ${esc(d.payee||'Someone')}</div><div style="margin-top:6px"><span class="hero" style="font-size:44px">${money(amt)}</span></div>
  <div style="margin:30px 2px 30px">${battery(L,W,{col:over>0?AMBER:col,goes:Math.min(amt,L),prev:L/W})}</div>
  <div class="row sp"><span><span class="cap">Left now</span><div class="h2">${money(L)}</div></span><span style="text-align:right"><span class="cap">Left after</span><div class="h2" style="${over>0?'color:var(--amber)':''}">${money(Math.max(0,L-amt))}</div></span></div>
  ${over<=0&&L>0?`<div class="sub" style="margin-top:14px;text-align:center">${amt<=L/daysToGo()?`That is ${Math.max(1,Math.round(amt/(L/daysToGo())*100))}% of today's ${money(L/daysToGo())}.`:`More than today's ${money(L/daysToGo())}.`}</div>`:''} ${over>0?`<div class="title" style="font-size:26px;color:var(--amber);margin-top:16px">${money(over)} over.</div><div class="sub" style="margin-top:4px">More than you have left. Savings cover it.</div>`:''}
- ${warn?`<div class="banner" style="margin-top:14px"><span style="color:var(--amber);font-weight:700">${esc(warn)}</span></div>`:''}${aw&&!warn?`<div class="banner" style="margin-top:14px;border-color:rgba(205,182,255,.4);background:rgba(205,182,255,.08)"><span style="color:#CDB6FF;font-weight:700">${esc(aw.t)}</span></div>`:''}
+ ${warn?`<div class="banner" style="margin-top:14px"><span style="color:var(--amber);font-weight:700">${esc(warn)}</span></div>`:''}${aw&&!warn?`<div class="banner" style="margin-top:14px;border-color:rgba(205,182,255,.4);background:rgba(205,182,255,.08)"><span style="color:#8FA3B8;font-weight:700">${esc(aw.t)}</span></div>`:''}
  ${lowbal?`<div class="banner" style="margin-top:12px"><b style="color:var(--amber)">Your account shows ${money(40)}.</b> <span class="sub">This may not go through.</span></div>`:''}</div>
  <div class="mfoot"><div class="row" style="gap:10px"><button class="btn o" style="flex:1" data-a="pback">Back</button><button class="btn" style="flex:1.3" data-a="pgo">Add ${money(amt)}</button></div></div>`}
 
 /* ---------- Insights: When (hour, day, part of the month), Repeats, Trend; each with its evidence ---------- */
 H.rhmode=a=>{UI.rh=a[0];UI.rhSel=null};H.inssel=a=>{UI.rhSel=+a[0]};
-function barsChart(vals,labels,sel,o){o=o||{};const mx=Math.max(1,...vals),H0=o.h||170;return `<div class="dbars" style="height:${H0+40}px">${vals.map((v,i)=>{const h=Math.max(v>0?8:3,Math.round(v/mx*H0));const on=i===sel;return `<button class="db ${on?'on':''}" data-a="inssel|${i}"><span class="bar" style="height:${h}px;${v>0?`background:${boxBg(on?'#5FE3B8':SPEND)}`:''}"></span><span class="lab ${o.today===i?'td':''}">${labels[i]||''}</span></button>`}).join('')}</div>`}
+function barsChart(vals,labels,sel,o){o=o||{};const mx=Math.max(1,...vals),H0=o.h||170;return `<div class="dbars" style="height:${H0+40}px">${vals.map((v,i)=>{const h=Math.max(v>0?8:3,Math.round(v/mx*H0));const on=i===sel;return `<button class="db ${on?'on':''}" data-a="inssel|${i}"><span class="bar" style="height:${h}px;${v>0?`background:${boxBg(on?'#6FB08F':SPEND)}`:''}"></span><span class="lab ${o.today===i?'td':''}">${labels[i]||''}</span></button>`}).join('')}</div>`}
 function insWhen(){const m=UI.rh||'hour';let body='';
  const chips=`<div class="row" style="gap:8px;margin:14px 0 6px">${[['hour','Time of day'],['day','Day'],['month','Month']].map(c=>`<button class="chip ${m===c[0]?'on':''}" data-a="rhmode|${c[0]}">${c[1]}</button>`).join('')}</div>`;
  const foot=`<div class="row sp" style="margin-top:6px"><button class="lnk" style="font-size:14px" data-a="why|${m}">Why this?</button><button class="lnk" style="font-size:14px;color:var(--ink3)" data-a="${S.nudgeOff?'nudgeon':'nudgeoff'}">Heads-ups: ${S.nudgeOff?'off':'on'}</button></div>`;

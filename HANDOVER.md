@@ -1,5 +1,8 @@
 # Trickle — handover
 
+## v17.3 (9 Oct): the 30 "looks vibecoded" tells removed; skill `.claude/skills/human-interfaces/` (V17-18)
+Flat, no shadows, tight radii, one muted accent, no purple or rainbow, plain wordmark title, Privacy and Terms in Settings. Audit: see the skill. Palette now lives in `engine.js` (SPEND, SAVE, AMBER, PAL16) and the CSS variables at the end of `shell.html`.
+
 ## v17.2 (9 Oct): UPI linking retired (Tarun, V17-17)
 No link step in onboarding, no "came in from" credits, no payment detection, no account linking in Settings. Code: `mockup17/ui17c.js` plus panel and test edits. The open question (1) below is closed.
 
