@@ -1,7 +1,10 @@
-/* ===== v17.18 (10 Oct): savings pots, a better hero, a way into all insights ===== */
+/* ===== v17.18 (10 Oct): savings goals, a better hero, a way into all insights ===== */
 function savingsPanel17(){const act=S.goals.filter(g=>g.state!=='done');if(!act.length&&S.free<=0)return '';
  const T=savedTotal(S),_M=savingsSeries().M,thisM=_M[_M.length-1];
- return `<div class="viz17" style="margin:4px 0 22px"><div class="cap" style="margin:0">Total saved</div><div style="font-size:40px;font-weight:700;margin-top:4px;line-height:1.1">${money(T)}</div>${thisM>0?`<div class="sm" style="margin-top:6px">Up ${money(thisM)} this month</div>`:''}</div>`}
+ return `<div class="viz17" style="margin:4px 0 22px"><div class="cap" style="margin:0">Saved this month</div><div style="font-size:40px;font-weight:700;margin-top:4px;line-height:1.1">${thisM>0?money(thisM):'₹0'}</div><div class="sm" style="margin-top:6px">${money(T)} saved in total</div></div>`}
+function incomeRow17(){const l=S.incomes||[],now=S.now.getTime(),run=l.filter(i=>!i.end||i.end+DAY>now);if(!planned()&&!l.length)return '';
+ const inTxt=run.length?`${money(run.reduce((a,i)=>a+i.amt,0))} · ${run.length===1?(run[0].end?'until '+shortD(run[0].end):'added'):run.length+' running'}`:'Not added yet';
+ return `<div style="margin-top:22px">${row17('Pocket money & income',inTxt,'push|incomes')}</div>`}
 /* hero */
 function awareList17(){const out=[];if(S.nudgeOff||!planned())return out;const L=Math.max(0,flexL()),dl=daysToGo(),tail=L<=0?"This week's amount is used up.":`${money(L)} left for ${dl===1?'today':dl+' days'}.`;
  const h=statsHour();if(h.ok){const sN=6+2*h.pk,hh=S.now.getHours()+S.now.getMinutes()/60,hN=hh<6?hh+24:hh;if(hN>=sN-1&&hN<sN+2){const w=Math.max(1,Math.round(sN-hN));out.push({k:'hour',t:hN<sN?`In about ${w} hour${w>1?'s':''}, ${bandLabel(h.pk)} is when you spend most.`:`${bandLabel(h.pk)} is when you spend most.`})}}

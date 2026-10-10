@@ -82,10 +82,8 @@ SCREENS.spending=()=>{const rec=recent17(5),mo=S.bills.filter(b=>!b.ended&&!b.pa
  <div class="col" style="gap:8px;margin-top:34px">${row17('Subscriptions',nb?`${money(mo)} a month${nxt?' · '+esc(nxt.name)+' '+shortD(new Date(nxt.nextDue).getTime()):''}`:'None yet','v15bills')}${(S.limits||[]).length?row17('Limits',`${S.limits.length} set`,'v16limits'):''}</div>`};
 
 /* ---------- Savings is the third tab; income lives inside it ---------- */
-SCREENS.savings=()=>{const l=S.incomes||[],now=S.now.getTime(),run=l.filter(i=>!i.end||i.end+DAY>now);
- const inTxt=run.length?`${money(run.reduce((a,i)=>a+i.amt,0))} · ${run.length===1?(run[0].end?'until '+shortD(run[0].end):'added'):run.length+' running'}`:planned()?'Not added yet':'Add what you get';
- return `<div class="title" style="margin-bottom:12px">Savings</div>`+mnSav()+`<div class="col" style="gap:8px;margin-top:18px">${row17('Pocket money & income',inTxt,'push|incomes')}</div>`};
-SCREENS.incomes=()=>back17('Savings')+`<div class="title" style="margin-bottom:12px">Pocket money & income</div>`+mnInc();
+SCREENS.savings=()=>`<div class="title" style="margin-bottom:12px">Savings</div>`+mnSav();
+SCREENS.incomes=()=>back17('Home')+`<div class="title" style="margin-bottom:12px">Pocket money & income</div>`+mnInc();
 SCREENS.pwhen=()=>back17('Home')+insWhen();
 SCREENS.prep=()=>back17('Home')+insRep();
 SCREENS.ptrend=()=>back17('Home')+insCmp();
