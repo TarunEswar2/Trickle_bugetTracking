@@ -645,3 +645,10 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 | ID | Domain | Evidence | Validation gate | Status |
 |---|---|---|---|---|
 | V17-35 | Home limits | Tarun: "instead of a scrollable field make it card type swipes". The Recommended limit cards on Home are now a second swipeable row with dots, like the insight cards, so Home no longer scrolls down through a stack of cards. Up to 4 category cards plus one shop card. | Do testers find the next card by swiping? | CONFIRMED (Tarun) |
+
+### V17-36 to V17-38 (10 Oct, Tarun). CONFIRMED (his words); counts and wording are mine.
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V17-36 | Limit cards: visits and close | Tarun: show the visit (times) limit as well, 2 to 3 recommendations at most, and a close so a recommendation can be removed. Home now shows at most 3 limit cards, alternating a spending card (category) and a visits card (a place visited 3 or more times in 30 days, with this week, this month and the share of your spends). Each card has a × that removes it; removing does not bring in a replacement. | Do testers use the × instead of ignoring? | CONFIRMED (Tarun) |
+| V17-37 | Goal reached card | Tarun (draft): "show the goal reached card on home bigger". A reached goal is a large full-width card above the insights: name, amount, a full bar, "I bought it" and "Raise the goal". | Do testers choose one of the two? | CONFIRMED (Tarun) |
+| V17-38 | "I bought it" | My choice: marks the goal done and the money is treated as spent on the item (it does not return to free savings, unlike "Mark done"). | Ask Tarun if bought goals should leave a spend record. | PROPOSED |

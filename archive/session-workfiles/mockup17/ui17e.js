@@ -57,16 +57,30 @@ H.amtdone=a=>{const d=UI.flow.d,t=amtOf(d.kp),v=Math.min(t,amtOf(d.ev)),sav=a[0]
 {const _car=carousel17;carousel17=function(){const c=cards17().filter(x=>x.tag!=='Limit');if(!c.length)return '';
   return `<div class="car17" id="car17">${c.map(x=>`<button class="cd17${x.hot?' hot':''}" data-a="${x.a}"><span class="tg">${x.tag}</span><b>${esc(x.t)}</b>${x.sub?`<span class="sb">${esc(x.sub)}</span>`:''}${x.mini||''}${x.cta?`<span class="go">${x.cta} ›</span>`:''}</button>`).join('')}</div>${c.length>1?`<div class="dots17" id="dots17">${c.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}`}}
 const limLabel17=(kind,cap)=>kind==='times'?`${cap} ${cap===1?'visit':'visits'} a week`:`${money(cap)} a week`;
-function limitsHome17(){if(!planned())return '';const now=S.now.getTime(),sg=suggestions(),shopSg=sg.filter(x=>x.scope==='shop').slice(0,1);
+function limitsHome17(){if(!planned())return '';const now=S.now.getTime();
  const wk=catTotals(now-7*DAY,now+1),mo=catTotals(now-30*DAY,now+1),wT=sumAmt(wk)||1,mT=sumAmt(mo)||1,byM={};mo.forEach(r=>byM[r.id]=r.amt);
- const recIds=new Set(sg.filter(x=>x.scope==='cat').map(x=>x.ref));
- const rows=wk.filter(r=>r.id!=='_u'&&r.amt>0&&!(S.limits||[]).some(l=>l.scope==='cat'&&l.ref===r.id)&&!S.limNo['c'+r.id]).sort((a,b)=>(recIds.has(b.id)-recIds.has(a.id))||b.amt-a.amt).slice(0,4);
- const cat=rows.map(r=>{const m=byM[r.id]||r.amt;return `<div class="cd17 lim17"><span class="tg">Recommended</span><b>${esc(catName(r.id))}: set a limit</b>
+ const recIds=new Set(suggestions().filter(x=>x.scope==='cat').map(x=>x.ref));
+ const cats=wk.filter(r=>r.id!=='_u'&&r.amt>0&&!(S.limits||[]).some(l=>l.scope==='cat'&&l.ref===r.id)).sort((a,b)=>(recIds.has(b.id)-recIds.has(a.id))||b.amt-a.amt).slice(0,2);
+ const sp7=txIn(now-7*DAY,now+1).filter(x=>x.kind==='cat'),sp30=txIn(now-30*DAY,now+1).filter(x=>x.kind==='cat');
+ const shops=shopList().filter(l=>l.n>=3&&!(S.limits||[]).some(x=>x.scope==='shop'&&x.ref===l.payee)). slice(0,2);
+ const close=key=>`<button class="x17" data-a="limno|${key}" aria-label="Remove">×</button>`;
+ const catCard=r=>{const m=byM[r.id]||r.amt;return `<div class="cd17 lim17">${close('c'+r.id)}<span class="tg">Recommended</span><b>${esc(catName(r.id))}: set a limit</b>
   <div class="row" style="gap:10px;margin-top:2px"><div style="flex:1"><div class="cap" style="margin:0">This week</div><div style="font-weight:700;font-size:17px">${money(r.amt)}</div><div class="sm">${pct0(r.amt/wT)}% of spending</div></div><div style="flex:1"><div class="cap" style="margin:0">This month</div><div style="font-weight:700;font-size:17px">${money(m)}</div><div class="sm">${pct0(m/mT)}% of spending</div></div></div>
-  <div class="row" style="gap:8px;margin-top:auto;padding-top:8px"><button class="btn s" style="flex:3" data-a="limset|cat|${r.id}|amt">Set a limit</button><button class="btn q s" style="flex:2" data-a="limno|c${r.id}">Not now</button></div></div>`}).join('');
- const shop=shopSg.map(s=>{const cap=limDefault(s.scope,s.ref,s.kind);return `<div class="cd17 lim17"><span class="tg">Recommended</span><b>${esc(s.ref)}: set a limit</b><span class="sb">${esc(s.text)}</span><div class="row" style="gap:8px;margin-top:auto;padding-top:8px"><button class="btn s" style="flex:2" data-a="limquick|${s.key}">Set ${limLabel17(s.kind,cap)}</button><button class="btn q s" style="flex:1" data-a="limsug|${s.key}">Change</button></div></div>`}).join('');
- const n=rows.length+shopSg.length;if(!n)return '';
- return `<div class="car17" id="car17b" style="margin-top:8px">${cat}${shop}</div>${n>1?`<div class="dots17" id="dots17b">${Array.from({length:n},(_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}`}
+  <div class="row" style="margin-top:auto;padding-top:8px"><button class="btn s" style="flex:1" data-a="limset|cat|${r.id}|amt">Set a limit</button></div></div>`};
+ const shopCard=l=>{const w=sp7.filter(x=>x.payee===l.payee).length,m=l.n;return `<div class="cd17 lim17">${close('s'+l.payee)}<span class="tg">Recommended</span><b>${esc(l.payee)}: limit visits</b>
+  <div class="row" style="gap:10px;margin-top:2px"><div style="flex:1"><div class="cap" style="margin:0">This week</div><div style="font-weight:700;font-size:17px">${w} ${w===1?'visit':'visits'}</div><div class="sm">${pct0(w/Math.max(1,sp7.length))}% of your spends</div></div><div style="flex:1"><div class="cap" style="margin:0">This month</div><div style="font-weight:700;font-size:17px">${m} ${m===1?'visit':'visits'}</div><div class="sm">${pct0(m/Math.max(1,sp30.length))}% of your spends</div></div></div>
+  <div class="row" style="margin-top:auto;padding-top:8px"><button class="btn s" style="flex:1" data-a="limset|shop|${esc(l.payee)}|times">Set a visit limit</button></div></div>`};
+ const order=[];const c=cats.slice(),sh=shops.slice();while((c.length||sh.length)&&order.length<3){if(c.length){const r=c.shift();order.push({k:'c'+r.id,h:catCard(r)})}if(order.length<3&&sh.length){const l=sh.shift();order.push({k:'s'+l.payee,h:shopCard(l)})}}
+ const shown=order.filter(o=>!S.limNo[o.k]).map(o=>o.h);
+ const n=shown.length;if(!n)return '';
+ return `<div class="car17" id="car17b" style="margin-top:8px">${shown.join('')}</div>${n>1?`<div class="dots17" id="dots17b">${Array.from({length:n},(_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}`}
 {const _ar4=window.afterRender;window.afterRender=()=>{if(_ar4)_ar4();const car=document.getElementById('car17b');const dots=document.querySelectorAll('#dots17b i');if(!car||!dots.length)return;car.addEventListener('scroll',()=>{const w=car.firstElementChild?car.firstElementChild.getBoundingClientRect().width+10:1,i=Math.round(car.scrollLeft/w);dots.forEach((d,k)=>d.classList.toggle('on',k===i))},{passive:true})}}
 H.limquick=a=>{const s=suggestions().find(x=>x.key===a[0]);if(!s)return false;S.limits=S.limits.filter(l=>!(l.scope===s.scope&&l.ref===s.ref));S.limits.push({id:'l'+(S.idc++),scope:s.scope,ref:s.ref,kind:s.kind,cap:limDefault(s.scope,s.ref,s.kind)});say('Limit set.');return false};
 H.limquickc=a=>{const id=a[0];if(!S.cats.some(c=>c.id===id))return false;S.limits=S.limits.filter(l=>!(l.scope==='cat'&&l.ref===id));S.limits.push({id:'l'+(S.idc++),scope:'cat',ref:id,kind:'amt',cap:limDefault('cat',id,'amt')});say(`Limit set for ${catName(id)}.`);return false};
+
+/* ===== v17.14: a reached goal gets a big card on Home, above the insights ===== */
+function reachedHome17(){const g=S.goals.find(x=>x.state==='reached');if(!g)return '';
+ return `<div class="card" style="margin:0 0 16px;padding:16px;border-color:var(--accent)"><div class="cap" style="margin:0 0 6px;color:var(--accent)">Goal reached</div><div style="font-size:24px;font-weight:700;line-height:1.15">${esc(g.name)}: you saved ${money(g.target)}</div><div class="sub" style="margin:6px 0 12px">Buy your item, or raise the goal.</div>${battery(g.target,g.target,{col:SAVE,sm:true})}<div class="row" style="gap:8px;margin-top:14px"><button class="btn" style="flex:1;white-space:nowrap" data-a="goalbought|${g.id}">I bought it</button><button class="btn q" style="flex:1;white-space:nowrap;padding-left:8px;padding-right:8px" data-a="sheet|goaledit|${J({id:g.id}).replace(/\|/g,'')}">Raise the goal</button></div></div>`}
+H.goalbought=a=>{const g=S.goals.find(x=>x.id===a[0]);if(!g)return false;g.state='done';g.doneOn=new Date(S.now);g.boughtOn=new Date(S.now);g.saved=0;logE(S,`${g.name} bought`);if(UI.stack&&UI.stack.length)UI.stack=[];say('Enjoy your '+g.name+'.');return false};
+{const _c5=cards17;cards17=function(){return _c5().filter(x=>x.tag!=='Goal reached')}}
+{const _sg3=SCREENS.goal;SCREENS.goal=p=>_sg3(p).replace(/data-a="gdone\|([^"]+)">I bought it/,'data-a="goalbought|$1">I bought it')}
