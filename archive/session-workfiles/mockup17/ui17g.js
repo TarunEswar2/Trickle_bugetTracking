@@ -1,11 +1,7 @@
 /* ===== v17.18 (10 Oct): piggy banks, a better hero, a way into all insights ===== */
-let _pg=0;
-function piggySvg(frac,col,size){const id='pg'+(++_pg),f=Math.max(0,Math.min(1,frac)),top=70-f*50;
- const body='M20 52c0-17 14-28 34-28h12c6 0 11 2 15 5l10-4-1 12c4 4 6 9 6 15 0 9-6 15-14 18v10h-12v-7H46v7H34V70C25 66 20 60 20 52z';
- return `<svg viewBox="0 0 104 92" width="${size}" height="${Math.round(size*.885)}" style="flex:none" aria-hidden="true"><defs><clipPath id="${id}"><path d="${body}"/></clipPath></defs><path d="${body}" fill="#1B2128" stroke="#8D97A3" stroke-width="2.5" stroke-linejoin="round"/><rect x="0" y="${top.toFixed(1)}" width="104" height="92" fill="${col}" clip-path="url(#${id})"/><path d="${body}" fill="none" stroke="#8D97A3" stroke-width="2.5" stroke-linejoin="round"/><rect x="44" y="28" width="18" height="4" rx="2" fill="#0F1215"/><circle cx="84" cy="46" r="2.8" fill="#E8ECF0"/></svg>`}
-function piggyPanel17(){const _M=savingsSeries().M,thisM=_M[_M.length-1];const act=S.goals.filter(g=>g.state!=='done');if(!act.length&&S.free<=0)return '';
- const T=savedTotal(S),tg=act.filter(g=>g.target>0),sumT=tg.reduce((a,g)=>a+g.target,0),inT=tg.reduce((a,g)=>a+Math.min(g.saved,g.target),0),ref=sumT>0?sumT:efTarget(),frac=Math.min(1,(sumT>0?inT:T)/Math.max(1,ref));
-  return `<div class="viz17 pig17">${piggySvg(frac,'#6FB08F',112)}<div style="min-width:0"><div class="cap" style="margin:0">Total saved</div><div style="font-size:30px;font-weight:700;margin-top:4px;line-height:1.1">${money(T)}</div><div class="sm" style="margin-top:4px">${sumT>0?`${Math.round(frac*100)}% of what they are saving for`:`${Math.round(frac*100)}% of an emergency fund of ${money(ref)}`}</div>${thisM>0?`<div class="sm">Up ${money(thisM)} this month</div>`:''}</div></div>`}
+function piggyPanel17(){const act=S.goals.filter(g=>g.state!=='done');if(!act.length&&S.free<=0)return '';
+ const T=savedTotal(S),_M=savingsSeries().M,thisM=_M[_M.length-1];
+ return `<div class="viz17" style="margin:4px 0 22px"><div class="cap" style="margin:0">Total saved</div><div style="font-size:40px;font-weight:700;margin-top:4px;line-height:1.1">${money(T)}</div>${thisM>0?`<div class="sm" style="margin-top:6px">Up ${money(thisM)} this month</div>`:''}</div>`}
 /* hero */
 function heroHome17(){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hs=homeState(),col=STATECOL[hs],dl=daysToGo(),ideal=weekIdeal(),rec=Math.round(ideal*W),aw=awareness();
  const st=hs==='out'?(S.touched?'Over budget':'Budget used'):hs==='fast'?'Spending fast':'On track';
