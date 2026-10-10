@@ -13,9 +13,7 @@ const sec17=t=>`<div class="cap" style="margin:34px 0 10px">${t}</div>`;
 function nextAct17(){const n=nextAct();if(n&&!n.low)return n;const a=awareness();if(a)return {t:a.t,a:'why|'+a.k+'|home',c:'tip'};return n}
 SCREENS.home=()=>{const pl=planned();let top,viz,cap='';
  if(pl){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),empty=L<=0,hs=homeState(),col=STATECOL[hs],dl=daysToGo();const st=hs==='out'?(S.touched?'Over this week. Savings used.':'Nothing left this week.'):hs==='fast'?'Spending a bit fast.':'';
-  top=`<div class="hero" style="font-size:52px;line-height:1.05;color:${hs==='out'?col:'var(--ink)'}">${money(L)}</div><div class="sub" style="margin-top:6px;font-size:16px">left of ${money(W)} this week</div>${st?`<div style="margin-top:6px;color:${col};font-weight:600">${st}</div>`:''}`;
-  viz=`<div style="margin:22px 0 22px" data-a="gridhow">${battery(L,W,{col,tick:weekIdeal(),label:'Recommended'})}</div>`;
-  cap=empty?'':`<div class="row sp" style="align-items:center;margin:0 0 14px"><span class="sub">${money(L/dl)} a day for ${dl===1?'today':dl+' days'}</span><button class="chip" data-a="gridhow">?</button></div>`}
+  top=heroHome17();viz='';cap=''}
  else{const tot=wkTot(0);top=tot?`<div class="hero" style="font-size:52px;line-height:1.05">${money(tot)}</div><div class="sub" style="margin-top:6px;font-size:16px">spent this week</div>`:`<div class="title" style="font-size:28px">Nothing logged yet.</div>`;viz=`<div style="margin:22px 0 14px"><div class="batt idle"></div></div>`}
  return `<div style="min-height:100%;display:flex;flex-direction:column"><div class="row sp" style="margin-top:2px"><span></span><button class="chip" data-a="settings">Settings</button></div><div style="margin-top:14px">${top}</div>${viz}${cap}${reachedHome17()}${carousel17()}${limitsHome17()}
 </div>`};

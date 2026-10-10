@@ -271,6 +271,8 @@ body{background:#0A0C0E;font-size:16px}
 #cta17{position:absolute;left:0;right:0;z-index:25;padding:12px 22px 12px;background:#0F1215;border-top:1px solid var(--line)}
 #view.home17{padding-bottom:190px}
 .panelC{background:var(--viz-c);border-radius:12px;padding:2px 14px}.panelC .cr17{border-bottom-color:#26323F}.panelC .cr17:last-child{border-bottom:0}
+.hero17{background:#2C353F;border:1px solid #343C47;border-radius:14px;padding:16px 16px 14px;margin:6px 0 24px}
+#phone .li.gc,#phone .li[data-a^="push|goal"]{background:var(--card-a);border-color:#343C47}
 </style></head><body>
 <div class="app"><div class="stage"><div id="frame"><div id="phone"><div class="notch"></div><div class="status"><span id="clk"></span><span>●●● 5G ▮</span></div><div id="glow"></div><div id="view"></div><div id="tabbar"></div><div id="layer"></div></div></div></div>
 <aside class="panel" id="panel"></aside></div>
@@ -2336,9 +2338,7 @@ const sec17=t=>`<div class="cap" style="margin:34px 0 10px">${t}</div>`;
 function nextAct17(){const n=nextAct();if(n&&!n.low)return n;const a=awareness();if(a)return {t:a.t,a:'why|'+a.k+'|home',c:'tip'};return n}
 SCREENS.home=()=>{const pl=planned();let top,viz,cap='';
  if(pl){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),empty=L<=0,hs=homeState(),col=STATECOL[hs],dl=daysToGo();const st=hs==='out'?(S.touched?'Over this week. Savings used.':'Nothing left this week.'):hs==='fast'?'Spending a bit fast.':'';
-  top=`<div class="hero" style="font-size:52px;line-height:1.05;color:${hs==='out'?col:'var(--ink)'}">${money(L)}</div><div class="sub" style="margin-top:6px;font-size:16px">left of ${money(W)} this week</div>${st?`<div style="margin-top:6px;color:${col};font-weight:600">${st}</div>`:''}`;
-  viz=`<div style="margin:22px 0 22px" data-a="gridhow">${battery(L,W,{col,tick:weekIdeal(),label:'Recommended'})}</div>`;
-  cap=empty?'':`<div class="row sp" style="align-items:center;margin:0 0 14px"><span class="sub">${money(L/dl)} a day for ${dl===1?'today':dl+' days'}</span><button class="chip" data-a="gridhow">?</button></div>`}
+  top=heroHome17();viz='';cap=''}
  else{const tot=wkTot(0);top=tot?`<div class="hero" style="font-size:52px;line-height:1.05">${money(tot)}</div><div class="sub" style="margin-top:6px;font-size:16px">spent this week</div>`:`<div class="title" style="font-size:28px">Nothing logged yet.</div>`;viz=`<div style="margin:22px 0 14px"><div class="batt idle"></div></div>`}
  return `<div style="min-height:100%;display:flex;flex-direction:column"><div class="row sp" style="margin-top:2px"><span></span><button class="chip" data-a="settings">Settings</button></div><div style="margin-top:14px">${top}</div>${viz}${cap}${reachedHome17()}${carousel17()}${limitsHome17()}
 </div>`};
@@ -2690,6 +2690,18 @@ H.goalbought=a=>{const g=S.goals.find(x=>x.id===a[0]);if(!g)return false;const a
 {const _as=areaSvg;areaSvg=function(v,c){return `<div class="viz17">${_as(v,c)}</div>`}}
 {const _wb=weeksBars;weeksBars=function(v,c){return `<div class="viz17">${_wb(v,c)}</div>`}}
 {const _ts=trendSvg;trendSvg=function(){return `<div class="viz17">${_ts.apply(null,arguments)}</div>`}}
+
+/* ===== v17.17 (10 Oct): the top of Home is the hero widget ===== */
+function heroHome17(){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hs=homeState(),col=STATECOL[hs],dl=daysToGo(),ideal=weekIdeal(),rec=Math.round(ideal*W);
+ const st=hs==='out'?(S.touched?'Over this week. Savings used.':'Nothing left this week.'):hs==='fast'?'Spending a bit fast.':hs==='ok'?'On track.':'';
+ return `<div class="hero17" style="border-color:${hs==='ok'?'#343C47':col}">
+ <div class="row sp" style="align-items:center"><span class="cap" style="margin:0">Left this week</span><button class="chip" data-a="gridhow">?</button></div>
+ <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px"><span class="hero" style="font-size:68px;line-height:1;color:${hs==='out'?col:'var(--ink)'}">${money(L)}</span><span style="font-size:18px;color:var(--ink2)">of ${money(W)}</span></div>
+ <div style="margin-top:6px;font-weight:650;color:${hs==='ok'?'var(--ink2)':col}">${st}</div>
+ <div class="row sp sm" style="margin:18px 0 6px"><span>₹0</span><span>${money(W)} = full budget</span></div>
+ <div data-a="gridhow">${battery(L,W,{col,tick:ideal,label:'Recommended '+money(rec)})}</div>
+ <div class="row" style="gap:12px;margin-top:44px;padding-top:14px;border-top:1px solid #353D48"><div style="flex:1.1"><div style="font-size:18px;font-weight:700;white-space:nowrap">${dl===1?'Last day':dl+' days to go'}</div><div class="sm">${dl===1?'of this week':'this week'}</div></div><div style="flex:1.4">${L>0?`<div style="font-size:19px;font-weight:700">${money(L/dl)} a day</div><div class="sm">to stay within budget</div>`:`<div style="font-size:19px;font-weight:700">Budget used</div><div class="sm">wait for next week</div>`}</div></div></div>`}
+SHEETS.gridhow=()=>{const W=Math.max(1,flexW());return `<div class="title" style="font-size:24px;margin-bottom:14px">How to read this</div><div class="col" style="gap:10px"><div class="sub">The big number is what is left of your budget for the week.</div><div class="sub">The right end of the bar is the full budget, ${money(W)}. The left end is zero.</div><div class="sub">The line is the recommended amount to have left by today. Below the line means you are spending faster than the week allows.</div></div><div style="margin:22px 0 40px">${battery(W*.62,W,{tick:.45,label:'Recommended'})}</div><div class="row sp" style="margin-top:18px"><button class="lnk" data-a="why|bar">Why a bar?</button><button class="btn s" data-a="closesheet" style="width:auto">OK</button></div>`};
 
 /* ===== control panel ===== */
 function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,0).getTime(),label:'Allowance',amt:S.p.income,note:''}];if(S.p.six)seedSix();else if(S.p.W>0){S.planSet=true;S.cats.forEach(c=>c.full=c.amt);S.bufFull=S.bufAmt;S.firstDay=new Date(S.now.getTime()-S.p.weeks*7*DAY)}resetUI();window._celeLock=false;render();fitPhone()}
