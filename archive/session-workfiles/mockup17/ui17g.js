@@ -15,7 +15,7 @@ function weekIdealEod(){const from=S.weekFrom||wk0(),end=wk0()+7*DAY,d=new Date(
 function heroHome17(){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hs=homeState(),col=STATECOL[hs],dl=daysToGo(),ideal=weekIdealEod(),rec=Math.round(ideal*W),aw=awareList17();
  const st=hs==='out'?(S.touched?'Over budget':'Budget used'):hs==='fast'?'Spending fast':'On track';
  return `<div class="hero17" style="border-color:${hs==='ok'?'#3B4553':col}">
- <div class="row sp" style="align-items:center"><span class="pill17" style="color:${col};background:${col}22"><i style="background:${col}"></i>${st}</span><button class="chip" data-a="gridhow">?</button></div>
+ <div class="row sp" style="align-items:center"><span class="pill17" style="color:${col};background:${col}22"><i style="background:${col}"></i>${st}</span><span style="display:flex;gap:8px">${window.NAV17==='fab'?'<button class="chip" data-a="addmoney17">+ Add money</button>':''}<button class="chip" data-a="gridhow">?</button></span></div>
  <div style="margin-top:14px"><span class="hero" style="font-size:72px;line-height:1;color:${hs==='out'?col:'var(--ink)'}">${money(L)}</span></div>
  <div style="font-size:18px;color:var(--ink2);margin-top:4px">left of ${money(W)} this week</div>
  <div class="row sp sm" style="margin:22px 0 8px"><span>₹0</span><span>${money(W)}</span></div>
@@ -23,7 +23,7 @@ function heroHome17(){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hs=homeS
  <div class="row" style="gap:12px;margin-top:14px;padding-top:14px;border-top:1px solid #3B4553"><div style="flex:1.1"><div style="font-size:18px;font-weight:700;white-space:nowrap">${dl===1?'Last day':dl+' days to go'}</div><div class="sm">${dl===1?'of this week':'this week'}</div></div><div style="flex:1.4">${L>0?`<div style="font-size:18px;font-weight:700;white-space:nowrap">${money(L/dl)} a day</div><div class="sm">to stay within budget</div>`:`<div style="font-size:18px;font-weight:700">Nothing to spend</div><div class="sm">until next week</div>`}</div></div>
  ${aw.length?`<div class="hu17box"><div class="cap" style="margin:0 0 6px;color:#E6B24F">Heads-up</div>${aw.map(x=>`<button class="hu17" data-a="insgo|${x.k}"><span>${esc(x.t)}${x.s?' '+esc(x.s):''}</span><i>›</i></button>`).join('')}</div>`:''}</div>`}
 /* the heads-up lives in the hero, not in the cards */
-{const _c6=cards17;cards17=function(){return _c6().filter(x=>x.tag!=='Heads-up')}}
+{const _c6=cards17;cards17=function(){const k=new Set(awareList17().map(x=>x.k)),map={'Time of day':'hour','Day':'day','Month':'month'};return _c6().filter(x=>x.tag!=='Heads-up'&&!(map[x.tag]&&k.has(map[x.tag])))}}
 /* a way into all the insights */
 {const _car2=carousel17;carousel17=function(){const h=_car2();if(!h)return '';return `<div class="row sp" style="align-items:center;margin:0 0 10px"><span class="cap" style="margin:0">Insights</span><button class="navi17" data-a="push|insall">All insights <i>›</i></button></div>`+h}}
 SCREENS.insall=()=>back17('Home')+`<div class="title" style="margin-bottom:6px">Insights</div>`+SCREENS.insights();

@@ -280,6 +280,9 @@ body{background:#0A0C0E;font-size:16px}
 .pig17{display:flex;gap:14px;align-items:center;margin:4px 0 22px}
 .pill17{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;font-size:14px;font-weight:700}.pill17 i{width:8px;height:8px;border-radius:50%;display:block}
 .hu17box{margin-top:14px;padding:10px 12px 4px;border-radius:12px;background:rgba(230,178,79,.12)}.hu17box .hu17{margin:0 0 8px;padding:0;background:none}
+#cta17.fab{left:auto;right:16px;padding:0;background:none;border:0}
+.fab17{display:flex;align-items:center;gap:8px;height:50px;padding:0 20px 0 16px;border:0;border-radius:999px;background:var(--accent);color:#0B1A14;font:inherit;font-weight:700;font-size:15.5px;cursor:pointer}.fab17 b{font-size:24px;line-height:1;font-weight:600}
+#view.fab17v{padding-bottom:140px}
 </style></head><body>
 <div class="app"><div class="stage"><div id="frame"><div id="phone"><div class="notch"></div><div class="status"><span id="clk"></span><span>●●● 5G ▮</span></div><div id="glow"></div><div id="view"></div><div id="tabbar"></div><div id="layer"></div></div></div></div>
 <aside class="panel" id="panel"></aside></div>
@@ -2162,7 +2165,6 @@ function mnSav(){const act=S.goals.filter(g=>g.state!=='done');
  if(!act.length&&S.free<=0)return `<div class="title" style="margin-top:6px">Saving for something?</div><div class="sub" style="margin:8px 0 22px">Open a savings goal. Name it, then put money in.</div><button class="btn" data-a="v15goal">Add a savings goal</button>`;
  const {ser,M,T}=savingsSeries(),grew=ser.filter((v,i)=>i&&v!==ser[i-1]).length>=2,inGoals=act.reduce((a,g)=>a+(g.target>0?Math.min(g.saved,g.target):g.saved),0),free=Math.max(0,S.free),thisM=M[11];
  return ` ${savingsPanel17()}
- <div class="sm" style="margin:${grew?'4px':'14px'} 2px 26px">${money(inGoals)} in savings goals${free>0?` · ${money(free)} not in one yet`:''}</div>
  <div class="col" style="gap:10px">${act.map(g=>{const col=goalCol(g),p=g.target>0?Math.min(1,g.saved/g.target):0;if(!(g.target>0))return `<button class="li" style="display:block;padding:14px 16px" data-a="push|goal|${J({id:g.id})}"><span class="row sp"><span class="n" style="flex:none;font-size:16px"><i style="width:10px;height:10px;border-radius:50%;background:${col};display:inline-block;margin-right:10px"></i>${esc(g.name)}</span><span class="hero" style="font-size:20px">${money(g.saved)}</span></span><span class="sm" style="display:block;margin-top:6px">No set amount</span></button>`;return `<button class="li gc" style="--glow:${col}66" data-a="push|goal|${J({id:g.id})}"><span class="row sp" style="margin-bottom:12px"><span class="n" style="flex:none;font-size:16px"><i style="width:10px;height:10px;border-radius:50%;background:${col};display:inline-block;margin-right:10px"></i>${esc(g.name)}</span><span class="pct" style="color:${col}">${Math.round(p*100)}%</span></span>${battery(g.saved,g.target,{col,sm:true,ms:true})}<span class="row sp sm" style="margin-top:10px"><span>${money(g.saved)} of ${money(g.target)}</span><span>${g.state==='reached'?'Reached':'Ready '+goalEta(g)}</span></span></button>`}).join('')}
  <button class="btn q" data-a="v15goal">+ Add a savings goal</button></div>`}
 
@@ -2687,8 +2689,8 @@ H.goalbought=a=>{const g=S.goals.find(x=>x.id===a[0]);if(!g)return false;const a
   if(!show){if(el)el.remove();return}
   const tb=document.getElementById('tabbar');const h=tb?tb.offsetHeight:84;
   if(!el){el=document.createElement('div');el.id='cta17';ph.appendChild(el)}
-  el.style.bottom=h+'px';
-  el.innerHTML=`<div class="row" style="gap:10px"><button class="btn" style="flex:3" data-a="${scanOn()?'payscan':'pay'}">Log expense</button><button class="btn q" style="flex:2;white-space:nowrap" data-a="addmoney17">Add money</button></div>`}}
+  const fab=window.NAV17==='fab';el.className=fab?'fab':'';view.classList.toggle('fab17v',fab);el.style.bottom=(fab?h+14:h)+'px';
+  el.innerHTML=fab?`<button class="fab17" data-a="${scanOn()?'payscan':'pay'}"><b>+</b> Log expense</button>`:`<div class="row" style="gap:10px"><button class="btn" style="flex:3" data-a="${scanOn()?'payscan':'pay'}">Log expense</button><button class="btn q" style="flex:2;white-space:nowrap" data-a="addmoney17">Add money</button></div>`}}
 /* 2. graphs sit on their own surface */
 {const _sb=stackBar;stackBar=function(rows,h){return `<div class="viz17">${_sb(rows,h)}</div>`}}
 {const _as=areaSvg;areaSvg=function(v,c){return `<div class="viz17">${_as(v,c)}</div>`}}
@@ -2724,7 +2726,7 @@ function weekIdealEod(){const from=S.weekFrom||wk0(),end=wk0()+7*DAY,d=new Date(
 function heroHome17(){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hs=homeState(),col=STATECOL[hs],dl=daysToGo(),ideal=weekIdealEod(),rec=Math.round(ideal*W),aw=awareList17();
  const st=hs==='out'?(S.touched?'Over budget':'Budget used'):hs==='fast'?'Spending fast':'On track';
  return `<div class="hero17" style="border-color:${hs==='ok'?'#3B4553':col}">
- <div class="row sp" style="align-items:center"><span class="pill17" style="color:${col};background:${col}22"><i style="background:${col}"></i>${st}</span><button class="chip" data-a="gridhow">?</button></div>
+ <div class="row sp" style="align-items:center"><span class="pill17" style="color:${col};background:${col}22"><i style="background:${col}"></i>${st}</span><span style="display:flex;gap:8px">${window.NAV17==='fab'?'<button class="chip" data-a="addmoney17">+ Add money</button>':''}<button class="chip" data-a="gridhow">?</button></span></div>
  <div style="margin-top:14px"><span class="hero" style="font-size:72px;line-height:1;color:${hs==='out'?col:'var(--ink)'}">${money(L)}</span></div>
  <div style="font-size:18px;color:var(--ink2);margin-top:4px">left of ${money(W)} this week</div>
  <div class="row sp sm" style="margin:22px 0 8px"><span>₹0</span><span>${money(W)}</span></div>
@@ -2732,7 +2734,7 @@ function heroHome17(){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hs=homeS
  <div class="row" style="gap:12px;margin-top:14px;padding-top:14px;border-top:1px solid #3B4553"><div style="flex:1.1"><div style="font-size:18px;font-weight:700;white-space:nowrap">${dl===1?'Last day':dl+' days to go'}</div><div class="sm">${dl===1?'of this week':'this week'}</div></div><div style="flex:1.4">${L>0?`<div style="font-size:18px;font-weight:700;white-space:nowrap">${money(L/dl)} a day</div><div class="sm">to stay within budget</div>`:`<div style="font-size:18px;font-weight:700">Nothing to spend</div><div class="sm">until next week</div>`}</div></div>
  ${aw.length?`<div class="hu17box"><div class="cap" style="margin:0 0 6px;color:#E6B24F">Heads-up</div>${aw.map(x=>`<button class="hu17" data-a="insgo|${x.k}"><span>${esc(x.t)}${x.s?' '+esc(x.s):''}</span><i>›</i></button>`).join('')}</div>`:''}</div>`}
 /* the heads-up lives in the hero, not in the cards */
-{const _c6=cards17;cards17=function(){return _c6().filter(x=>x.tag!=='Heads-up')}}
+{const _c6=cards17;cards17=function(){const k=new Set(awareList17().map(x=>x.k)),map={'Time of day':'hour','Day':'day','Month':'month'};return _c6().filter(x=>x.tag!=='Heads-up'&&!(map[x.tag]&&k.has(map[x.tag])))}}
 /* a way into all the insights */
 {const _car2=carousel17;carousel17=function(){const h=_car2();if(!h)return '';return `<div class="row sp" style="align-items:center;margin:0 0 10px"><span class="cap" style="margin:0">Insights</span><button class="navi17" data-a="push|insall">All insights <i>›</i></button></div>`+h}}
 SCREENS.insall=()=>back17('Home')+`<div class="title" style="margin-bottom:6px">Insights</div>`+SCREENS.insights();
@@ -2807,6 +2809,7 @@ const EVENTS=()=>{const c0=S.cats[0],big=S.cats.find(c=>c.name==='Outings')||S.c
   ['Time: Thursday 3 pm (guess check)',()=>{S.now=new Date(startOfWeek(S.now).getTime()+3*DAY+15*36e5);say('Thursday afternoon.')}],
   ['Make today my biggest day',()=>{const c=S.cats[0];for(let k=1;k<=4;k++){const t=simSpend(c.id,'Heavy day',250,0);t.t=S.now.getTime()-k*7*DAY-36e5}say('Today is now your biggest day.')}],
   ['Heads-ups on',()=>{S.nudgeOff=false;say('On.')}]]},
+ {h:'Bottom actions (layout test)',items:[['Two full-width buttons on the tab bar',()=>{window.NAV17='bar';go('home')}],['One floating Log expense, Add money in the card',()=>{window.NAV17='fab';go('home')}]]},
  {h:'Scan & pay helper (Test B)',items:[['Log expense opens a scanner',()=>{window.HOMEBTN='scan';go('home')}],['Log expense goes straight to by hand',()=>{window.HOMEBTN='log';go('home')}],['Platform: Android',()=>{window.PLATFORM='android';go('home')}],['Platform: iOS (no scan)',()=>{window.PLATFORM='ios';go('home')}]]},
  {h:'First-time tips',items:[['Show every tip again',()=>{Object.keys(TS).forEach(k=>delete TS[k]);say('Tips will show again.')}],['Turn tips on or off',()=>{window.TIPS=!window.TIPS;say(window.TIPS?'Tips on.':'Tips off.')}]]},
  {h:'Pop-ups (always skippable)',items:[['Add a spend?',()=>openAsk('add')],['Payments need a place',()=>openAsk('sort')],['Make a plan?',()=>openAsk('plan')],['Add your income?',()=>openAsk('income')],['After a week: here is how you spend',()=>{if(S.firstDay){S.now=new Date(S.firstDay.getTime()+8*DAY)}openAsk('planoffer')}],['Add a goal?',()=>openAsk('goal')],['Remind about bills?',()=>openAsk('notif')],['Add a PIN?',()=>openAsk('pin')],['Bring in older spends?',()=>openAsk('import')],['Last week recap (no budget)',()=>openAsk('recap')]]},

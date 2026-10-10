@@ -6,8 +6,8 @@
   if(!show){if(el)el.remove();return}
   const tb=document.getElementById('tabbar');const h=tb?tb.offsetHeight:84;
   if(!el){el=document.createElement('div');el.id='cta17';ph.appendChild(el)}
-  el.style.bottom=h+'px';
-  el.innerHTML=`<div class="row" style="gap:10px"><button class="btn" style="flex:3" data-a="${scanOn()?'payscan':'pay'}">Log expense</button><button class="btn q" style="flex:2;white-space:nowrap" data-a="addmoney17">Add money</button></div>`}}
+  const fab=window.NAV17==='fab';el.className=fab?'fab':'';view.classList.toggle('fab17v',fab);el.style.bottom=(fab?h+14:h)+'px';
+  el.innerHTML=fab?`<button class="fab17" data-a="${scanOn()?'payscan':'pay'}"><b>+</b> Log expense</button>`:`<div class="row" style="gap:10px"><button class="btn" style="flex:3" data-a="${scanOn()?'payscan':'pay'}">Log expense</button><button class="btn q" style="flex:2;white-space:nowrap" data-a="addmoney17">Add money</button></div>`}}
 /* 2. graphs sit on their own surface */
 {const _sb=stackBar;stackBar=function(rows,h){return `<div class="viz17">${_sb(rows,h)}</div>`}}
 {const _as=areaSvg;areaSvg=function(v,c){return `<div class="viz17">${_as(v,c)}</div>`}}
