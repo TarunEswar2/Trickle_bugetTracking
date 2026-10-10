@@ -1,7 +1,7 @@
 /* ===== v17.16 (10 Oct): visual hierarchy. Three greys for three kinds of information, and the two main buttons snap to the bar above the tab bar ===== */
 /* 1. Log expense and Add money: a fixed bar sitting on the tab bar (Home only) */
 {const _ar6=window.afterRender;window.afterRender=()=>{if(_ar6)_ar6();const ph=document.getElementById('phone'),view=document.getElementById('view');if(!ph||!view)return;
-  const show=UI.tab==='home'&&!(UI.stack&&UI.stack.length)&&!UI.flow&&!UI.popup&&!UI.sheet&&S&&S.cats;let el=document.getElementById('cta17');
+  const show=['home','spending','savings'].includes(UI.tab)&&!(UI.stack&&UI.stack.length)&&!UI.flow&&!UI.popup&&!UI.sheet&&S&&S.cats;let el=document.getElementById('cta17');
   view.classList.toggle('home17',!!show);
   if(!show){if(el)el.remove();return}
   const tb=document.getElementById('tabbar');const h=tb?tb.offsetHeight:84;

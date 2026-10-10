@@ -716,3 +716,8 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 |---|---|---|---|---|
 | V17-61 | Widget: place chips and Other | Tarun (draft): add the place chips back under the buttons. Tarun: the categories are not enough, the widget will mostly be used for e-commerce and food delivery, so it needs an Other that brings a list or lets you type. The widget shows two quick place chips under Log expense and Add money. In Log expense, "What for" shows the top 5 categories and "Other ›": a box to type a name (Zomato, Amazon, Rent) with matching categories below it, and "+ Use “Zomato”" creates it and selects it. | Can a tester log a Zomato order from the widget in under 15 seconds? | CONFIRMED (Tarun) |
 | V17-62 | "Recommended ... by end of day" | Tarun: "recommended 228 by EOD". The marker on the bar is the amount to have left at the end of today, labelled "Recommended ₹306 by end of day". The label is placed so it never leaves the card. The ? sheet says the same. | Five-second test | CONFIRMED (Tarun) |
+
+### V17-63 (10 Oct, Tarun): the main buttons snap to the navigation on every tab. CONFIRMED (his words); scope is my reading.
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V17-63 | Log expense and Add money placement | Tarun: "again put the CTA below, snapped to navigation". Home already had them flush on the tab bar (checked at 390x844, 430x760 and desktop). The bar now also shows on Spending and Savings, so the main actions are on all three tabs. Hidden on detail screens, flows and sheets. | First-click on each tab | CONFIRMED (Tarun) for the placement; "all three tabs" is my reading |
