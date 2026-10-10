@@ -1,6 +1,6 @@
 # Trickle — handover
 
-## v21 (10 Oct): from the second test round (on v20). Read `docs/claude/v21_plan.md` (feedback F1–F13, research, principles, specs, checklist). Build `archive/session-workfiles/mockup21/` (`ui21.js` + last CSS block); decisions V21-1…14; screenshots `docs/claude/v21_screens/`. Open: V21-14 (tiny week after adding money midweek), day-colour thresholds, photos vs drawn goal pictures, and a committed visual direction (F13).
+## v21 (10 Oct): from the second test round (on v20). Published at https://claude.ai/artifact/GHBj9J2uLTpkitfYZAWGte. Read `docs/claude/v21_plan.md` (feedback F1–F13, research, principles, specs, checklist). Build `archive/session-workfiles/mockup21/` (`ui21.js` + last CSS block); decisions V21-1…14; screenshots `docs/claude/v21_screens/`. Open: V21-14 (tiny week after adding money midweek), day-colour thresholds, photos vs drawn goal pictures, and a committed visual direction (F13).
 
 ## v20.1 (10 Oct): weeks stepper (+/−) or calendar instead of the dropdown; plan screen in numbered blocks with one result card; more spacing on Home; plain tips (V20-13…15). Known issue, not fixed (model, pre-existing): right after adding money mid-week, Home can show a tiny amount left (e.g. ₹5 of ₹1,092), because this week only gets its share for the days left minus what was already spent. Needs a decision from Tarun.
 
