@@ -776,3 +776,8 @@ Research (web search, 10 Oct): Monzo's community thread on a budgeting widget (l
 | ID | Domain | Evidence | Validation gate | Status |
 |---|---|---|---|---|
 | V19-17 | Remove the centre + button and the Settings tab-bar item. Settings is the gear at the top right again; Log expense and Add money are two buttons snapped above the tab bar. Supersedes V19-10 and V19-11 | Tarun, 10 Oct: "the centre button is not working, the earlier one with settings on top right and two buttons is better" | none | CONFIRMED (Tarun) |
+
+### V19-18 (10 Oct, Tarun): split bar styled from his reference image.
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V19-18 | The save/spend split uses a thin rounded bar with a white shield-shaped handle, instead of the thick bar with a tall line handle. Colours stay save = indigo, spend = orange | Tarun's 60 px reference image, 10 Oct ("use this slider bar for splitting spend and saving"). The image is tiny, so the handle shape is my reading of it | Test B | CONFIRMED (Tarun) for the style; exact shape mine |
