@@ -13,12 +13,12 @@ FLOWS.move=F=>{if(F.step===1)return _mvOld(F);const d=F.d,src=d.from;if(!d.dest)
  const goals=moveTiles({from:src,tab:'s'});
  const where=d.dest==='spend'?`<div class="cap" style="margin:12px 0 6px">When</div><div class="row" style="gap:8px"><button class="chip ${d.when==='week'?'on':''}" data-a="mwhen|week">This week</button><button class="chip ${d.when==='date'?'on':''}" data-a="mwhen|date">Spread to a date</button></div>
    ${d.when==='date'?`<div class="sub" style="margin:10px 0 8px">Until <b style="color:var(--ink)">${fmtDate(end)}</b>${amt?`. About ${money(per)} a week.`:''}</div>${calHtml(d,t0,end)}`:`<div class="sub" style="margin:10px 0">All of it is added to this week.</div>`}`
-  :`<div class="cap" style="margin:12px 0 6px">Which goal?</div><div class="tgrid">${goals.map(t=>{const on=d.toK===t.k;return `<button class="tile ${on?'on':''}" style="${on?`border-color:${t.col}`:''}" data-a="mto|${t.k}|s"><b><i style="background:${t.col}"></i>${esc(t.n)}</b><small style="color:${SAVE}">${t.w}</small></button>`}).join('')||'<div class="sm">No other goals yet.</div>'}</div>`;
+  :`<div class="cap" style="margin:12px 0 6px">Which piggy bank?</div><div class="tgrid">${goals.map(t=>{const on=d.toK===t.k;return `<button class="tile ${on?'on':''}" style="${on?`border-color:${t.col}`:''}" data-a="mto|${t.k}|s"><b><i style="background:${t.col}"></i>${esc(t.n)}</b><small style="color:${SAVE}">${t.w}</small></button>`}).join('')||'<div class="sm">No other goals yet.</div>'}</div>`;
  const ok=amt&&(d.dest==='spend'||d.toK);
  return `<div class="mbody"><button class="back" data-a="mclose">‹ Close</button><div class="cap">Move money</div>
  <div class="card" style="padding:10px 14px;margin:6px 0 10px"><div class="cap" style="font-size:10.5px">From</div><b><i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${SAVE};margin-right:8px"></i>${esc(sname)} · ${money(have)} saved</b></div>
  <div class="title" style="font-size:44px">₹ ${d.kp||'0'}</div><div class="sm" style="margin-bottom:10px;${over?'color:var(--amber);font-weight:700':''}">${over?`${esc(sname)} has ${money(have)} saved.`:`Most you can move: ${money(have)}`}</div>
- <div class="cap" style="margin:8px 0 6px">Move it to</div><div class="row" style="gap:8px"><button class="chip ${d.dest==='spend'?'on':''}" data-a="mdest|spend">Spend</button><button class="chip ${d.dest==='goal'?'on':''}" data-a="mdest|goal">Another goal</button></div>
+ <div class="cap" style="margin:8px 0 6px">Move it to</div><div class="row" style="gap:8px"><button class="chip ${d.dest==='spend'?'on':''}" data-a="mdest|spend">Spend</button><button class="chip ${d.dest==='goal'?'on':''}" data-a="mdest|goal">Another piggy bank</button></div>
  ${where}<div style="height:12px"></div>${keypad('kp')}</div><div class="mfoot"><button class="btn ${ok?'':'d'}" ${ok?'data-a="mdo"':''}>${over&&have?'Move '+money(have):'Move '+(amt?money(amt):'')}</button></div>`};
 H.mdest=a=>{const d=UI.flow.d;d.dest=a[0];d.toK=null;d.to=null;d.tab='s'};
 H.mwhen=a=>{const d=UI.flow.d;d.when=a[0];if(a[0]==='date'&&!d.end){d.end=MV_END();const e=new Date(d.end),n=new Date(day0());d.cm=(e.getFullYear()-n.getFullYear())*12+e.getMonth()-n.getMonth()}};
@@ -32,14 +32,14 @@ H.mwhen=a=>{const d=UI.flow.d;d.when=a[0];if(a[0]==='date'&&!d.end){d.end=MV_END
 /* a goal is moved from, not added to */
 {const _sg2=SCREENS.goal;SCREENS.goal=p=>{let h=_sg2(p);const g=S.goals.find(x=>x.id===p.id);if(!g)return h;
  h=h.replace('data-a="movefrom|'+g.id+'">Add money</button>','data-a="movefrom|'+g.id+'">Move money</button>');
- if(g.state==='reached')h=h.replace('data-a="gdone|'+g.id+'">Mark done</button>','data-a="gdone|'+g.id+'">I bought it</button><button class="btn q" data-a="sheet|goaledit|'+J({id:g.id}).replace(/\|/g,'')+'">Raise the goal</button>');
+ if(g.state==='reached')h=h.replace('data-a="gdone|'+g.id+'">Mark done</button>','data-a="gdone|'+g.id+'">I bought it</button><button class="btn q" data-a="sheet|goaledit|'+J({id:g.id}).replace(/\|/g,'')+'">Raise the target</button>');
  if(g.state==='reached')h=h.replace('You saved it all.</div>','You saved it all. Buy your item, or raise the goal.</div>');
  h=h.replace('‹ Money','‹ Savings');
  if(!(g.target>0))h=h.replace('<div class="col" style="gap:10px"><button class="btn" data-a="movefrom','<button class="li" style="margin-bottom:14px" data-a="sheet|goaledit|'+J({id:g.id,tgt:1}).replace(/\|/g,'')+'"><span class="n">Set a target</span><span class="t">optional ›</span></button><div class="col" style="gap:10px"><button class="btn" data-a="movefrom');
  return h}}
 /* Home: a reached goal comes first */
 {const _c3=cards17;cards17=function(){const out=_c3(),r=S.goals.filter(g=>g.state==='reached');if(!r.length)return out;const g=r[0];
-  return [{tag:'Goal reached',t:`${g.name}: you saved ${money(g.target)}.`,sub:'Buy your item, or raise the goal.',a:'push|goal|'+J({id:g.id}).replace(/\|/g,''),cta:'Choose',hot:true},...out].slice(0,7)}}
+  return [{tag:'Piggy bank full',t:`${g.name}: you saved ${money(g.target)}.`,sub:'Buy your item, or raise the goal.',a:'push|goal|'+J({id:g.id}).replace(/\|/g,''),cta:'Choose',hot:true},...out].slice(0,7)}}
 
 /* savings tab: money that is on its way to spending */
 {const _ms2=mnSav;mnSav=function(){const held=(S.sched||[]).reduce((a,x)=>a+x.held,0);return (held>0?`<div class="sm" style="margin:0 2px 12px">${money(held)} is waiting to be added to spending, week by week.</div>`:'')+_ms2()}}
@@ -80,7 +80,7 @@ H.limquickc=a=>{const id=a[0];if(!S.cats.some(c=>c.id===id))return false;S.limit
 
 /* ===== v17.14: a reached goal gets a big card on Home, above the insights ===== */
 function reachedHome17(){const g=S.goals.find(x=>x.state==='reached');if(!g)return '';
- return `<div class="card" style="margin:0 0 26px;padding:16px;border-color:var(--accent)"><div class="cap" style="margin:0 0 6px;color:var(--accent)">Goal reached</div><div style="font-size:24px;font-weight:700;line-height:1.15">${esc(g.name)}: you saved ${money(g.target)}</div><div class="sub" style="margin:6px 0 12px">Buy your item, or raise the goal.</div>${battery(g.target,g.target,{col:SAVE,sm:true})}<div class="row" style="gap:8px;margin-top:14px"><button class="btn t" style="flex:1;white-space:nowrap" data-a="goalbought|${g.id}">I bought it</button><button class="btn q" style="flex:1;white-space:nowrap;padding-left:8px;padding-right:8px" data-a="sheet|goaledit|${J({id:g.id}).replace(/\|/g,'')}">Raise the goal</button></div></div>`}
+ return `<div class="card" style="margin:0 0 26px;padding:16px;border-color:var(--accent)"><div class="cap" style="margin:0 0 6px;color:var(--accent)">Piggy bank full</div><div style="font-size:24px;font-weight:700;line-height:1.15">${esc(g.name)}: you saved ${money(g.target)}</div><div class="sub" style="margin:6px 0 12px">Buy your item, or raise the goal.</div>${battery(g.target,g.target,{col:SAVE,sm:true})}<div class="row" style="gap:8px;margin-top:14px"><button class="btn t" style="flex:1;white-space:nowrap" data-a="goalbought|${g.id}">I bought it</button><button class="btn q" style="flex:1;white-space:nowrap;padding-left:8px;padding-right:8px" data-a="sheet|goaledit|${J({id:g.id}).replace(/\|/g,'')}">Raise the target</button></div></div>`}
 H.goalbought=a=>{const g=S.goals.find(x=>x.id===a[0]);if(!g)return false;const amt=Math.max(0,Math.round(g.saved));g.state='done';g.doneOn=new Date(S.now);g.boughtOn=new Date(S.now);g.saved=0;if(amt>0)S.txns.unshift({id:'t'+(S.idc++),t:S.now.getTime(),payee:g.name,amt,kind:'goal',bought:true,note:'Bought with savings'});logE(S,`${g.name} bought`);if(UI.stack&&UI.stack.length)UI.stack=[];say('Enjoy your '+g.name+'.');return false};
 {const _c5=cards17;cards17=function(){return _c5().filter(x=>x.tag!=='Goal reached')}}
 {const _sg3=SCREENS.goal;SCREENS.goal=p=>_sg3(p).replace(/data-a="gdone\|([^"]+)">I bought it/,'data-a="goalbought|$1">I bought it')}

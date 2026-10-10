@@ -43,7 +43,7 @@ function monthCal(){const off=UI.mcOff||0,m0=new Date(S.now.getFullYear(),S.now.
  for(let n=1;n<=dim;n++){const v=by[key(n)]||0,fut=new Date(m0.getFullYear(),m0.getMonth(),n).getTime()>tdy.getTime(),isT=new Date(m0.getFullYear(),m0.getMonth(),n).getTime()===tdy.getTime();
   const a=v?(.16+.7*v/mx):0;cells+=`<button class="cl17${sel===n?' sel':''}${isT?' td':''}${fut?' fut':''}" style="${v?`background:rgba(233,161,92,${a.toFixed(2)})`:''}" data-a="${fut?'x':'mcsel|'+n}">${n}</button>`}
  const day=new Date(m0.getFullYear(),m0.getMonth(),sel||1),list=S.txns.filter(t=>isSp(t)&&new Date(t.t).toDateString()===day.toDateString());
- const dtxt=sel?`<div class="row sp" style="margin-top:14px;align-items:baseline"><b>${fmtDay(day)}</b><span class="hero" style="font-size:26px">${money(by[key(sel)]||0)}</span></div><div class="sm" style="margin-top:4px">${list.length?list.slice(0,3).map(t=>esc(t.payee)+' '+money(t.amt)).join(' · ')+(list.length>3?` · ${list.length-3} more`:''):'No spends.'}</div>`:'';
+ const dtxt=sel?`<div class="row sp" style="margin-top:14px;align-items:baseline"><b>${fmtDay(day)}</b><span class="hero" style="font-size:26px">${money(by[key(sel)]||0)}</span></div><div class="col" style="gap:6px;margin-top:10px">${list.length?list.map(t=>txRow17(t)).join(''):'<div class="sm">No spends.</div>'}</div>`:'';
  return `<div class="row sp" style="margin:14px 0 8px;align-items:center"><button class="chip" style="${off<=-3?'opacity:.3;pointer-events:none':''}" data-a="mcnav|-1">‹</button><b>${m0.toLocaleDateString('en-IN',{month:'long',year:'numeric'})}</b><button class="chip" style="${off>=0?'opacity:.3;pointer-events:none':''}" data-a="mcnav|1">›</button></div>
  <div class="viz17"><div class="cal17">${['M','T','W','T','F','S','S'].map(x=>`<span class="cap">${x}</span>`).join('')}${cells}</div></div><div class="sm" style="margin-top:8px">Darker means you spent more that day. ${money(tot)} this month.</div>${dtxt}`}
 H.mcnav=a=>{UI.mcOff=Math.max(-3,Math.min(0,(UI.mcOff||0)+(+a[0])));UI.mcSel=null};
@@ -77,7 +77,7 @@ function cats17(){const sc=UI.sc||'week',[f,t]=inWin(sc),rows=catTotals(f,t),T=s
 SCREENS.spending=()=>{const rec=recent17(5),mo=S.bills.filter(b=>!b.ended&&!b.paused&&!(b.trialUntil&&S.now.getTime()<b.trialUntil)).reduce((a,b)=>a+perMonth(b),0),nb=S.bills.filter(b=>!b.ended).length;
  const nxt=S.bills.filter(b=>!b.ended&&b.nextDue).sort((a,b)=>new Date(a.nextDue)-new Date(b.nextDue))[0];
  return `<div class="title" style="margin-bottom:2px">Spending</div>${cats17()}
- <div class="row sp" style="margin:38px 0 10px;align-items:center;padding-top:22px;border-top:1px solid var(--line)"><span class="cap" style="margin:0">Recent</span><button class="lnk" style="font-size:14px" data-a="push|history">See all ›</button></div>
+ <div class="row sp" style="margin:38px 0 10px;align-items:center;padding-top:22px;border-top:1px solid var(--line)"><span class="cap" style="margin:0">Past transactions</span><button class="lnk" style="font-size:14px" data-a="push|history">See all ›</button></div>
  <div class="col" style="gap:6px">${rec.length?rec.map(txRow17).join(''):'<div class="sub">Nothing yet.</div>'}</div>
  <div class="col" style="gap:8px;margin-top:34px">${row17('Subscriptions',nb?`${money(mo)} a month${nxt?' · '+esc(nxt.name)+' '+shortD(new Date(nxt.nextDue).getTime()):''}`:'None yet','v15bills')}${(S.limits||[]).length?row17('Limits',`${S.limits.length} set`,'v16limits'):''}</div>`};
 
@@ -89,7 +89,7 @@ SCREENS.incomes=()=>back17('Savings')+`<div class="title" style="margin-bottom:1
 SCREENS.pwhen=()=>back17('Home')+insWhen();
 SCREENS.prep=()=>back17('Home')+insRep();
 SCREENS.ptrend=()=>back17('Home')+insCmp();
-SCREENS.history=()=>back17('Spending')+`<div class="title" style="margin-bottom:4px">All spends</div>`+spHist();
+SCREENS.history=()=>back17('Spending')+`<div class="title" style="margin-bottom:4px">Past transactions</div>`+spHist();
 
 /* ---------- category screen: "Where" rows say visits plainly ---------- */
 {const _cat=SCREENS.cat;SCREENS.cat=SCREENS.tcat=p=>_cat(p).replace(/<span class="t">(\d+)× · /g,(_,n)=>`<span class="t">${n} ${n==='1'?'visit':'visits'} · `).replace('<div class="cap" style="margin:30px 0 10px">Where</div>','<div class="cap" style="margin:18px 0 2px">Where you went</div><div class="sm" style="margin-bottom:8px">Tap a place to limit how often.</div>')}

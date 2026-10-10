@@ -23,7 +23,7 @@ const phaseNow=()=>{const d=S.now.getDate();return d<=10?0:d<=20?1:2};
 const perDayLeft=()=>{const L=Math.max(0,flexL()),dl=daysToGo();return L/dl};
 
 /* ---------- awareness: one calm heads-up on Home, only at the user's own busy times ---------- */
-function awareness(){if(S.nudgeOff||!planned())return null;const L=Math.max(0,flexL()),pd=Math.round(perDayLeft()),tail=L<=0?"This week's amount is used up.":`About ${money(pd)} a day left.`;
+function awareness(){if(S.nudgeOff||!planned())return null;const L=Math.max(0,flexL()),pd=Math.round(perDayLeft()),tail=L<=0?"This week's amount is used up.":`${money(L)} left for ${daysToGo()===1?'today':daysToGo()+' days'}.`;
  const h=statsHour();if(h.ok){const sN=6+2*h.pk,hh=S.now.getHours()+S.now.getMinutes()/60,hN=hh<6?hh+24:hh;if(hN>=sN-1&&hN<sN+2)return {k:'hour',t:`${bandLabel(h.pk)} is when you spend most.`,s:tail}}
  const d=statsDay();if(d.ok&&dowIdx(S.now.getTime())===d.pk)return {k:'day',t:`${FULLDAY[d.pk]}s are your biggest day.`,s:`Typical: ${money(d.vals[d.pk])}. ${tail}`};
  const m=statsMonth();if(m.ok&&phaseNow()===m.pk)return {k:'month',t:`${PHASE[m.pk]} is when you spend most.`,s:`Typically ${money(m.vals[m.pk])} a day. ${tail}`};return null}

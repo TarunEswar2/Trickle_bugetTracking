@@ -273,6 +273,11 @@ body{background:#0A0C0E;font-size:16px}
 .panelC{background:var(--viz-c);border-radius:12px;padding:2px 14px}.panelC .cr17{border-bottom-color:#26323F}.panelC .cr17:last-child{border-bottom:0}
 .hero17{background:#2C353F;border:1px solid #343C47;border-radius:14px;padding:16px 16px 14px;margin:6px 0 24px}
 #phone .li.gc,#phone .li[data-a^="push|goal"]{background:var(--card-a);border-color:#343C47}
+.hero17{background:linear-gradient(165deg,#36424F 0%,#262F39 100%)}
+.hu17{display:flex;align-items:center;gap:8px;width:100%;margin-top:14px;padding:10px 12px;border:0;border-radius:10px;background:rgba(230,178,79,.14);color:var(--ink);font:inherit;font-size:14px;text-align:left;cursor:pointer}
+.hu17 b{color:#E6B24F;flex:none}.hu17 span{flex:1;line-height:1.3}.hu17 i{font-style:normal;color:var(--ink3);font-size:18px}
+.navi17{background:none;border:1px solid var(--line);color:var(--accent);border-radius:999px;padding:5px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}.navi17 i{font-style:normal}
+.pig17{display:flex;gap:14px;align-items:center;margin:4px 0 22px}
 </style></head><body>
 <div class="app"><div class="stage"><div id="frame"><div id="phone"><div class="notch"></div><div class="status"><span id="clk"></span><span>●●● 5G ▮</span></div><div id="glow"></div><div id="view"></div><div id="tabbar"></div><div id="layer"></div></div></div></div>
 <aside class="panel" id="panel"></aside></div>
@@ -2015,7 +2020,7 @@ const phaseNow=()=>{const d=S.now.getDate();return d<=10?0:d<=20?1:2};
 const perDayLeft=()=>{const L=Math.max(0,flexL()),dl=daysToGo();return L/dl};
 
 /* ---------- awareness: one calm heads-up on Home, only at the user's own busy times ---------- */
-function awareness(){if(S.nudgeOff||!planned())return null;const L=Math.max(0,flexL()),pd=Math.round(perDayLeft()),tail=L<=0?"This week's amount is used up.":`About ${money(pd)} a day left.`;
+function awareness(){if(S.nudgeOff||!planned())return null;const L=Math.max(0,flexL()),pd=Math.round(perDayLeft()),tail=L<=0?"This week's amount is used up.":`${money(L)} left for ${daysToGo()===1?'today':daysToGo()+' days'}.`;
  const h=statsHour();if(h.ok){const sN=6+2*h.pk,hh=S.now.getHours()+S.now.getMinutes()/60,hN=hh<6?hh+24:hh;if(hN>=sN-1&&hN<sN+2)return {k:'hour',t:`${bandLabel(h.pk)} is when you spend most.`,s:tail}}
  const d=statsDay();if(d.ok&&dowIdx(S.now.getTime())===d.pk)return {k:'day',t:`${FULLDAY[d.pk]}s are your biggest day.`,s:`Typical: ${money(d.vals[d.pk])}. ${tail}`};
  const m=statsMonth();if(m.ok&&phaseNow()===m.pk)return {k:'month',t:`${PHASE[m.pk]} is when you spend most.`,s:`Typically ${money(m.vals[m.pk])} a day. ${tail}`};return null}
@@ -2152,13 +2157,13 @@ function areaSvg(vals,col){const W=346,H=176,pl=10,pr=16,pt=20,pb=30,n=vals.leng
  ${vals.map((_,i)=>`<text x="${x(i).toFixed(1)}" y="${H-9}" text-anchor="middle" fill="${i===n-1?'#F4F6FA':'#8F9AAB'}" font-size="12.5" font-weight="${i===n-1?700:500}">${ml(i)}</text>`).join('')}</svg>`}
 
 function mnSav(){const act=S.goals.filter(g=>g.state!=='done');
- if(!act.length&&S.free<=0)return `<div class="title" style="margin-top:6px">Saving for something?</div><div class="sub" style="margin:8px 0 22px">Name it. Pick an amount. Watch it grow.</div><button class="btn" data-a="v15goal">Add a goal</button>`;
+ if(!act.length&&S.free<=0)return `<div class="title" style="margin-top:6px">Saving for something?</div><div class="sub" style="margin:8px 0 22px">Open a piggy bank. Name it, then put money in.</div><button class="btn" data-a="v15goal">Add a piggy bank</button>`;
  const {ser,M,T}=savingsSeries(),grew=ser.filter((v,i)=>i&&v!==ser[i-1]).length>=2,inGoals=act.reduce((a,g)=>a+(g.target>0?Math.min(g.saved,g.target):g.saved),0),free=Math.max(0,S.free),thisM=M[11];
  return `<div><span class="hero" style="font-size:46px">${money(T)}</span><div class="sub" style="margin-top:6px;font-size:16px">saved${thisM>0?` · up ${money(thisM)} this month`:''}</div></div>
- ${grew?`<div style="margin:20px 0 4px">${areaSvg(ser,'#7CE7C4')}</div>`:''}
- <div class="sm" style="margin:${grew?'4px':'14px'} 2px 26px">${money(inGoals)} in goals${free>0?` · ${money(free)} free`:''}</div>
- <div class="col" style="gap:10px">${act.map(g=>{const col=goalCol(g),p=g.target>0?Math.min(1,g.saved/g.target):0;if(!(g.target>0))return `<button class="li" style="display:block;padding:14px 16px" data-a="push|goal|${J({id:g.id})}"><span class="row sp"><span class="n" style="flex:none;font-size:16px"><i style="width:10px;height:10px;border-radius:50%;background:${col};display:inline-block;margin-right:10px"></i>${esc(g.name)}</span><span class="hero" style="font-size:20px">${money(g.saved)}</span></span><span class="sm" style="display:block;margin-top:6px">No set amount</span></button>`;return `<button class="li gc" style="--glow:${col}66" data-a="push|goal|${J({id:g.id})}"><span class="row sp" style="margin-bottom:12px"><span class="n" style="flex:none;font-size:16px"><i style="width:10px;height:10px;border-radius:50%;background:${col};display:inline-block;margin-right:10px;box-shadow:0 0 10px ${col}88"></i>${esc(g.name)}</span><span class="pct" style="color:${col}">${Math.round(p*100)}%</span></span>${battery(g.saved,g.target,{col,sm:true,ms:true})}<span class="row sp sm" style="margin-top:10px"><span>${money(g.saved)} of ${money(g.target)}</span><span>${g.state==='reached'?'Reached':'Ready '+goalEta(g)}</span></span></button>`}).join('')}
- <button class="btn q" data-a="v15goal">+ Add a goal</button></div>`}
+ ${piggyPanel17()}
+ <div class="sm" style="margin:${grew?'4px':'14px'} 2px 26px">${money(inGoals)} in piggy banks${free>0?` · ${money(free)} not in one yet`:''}</div>
+ <div class="col" style="gap:10px">${act.map(g=>{const col=goalCol(g),p=g.target>0?Math.min(1,g.saved/g.target):0;if(!(g.target>0))return `<button class="li" style="display:block;padding:14px 16px" data-a="push|goal|${J({id:g.id})}"><span class="row sp"><span class="n" style="flex:none;font-size:16px">${piggySvg(Math.min(1,g.saved/Math.max(1,efTarget())),col,34)}<span style="display:inline-block;width:8px"></span>${esc(g.name)}</span><span class="hero" style="font-size:20px">${money(g.saved)}</span></span><span class="sm" style="display:block;margin-top:6px">No set amount</span></button>`;return `<button class="li gc" style="--glow:${col}66" data-a="push|goal|${J({id:g.id})}"><span class="row sp" style="margin-bottom:12px"><span class="n" style="flex:none;font-size:16px">${piggySvg(p,col,34)}<span style="display:inline-block;width:8px"></span>${esc(g.name)}</span><span class="pct" style="color:${col}">${Math.round(p*100)}%</span></span>${battery(g.saved,g.target,{col,sm:true,ms:true})}<span class="row sp sm" style="margin-top:10px"><span>${money(g.saved)} of ${money(g.target)}</span><span>${g.state==='reached'?'Reached':'Ready '+goalEta(g)}</span></span></button>`}).join('')}
+ <button class="btn q" data-a="v15goal">+ Add a piggy bank</button></div>`}
 
 /* ---------- a goal ---------- */
 SCREENS.goal=({id})=>{const g=S.goals.find(x=>x.id===id);if(!g)return '';const col=goalCol(g),p=Math.min(1,g.saved/g.target),need=goalNeeded(g),togo=Math.max(0,g.target-g.saved);
@@ -2353,7 +2358,7 @@ SCREENS.spending=()=>{const h=statsHour(),rep=shopList()[0],cmp=cmpNow();
 SCREENS.pwhen=()=>back17('Spending')+insWhen();
 SCREENS.prep=()=>back17('Spending')+insRep();
 SCREENS.ptrend=()=>back17('Spending')+insCmp();
-SCREENS.history=()=>back17('Spending')+`<div class="title" style="margin-bottom:4px">All spends</div>`+spHist();
+SCREENS.history=()=>back17('Spending')+`<div class="title" style="margin-bottom:4px">Past transactions</div>`+spHist();
 
 /* ---------- Money: one list ---------- */
 SCREENS.money=()=>{const l=S.incomes||[],now=S.now.getTime(),run=l.filter(i=>!i.end||i.end+DAY>now),mo=S.bills.filter(b=>!b.ended&&!b.paused&&!(b.trialUntil&&now<b.trialUntil)).reduce((a,b)=>a+perMonth(b),0),sav=savedTotal(S);
@@ -2409,7 +2414,7 @@ function monthCal(){const off=UI.mcOff||0,m0=new Date(S.now.getFullYear(),S.now.
  for(let n=1;n<=dim;n++){const v=by[key(n)]||0,fut=new Date(m0.getFullYear(),m0.getMonth(),n).getTime()>tdy.getTime(),isT=new Date(m0.getFullYear(),m0.getMonth(),n).getTime()===tdy.getTime();
   const a=v?(.16+.7*v/mx):0;cells+=`<button class="cl17${sel===n?' sel':''}${isT?' td':''}${fut?' fut':''}" style="${v?`background:rgba(233,161,92,${a.toFixed(2)})`:''}" data-a="${fut?'x':'mcsel|'+n}">${n}</button>`}
  const day=new Date(m0.getFullYear(),m0.getMonth(),sel||1),list=S.txns.filter(t=>isSp(t)&&new Date(t.t).toDateString()===day.toDateString());
- const dtxt=sel?`<div class="row sp" style="margin-top:14px;align-items:baseline"><b>${fmtDay(day)}</b><span class="hero" style="font-size:26px">${money(by[key(sel)]||0)}</span></div><div class="sm" style="margin-top:4px">${list.length?list.slice(0,3).map(t=>esc(t.payee)+' '+money(t.amt)).join(' · ')+(list.length>3?` · ${list.length-3} more`:''):'No spends.'}</div>`:'';
+ const dtxt=sel?`<div class="row sp" style="margin-top:14px;align-items:baseline"><b>${fmtDay(day)}</b><span class="hero" style="font-size:26px">${money(by[key(sel)]||0)}</span></div><div class="col" style="gap:6px;margin-top:10px">${list.length?list.map(t=>txRow17(t)).join(''):'<div class="sm">No spends.</div>'}</div>`:'';
  return `<div class="row sp" style="margin:14px 0 8px;align-items:center"><button class="chip" style="${off<=-3?'opacity:.3;pointer-events:none':''}" data-a="mcnav|-1">‹</button><b>${m0.toLocaleDateString('en-IN',{month:'long',year:'numeric'})}</b><button class="chip" style="${off>=0?'opacity:.3;pointer-events:none':''}" data-a="mcnav|1">›</button></div>
  <div class="viz17"><div class="cal17">${['M','T','W','T','F','S','S'].map(x=>`<span class="cap">${x}</span>`).join('')}${cells}</div></div><div class="sm" style="margin-top:8px">Darker means you spent more that day. ${money(tot)} this month.</div>${dtxt}`}
 H.mcnav=a=>{UI.mcOff=Math.max(-3,Math.min(0,(UI.mcOff||0)+(+a[0])));UI.mcSel=null};
@@ -2443,7 +2448,7 @@ function cats17(){const sc=UI.sc||'week',[f,t]=inWin(sc),rows=catTotals(f,t),T=s
 SCREENS.spending=()=>{const rec=recent17(5),mo=S.bills.filter(b=>!b.ended&&!b.paused&&!(b.trialUntil&&S.now.getTime()<b.trialUntil)).reduce((a,b)=>a+perMonth(b),0),nb=S.bills.filter(b=>!b.ended).length;
  const nxt=S.bills.filter(b=>!b.ended&&b.nextDue).sort((a,b)=>new Date(a.nextDue)-new Date(b.nextDue))[0];
  return `<div class="title" style="margin-bottom:2px">Spending</div>${cats17()}
- <div class="row sp" style="margin:38px 0 10px;align-items:center;padding-top:22px;border-top:1px solid var(--line)"><span class="cap" style="margin:0">Recent</span><button class="lnk" style="font-size:14px" data-a="push|history">See all ›</button></div>
+ <div class="row sp" style="margin:38px 0 10px;align-items:center;padding-top:22px;border-top:1px solid var(--line)"><span class="cap" style="margin:0">Past transactions</span><button class="lnk" style="font-size:14px" data-a="push|history">See all ›</button></div>
  <div class="col" style="gap:6px">${rec.length?rec.map(txRow17).join(''):'<div class="sub">Nothing yet.</div>'}</div>
  <div class="col" style="gap:8px;margin-top:34px">${row17('Subscriptions',nb?`${money(mo)} a month${nxt?' · '+esc(nxt.name)+' '+shortD(new Date(nxt.nextDue).getTime()):''}`:'None yet','v15bills')}${(S.limits||[]).length?row17('Limits',`${S.limits.length} set`,'v16limits'):''}</div>`};
 
@@ -2455,7 +2460,7 @@ SCREENS.incomes=()=>back17('Savings')+`<div class="title" style="margin-bottom:1
 SCREENS.pwhen=()=>back17('Home')+insWhen();
 SCREENS.prep=()=>back17('Home')+insRep();
 SCREENS.ptrend=()=>back17('Home')+insCmp();
-SCREENS.history=()=>back17('Spending')+`<div class="title" style="margin-bottom:4px">All spends</div>`+spHist();
+SCREENS.history=()=>back17('Spending')+`<div class="title" style="margin-bottom:4px">Past transactions</div>`+spHist();
 
 /* ---------- category screen: "Where" rows say visits plainly ---------- */
 {const _cat=SCREENS.cat;SCREENS.cat=SCREENS.tcat=p=>_cat(p).replace(/<span class="t">(\d+)× · /g,(_,n)=>`<span class="t">${n} ${n==='1'?'visit':'visits'} · `).replace('<div class="cap" style="margin:30px 0 10px">Where</div>','<div class="cap" style="margin:18px 0 2px">Where you went</div><div class="sm" style="margin-bottom:8px">Tap a place to limit how often.</div>')}
@@ -2520,25 +2525,25 @@ const efTarget=()=>Math.max(2000,Math.round((S.W||1500)*13/500)*500);
 const activeGoals=()=>S.goals.filter(g=>g.state!=='done');
 H.efund=()=>{openSheet('addgoal',{name:'Emergency fund',kp:String(efTarget()),by:12});return false};
 H.choosegoal=()=>{const g=activeGoals();if(!g.length)return H.efund();if(g.length===1){openSheet('fundgoal',{id:g[0].id});return false}openSheet('pickgoal',{});return false};
-SHEETS.pickgoal=()=>`<div class="title" style="font-size:24px;margin-bottom:12px">Which goal?</div><div class="col" style="gap:8px">${activeGoals().map(g=>`<button class="li" data-a="fundpick|${g.id}"><span class="n">${esc(g.name)}</span><span class="t">${money(g.saved)} of ${money(g.target)} ›</span></button>`).join('')}</div>`;
+SHEETS.pickgoal=()=>`<div class="title" style="font-size:24px;margin-bottom:12px">Which piggy bank?</div><div class="col" style="gap:8px">${activeGoals().map(g=>`<button class="li" data-a="fundpick|${g.id}"><span class="n">${esc(g.name)}</span><span class="t">${money(g.saved)} of ${money(g.target)} ›</span></button>`).join('')}</div>`;
 H.fundpick=a=>{openSheet('fundgoal',{id:a[0]});return false};
 SHEETS.fundgoal=({id})=>{const g=S.goals.find(x=>x.id===id);if(!g)return '';const free=Math.max(0,Math.floor(S.free)),amt=Math.min(free,Math.max(0,g.target-g.saved)||free);
- return `<div class="cap">${money(free)} saved, not in a goal</div><div class="title" style="font-size:26px;margin:4px 0 8px">Put ${money(amt)} in ${esc(g.name)}?</div><div class="sub" style="margin-bottom:16px">It stays your money. It just gets a job.</div><div class="col" style="gap:8px"><button class="btn" data-a="fundgo|${g.id}|${amt}">Put ${money(amt)} in</button><button class="btn q" data-a="closesheet">Not now</button></div>`};
-H.fundgo=a=>{const amt=+a[1];if(amt>0)moveMoney(S,{type:'free'},{type:'goal',id:a[0]},amt);UI.sheet=null;say(money(amt)+' is in your goal.');return false};
+ return `<div class="cap">${money(free)} saved, not in a piggy bank</div><div class="title" style="font-size:26px;margin:4px 0 8px">Put ${money(amt)} in ${esc(g.name)}?</div><div class="sub" style="margin-bottom:16px">It stays your money. It just goes in a piggy bank.</div><div class="col" style="gap:8px"><button class="btn" data-a="fundgo|${g.id}|${amt}">Put ${money(amt)} in</button><button class="btn q" data-a="closesheet">Not now</button></div>`};
+H.fundgo=a=>{const amt=+a[1];if(amt>0)moveMoney(S,{type:'free'},{type:'goal',id:a[0]},amt);UI.sheet=null;say(money(amt)+' is in your piggy bank.');return false};
 /* after a new goal is added, offer the free money straight away */
 {const _ga=H.goaladd;H.goaladd=()=>{const n=S.goals.length;_ga();if(S.goals.length>n&&S.free>=1){const g=S.goals[S.goals.length-1];openSheet('fundgoal',{id:g.id})}}}
 /* the goal sheet offers an emergency fund first */
 {const _ag=SHEETS.addgoal;SHEETS.addgoal=p=>_ag(p).replace(`<button class="chip ${p.name==='Trip'?'on':''}" data-a="gname|Trip">Trip</button>`,`<button class="chip ${p.name==='Emergency fund'?'on':''}" data-a="gname|Emergency fund">Emergency fund</button><button class="chip ${p.name==='Trip'?'on':''}" data-a="gname|Trip">Trip</button>`)}
 /* Savings tab: the action first */
 {const _ms=mnSav;mnSav=function(){const free=Math.floor(S.free),g=activeGoals();let top='';
-  if(free>=1&&g.length===0)top=`<div class="card" style="margin-bottom:28px"><div class="cap">Needs a job</div><div style="font-weight:650;font-size:17px;margin-top:4px">${money(free)} is saved but not in a goal.</div><div class="sub" style="margin-top:4px">Most people start with an emergency fund, about 3 months of spending: ${money(efTarget())}.</div><button class="btn" style="margin-top:12px" data-a="efund">Start an emergency fund</button></div>`;
-  else if(free>=1)top=`<div class="card" style="margin-bottom:28px"><div class="cap">Needs a job</div><div style="font-weight:650;font-size:17px;margin-top:4px">${money(free)} is saved but not in a goal.</div><button class="btn" style="margin-top:12px" data-a="choosegoal">Put it in a goal</button></div>`;
+  if(free>=1&&g.length===0)top=`<div class="card" style="margin-bottom:28px"><div class="cap">Needs a piggy bank</div><div style="font-weight:650;font-size:17px;margin-top:4px">${money(free)} is saved. Put it in a piggy bank.</div><div class="sub" style="margin-top:4px">Start with an emergency fund, about 3 months of spending: ${money(efTarget())}. You can skip the amount.</div><button class="btn" style="margin-top:12px" data-a="efund">Open an emergency fund</button></div>`;
+  else if(free>=1)top=`<div class="card" style="margin-bottom:28px"><div class="cap">Needs a piggy bank</div><div style="font-weight:650;font-size:17px;margin-top:4px">${money(free)} is saved. Put it in a piggy bank.</div><button class="btn" style="margin-top:12px" data-a="choosegoal">Choose a piggy bank</button></div>`;
   else if(g.length===0&&S.goals.length===0)top=`<div class="card" style="margin-bottom:28px"><div style="font-weight:650;font-size:17px">Start with an emergency fund.</div><div class="sub" style="margin-top:4px">A small pot for surprises. ${money(efTarget())} is about 3 months.</div><button class="btn" style="margin-top:12px" data-a="efund">Start it</button></div>`;
   return top+_ms()}}
 /* Home: the only savings number is money that needs a decision */
 {const _c=cards17;cards17=function(){const out=_c(),free=Math.floor(S.free),g=activeGoals();let c=null;
-  if(free>=1)c={tag:'Savings',t:`${money(free)} is saved. Give it a job.`,sub:g.length?'Put it in a goal.':'Start an emergency fund.',a:g.length?'choosegoal':'efund',cta:'Choose',hot:true};
-  else if(planned()&&S.goals.length===0)c={tag:'Savings',t:'Start an emergency fund',sub:`About 3 months of spending: ${money(efTarget())}.`,a:'efund',cta:'Add a goal'};
+  if(free>=1)c={tag:'Savings',t:`${money(free)} is saved. Put it in a piggy bank.`,sub:g.length?'Pick one.':'Start with an emergency fund.',a:g.length?'choosegoal':'efund',cta:'Choose',hot:true};
+  else if(planned()&&S.goals.length===0)c={tag:'Savings',t:'Open a piggy bank for surprises',sub:`An emergency fund. About 3 months of spending: ${money(efTarget())}.`,a:'efund',cta:'Open one'};
   if(c){const rest=out.filter(x=>x.tag!=='Soon');return [c,...rest].slice(0,7)}return out}}
 
 /* ===== goals do not need an amount or a date (Tarun, 9 Oct). An emergency fund can just grow. ===== */
@@ -2546,10 +2551,10 @@ function gThere(g){return g.target>0?`${g.name} is now ${Math.round(Math.min(1,g
 {const _ge=goalEta;goalEta=function(g){return g.target>0?_ge(g):'whenever you like'}}
 H.efund=()=>{openSheet('addgoal',{name:'Emergency fund',open:true,kp:'',by:0});return false};
 SHEETS.addgoal=p=>{p.name=p.name||'Emergency fund';if(p.open===undefined)p.open=p.name==='Emergency fund';if(p.by===undefined)p.by=0;if(p.kp===undefined)p.kp=p.open?'':'6000';const a=amtOf(p.kp),need=a&&p.by?Math.ceil(a/p.by/10)*10:0;
- return `<div class="h2">Add a goal</div><div class="row wrap" style="margin:10px 0">${['Emergency fund','Trip','Laptop','Phone','Bike','Course'].map(n=>`<button class="chip ${p.name===n?'on':''}" data-a="gname|${n}">${n}</button>`).join('')}</div>
+ return `<div class="h2">Add a piggy bank</div><div class="row wrap" style="margin:10px 0">${['Emergency fund','Trip','Laptop','Phone','Bike','Course'].map(n=>`<button class="chip ${p.name===n?'on':''}" data-a="gname|${n}">${n}</button>`).join('')}</div>
  <div class="cap" style="margin:6px 0 6px">Amount (optional)</div><div class="row wrap"><button class="chip ${p.open?'on':''}" data-a="gopen|1">No set amount</button><button class="chip ${p.open?'':'on'}" data-a="gopen|0">Set an amount</button></div>
  ${p.open?`<div class="sub" style="margin:10px 0">${p.name==='Emergency fund'?`It just grows. A common target is about 3 months of spending, ${money(efTarget())}.`:'It just grows. You can set an amount later.'}</div>`:`<div class="field" style="font-size:30px;margin-top:10px">₹ ${esc(p.kp||'0')}</div><div class="cap" style="margin:12px 0 6px">By when (optional)</div><div class="row wrap">${[[0,'No date'],[6,'6 months'],[12,'1 year'],[24,'2 years']].map(o=>`<button class="chip ${p.by===o[0]?'on':''}" data-a="gby|${o[0]}">${o[1]}</button>`).join('')}</div><div class="sub" style="margin:10px 0">${need?`Save about ${money(need)} a month to get there.`:'No date, so it takes what is left.'}</div>${keypad('kp')}`}
- <div style="height:8px"></div><button class="btn ${p.open||a?'':'d'}" data-a="${p.open||a?'goaladd':'x'}">Add goal</button>`};
+ <div style="height:8px"></div><button class="btn ${p.open||a?'':'d'}" data-a="${p.open||a?'goaladd':'x'}">Add piggy bank</button>`};
 H.gopen=a=>{const p=UI.sheet.p;p._set=true;p.open=a[0]==='1';if(!p.open&&!p.kp)p.kp=p.name==='Emergency fund'?String(efTarget()):'6000'};
 {H.gname=a=>{const p=UI.sheet.p;p.name=a[0];if(!p._set)p.open=a[0]==='Emergency fund'}}
 H.goaladd=()=>{const p=UI.sheet.p,t=p.open?0:amtOf(p.kp);if(!p.open&&!t)return false;const n=S.goals.length;addGoal(S,{name:p.name,target:t,byMonths:t?(p.by||0):0});UI.sheet=null;say(`${p.name} added.`);if(S.goals.length>n&&S.free>=1){const g=S.goals[S.goals.length-1];openSheet('fundgoal',{id:g.id})};return false};
@@ -2559,20 +2564,20 @@ H.goaladd=()=>{const p=UI.sheet.p,t=p.open?0:amtOf(p.kp);if(!p.open&&!t)return f
 /* ===== v17.7 (9 Oct): editable goal name and target; custom categories back on the pay screen; clearer first nudge ===== */
 HI.gnametxt=(a,el)=>{UI.sheet.p.name=el.value;return false};
 {const _as=SHEETS.addgoal;SHEETS.addgoal=p=>{let h=_as(p);
-  h=h.replace('<div class="cap" style="margin:6px 0 6px">Amount (optional)</div>',`<input class="field" style="width:100%;font-size:18px;margin:2px 0 8px" placeholder="Name your goal" value="${esc(p.name||'')}" data-i="gnametxt" maxlength="24" autocomplete="off"><div class="cap" style="margin:6px 0 6px">Amount (optional)</div>`);
+  h=h.replace('<div class="cap" style="margin:6px 0 6px">Amount (optional)</div>',`<input class="field" style="width:100%;font-size:18px;margin:2px 0 8px" placeholder="Name your piggy bank" value="${esc(p.name||'')}" data-i="gnametxt" maxlength="24" autocomplete="off"><div class="cap" style="margin:6px 0 6px">Amount (optional)</div>`);
   return h.replace(/<div class="h2">Add a goal<\/div>/,'<div class="h2">Add a goal</div>')}}
-{const _ga2=H.goaladd;H.goaladd=()=>{const p=UI.sheet.p;p.name=(p.name||'').trim();if(!p.name){say('Give the goal a name.');return false}return _ga2()}}
+{const _ga2=H.goaladd;H.goaladd=()=>{const p=UI.sheet.p;p.name=(p.name||'').trim();if(!p.name){say('Give the piggy bank a name.');return false}return _ga2()}}
 /* edit: name, amount and date can all change later */
 SHEETS.goaledit=p=>{const g=S.goals.find(x=>x.id===p.id);if(!g)return '';if(p.name===undefined){p.name=g.name;p.open=!(g.target>0);p.kp=g.target>0?String(g.target):'';p.by=g.byMonths||0}
  if(p.tgt){p.open=false;if(!p.kp)p.kp='6000';p.tgt=0}
  const a=amtOf(p.kp),need=a&&p.by?Math.ceil(a/p.by/10)*10:0;
- return `<div class="h2">Edit goal</div><input class="field" style="width:100%;font-size:18px;margin:10px 0 8px" value="${esc(p.name)}" data-i="gnametxt" maxlength="24" autocomplete="off">
+ return `<div class="h2">Edit piggy bank</div><input class="field" style="width:100%;font-size:18px;margin:10px 0 8px" value="${esc(p.name)}" data-i="gnametxt" maxlength="24" autocomplete="off">
  <div class="cap" style="margin:6px 0 6px">Amount (optional)</div><div class="row wrap"><button class="chip ${p.open?'on':''}" data-a="geopen|1">No set amount</button><button class="chip ${p.open?'':'on'}" data-a="geopen|0">Set an amount</button></div>
  ${p.open?'':`<div class="field" style="font-size:30px;margin-top:10px">₹ ${esc(p.kp||'0')}</div><div class="cap" style="margin:12px 0 6px">By when (optional)</div><div class="row wrap">${[[0,'No date'],[6,'6 months'],[12,'1 year'],[24,'2 years']].map(o=>`<button class="chip ${p.by===o[0]?'on':''}" data-a="geby|${o[0]}">${o[1]}</button>`).join('')}</div><div class="sub" style="margin:10px 0">${need?`Save about ${money(need)} a month to get there.`:''}</div>${keypad('kp')}`}
- <div class="col" style="gap:8px;margin-top:12px"><button class="btn ${p.open||a?'':'d'}" data-a="${p.open||a?'gesave':'x'}">Save</button><button class="btn q" data-a="gdone|${g.id}">Mark done</button><button class="btn o" data-a="gdel|${g.id}">Delete goal</button><div class="sm">Deleting returns its money to free savings.</div></div>`};
+ <div class="col" style="gap:8px;margin-top:12px"><button class="btn ${p.open||a?'':'d'}" data-a="${p.open||a?'gesave':'x'}">Save</button><button class="btn q" data-a="gdone|${g.id}">Mark done</button><button class="btn o" data-a="gdel|${g.id}">Delete piggy bank</button><div class="sm">Deleting returns its money to free savings.</div></div>`};
 H.geopen=a=>{const p=UI.sheet.p;p.open=a[0]==='1';if(!p.open&&!p.kp)p.kp='6000'};
 H.geby=a=>{UI.sheet.p.by=+a[0]};
-H.gesave=()=>{const p=UI.sheet.p,g=S.goals.find(x=>x.id===p.id);if(!g)return false;const nm=(p.name||'').trim();if(!nm){say('Give the goal a name.');return false}g.name=nm;g.target=p.open?0:amtOf(p.kp);g.byMonths=g.target?(p.by||0):0;if(g.target>0&&g.saved<g.target&&g.state==='reached')g.state='active';reachedCheck(S);UI.sheet=null;say('Goal saved.');return false};
+H.gesave=()=>{const p=UI.sheet.p,g=S.goals.find(x=>x.id===p.id);if(!g)return false;const nm=(p.name||'').trim();if(!nm){say('Give the piggy bank a name.');return false}g.name=nm;g.target=p.open?0:amtOf(p.kp);g.byMonths=g.target?(p.by||0):0;if(g.target>0&&g.saved<g.target&&g.state==='reached')g.state='active';reachedCheck(S);UI.sheet=null;say('Goal saved.');return false};
 /* the goal screen shows the open-goal "Set an amount" next to Edit through the same sheet; nothing else to change */
 /* pay screen: "+ New" opens the category search, where a new name can be created */
 {const _ap=applyPick;applyPick=function(act,arg,id){if(act==='scan'){const d=UI.flow.d;d.cid=id;d.target={type:'cat',id};d.toK=id;d.catWhy='';UI.sheet=null;return}return _ap(act,arg,id)}}
@@ -2598,12 +2603,12 @@ FLOWS.move=F=>{if(F.step===1)return _mvOld(F);const d=F.d,src=d.from;if(!d.dest)
  const goals=moveTiles({from:src,tab:'s'});
  const where=d.dest==='spend'?`<div class="cap" style="margin:12px 0 6px">When</div><div class="row" style="gap:8px"><button class="chip ${d.when==='week'?'on':''}" data-a="mwhen|week">This week</button><button class="chip ${d.when==='date'?'on':''}" data-a="mwhen|date">Spread to a date</button></div>
    ${d.when==='date'?`<div class="sub" style="margin:10px 0 8px">Until <b style="color:var(--ink)">${fmtDate(end)}</b>${amt?`. About ${money(per)} a week.`:''}</div>${calHtml(d,t0,end)}`:`<div class="sub" style="margin:10px 0">All of it is added to this week.</div>`}`
-  :`<div class="cap" style="margin:12px 0 6px">Which goal?</div><div class="tgrid">${goals.map(t=>{const on=d.toK===t.k;return `<button class="tile ${on?'on':''}" style="${on?`border-color:${t.col}`:''}" data-a="mto|${t.k}|s"><b><i style="background:${t.col}"></i>${esc(t.n)}</b><small style="color:${SAVE}">${t.w}</small></button>`}).join('')||'<div class="sm">No other goals yet.</div>'}</div>`;
+  :`<div class="cap" style="margin:12px 0 6px">Which piggy bank?</div><div class="tgrid">${goals.map(t=>{const on=d.toK===t.k;return `<button class="tile ${on?'on':''}" style="${on?`border-color:${t.col}`:''}" data-a="mto|${t.k}|s"><b><i style="background:${t.col}"></i>${esc(t.n)}</b><small style="color:${SAVE}">${t.w}</small></button>`}).join('')||'<div class="sm">No other goals yet.</div>'}</div>`;
  const ok=amt&&(d.dest==='spend'||d.toK);
  return `<div class="mbody"><button class="back" data-a="mclose">‹ Close</button><div class="cap">Move money</div>
  <div class="card" style="padding:10px 14px;margin:6px 0 10px"><div class="cap" style="font-size:10.5px">From</div><b><i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${SAVE};margin-right:8px"></i>${esc(sname)} · ${money(have)} saved</b></div>
  <div class="title" style="font-size:44px">₹ ${d.kp||'0'}</div><div class="sm" style="margin-bottom:10px;${over?'color:var(--amber);font-weight:700':''}">${over?`${esc(sname)} has ${money(have)} saved.`:`Most you can move: ${money(have)}`}</div>
- <div class="cap" style="margin:8px 0 6px">Move it to</div><div class="row" style="gap:8px"><button class="chip ${d.dest==='spend'?'on':''}" data-a="mdest|spend">Spend</button><button class="chip ${d.dest==='goal'?'on':''}" data-a="mdest|goal">Another goal</button></div>
+ <div class="cap" style="margin:8px 0 6px">Move it to</div><div class="row" style="gap:8px"><button class="chip ${d.dest==='spend'?'on':''}" data-a="mdest|spend">Spend</button><button class="chip ${d.dest==='goal'?'on':''}" data-a="mdest|goal">Another piggy bank</button></div>
  ${where}<div style="height:12px"></div>${keypad('kp')}</div><div class="mfoot"><button class="btn ${ok?'':'d'}" ${ok?'data-a="mdo"':''}>${over&&have?'Move '+money(have):'Move '+(amt?money(amt):'')}</button></div>`};
 H.mdest=a=>{const d=UI.flow.d;d.dest=a[0];d.toK=null;d.to=null;d.tab='s'};
 H.mwhen=a=>{const d=UI.flow.d;d.when=a[0];if(a[0]==='date'&&!d.end){d.end=MV_END();const e=new Date(d.end),n=new Date(day0());d.cm=(e.getFullYear()-n.getFullYear())*12+e.getMonth()-n.getMonth()}};
@@ -2617,14 +2622,14 @@ H.mwhen=a=>{const d=UI.flow.d;d.when=a[0];if(a[0]==='date'&&!d.end){d.end=MV_END
 /* a goal is moved from, not added to */
 {const _sg2=SCREENS.goal;SCREENS.goal=p=>{let h=_sg2(p);const g=S.goals.find(x=>x.id===p.id);if(!g)return h;
  h=h.replace('data-a="movefrom|'+g.id+'">Add money</button>','data-a="movefrom|'+g.id+'">Move money</button>');
- if(g.state==='reached')h=h.replace('data-a="gdone|'+g.id+'">Mark done</button>','data-a="gdone|'+g.id+'">I bought it</button><button class="btn q" data-a="sheet|goaledit|'+J({id:g.id}).replace(/\|/g,'')+'">Raise the goal</button>');
+ if(g.state==='reached')h=h.replace('data-a="gdone|'+g.id+'">Mark done</button>','data-a="gdone|'+g.id+'">I bought it</button><button class="btn q" data-a="sheet|goaledit|'+J({id:g.id}).replace(/\|/g,'')+'">Raise the target</button>');
  if(g.state==='reached')h=h.replace('You saved it all.</div>','You saved it all. Buy your item, or raise the goal.</div>');
  h=h.replace('‹ Money','‹ Savings');
  if(!(g.target>0))h=h.replace('<div class="col" style="gap:10px"><button class="btn" data-a="movefrom','<button class="li" style="margin-bottom:14px" data-a="sheet|goaledit|'+J({id:g.id,tgt:1}).replace(/\|/g,'')+'"><span class="n">Set a target</span><span class="t">optional ›</span></button><div class="col" style="gap:10px"><button class="btn" data-a="movefrom');
  return h}}
 /* Home: a reached goal comes first */
 {const _c3=cards17;cards17=function(){const out=_c3(),r=S.goals.filter(g=>g.state==='reached');if(!r.length)return out;const g=r[0];
-  return [{tag:'Goal reached',t:`${g.name}: you saved ${money(g.target)}.`,sub:'Buy your item, or raise the goal.',a:'push|goal|'+J({id:g.id}).replace(/\|/g,''),cta:'Choose',hot:true},...out].slice(0,7)}}
+  return [{tag:'Piggy bank full',t:`${g.name}: you saved ${money(g.target)}.`,sub:'Buy your item, or raise the goal.',a:'push|goal|'+J({id:g.id}).replace(/\|/g,''),cta:'Choose',hot:true},...out].slice(0,7)}}
 
 /* savings tab: money that is on its way to spending */
 {const _ms2=mnSav;mnSav=function(){const held=(S.sched||[]).reduce((a,x)=>a+x.held,0);return (held>0?`<div class="sm" style="margin:0 2px 12px">${money(held)} is waiting to be added to spending, week by week.</div>`:'')+_ms2()}}
@@ -2665,7 +2670,7 @@ H.limquickc=a=>{const id=a[0];if(!S.cats.some(c=>c.id===id))return false;S.limit
 
 /* ===== v17.14: a reached goal gets a big card on Home, above the insights ===== */
 function reachedHome17(){const g=S.goals.find(x=>x.state==='reached');if(!g)return '';
- return `<div class="card" style="margin:0 0 26px;padding:16px;border-color:var(--accent)"><div class="cap" style="margin:0 0 6px;color:var(--accent)">Goal reached</div><div style="font-size:24px;font-weight:700;line-height:1.15">${esc(g.name)}: you saved ${money(g.target)}</div><div class="sub" style="margin:6px 0 12px">Buy your item, or raise the goal.</div>${battery(g.target,g.target,{col:SAVE,sm:true})}<div class="row" style="gap:8px;margin-top:14px"><button class="btn t" style="flex:1;white-space:nowrap" data-a="goalbought|${g.id}">I bought it</button><button class="btn q" style="flex:1;white-space:nowrap;padding-left:8px;padding-right:8px" data-a="sheet|goaledit|${J({id:g.id}).replace(/\|/g,'')}">Raise the goal</button></div></div>`}
+ return `<div class="card" style="margin:0 0 26px;padding:16px;border-color:var(--accent)"><div class="cap" style="margin:0 0 6px;color:var(--accent)">Piggy bank full</div><div style="font-size:24px;font-weight:700;line-height:1.15">${esc(g.name)}: you saved ${money(g.target)}</div><div class="sub" style="margin:6px 0 12px">Buy your item, or raise the goal.</div>${battery(g.target,g.target,{col:SAVE,sm:true})}<div class="row" style="gap:8px;margin-top:14px"><button class="btn t" style="flex:1;white-space:nowrap" data-a="goalbought|${g.id}">I bought it</button><button class="btn q" style="flex:1;white-space:nowrap;padding-left:8px;padding-right:8px" data-a="sheet|goaledit|${J({id:g.id}).replace(/\|/g,'')}">Raise the target</button></div></div>`}
 H.goalbought=a=>{const g=S.goals.find(x=>x.id===a[0]);if(!g)return false;const amt=Math.max(0,Math.round(g.saved));g.state='done';g.doneOn=new Date(S.now);g.boughtOn=new Date(S.now);g.saved=0;if(amt>0)S.txns.unshift({id:'t'+(S.idc++),t:S.now.getTime(),payee:g.name,amt,kind:'goal',bought:true,note:'Bought with savings'});logE(S,`${g.name} bought`);if(UI.stack&&UI.stack.length)UI.stack=[];say('Enjoy your '+g.name+'.');return false};
 {const _c5=cards17;cards17=function(){return _c5().filter(x=>x.tag!=='Goal reached')}}
 {const _sg3=SCREENS.goal;SCREENS.goal=p=>_sg3(p).replace(/data-a="gdone\|([^"]+)">I bought it/,'data-a="goalbought|$1">I bought it')}
@@ -2702,6 +2707,31 @@ function heroHome17(){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hs=homeS
  <div data-a="gridhow">${battery(L,W,{col,tick:ideal,label:'Recommended '+money(rec)})}</div>
  <div class="row" style="gap:12px;margin-top:44px;padding-top:14px;border-top:1px solid #353D48"><div style="flex:1.1"><div style="font-size:18px;font-weight:700;white-space:nowrap">${dl===1?'Last day':dl+' days to go'}</div><div class="sm">${dl===1?'of this week':'this week'}</div></div><div style="flex:1.4">${L>0?`<div style="font-size:19px;font-weight:700">${money(L/dl)} a day</div><div class="sm">to stay within budget</div>`:`<div style="font-size:19px;font-weight:700">Budget used</div><div class="sm">wait for next week</div>`}</div></div></div>`}
 SHEETS.gridhow=()=>{const W=Math.max(1,flexW());return `<div class="title" style="font-size:24px;margin-bottom:14px">How to read this</div><div class="col" style="gap:10px"><div class="sub">The big number is what is left of your budget for the week.</div><div class="sub">The right end of the bar is the full budget, ${money(W)}. The left end is zero.</div><div class="sub">The line is the recommended amount to have left by today. Below the line means you are spending faster than the week allows.</div></div><div style="margin:22px 0 40px">${battery(W*.62,W,{tick:.45,label:'Recommended'})}</div><div class="row sp" style="margin-top:18px"><button class="lnk" data-a="why|bar">Why a bar?</button><button class="btn s" data-a="closesheet" style="width:auto">OK</button></div>`};
+
+/* ===== v17.18 (10 Oct): piggy banks, a better hero, a way into all insights ===== */
+let _pg=0;
+function piggySvg(frac,col,size){const id='pg'+(++_pg),f=Math.max(0,Math.min(1,frac)),top=70-f*50;
+ const body='M20 52c0-17 14-28 34-28h12c6 0 11 2 15 5l10-4-1 12c4 4 6 9 6 15 0 9-6 15-14 18v10h-12v-7H46v7H34V70C25 66 20 60 20 52z';
+ return `<svg viewBox="0 0 104 92" width="${size}" height="${Math.round(size*.885)}" style="flex:none" aria-hidden="true"><defs><clipPath id="${id}"><path d="${body}"/></clipPath></defs><path d="${body}" fill="#1B2128" stroke="#8D97A3" stroke-width="2.5" stroke-linejoin="round"/><rect x="0" y="${top.toFixed(1)}" width="104" height="92" fill="${col}" clip-path="url(#${id})"/><path d="${body}" fill="none" stroke="#8D97A3" stroke-width="2.5" stroke-linejoin="round"/><rect x="44" y="28" width="18" height="4" rx="2" fill="#0F1215"/><circle cx="84" cy="46" r="2.8" fill="#E8ECF0"/></svg>`}
+function piggyPanel17(){const act=S.goals.filter(g=>g.state!=='done');if(!act.length&&S.free<=0)return '';
+ const T=savedTotal(S),tg=act.filter(g=>g.target>0),sumT=tg.reduce((a,g)=>a+g.target,0),inT=tg.reduce((a,g)=>a+Math.min(g.saved,g.target),0),ref=sumT>0?sumT:efTarget(),frac=Math.min(1,(sumT>0?inT:T)/Math.max(1,ref));
+  return `<div class="viz17 pig17">${piggySvg(frac,'#6FB08F',112)}<div style="min-width:0"><div class="cap" style="margin:0">All your piggy banks</div><div style="font-size:22px;font-weight:700;margin-top:4px">${act.length} piggy bank${act.length===1?'':'s'}</div><div class="sm" style="margin-top:4px">${sumT>0?`${Math.round(frac*100)}% of what they are saving for`:`${Math.round(frac*100)}% of an emergency fund of ${money(ref)}`}</div><div class="sm">${money(Math.max(0,Math.floor(S.free)))} not in one yet</div></div></div>`}
+/* hero */
+function heroHome17(){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hs=homeState(),col=STATECOL[hs],dl=daysToGo(),ideal=weekIdeal(),rec=Math.round(ideal*W),aw=awareness();
+ const st=hs==='out'?(S.touched?'Over this week. Savings used.':'Nothing left this week.'):hs==='fast'?'Spending a bit fast.':'On track.';
+ return `<div class="hero17" style="border-color:${hs==='ok'?'#3B4553':col}">
+ <div class="row sp" style="align-items:center"><span class="cap" style="margin:0;color:var(--ink2)">This week · ${fmtDay(S.now)}</span><button class="chip" data-a="gridhow">?</button></div>
+ <div style="margin-top:10px"><span class="hero" style="font-size:72px;line-height:1;color:${hs==='out'?col:'var(--ink)'}">${money(L)}</span></div><div style="font-size:18px;color:var(--ink2);margin-top:4px">left of ${money(W)}</div>
+ <div style="margin-top:8px;font-weight:650;color:${hs==='ok'?'var(--ink2)':col}">${st}</div>
+ <div class="row sp sm" style="margin:20px 0 8px"><span>₹0</span><span>${money(W)} = full budget</span></div>
+ <div data-a="gridhow">${battery(L,W,{col,tick:ideal,label:'Recommended '+money(rec)})}</div>
+ <div class="row" style="gap:12px;margin-top:46px;padding-top:14px;border-top:1px solid #3B4553"><div style="flex:1.1"><div style="font-size:18px;font-weight:700;white-space:nowrap">${dl===1?'Last day':dl+' days to go'}</div><div class="sm">${dl===1?'of this week':'this week'}</div></div><div style="flex:1.4">${L>0?`<div style="font-size:18px;font-weight:700;white-space:nowrap">${money(L/dl)} a day</div><div class="sm">to stay within budget</div>`:`<div style="font-size:18px;font-weight:700">Budget used</div><div class="sm">wait for next week</div>`}</div></div>
+ ${aw?`<button class="hu17" data-a="insgo|${aw.k}"><b>Heads-up</b><span>${esc(aw.t)} ${esc(aw.s)}</span><i>›</i></button>`:''}</div>`}
+/* the heads-up lives in the hero, not in the cards */
+{const _c6=cards17;cards17=function(){return _c6().filter(x=>x.tag!=='Heads-up')}}
+/* a way into all the insights */
+{const _car2=carousel17;carousel17=function(){const h=_car2();if(!h)return '';return `<div class="row sp" style="align-items:center;margin:0 0 10px"><span class="cap" style="margin:0">Insights</span><button class="navi17" data-a="push|insall">All insights <i>›</i></button></div>`+h}}
+SCREENS.insall=()=>back17('Home')+`<div class="title" style="margin-bottom:6px">Insights</div>`+SCREENS.insights();
 
 /* ===== control panel ===== */
 function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,0).getTime(),label:'Allowance',amt:S.p.income,note:''}];if(S.p.six)seedSix();else if(S.p.W>0){S.planSet=true;S.cats.forEach(c=>c.full=c.amt);S.bufFull=S.bufAmt;S.firstDay=new Date(S.now.getTime()-S.p.weeks*7*DAY)}resetUI();window._celeLock=false;render();fitPhone()}

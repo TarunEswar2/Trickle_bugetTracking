@@ -28,7 +28,7 @@ SCREENS.spending=()=>{const h=statsHour(),rep=shopList()[0],cmp=cmpNow();
 SCREENS.pwhen=()=>back17('Spending')+insWhen();
 SCREENS.prep=()=>back17('Spending')+insRep();
 SCREENS.ptrend=()=>back17('Spending')+insCmp();
-SCREENS.history=()=>back17('Spending')+`<div class="title" style="margin-bottom:4px">All spends</div>`+spHist();
+SCREENS.history=()=>back17('Spending')+`<div class="title" style="margin-bottom:4px">Past transactions</div>`+spHist();
 
 /* ---------- Money: one list ---------- */
 SCREENS.money=()=>{const l=S.incomes||[],now=S.now.getTime(),run=l.filter(i=>!i.end||i.end+DAY>now),mo=S.bills.filter(b=>!b.ended&&!b.paused&&!(b.trialUntil&&now<b.trialUntil)).reduce((a,b)=>a+perMonth(b),0),sav=savedTotal(S);
