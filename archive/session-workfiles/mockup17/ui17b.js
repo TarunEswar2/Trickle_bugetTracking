@@ -104,7 +104,7 @@ POPUPS.homescreen=P=>{const mo=UI.hsMoney;let h=_wid(P);
   h=h.replace('<button class="hs-btn pri" style="flex:.8" data-a="hsadd">+ Add</button></div></div>','</div><div class="hs-row" style="margin-top:8px"><button class="hs-btn pri" style="height:44px" data-a="hsadd">+ Spend</button><button class="hs-btn" style="height:44px;border:1px solid var(--accent);color:var(--accent)" data-a="hsmoney">+ Money</button></div></div>');
   if(UI.hsNote)h=h.replace('<div class="hs-row">',`<div class="hs-note"><span>${esc(UI.hsNote)}</span></div><div class="hs-row">`);
   return h}
- const hide=UI.hsHide,amt=amtOf(mo.kp),pct=mo.pct,sav=Math.round(amt*pct/100/10)*10,sp=amt-sav,ok=amt>0;
+ const hide=UI.hsHide,amt=amtOf(mo.kp),pct=mo.pct,sav=savCalc(mo,amt,pct),sp=amt-sav,ok=amt>0;
  const wid=`<div class="hs-wid"><div class="row sp"><span class="cap">Add money</span><button class="hs-eye" data-a="hseye">${hide?'Show amounts':'Hide amounts'}</button></div>
   <div class="hero" style="font-size:40px;margin-top:2px">${hide?'₹•••':'₹'+(mo.kp||'0')}</div>
   <div class="hs-chips">${[500,1000,2000,5000].map(v=>`<button class="hs-c ${amt===v?'on':''}" data-a="hsmamt|${v}">₹${v}</button>`).join('')}</div>

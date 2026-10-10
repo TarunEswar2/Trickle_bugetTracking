@@ -60,7 +60,7 @@ H.startplan=()=>{openFlow('inc',{step:0,kp:''});return false};
 /* offer a plan after a week of tracking; ask again after four weeks if declined */
 function maybeOfferPlan(){if(!S.track||S.planSet||UI.popup||UI.flow||UI.sheet)return;if(!S.firstDay||(S.now-S.firstDay)/DAY<7||S.txns.length<4)return;const at=S.askedAt&&S.askedAt.planoffer;if(at&&(S.now.getTime()-at)/DAY<28)return;openAsk('planoffer')}
 /* ---- income: separate from the plan ---- */
-FLOWS.inc=F=>{const d=F.d;const a=amtOf(d.kp);const pct=d.pct===undefined?20:d.pct;const sav=Math.round(a*pct/100/10)*10,sp=a-sav;
+FLOWS.inc=F=>{const d=F.d;const a=amtOf(d.kp);const pct=d.pct===undefined?20:d.pct;const sav=savCalc(d,a,pct),sp=a-sav;
  if(F.step===0)return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button><div class="cap">Income</div><div class="title" style="margin-top:4px">How much came in?</div><div style="margin:10px 0;display:flex;justify-content:center">${amtDots('₹'+(d.kp||'0'))}</div>${keypad('kp')}</div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn ${a>0?'':'d'}" data-a="${a>0?'incnext':'x'}">Next</button><button class="btn q" data-a="pclose">Not now</button></div></div>`;
  if(F.step===2){const t0=day0(),end=snapEnd(d.end||t0+27*DAY),days=daysIn(t0,end),wk=Math.max(5,r5b(sp/days*7)),left=daysIn(t0,wk0()+6*DAY),share=r5b(sp/days*left);
   return `<div class="mbody"><button class="back" data-a="incback">‹ Back</button><div class="cap">${money(sp)} to spend</div><div class="title" style="margin-top:4px">Until when?</div><p class="sub">Plans end on a Sunday. The money is split by day.</p>
@@ -86,10 +86,11 @@ function calHtml(d,t0,end){const today0=day0();const off=d.cm||0;const m0=new Da
 H.incday=a=>{const d=UI.flow.d;d.end=snapEnd(+a[0])};
 H.incmon=a=>{const d=UI.flow.d;d.cm=Math.max(0,Math.min(24,(d.cm||0)+(+a[0])))};
 H.incpre=a=>{const d=UI.flow.d;d.end=presetEnd(PRESETS[+a[0]]);const e=new Date(d.end),n=new Date(day0());d.cm=(e.getFullYear()-n.getFullYear())*12+e.getMonth()-n.getMonth()};
-H.incnext=()=>{UI.flow.step=1;UI.flow.d.pct=20};
+H.incnext=()=>{UI.flow.step=1;UI.flow.d.pct=20;UI.flow.d.savX=null};
 H.incback=()=>{UI.flow.step=Math.max(0,UI.flow.step-1)};H.incnext2=()=>{const d=UI.flow.d;UI.flow.step=2;if(!d.end){d.end=presetEnd(PRESETS[1]);const e=new Date(d.end),n=new Date(day0());d.cm=(e.getFullYear()-n.getFullYear())*12+e.getMonth()-n.getMonth()}};H.inclast=a=>{UI.flow.d.lasts=parseFloat(a[0])};
-HI.incpct=(a,el)=>{const d=UI.flow.d;d.pct=+el.value;const t=amtOf(d.kp),sav=Math.round(t*d.pct/100/10)*10,sp=t-sav;$('#inc-pct').textContent=d.pct+'%';$('#inc-sav').textContent=money(sav);$('#inc-sp').textContent=money(sp);$('#inc-grid').innerHTML=multiGrid([{amt:Math.max(0,sav),color:SAVE},{amt:Math.max(1,sp),color:SPEND}],Math.max(1,t),{w:260});return false};
-function addIncome(d,withEnd){const a=amtOf(d.kp),pct=d.pct===undefined?20:d.pct;const sav=Math.round(a*pct/100/10)*10;const sp=a-sav;const t0=day0();const end=withEnd&&d.end?snapEnd(d.end):null;
+HI.incpct=(a,el)=>{const d=UI.flow.d;d.pct=+el.value;d.savX=null;const t=amtOf(d.kp),sav=savCalc(d,t,d.pct),sp=t-sav;$('#inc-pct').textContent=d.pct+'%';$('#inc-sav').textContent=money(sav);$('#inc-sp').textContent=money(sp);$('#inc-grid').innerHTML=multiGrid([{amt:Math.max(0,sav),color:SAVE},{amt:Math.max(1,sp),color:SPEND}],Math.max(1,t),{w:260});return false};
+const savCalc=(o,a,pct)=>(o.savX!=null&&o.savX>=0)?Math.min(a,Math.round(o.savX)):Math.round(a*pct/100/10)*10;
+function addIncome(d,withEnd){const a=amtOf(d.kp),pct=d.pct===undefined?20:d.pct;const sav=savCalc(d,a,pct);const sp=a-sav;const t0=day0();const end=withEnd&&d.end?snapEnd(d.end):null;
 
  if(d.cr)S.credits=S.credits.filter(c=>c.id!==d.cr);
  (S.incomes=S.incomes||[]).push({id:'in'+(S.idc++),amt:a,sav,sp,start:t0,end});

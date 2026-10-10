@@ -84,7 +84,7 @@ SCREENS.money=()=>{const v=UI.mn||'inc';return `<div class="sec">${SEG([['inc','
 /* ---------- Making a plan is adding income ---------- */
 const _incFlow=FLOWS.inc;
 FLOWS.inc=F=>{const d=F.d;
- if(F.step===2){const a=amtOf(d.kp),pct=d.pct===undefined?20:d.pct,sp=a-Math.round(a*pct/100/10)*10;const t0=day0(),end=snapEnd(d.end||presetEnd(PRESETS[1])),days=daysIn(t0,end),wk=Math.max(5,r5b(sp/days*7));
+ if(F.step===2){const a=amtOf(d.kp),pct=d.pct===undefined?20:d.pct,sp=a-savCalc(d,a,pct);const t0=day0(),end=snapEnd(d.end||presetEnd(PRESETS[1])),days=daysIn(t0,end),wk=Math.max(5,r5b(sp/days*7));
   return `<div class="mbody"><button class="back" data-a="incback">‹ Back</button><div class="title" style="margin-top:8px">How many days should this money last?</div>
   <div class="row wrap" style="gap:8px;margin:16px 0 10px">${PRESETS.map((p,i)=>`<button class="chip ${!d.cal&&end===presetEnd(p)?'on':''}" data-a="incpre|${i}">${p[0]}</button>`).join('')}<button class="chip ${d.cal?'on':''}" data-a="v15cal">Pick a date</button></div>
   ${d.cal?`<div class="sub" style="text-align:center;margin:0 0 8px">${money(wk)} a week · until ${fmtDate(end)}</div>${calHtml(d,t0,end)}`:`<div style="text-align:center;margin-top:30px"><div style="display:flex;justify-content:center">${amtDots(money(wk))}</div><div class="sub">a week to spend</div></div>`}</div>

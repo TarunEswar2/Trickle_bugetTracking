@@ -43,3 +43,12 @@ H.mwhen=a=>{const d=UI.flow.d;d.when=a[0];if(a[0]==='date'&&!d.end){d.end=MV_END
 
 /* savings tab: money that is on its way to spending */
 {const _ms2=mnSav;mnSav=function(){const held=(S.sched||[]).reduce((a,x)=>a+x.held,0);return (held>0?`<div class="sm" style="margin:0 2px 12px">${money(held)} is waiting to be added to spending, week by week.</div>`:'')+_ms2()}}
+
+/* ===== v17.9 (10 Oct): tap the save or spend amount and type it ===== */
+{const _fi3=FLOWS.inc;FLOWS.inc=F=>{let h=_fi3(F);if(F.step!==1)return h;
+  h=h.replace(/<div id="inc-sav" class="h2">([^<]*)<\/div>/,'<button id="inc-sav" class="h2 tapamt" data-a="incedit|sav">$1</button>').replace(/<div id="inc-sp" class="h2">([^<]*)<\/div>/,'<button id="inc-sp" class="h2 tapamt" data-a="incedit|sp">$1</button>');
+  return h.replace('<span>Nothing</span><span>All of it</span></div>','<span>Nothing</span><span>All of it</span></div><div class="sm" style="text-align:center;margin-top:10px">Tap an amount to type it.</div>')}}
+H.incedit=a=>{UI.flow.d.ev='';openSheet('amtedit',{which:a[0]});return false};
+SHEETS.amtedit=p=>{const d=UI.flow.d,t=amtOf(d.kp),sav=savCalc(d,t,d.pct===undefined?20:d.pct),cur=p.which==='sav'?sav:t-sav,v=amtOf(d.ev);
+ return `<div class="cap">Of ${money(t)}</div><div class="title" style="font-size:26px;margin:2px 0 6px">${p.which==='sav'?'How much to save?':'How much to spend?'}</div><div class="field" style="font-size:32px">₹ ${d.ev||`<span style="color:var(--ink3)">${cur}</span>`}</div>${v>t?`<div class="sm" style="color:var(--amber);margin-top:6px">That is more than ${money(t)}. It will be ${money(t)}.</div>`:`<div class="sm" style="margin-top:6px">${v?(p.which==='sav'?`Then ${money(t-v)} is for spending.`:`Then ${money(t-v)} is saved.`):'Type a number, or tap Cancel.'}</div>`}${keypad('ev')}<div class="col" style="gap:8px;margin-top:10px"><button class="btn ${d.ev!==''?'':'d'}" data-a="${d.ev!==''?'amtdone|'+p.which:'x'}">Done</button><button class="btn q" data-a="closesheet">Cancel</button></div>`};
+H.amtdone=a=>{const d=UI.flow.d,t=amtOf(d.kp),v=Math.min(t,amtOf(d.ev)),sav=a[0]==='sav'?v:t-v;d.savX=sav;d.pct=t?Math.round(sav/t*100):0;d.ev='';UI.sheet=null};

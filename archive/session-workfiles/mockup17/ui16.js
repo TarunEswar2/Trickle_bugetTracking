@@ -194,7 +194,7 @@ function mnInc(){const l=S.incomes||[],now=S.now.getTime(),run=l.filter(i=>!i.en
 const INCPRE=[3000,6000,10000,15000];
 H.incamt=a=>{UI.flow.d.kp=String(a[0])};
 const steps16=n=>`<div class="steps">${[0,1,2].map(i=>`<i class="${i<=n?'on':''}"></i>`).join('')}</div>`;
-FLOWS.inc=F=>{const d=F.d,a=amtOf(d.kp),pct=d.pct===undefined?20:d.pct,sav=Math.round(a*pct/100/10)*10,sp=a-sav;
+FLOWS.inc=F=>{const d=F.d,a=amtOf(d.kp),pct=d.pct===undefined?20:d.pct,sav=savCalc(d,a,pct),sp=a-sav;
  if(F.step===0)return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button>${steps16(0)}<div class="title" style="margin-top:14px">How much money do you get?</div><div class="sub" style="margin-top:6px">Rough is fine.</div>
   <div class="row wrap" style="gap:8px;margin:14px 0 4px">${INCPRE.map(v=>`<button class="chip ${a===v?'on':''}" data-a="incamt|${v}">${money(v)}</button>`).join('')}</div><div style="margin:8px 0;display:flex;justify-content:center">${amtDots('₹'+(d.kp||'0'))}</div>${keypad('kp')}</div><div class="mfoot"><div class="col" style="gap:10px"><button class="btn ${a>0?'':'d'}" data-a="${a>0?'incnext':'x'}">Next</button><button class="btn q" data-a="pclose">Not now</button></div></div>`;
  if(F.step===2){const t0=day0(),end=snapEnd(d.end||presetEnd(PRESETS[1])),days=daysIn(t0,end),wk=Math.max(5,r5b(sp/days*7)),left=daysIn(t0,wk0()+6*DAY),share=r5b(sp/days*left);
@@ -207,7 +207,7 @@ FLOWS.inc=F=>{const d=F.d,a=amtOf(d.kp),pct=d.pct===undefined?20:d.pct,sav=Math.
   <div class="row sp"><span><span class="cap" style="color:${SAVE}">Save · <span id="inc-pct">${pct}%</span></span><div id="inc-sav" class="h2">${money(sav)}</div></span><span style="text-align:right"><span class="cap" style="color:${SPEND}">Spend</span><div id="inc-sp" class="h2">${money(sp)}</div></span></div>
   <input type="range" min="0" max="100" step="5" value="${pct}" data-i="incpct" style="margin:22px 0 6px"><div class="row sp sm"><span>Nothing</span><span>All of it</span></div></div>
   <div class="mfoot"><div class="col" style="gap:10px">${sp>0?`<button class="btn" data-a="incnext2">Next</button>`:`<button class="btn" data-a="incdone">Add ${money(a)}</button>`}</div></div>`};
-HI.incpct=(a,el)=>{const d=UI.flow.d;d.pct=+el.value;const t=amtOf(d.kp),sav=Math.round(t*d.pct/100/10)*10,sp=t-sav;$('#inc-pct').textContent=d.pct+'%';$('#inc-sav').textContent=money(sav);$('#inc-sp').textContent=money(sp);$('#inc-bsav').style.flex=Math.max(d.pct,.001)+' 1 0';$('#inc-bsp').style.flex=Math.max(100-d.pct,.001)+' 1 0';return false};
+HI.incpct=(a,el)=>{const d=UI.flow.d;d.pct=+el.value;d.savX=null;const t=amtOf(d.kp),sav=savCalc(d,t,d.pct),sp=t-sav;$('#inc-pct').textContent=d.pct+'%';$('#inc-sav').textContent=money(sav);$('#inc-sp').textContent=money(sp);$('#inc-bsav').style.flex=Math.max(d.pct,.001)+' 1 0';$('#inc-bsp').style.flex=Math.max(100-d.pct,.001)+' 1 0';return false};
 
 /* ---------- Onboarding: how do we see spends? How much money do you get? Categories are not asked. ---------- */
 const _onb16=FLOWS.onb;
@@ -253,7 +253,7 @@ function ubScreen(d,s){const {a,pct,sav,sp}=ubSplit(d);
  return `<div class="mbody" style="padding-top:64px"><button class="back" data-a="obgo|ubal">‹ Back</button><div class="title" style="margin-top:8px">How many days should this money last?</div>
   <div class="row wrap" style="gap:8px;margin:18px 0 10px">${PRESETS.map((p,i)=>`<button class="chip ${!d.cal&&end===presetEnd(p)?'on':''}" data-a="incpre|${i}">${p[0]}</button>`).join('')}<button class="chip ${d.cal?'on':''}" data-a="ubcal">Pick a date</button></div>
   <div class="card allow"><div class="cap">Your weekly allowance</div><div style="display:flex;align-items:baseline;gap:8px;margin-top:6px"><span class="hero" style="font-size:44px">${money(wk)}</span><span class="sub">a week</span></div><div class="sm" style="margin-top:6px">${money(sp)} over ${days} days.</div></div>${d.cal?calHtml(d,t0,end):''}</div>`+obFoot(obBtn('Start my week','ubdone')+obBtn('Skip','ubskip','q'))}
-HI.ubpct=(a,el)=>{const d=UI.flow.d;d.pct=+el.value;const {pct,sav,sp}=ubSplit(d);$('#ub-pct').textContent=pct+'%';$('#ub-sav').textContent=money(sav);$('#ub-sp').textContent=money(sp);$('#ub-bsav').style.flex=Math.max(pct,.001)+' 1 0';$('#ub-bsp').style.flex=Math.max(100-pct,.001)+' 1 0';return false};
+HI.ubpct=(a,el)=>{const d=UI.flow.d;d.pct=+el.value;d.savX=null;const {pct,sav,sp}=ubSplit(d);$('#ub-pct').textContent=pct+'%';$('#ub-sav').textContent=money(sav);$('#ub-sp').textContent=money(sp);$('#ub-bsav').style.flex=Math.max(pct,.001)+' 1 0';$('#ub-bsp').style.flex=Math.max(100-pct,.001)+' 1 0';return false};
 {const _ubd=H.ubdone;H.ubdone=()=>{_ubd();const d=obD();if(!d.cats.length)d.cats=[...BASIC6];toEnd(d);return false}}
 
 /* ---------- History: every spend shows its category ---------- */
