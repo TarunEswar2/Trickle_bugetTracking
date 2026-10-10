@@ -1,5 +1,7 @@
 # Trickle — handover
 
+## v19 (10 Oct): style revamp from three references, fork in `archive/session-workfiles/mockup19/` (V19-1…8). New CSS block at the end of `shell.html`, `ui19.js` (tiles, donut), pastel palette in `ui_a.js`/`engine.js`. Tests pass. Not checked: colour contrast of pastel on dark, the other screens beyond Home, Spending, Savings and Add money. Gradient hero may clash with the earlier "remove the gradient" instruction.
+
 ## v18 (10 Oct): fork in `archive/session-workfiles/mockup18/` (`python3 build.py`). One split bar, split + duration on one screen with dropdowns, icon tab bar, header gear, floating Log expense default, indigo savings. V18-1…8, research in `docs/claude/v18_research.md`. Tests in mockup18/tests pass (fuzz, panel, tips, scan5). Not yet done: stacked category pill, dismissible chips. Ask Tarun which apps the reviewer expected it to resemble.
 
 ## Skill removed (9 Oct): Tarun disliked it, so `.claude/skills/human-interfaces/` and the audit states file are deleted (still in git commit 825d5aa).
