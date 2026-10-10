@@ -1,5 +1,7 @@
 # Trickle — handover
 
+## v19.3 (10 Oct): centre + button in the tab bar (Log expense, Add money, Move money), Settings in the tab bar, category emoji icons (V19-10…13). Tests updated to open the + sheet. Emoji look differs by phone; icon mapping is by name keywords only.
+
 ## v19 update (10 Oct): gradients removed at Tarun's request; flat v17 palette back, v19 structure kept (V19-9).
 
 ## v19 (10 Oct): style revamp from three references, fork in `archive/session-workfiles/mockup19/` (V19-1…8). New CSS block at the end of `shell.html`, `ui19.js` (tiles, donut), pastel palette in `ui_a.js`/`engine.js`. Tests pass. Not checked: colour contrast of pastel on dark, the other screens beyond Home, Spending, Savings and Add money. Gradient hero may clash with the earlier "remove the gradient" instruction.

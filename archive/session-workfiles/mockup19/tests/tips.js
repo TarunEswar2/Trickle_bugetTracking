@@ -6,9 +6,9 @@ const tip=()=>p.evaluate(()=>UI.sheet&&UI.sheet.id==='tip'?UI.sheet.p.k:UI.sheet
 await p.evaluate(()=>startOnb());await p.waitForTimeout(300);
 await click('[data-a="obgo|link"]');await click('[data-a="obm|skip"]');log.push('home',await tip());
 await p.evaluate(()=>{UI.popup=null;render()});
-await click('[data-a="payscan"]');await click('[data-a="paybyhand"]');await p.evaluate(()=>{UI.flow.d.kp='120'});await p.evaluate(()=>render());await click('[data-a="payask"]');await click('[data-a="tpick|c0"]');await click('[data-a="tadd"]');
+await click('#tabbar .plus19');await click('[data-a="plus19go|payscan"]');await click('[data-a="paybyhand"]');await p.evaluate(()=>{UI.flow.d.kp='120'});await p.evaluate(()=>render());await click('[data-a="payask"]');await click('[data-a="tpick|c0"]');await click('[data-a="tadd"]');
 log.push('afterpay',await tip(),await p.evaluate(()=>JSON.stringify({tq:TQ,ts:TS})));await p.screenshot({path:'tip1.png'});await closeIf();log.push('next',await tip());await closeIf();log.push('then',await tip());
-await click('[data-a="addmoney17"]');await p.evaluate(()=>{UI.flow.d.kp='9000'});await p.evaluate(()=>render());await click('[data-a="incnext"]');await click('[data-a="incfinish"]');await p.waitForTimeout(600);
+await click('#tabbar .plus19');await click('[data-a="plus19go|addmoney17"]');await p.evaluate(()=>{UI.flow.d.kp='9000'});await p.evaluate(()=>render());await click('[data-a="incnext"]');await click('[data-a="incfinish"]');await p.waitForTimeout(600);
 log.push('plan',await tip());await closeIf();
 for(const t of ['spending','savings']){await click(`#tabbar [data-a="tab|${t}"]`);log.push(t,await tip());await closeIf()}
 await click('#tabbar [data-a="tab|home"]');log.push('home2',await tip());

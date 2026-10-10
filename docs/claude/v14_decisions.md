@@ -755,3 +755,11 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 | ID | Domain | Evidence | Validation gate | Status |
 |---|---|---|---|---|
 | V19-9 | Remove the pastel gradient hero and the gradients inside it; back to v17 flat colours (mint accent, orange spend, indigo savings, v17 category palette) with the v19 structure kept (floating icon tab bar, snapped buttons, donut, segmented scope, 20 to 24 px corners) | Tarun, 10 Oct: "the white gradient and other gradient inside is not working, fall back to v17 language just make it modern and good looking" | Tarun review | CONFIRMED (Tarun) for the direction; the exact look is mine, PROPOSED. Supersedes V19-2 and V19-6 |
+
+### V19-10…V19-13 (10 Oct): changes from Tarun's Gemini screenshots (FAB, category icons, hero, insights). Gemini's advice is one model's opinion; no usability evidence.
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V19-10 | Replace the two snapped buttons with one centre + button in the tab bar; it opens a sheet with Log expense, Add money, Move money. Supersedes V19-3 | Tarun, 10 Oct ("use these to improve"); Gemini: FAB is the usual pattern in finance apps (not verified by me) | Layout test, Test A | CONFIRMED (Tarun) for the direction; exact layout mine, PROPOSED |
+| V19-11 | Tab bar is Home, Spending, +, Savings, Settings; the header gear is removed (no repeat) | Gemini: settings in header or as a 5th item. Tarun's earlier "too many tabs" review: Settings is not a content tab | Test A | PROPOSED |
+| V19-12 | Categories show an emoji icon in a tinted circle (list rows and past transactions) instead of coloured dots; icon chosen from the category name, with a default | Gemini: icons beat dots for scanning (no study checked) | Test A | PROPOSED |
+| V19-13 | Not adopted: Gemini's 4 to 5 content tabs (Transactions, Goals, Budgets, Profile) because Tarun's v17 review said too many tabs; hero (already big number, bar, days left, per-day); donut and header (done in v19); insight banners as small dismissible chips (Home keeps the swipe cards Tarun asked for) | Tarun's earlier reviews | Tarun decides | PROPOSED |

@@ -353,6 +353,15 @@ body{background:#050506}
 /* progress: gradient fills in dark tracks (reference 1, right) */
 #phone .mb18{background:#2A2A2F}
 #phone .limbar,#phone .gbar{background:#2A2A2F;border-radius:999px}
+/* centre + and icons */
+.icon18[data-a=settings]{display:none}
+#tabbar .plus19{flex:none;width:54px;height:54px;border-radius:50%;background:var(--accent);color:#07241B;border:0;margin:-18px 2px 0;font:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px #0E0E10;flex:none}
+#tabbar .plus19 b{font-size:32px;font-weight:500;line-height:1;margin-top:-3px}
+#tabbar .gear19{color:var(--ink3)}#tabbar .gear19 svg{width:40px;height:40px;padding:9px}#tabbar .gear19 span{display:none}
+#tabbar button[data-a^="tab|"]:not(.on) span{display:none}
+.ic19{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex:none;line-height:1}
+.pl19{padding:12px 14px}.pl19 .ic19{margin-right:2px}
+#view,#view.home17,#view.fab17v{padding-bottom:130px}
 </style></head><body>
 <div class="app"><div class="stage"><div id="frame"><div id="phone"><div class="notch"></div><div class="status"><span id="clk"></span><span>●●● 5G ▮</span></div><div id="glow"></div><div id="view"></div><div id="tabbar"></div><div id="layer"></div></div></div></div>
 <aside class="panel" id="panel"></aside></div>
@@ -2884,6 +2893,22 @@ function donut19(rows){const T=rows.reduce((a,r)=>a+r.amt,0)||1,R=88,C=2*Math.PI
  return `<div class="dn19"><div style="position:relative"><svg viewBox="0 0 230 230">${seg}</svg><div class="ctr"><div class="hero" style="font-size:32px">${money(T)}</div><div class="sm">${(UI.sc||'week')==='week'?'this week':'spent'}</div></div></div></div><div class="lg19">${lg}</div>`}
 {const _sb=stackBar;stackBar=function(rows,h){return window.__dn19?donut19(rows):_sb(rows,h)}}
 {const _sp=cats17;cats17=function(){window.__dn19=1;try{return _sp().replace(/^<div class="row" style="align-items:baseline[\s\S]*?<\/span><\/div>/,'')}finally{window.__dn19=0}}}
+
+/* ===== v19.3 (10 Oct, from Tarun's Gemini screenshots): centre + button in the tab bar opens Log expense / Add money / Move money; category icons in tinted circles ===== */
+const ICO19=[[/food|lunch|meal|dinner|eat|canteen|mess/,'🍔'],[/chai|coffee|tea|cafe/,'☕'],[/snack/,'🍿'],[/travel|transport|auto|uber|bus|metro|fuel|petrol|cab/,'🚌'],[/phone|data|recharge|mobile|internet|wifi/,'📱'],[/college|study|book|stationer|educat|course|fee|print/,'🎓'],[/rent|room|hostel|laundry/,'🏠'],[/shop|cloth|fashion/,'🛍️'],[/fun|movie|game|entertain|outing|party|trip/,'🎬'],[/health|medic|pharma|doctor/,'💊'],[/subscri|netflix|spotify|prime/,'🔁'],[/gym|sport/,'🏋️'],[/gift/,'🎁'],[/saving|goal|bought/,'💰'],[/other|unsorted|uncategor/,'✨']];
+const ico19=n=>{n=(n||'').toLowerCase();for(const [r,e] of ICO19)if(r.test(n))return e;return '🏷️'};
+function icSpan19(name,cssCol){let bg='rgba(255,255,255,.08)';const m=/rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(cssCol||'');if(m&&!/rgba\(0, 0, 0, 0\)/.test(cssCol))bg=`rgba(${m[1]},${m[2]},${m[3]},.2)`;const s=document.createElement('span');s.className='ic19';s.style.background=bg;s.textContent=ico19(name);return s}
+SHEETS.plus19=()=>{const r=(a,e,t,s)=>`<button class="li pl19" data-a="plus19go|${a}"><span class="ic19" style="background:rgba(111,211,174,.16)">${e}</span><span class="n">${t}<span class="mut" style="display:block;font-weight:500;font-size:12.5px">${s}</span></span><span class="t">›</span></button>`;
+ return `<div class="title" style="font-size:22px;margin-bottom:14px">Add</div><div class="col" style="gap:8px">${r(scanOn()?'payscan':'pay','💸','Log expense','Scan a shop QR or type it')}${r('addmoney17','📥','Add money','Pocket money or income')}${r('movefrom|free','🔄','Move money','Savings to spend, or to a goal')}</div>`};
+H.plus19=()=>{openSheet('plus19');return false};
+H.plus19go=a=>{UI.sheet=null;const n=a[0];if(H[n])H[n](a.slice(1));render();return false};
+{const _a=window.afterRender;window.afterRender=()=>{if(_a)_a();
+ const c=document.getElementById('cta17');if(c)c.remove();
+ const tb=document.getElementById('tabbar');
+ if(tb&&!tb.querySelector('.plus19')){const b=tb.querySelectorAll('button[data-a^="tab|"]');if(b.length>=3){const p=document.createElement('button');p.className='plus19';p.dataset.a='plus19';p.setAttribute('aria-label','Add');p.innerHTML='<b>+</b>';b[1].after(p);
+   const g=document.createElement('button');g.className='gear19';g.dataset.a='settings';g.setAttribute('aria-label','Settings');g.innerHTML=window.GEAR18+'<span>Settings</span>';tb.appendChild(g)}}
+ document.querySelectorAll('.cr17 > i').forEach(i=>{const nm=i.parentElement.querySelector('.nm');const n=nm&&nm.firstChild?nm.firstChild.textContent:'';i.replaceWith(icSpan19(n,getComputedStyle(i).backgroundColor))});
+ document.querySelectorAll('.tx17 > .d').forEach(d=>{const m=d.parentElement.querySelector('.mut');const n=m?m.textContent.split(' · ')[0]:'';d.replaceWith(icSpan19(n,getComputedStyle(d).backgroundColor))})}}
 
 /* ===== control panel ===== */
 function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,0).getTime(),label:'Allowance',amt:S.p.income,note:''}];if(S.p.six)seedSix();else if(S.p.W>0){S.planSet=true;S.cats.forEach(c=>c.full=c.amt);S.bufFull=S.bufAmt;S.firstDay=new Date(S.now.getTime()-S.p.weeks*7*DAY)}resetUI();window._celeLock=false;render();fitPhone()}
