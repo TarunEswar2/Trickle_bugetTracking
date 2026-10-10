@@ -771,3 +771,8 @@ Research (web search, 10 Oct): Monzo's community thread on a budgeting widget (l
 | V19-14 | Remove the category emoji icons; coloured dots are back | Tarun, 10 Oct ("i dont like the new icons on categories"). Supersedes V19-12 | none | CONFIRMED (Tarun) |
 | V19-15 | Hero shows the budget once ("of ₹1,072" beside the big number); the ₹0 and end-of-bar labels are removed. Days left are 7 dots with the days left lit, plus a short label. Tarun's idea | Tarun, 10 Oct ("704 twice", "7 dot and 3 lit") | Test A | CONFIRMED (Tarun) for both asks; layout mine, PROPOSED |
 | V19-16 | The On track / Spending fast pill is removed. Pace is carried by the bar colour and the tick; when not on track the word is added to the tick label ("Spending fast · ₹306 by tonight") | Tarun: the pill and the bar "show the same thing". Wiz and PocketGuard put pace in the bar (above, not tested) | Test A: do students read the colour without a word? | PROPOSED |
+
+### V19-17 (10 Oct, Tarun): the centre + is dropped; the earlier layout is back.
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V19-17 | Remove the centre + button and the Settings tab-bar item. Settings is the gear at the top right again; Log expense and Add money are two buttons snapped above the tab bar. Supersedes V19-10 and V19-11 | Tarun, 10 Oct: "the centre button is not working, the earlier one with settings on top right and two buttons is better" | none | CONFIRMED (Tarun) |

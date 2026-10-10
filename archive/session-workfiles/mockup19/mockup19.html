@@ -340,7 +340,7 @@ body{background:#050506}
 #tabbar button.on svg{background:var(--lime);color:#07241B}
 #tabbar button.on span{display:block;margin-top:-2px;font-weight:700}
 #tabbar button.on svg{width:36px;height:36px;padding:8px}
-#cta17,#cta17.fab{left:22px!important;right:22px!important;width:auto!important;box-sizing:border-box;bottom:88px!important;padding:14px 0 0!important;background:#0E0E10!important;margin:0 -22px;padding-left:22px!important;padding-right:22px!important;border:0!important}
+#cta17,#cta17.fab{left:22px!important;right:22px!important;width:auto!important;box-sizing:border-box;bottom:78px!important;padding:14px 0 12px!important;background:#0E0E10!important;margin:0 -22px;padding-left:22px!important;padding-right:22px!important;border:0!important}
 #cta17 .row{gap:10px!important}#cta17 .btn{height:54px;flex:1 1 0!important;width:auto!important;min-width:0;padding:0 8px;margin:0!important;font-size:15.5px}#cta17 .btn.q{background:#232327;color:var(--ink)}
 #view.home17,#view.fab17v{padding-bottom:190px}
 #view{padding-bottom:150px}
@@ -354,14 +354,14 @@ body{background:#050506}
 #phone .mb18{background:#2A2A2F}
 #phone .limbar,#phone .gbar{background:#2A2A2F;border-radius:999px}
 /* centre + and icons */
-.icon18[data-a=settings]{display:none}
+
 #tabbar .plus19{flex:none;width:54px;height:54px;border-radius:50%;background:var(--accent);color:#07241B;border:0;margin:-18px 2px 0;font:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px #0E0E10;flex:none}
 #tabbar .plus19 b{font-size:32px;font-weight:500;line-height:1;margin-top:-3px}
 #tabbar .gear19{color:var(--ink3)}#tabbar .gear19 svg{width:40px;height:40px;padding:9px}#tabbar .gear19 span{display:none}
 #tabbar button[data-a^="tab|"]:not(.on) span{display:none}
 .ic19{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex:none;line-height:1}
 .pl19{padding:12px 14px}.pl19 .ic19{margin-right:2px}
-#view,#view.home17,#view.fab17v{padding-bottom:130px}
+#view,#view.home17,#view.fab17v{padding-bottom:190px}
 .wd19{display:flex;gap:6px}.wd19 i{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.14)}.wd19 i.on{background:var(--ink)}
 </style></head><body>
 <div class="app"><div class="stage"><div id="frame"><div id="phone"><div class="notch"></div><div class="status"><span id="clk"></span><span>●●● 5G ▮</span></div><div id="glow"></div><div id="view"></div><div id="tabbar"></div><div id="layer"></div></div></div></div>
@@ -2904,10 +2904,6 @@ SHEETS.plus19=()=>{const r=(a,e,t,s)=>`<button class="li pl19" data-a="plus19go|
 H.plus19=()=>{openSheet('plus19');return false};
 H.plus19go=a=>{UI.sheet=null;const n=a[0];if(H[n])H[n](a.slice(1));render();return false};
 {const _a=window.afterRender;window.afterRender=()=>{if(_a)_a();
- const c=document.getElementById('cta17');if(c)c.remove();
- const tb=document.getElementById('tabbar');
- if(tb&&!tb.querySelector('.plus19')){const b=tb.querySelectorAll('button[data-a^="tab|"]');if(b.length>=3){const p=document.createElement('button');p.className='plus19';p.dataset.a='plus19';p.setAttribute('aria-label','Add');p.innerHTML='<b>+</b>';b[1].after(p);
-   const g=document.createElement('button');g.className='gear19';g.dataset.a='settings';g.setAttribute('aria-label','Settings');g.innerHTML=window.GEAR18+'<span>Settings</span>';tb.appendChild(g)}}
 }}
 
 /* ===== v19.4 (10 Oct): hero card with no repeated numbers. Budget shown once, pace carried by the bar colour and tick alone (no status pill), days as 7 dots ===== */

@@ -16,10 +16,6 @@ SHEETS.plus19=()=>{const r=(a,e,t,s)=>`<button class="li pl19" data-a="plus19go|
 H.plus19=()=>{openSheet('plus19');return false};
 H.plus19go=a=>{UI.sheet=null;const n=a[0];if(H[n])H[n](a.slice(1));render();return false};
 {const _a=window.afterRender;window.afterRender=()=>{if(_a)_a();
- const c=document.getElementById('cta17');if(c)c.remove();
- const tb=document.getElementById('tabbar');
- if(tb&&!tb.querySelector('.plus19')){const b=tb.querySelectorAll('button[data-a^="tab|"]');if(b.length>=3){const p=document.createElement('button');p.className='plus19';p.dataset.a='plus19';p.setAttribute('aria-label','Add');p.innerHTML='<b>+</b>';b[1].after(p);
-   const g=document.createElement('button');g.className='gear19';g.dataset.a='settings';g.setAttribute('aria-label','Settings');g.innerHTML=window.GEAR18+'<span>Settings</span>';tb.appendChild(g)}}
 }}
 
 /* ===== v19.4 (10 Oct): hero card with no repeated numbers. Budget shown once, pace carried by the bar colour and tick alone (no status pill), days as 7 dots ===== */
