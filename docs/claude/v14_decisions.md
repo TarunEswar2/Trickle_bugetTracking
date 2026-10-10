@@ -743,8 +743,8 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 | ID | Domain | Evidence | Validation gate | Status |
 |---|---|---|---|---|
 | V19-1 | Revamp the app style from the three references | Tarun, 10 Oct | none | CONFIRMED (Tarun) |
-| V19-2 | Home hero is a pastel gradient card (lime to lavender) with dark text and dark pills | Reference 1; my reading of it. Gradients were rejected in v17 ("remove the gradient"), so this may be overridden | Tarun review | PROPOSED |
-| V19-3 | Home gets three quick-action tiles (Add Expense, Add Money, See Spends); no floating button on Home, floating Log expense stays on other tabs | Reference 1; also removes the repeated buttons (V17-64) | Layout test | PROPOSED |
+| V19-2 | Home hero is a softer, lighter pastel gradient with solid near-black text (changed after Tarun said it was not readable).| Reference 1; my reading of it. Gradients were rejected in v17 ("remove the gradient"), so this may be overridden | Tarun review | PROPOSED |
+| V19-3 | Log expense and Add money are two equal buttons snapped just above the floating tab bar on all three tabs, aligned to the content edges (Tarun, 10 Oct: "snap them and align them properly"). The tiles were dropped | Tarun, 10 Oct | Layout test | CONFIRMED (Tarun) |
 | V19-4 | Tab bar is a floating pill with circle icons, active tab a lime circle with its label | Reference 2 | Test A | PROPOSED |
 | V19-5 | Spending uses a pastel pill-segment donut with a two-column legend instead of the stacked bar | Reference 3 | Test A | PROPOSED |
 | V19-6 | Accent is soft lime (#D5F26E); category colours are a pastel set; spend colour is peach, savings lavender | References 1 and 2 | Colour review with Tarun; contrast not yet checked | PROPOSED |

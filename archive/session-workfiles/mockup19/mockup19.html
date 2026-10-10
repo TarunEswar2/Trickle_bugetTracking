@@ -320,14 +320,14 @@ body{background:#050506}
 .chip.on{background:var(--lime);color:#14160A}
 .fab17{background:var(--lime);color:#14160A;box-shadow:none}
 /* header: pastel gradient card, dark text, dark pills (reference 1) */
-.hero17{position:relative;border:0!important;border-radius:28px;color:#121316;background:radial-gradient(120% 90% at 100% 0%,#EEF0A4 0%,rgba(238,240,164,0) 60%),radial-gradient(110% 100% at 0% 100%,#BFC3F3 0%,rgba(191,195,243,0) 65%),linear-gradient(160deg,#D8E8C4,#C9CEEF);padding:18px 18px 16px}
+.hero17{position:relative;border:0!important;border-radius:28px;color:#121316;background:linear-gradient(165deg,#EEF3C4 0%,#E3E9D2 45%,#DADDF3 100%);padding:18px 18px 16px}
 .hero17 .hero,.hero17 .sub,.hero17 .sm,.hero17 .mut,.hero17 div,.hero17 span:not(.pill17){color:#121316}
-.hero17 .hero,.hero17 [style*=color]:not(.pill17):not(.pill17 *){color:#121316!important}.hero17 [style*=ink2]{opacity:.7}
+.hero17 .hero,.hero17 [style*=color]:not(.pill17):not(.pill17 *):not(.hu17box *){color:#0B0C0E!important}
 .hero17 .pill17{background:#17181B!important}
 .hero17 .chip{background:#17181B;color:#F2F4F6}
 .hero17 .row[style*="border-top"]{border-top-color:rgba(18,19,22,.18)!important}
 .hero17 .batt{background:#17181B}
-.hero17 .batt .bfill{background:linear-gradient(90deg,#F1EDA0,#C7C4F2)!important}
+.hero17 .batt .bfill{background:linear-gradient(90deg,#E9F08F,#B9B4F0)!important}
 .hero17 .batt .btick{background:#F4F4F6}
 .hero17 .hu17box{background:#17181B;border-radius:18px}
 .hero17 .hu17box *{color:#F2F4F6!important}.hero17 .hu17box .cap{color:#E6B24F!important}
@@ -339,7 +339,7 @@ body{background:#050506}
 .qa19 i{position:absolute;top:11px;right:11px;width:24px;height:24px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:16px;line-height:1;color:var(--ink2)}
 .qa19 button:first-child i{color:var(--lime)}
 /* tab bar: floating pill, circle icons (reference 2) */
-#tabbar{left:18px;right:18px;bottom:14px;height:66px;padding:7px 10px;border:1px solid rgba(255,255,255,.07);border-radius:34px;background:rgba(28,28,31,.94);justify-content:space-between;gap:6px}
+#tabbar{left:22px;right:22px;bottom:14px;height:66px;padding:7px 10px;border:1px solid rgba(255,255,255,.07);border-radius:34px;background:rgba(28,28,31,.94);justify-content:space-between;gap:6px}
 #tabbar button{flex:1;gap:0;font-size:10.5px;color:var(--ink3);padding:0}
 #tabbar button svg{width:40px;height:40px;padding:9px;box-sizing:border-box;border-radius:50%}
 #tabbar button span{display:none}
@@ -347,7 +347,9 @@ body{background:#050506}
 #tabbar button.on svg{background:var(--lime);color:#14160A}
 #tabbar button.on span{display:block;margin-top:-2px;font-weight:700}
 #tabbar button.on svg{width:36px;height:36px;padding:8px}
-#cta17.fab{bottom:96px!important}
+#cta17,#cta17.fab{left:22px!important;right:22px!important;width:auto!important;box-sizing:border-box;bottom:88px!important;padding:14px 0 0!important;background:linear-gradient(180deg,rgba(14,14,16,0),#0E0E10 38%)!important;border:0!important}
+#cta17 .row{gap:10px!important}#cta17 .btn{height:54px;flex:1 1 0!important;width:auto!important;min-width:0;padding:0 8px;margin:0!important;font-size:15.5px}#cta17 .btn.q{background:#232327;color:var(--ink)}
+#view.home17,#view.fab17v{padding-bottom:190px}
 #view{padding-bottom:150px}
 /* donut and legend (reference 3) */
 .dn19{display:flex;flex-direction:column;align-items:center;margin:8px 0 6px}.dn19 svg{width:230px;height:230px;display:block}
@@ -2882,12 +2884,7 @@ H.incnext=()=>{const d=UI.flow.d;UI.flow.step=1;d.pct=20;d.savX=null;if(!d.end){
 {const _ad=H.amtdone;H.amtdone=a=>{_ad(a)}}
 
 /* ===== v19: style revamp (Tarun's references, 10 Oct). Structure unchanged except: quick-action tiles on Home, pastel donut on Spending ===== */
-window.NAV17='fab';
-{const _h=heroHome17;heroHome17=function(){const h=_h().replace('<button class="chip" data-a="addmoney17">+ Add money</button>','');
- const t=(a,l,b,ic)=>`<button data-a="${a}"><i>${ic}</i><small>${l}</small><b>${b}</b></button>`;
- return h+`<div class="qa19">${t(scanOn()?'payscan':'pay','Add','Expense','−')}${t('addmoney17','Add','Money','+')}${t('tab|spending','See','Spends','✓')}</div>`}}
-/* Home has the tiles, so no floating button there */
-{const _a=window.afterRender;window.afterRender=()=>{if(_a)_a();if(UI.tab==='home'&&document.querySelector('.qa19')){const e=document.getElementById('cta17');if(e)e.remove();const v=document.getElementById('view');if(v)v.classList.remove('fab17v')}}}
+window.NAV17='bar';
 function donut19(rows){const T=rows.reduce((a,r)=>a+r.amt,0)||1,R=88,C=2*Math.PI*R,gap=rows.length>1?9:0;let off=0;
  const seg=rows.map(r=>{const len=Math.max(4,C*r.amt/T-gap);const s=`<circle r="${R}" cx="115" cy="115" fill="none" stroke="${r.col}" stroke-width="26" stroke-linecap="round" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 115 115)"/>`;off+=C*r.amt/T;return s}).join('');
  const lg=rows.slice(0,8).map(r=>`<span><i style="background:${r.col}"></i><em style="font-style:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.name)}</em><b>${Math.round(100*r.amt/T)}%</b></span>`).join('');
