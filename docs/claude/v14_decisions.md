@@ -750,3 +750,8 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 | V19-6 | Accent is soft lime (#D5F26E); category colours are a pastel set; spend colour is peach, savings lavender | References 1 and 2 | Colour review with Tarun; contrast not yet checked | PROPOSED |
 | V19-7 | Near-black cards with 20 to 28 px corners, week/month scope as a segmented pill | References 1 and 2 | Tarun review | PROPOSED |
 | V19-8 | Not done: blue highlight card (reference 2), pastel columns for the time-of-day chart, greeting line | Time | Tarun decides | PROPOSED |
+
+### V19-9 (10 Oct, Tarun): the gradients are dropped, v17 flat language comes back, kept modern.
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V19-9 | Remove the pastel gradient hero and the gradients inside it; back to v17 flat colours (mint accent, orange spend, indigo savings, v17 category palette) with the v19 structure kept (floating icon tab bar, snapped buttons, donut, segmented scope, 20 to 24 px corners) | Tarun, 10 Oct: "the white gradient and other gradient inside is not working, fall back to v17 language just make it modern and good looking" | Tarun review | CONFIRMED (Tarun) for the direction; the exact look is mine, PROPOSED. Supersedes V19-2 and V19-6 |

@@ -17,7 +17,7 @@ SCREENS.home=()=>{const [a,b]=homeSentence();const r=flexL()/flexW();const empty
  <div style="position:sticky;bottom:0;margin-top:24px;padding-top:10px;background:transparent"><button class="btn" data-a="pay">Pay</button></div>`};
 H.goto=a=>{go(a[0]);return false};H.push=a=>{push(a[0],a[1]?JSON.parse(a[1]):{});return false};
 /* ===== SPENDING ===== */
-const catIdx=id=>S.cats.findIndex(c=>c.id===id);const PAL16=['#EBB5DA','#C4E3C6','#F1EDA0','#C7C4F2','#A8D6F0','#F4C6A0','#E4E4E6','#B4E4D6'];const catCol=i=>PAL16[Math.max(0,i)%PAL16.length];
+const catIdx=id=>S.cats.findIndex(c=>c.id===id);const PAL16=['#5AA9FF','#FF7EB6','#F2D65B','#7EE0A6','#CDB6FF','#4FD1E6','#F6A25C','#9AA4FF'];const catCol=i=>PAL16[Math.max(0,i)%PAL16.length];
 const catColor2=id=>catCol(catIdx(id));
 function habits(){const lim=S.now.getTime()-30*DAY;const m={};S.txns.filter(t=>t.t>=lim&&t.kind==='cat').forEach(t=>{(m[t.payee]=m[t.payee]||[]).push(t)});return Object.keys(m).filter(k=>m[k].length>=3).map(k=>({payee:k,list:m[k],n:m[k].length,cat:m[k][0].ref})).sort((a,b)=>b.n-a.n)}
 function ringItems(){const sorted=[...S.cats].sort((a,b)=>b.amt-a.amt);const top=sorted.slice(0,5);const rest=sorted.slice(5);const items=top.map(c=>({name:c.name,id:c.id,color:catCol(catIdx(c.id)),pct:c.amt?(c.amt-c.left)/c.amt:0}));if(rest.length){const am=rest.reduce((a,c)=>a+c.amt,0),sp=rest.reduce((a,c)=>a+(c.amt-c.left),0);items.push({name:'Others',id:'others',color:REST,pct:am?sp/am:0})}return items}
