@@ -109,8 +109,10 @@ POPUPS.homescreen=P=>{const mo=UI.hsMoney;let h=_wid(P);
   <div class="hero" style="font-size:40px;margin-top:2px">${hide?'₹•••':'₹'+(mo.kp||'0')}</div>
   <div class="hs-chips">${[500,1000,2000,5000].map(v=>`<button class="hs-c ${amt===v?'on':''}" data-a="hsmamt|${v}">₹${v}</button>`).join('')}</div>
   <div class="hs-kp">${['1','2','3','4','5','6','7','8','9','','0','⌫'].map(k=>k?`<button data-a="hsmk|${k}">${k}</button>`:'<span></span>').join('')}</div>
-  <div class="cap" style="margin-top:8px">Save</div><div class="hs-chips" style="margin-top:4px">${[0,10,20,30,50].map(p=>`<button class="hs-c ${pct===p?'on':''}" data-a="hsmpct|${p}">${p}%</button>`).join('')}</div>
-  ${ok?`<div class="sm" style="margin-top:4px">${hide?'':money(sav)+' saved · '+money(sp)+' to spend'}</div>`:''}
+  <div class="cap" style="margin-top:8px">Save or spend</div>
+  <div class="sbar" style="height:12px;margin-top:6px"><i id="hsm-bs" style="flex:${Math.max(pct,.001)} 1 0;background:${SAVE}"></i><i id="hsm-bp" style="flex:${Math.max(100-pct,.001)} 1 0;background:${SPEND}"></i></div>
+  <input type="range" min="0" max="100" step="5" value="${pct}" data-i="hsmslider" style="margin:10px 0 2px;width:100%">
+  <div class="row sp sm"><span>Save <b id="hsm-pct" style="color:var(--ink)">${pct}%</b> <b id="hsm-sv" style="color:var(--ink)">${hide?'':money(sav)}</b></span><span>Spend <b id="hsm-sp" style="color:var(--ink)">${hide?'':money(sp)}</b></span></div>
   <div class="cap" style="margin-top:8px">For how long</div><div class="hs-chips" style="margin-top:4px">${HSDUR.map((d,i)=>`<button class="hs-c ${mo.dur===d[1]?'on':''}" data-a="hsmdur|${i}">${d[0]}</button>`).join('')}</div>
   ${mo.dur!=null&&S.planSet&&!S.planFromIncome?`<div class="sm" style="color:var(--amber);margin-top:8px">This replaces your weekly amount of ${hide?'₹•••':money(S.W)}.</div>`:''}<div class="hs-row"><button class="hs-btn" style="flex:.6;height:46px" data-a="hsmcancel">Cancel</button><button class="hs-btn pri ${ok?'':'dis'}" style="height:46px" data-a="${ok?'hsmsave':'x'}">Add ${ok?money(amt):''}</button></div></div>`;
  return `<div class="hs"><div class="hs-top"><span>${fmtTime(S.now)}</span><span>5G ▮</span></div>${wid}<button class="hs-close" data-a="hsclose">Leave the home screen</button><div class="sm" style="text-align:center;margin-top:6px">Simulated Android home screen. The widget never opens Trickle.</div></div>`};
@@ -119,6 +121,7 @@ H.hsmcancel=()=>{UI.hsMoney=null};
 H.hsmk=a=>{const k=a[0],mo=UI.hsMoney;let v=mo.kp||'';if(k==='⌫')v=v.slice(0,-1);else if(v.length<6)v=(v==='0'?'':v)+k;mo.kp=v};
 H.hsmamt=a=>{UI.hsMoney.kp=String(a[0])};
 H.hsmpct=a=>{UI.hsMoney.pct=+a[0]};
+HI.hsmslider=(a,el)=>{const mo=UI.hsMoney;mo.pct=+el.value;const t=amtOf(mo.kp),sv=savCalc(mo,t,mo.pct),hide=UI.hsHide;$('#hsm-pct').textContent=mo.pct+'%';$('#hsm-sv').textContent=hide?'':money(sv);$('#hsm-sp').textContent=hide?'':money(t-sv);$('#hsm-bs').style.flex=Math.max(mo.pct,.001)+' 1 0';$('#hsm-bp').style.flex=Math.max(100-mo.pct,.001)+' 1 0';return false};
 H.hsmdur=a=>{UI.hsMoney.dur=HSDUR[+a[0]][1]};
 H.hsmsave=()=>{const mo=UI.hsMoney,amt=amtOf(mo.kp);if(!amt)return false;const withEnd=mo.dur!=null,d={kp:mo.kp,pct:mo.pct};if(withEnd)d.end=presetEnd(PRESETS[mo.dur]);
  const before=Math.max(0,flexL()),r=addIncome(d,withEnd);if(withEnd&&S.planSet)recomputePlan(true);UI.hsMoney=null;

@@ -630,3 +630,8 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 | ID | Domain | Evidence | Validation gate | Status |
 |---|---|---|---|---|
 | V17-32 | Home layout and limits | Tarun: move Log expense lower; in the space below the insight cards show the recommended limit cards and quick limits. Log expense and Add money are pinned just above the tab bar. Limit recommendations left the card carousel and now sit under it as cards with "Set <limit>" (one tap) and "Change", then "Quick limits" chips (a category and a suggested weekly amount, one tap to set). The suggested amounts come from the last 14 days (existing rule, mine). | Do testers set a limit from Home without opening Spending? | CONFIRMED (Tarun) for the layout; amounts PROPOSED |
+
+### V17-33 (10 Oct, Tarun): quick save/spend slider in the widget. CONFIRMED (his words).
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V17-33 | Widget | Tarun: "add a quick slider for saving and spending" in the widget. The widget's Add money replaces the 0/10/20/30/50% chips with a two-colour bar and a slider (0 to 100%, steps of 5) showing "Save 60% ₹3,000 · Spend ₹2,000" live. | Can a tester split ₹5,000 in the widget in under 10 seconds? | CONFIRMED (Tarun) |
