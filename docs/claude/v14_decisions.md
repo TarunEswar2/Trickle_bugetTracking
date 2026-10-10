@@ -692,3 +692,9 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 | ID | Domain | Evidence | Validation gate | Status |
 |---|---|---|---|---|
 | V17-54 | Hero and savings visuals | Tarun: remove the gradient (on the hero card); remove the piggy bank main viz; "don't show piggy banks, it's an analogy that is used". The hero card is a flat grey. The piggy drawings (big one and the small ones on each row) are gone; "piggy bank" stays as the word for a goal. Savings shows a plain "Total saved ₹3,000, up ₹340 this month" card. Supersedes the picture part of V17-46; the wording of V17-45 stays. | None | CONFIRMED (Tarun) |
+
+### V17-55, V17-56 (10 Oct, Tarun)
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V17-55 | Name for a savings goal | Tarun: "piggy banks sound a little childish, make it savings but something easy to understand". Replaces "piggy bank" (V17-45) with "savings pot" everywhere in the app ("Add a savings pot", "Put it in a savings pot", "Savings pot full"). "Pot" is my choice; Monzo uses it for savings; the plain alternative is "savings goal", but an emergency fund has no goal amount. Tarun decides. | Ask three testers what "savings pot" means before they see an explanation | PROPOSED (word) |
+| V17-56 | Heads-up timing | Tarun: why does it say 4 to 6 pm at 3 pm, and on Friday it has to say Friday is when you spend a lot. The hour heads-up now says when it is ahead ("In about 1 hour, 8–10 pm is when you spend most.") and plain when it is now. The day heads-up shows all day on your biggest day ("Tuesdays are your biggest day."), at the same time as the hour one. Up to two lines in the hero, with "₹607 left for 6 days." on the last. | Does a tester act on it? | CONFIRMED (Tarun) |

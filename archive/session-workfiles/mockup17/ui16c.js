@@ -13,12 +13,12 @@ function areaSvg(vals,col){const W=346,H=176,pl=10,pr=16,pt=20,pb=30,n=vals.leng
  ${vals.map((_,i)=>`<text x="${x(i).toFixed(1)}" y="${H-9}" text-anchor="middle" fill="${i===n-1?'#F4F6FA':'#8F9AAB'}" font-size="12.5" font-weight="${i===n-1?700:500}">${ml(i)}</text>`).join('')}</svg>`}
 
 function mnSav(){const act=S.goals.filter(g=>g.state!=='done');
- if(!act.length&&S.free<=0)return `<div class="title" style="margin-top:6px">Saving for something?</div><div class="sub" style="margin:8px 0 22px">Open a piggy bank. Name it, then put money in.</div><button class="btn" data-a="v15goal">Add a piggy bank</button>`;
+ if(!act.length&&S.free<=0)return `<div class="title" style="margin-top:6px">Saving for something?</div><div class="sub" style="margin:8px 0 22px">Open a savings pot. Name it, then put money in.</div><button class="btn" data-a="v15goal">Add a savings pot</button>`;
  const {ser,M,T}=savingsSeries(),grew=ser.filter((v,i)=>i&&v!==ser[i-1]).length>=2,inGoals=act.reduce((a,g)=>a+(g.target>0?Math.min(g.saved,g.target):g.saved),0),free=Math.max(0,S.free),thisM=M[11];
- return ` ${piggyPanel17()}
- <div class="sm" style="margin:${grew?'4px':'14px'} 2px 26px">${money(inGoals)} in piggy banks${free>0?` · ${money(free)} not in one yet`:''}</div>
+ return ` ${savingsPanel17()}
+ <div class="sm" style="margin:${grew?'4px':'14px'} 2px 26px">${money(inGoals)} in savings pots${free>0?` · ${money(free)} not in one yet`:''}</div>
  <div class="col" style="gap:10px">${act.map(g=>{const col=goalCol(g),p=g.target>0?Math.min(1,g.saved/g.target):0;if(!(g.target>0))return `<button class="li" style="display:block;padding:14px 16px" data-a="push|goal|${J({id:g.id})}"><span class="row sp"><span class="n" style="flex:none;font-size:16px"><i style="width:10px;height:10px;border-radius:50%;background:${col};display:inline-block;margin-right:10px"></i>${esc(g.name)}</span><span class="hero" style="font-size:20px">${money(g.saved)}</span></span><span class="sm" style="display:block;margin-top:6px">No set amount</span></button>`;return `<button class="li gc" style="--glow:${col}66" data-a="push|goal|${J({id:g.id})}"><span class="row sp" style="margin-bottom:12px"><span class="n" style="flex:none;font-size:16px"><i style="width:10px;height:10px;border-radius:50%;background:${col};display:inline-block;margin-right:10px"></i>${esc(g.name)}</span><span class="pct" style="color:${col}">${Math.round(p*100)}%</span></span>${battery(g.saved,g.target,{col,sm:true,ms:true})}<span class="row sp sm" style="margin-top:10px"><span>${money(g.saved)} of ${money(g.target)}</span><span>${g.state==='reached'?'Reached':'Ready '+goalEta(g)}</span></span></button>`}).join('')}
- <button class="btn q" data-a="v15goal">+ Add a piggy bank</button></div>`}
+ <button class="btn q" data-a="v15goal">+ Add a savings pot</button></div>`}
 
 /* ---------- a goal ---------- */
 SCREENS.goal=({id})=>{const g=S.goals.find(x=>x.id===id);if(!g)return '';const col=goalCol(g),p=Math.min(1,g.saved/g.target),need=goalNeeded(g),togo=Math.max(0,g.target-g.saved);
