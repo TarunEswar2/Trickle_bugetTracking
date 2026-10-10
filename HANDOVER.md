@@ -1,5 +1,7 @@
 # Trickle — handover
 
+## v18 (10 Oct): fork in `archive/session-workfiles/mockup18/` (`python3 build.py`). One split bar, split + duration on one screen with dropdowns, icon tab bar, header gear, floating Log expense default, indigo savings. V18-1…8, research in `docs/claude/v18_research.md`. Tests in mockup18/tests pass (fuzz, panel, tips, scan5). Not yet done: stacked category pill, dismissible chips. Ask Tarun which apps the reviewer expected it to resemble.
+
 ## Skill removed (9 Oct): Tarun disliked it, so `.claude/skills/human-interfaces/` and the audit states file are deleted (still in git commit 825d5aa).
 
 ## v17.5 (9 Oct): visual language rolled back to v17.2, only glows and shadows removed (Tarun, V17-22). Features of v17.4 kept. The v17.3 restyle is in commit c9a19c5, the softer version in 825d5aa.

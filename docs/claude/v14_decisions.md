@@ -726,3 +726,15 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 | ID | Domain | Evidence | Validation gate | Status |
 |---|---|---|---|---|
 | V17-64 | Repetition and familiarity | Review quoted by Tarun, 10 Oct. Audit of the mockup (Fri 2 Oct state, 844 px phone): the two full-width buttons plus the tab bar take 161 px, 19% of the screen, and the same two buttons repeat on all three tabs; the hero heads-up and the Time of day and Day insight cards said the same thing; "Recommended: set a limit" appears on Home and on Spending; the savings total appeared in the Savings card and again in a line under it; "needs a savings goal" appears on Home and Savings. Changes now: insight cards the heads-up already covers are hidden; the repeated savings line is removed. Option added behind a switch in the side panel ("Bottom actions"): one floating Log expense button, with Add money moved into the hero card, which cuts the bottom chrome to the tab bar alone (84 px, 10%). The default stays the two full-width buttons because Tarun asked for them twice. "Not familiar" is not yet understood: which apps did the reviewer expect it to resemble? Research note (web search, inconclusive on placement): Google Pay India used a labelled floating scan button in a 2021 critique; PhonePe's help page puts the QR icon at the top. | Ask the reviewer what they compared it to; first-click test on bar against floating button | PROPOSED |
+
+### V18-1…V18-8 (10 Oct): v18 visual and structure pass. Research and caveats: `docs/claude/v18_research.md`.
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V18-1 | Make v18 (fork of v17 in `mockup18/`) | Tarun, 10 Oct | none | CONFIRMED (Tarun) |
+| V18-2 | One split bar instead of slider + preview bar | Tarun, 10 Oct | Test B | CONFIRMED (Tarun) |
+| V18-3 | Split and duration on one screen with dropdowns | Tarun, 10 Oct | Test B | CONFIRMED (Tarun) |
+| V18-4 | Floating Log expense is the default; bar kept as option in panel | Gemini critique + my chrome audit (V17-64); no student evidence | Layout test | PROPOSED |
+| V18-5 | Icon + label tab bar, settings gear in header | Common pattern in teardowns; not tested | Test A | PROPOSED |
+| V18-6 | Indigo for savings, mint only for actions/good state | Gemini critique; my choice | Colour review with Tarun | PROPOSED |
+| V18-7 | Manrope font, tonal borders, micro share bars on categories | My choice | Tarun review | PROPOSED |
+| V18-8 | Stacked pill for categories, dismissible chips | Not built | Tarun decides | PROPOSED |
