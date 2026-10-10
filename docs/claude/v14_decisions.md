@@ -635,3 +635,8 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 | ID | Domain | Evidence | Validation gate | Status |
 |---|---|---|---|---|
 | V17-33 | Widget | Tarun: "add a quick slider for saving and spending" in the widget. The widget's Add money replaces the 0/10/20/30/50% chips with a two-colour bar and a slider (0 to 100%, steps of 5) showing "Save 60% ₹3,000 · Spend ₹2,000" live. | Can a tester split ₹5,000 in the widget in under 10 seconds? | CONFIRMED (Tarun) |
+
+### V17-34 (10 Oct, Tarun): limit cards on Home replace quick limits. CONFIRMED (his words).
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V17-34 | Home limits | Tarun: "instead of quick limits literally just have cards with a title Recommended, Food: set a limit, with the monthly and weekly spend and the percentage". The quick-limit chips are gone. Each card says "Recommended / Food: set a limit" and shows this week's and this month's (30 days) spend with the share of all spending, then "Set a limit" (opens the limit sheet) and "Not now". Up to 3 categories, the ones the suggestion rule flags first, then by spend; a shop with many visits gets a card with a one-tap limit. | Does the share make people choose a limit? | CONFIRMED (Tarun) |
