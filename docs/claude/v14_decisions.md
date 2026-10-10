@@ -781,3 +781,19 @@ Research (web search, 10 Oct): Monzo's community thread on a budgeting widget (l
 | ID | Domain | Evidence | Validation gate | Status |
 |---|---|---|---|---|
 | V19-18 | The save/spend split uses a thin rounded bar with a white shield-shaped handle, instead of the thick bar with a tall line handle. Colours stay save = indigo, spend = orange | Tarun's 60 px reference image, 10 Oct ("use this slider bar for splitting spend and saving"). The image is tiny, so the handle shape is my reading of it | Test B | CONFIRMED (Tarun) for the style; exact shape mine |
+
+### V20-1…V20-12 (10 Oct): v20, from the 3-person test of v19. Report, root causes and next test: `docs/claude/v20_user_test_report.md`. Build: `archive/session-workfiles/mockup20/` (ui20.js plus a CSS block at the end of shell.html).
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V20-1 | Make v20 with a test report first | Tarun, 10 Oct | none | CONFIRMED (Tarun) |
+| V20-2 | Hero reads "₹607 / of ₹1,072 left this week" | Tester quote ("₹735 of ₹735 left this week is more understandable") | Test task 2 | CONFIRMED (tester's words via Tarun); layout mine |
+| V20-3 | Pace line and "₹X by tonight" removed from the bar; the bar shows money left only | Testers asked what the line and "₹201 by tonight" meant (R2) | Task 3 | PROPOSED |
+| V20-4 | Pace as a chip with a small speed-dial symbol and a word (On track / A bit fast / All spent); hero gets a faint tint of that colour. Reverses V19-16 (pill removed) because the bar no longer carries pace | Tarun: "amber is not enough, minimal symbols, not a warning" | Task 3 | PROPOSED |
+| V20-5 | One bar component for "left this week" on Home, pay confirm, pay result and the help sheet; the payment is a lighter piece labelled "−₹120"; no hatching | Testers did not read hatching as money going out and did not link the confirm bar to Home (R6) | Task 4 | PROPOSED |
+| V20-6 | Pay copy: hand-off "Pay ₹120 in your UPI app"; result "Paid ₹120" (by hand: "Spent"); confirm asks "What was it for?"; the "59% of today's" line is removed | Tester: "why does it say added to your week, isn't it paid" | Task 4 | PROPOSED |
+| V20-7 | Plan screen draws the sum: ₹ to spend ÷ days = ₹ each week, plus a strip of weeks up to the end date; labels "Keep some aside?", "Keep aside", "To spend", "How long should ₹X last?" | Testers did not understand the split, the weekly amount or the duration (R1) | Task 1 | PROPOSED |
+| V20-8 | Questions: onboarding "How much money do you have now?", Add money "How much money came in?"; the gift / friend-paid-back button is removed from Add money | Tarun's notes from the test | Task 1 | CONFIRMED (Tarun) for removing the gift option; wording PROPOSED |
+| V20-9 | One look per job: status = tinted hero; suggestion = solid card with icon, title, one line, button under one "Suggestions" title; information = outlined picture tile under "Insights"; records = plain rows. "Recommended" no longer on each card; savings and other nudges move to Suggestions | Testers: "everything looks the same", "recommended on every card" (R3) | Ask "which of these can you tap / which is advice" | PROPOSED |
+| V20-10 | Coloured text only on things you can tap; data colours fill shapes only (goal %, Save/Spend labels, the purple heads-up banner on pay confirm are now plain) | Tester: "why is this purple, I thought it was a button" (R4) | Same question | PROPOSED |
+| V20-11 | "Unsorted" and "Needs a category" read "Other"; "Recommended: set a limit" in Spending rows reads "Set a limit" | Tester: "what is unsorted, it just has to be other" | none | CONFIRMED (Tarun's notes) |
+| V20-12 | The help sheet ("?") is a picture: ₹ left ÷ days = ₹ a day, the bar, and the three states | "Too much text to read" | Task 3 | PROPOSED |

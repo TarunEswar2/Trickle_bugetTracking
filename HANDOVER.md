@@ -1,5 +1,7 @@
 # Trickle — handover
 
+## v20 (10 Oct): answers the first recorded 3-person test (of v19). Read `docs/claude/v20_user_test_report.md` first: findings, 7 root causes, what changed, and a 5-task test script with pass rules. Build in `archive/session-workfiles/mockup20/` (`ui20.js` + last CSS block in `shell.html`); decisions V20-1…12; screenshots in `docs/claude/v20_screens/`. Not redesigned: home-screen widget, goals, settings, insight detail screens. Next: run the 5-task test on v20 with 5 people, one row per person.
+
 ## v19.5 (10 Oct): centre + removed, gear top right and two snapped buttons back (V19-17). Hero v19.4 and no category icons kept. The + sheet code (SHEETS.plus19, H.plus19) is still in ui19.js but unused.
 
 ## v19.4 (10 Oct): hero rebuilt without repeated numbers or the status pill, 7 day-dots; category icons removed (V19-14…16). Open: whether colour alone says "fast" to students. The home-screen widget still has the pill.
