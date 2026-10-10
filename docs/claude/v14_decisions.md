@@ -625,3 +625,8 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 | ID | Domain | Evidence | Validation gate | Status |
 |---|---|---|---|---|
 | V17-31 | Split input | Tarun: "I should be able to tap and manually input the number" on "How much will you save?". The save and spend amounts (underlined) open a keypad; the slider and percentage follow. An amount above the total is capped to the total. The exact typed number is kept (the slider alone still rounds to ₹10). | Can a tester enter exactly ₹3,700? | CONFIRMED (Tarun) |
+
+### V17-32 (10 Oct, Tarun): Home layout. CONFIRMED (his words); the one-tap defaults are mine.
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V17-32 | Home layout and limits | Tarun: move Log expense lower; in the space below the insight cards show the recommended limit cards and quick limits. Log expense and Add money are pinned just above the tab bar. Limit recommendations left the card carousel and now sit under it as cards with "Set <limit>" (one tap) and "Change", then "Quick limits" chips (a category and a suggested weekly amount, one tap to set). The suggested amounts come from the last 14 days (existing rule, mine). | Do testers set a limit from Home without opening Spending? | CONFIRMED (Tarun) for the layout; amounts PROPOSED |
