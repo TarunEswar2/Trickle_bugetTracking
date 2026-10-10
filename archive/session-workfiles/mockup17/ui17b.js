@@ -63,9 +63,9 @@ function insWhen(){const m=UI.rh||'hour';let body='';
  return body+foot}
 
 /* ---------- Spending: manage. Compact categories, recent spends, subscriptions, limits ---------- */
-function recent17(n){return S.txns.filter(t=>t.kind==='cat'||t.kind==='unsorted'||t.kind==='fixed').slice(0,n)}
-const txRow17=t=>{const cn=t.kind==='cat'?catName(t.ref):t.kind==='unsorted'?'Needs a category':'Subscription',dl=Math.floor((new Date(S.now.toDateString())-new Date(new Date(t.t).toDateString()))/DAY),when=dl===0?fmtTime(new Date(t.t)):dl===1?'Yesterday':fmtDay(new Date(t.t));
- return `<button class="li tx17" data-a="push|txn|${J({id:t.id}).replace(/\|/g,'')}"><span class="d" style="${t.kind==='unsorted'?`border:1.5px dashed ${AMBER};background:none`:`background:${t.kind==='fixed'?FIXC:catColor2(t.ref)}`}"></span><span class="n" style="line-height:1.25">${esc(t.payee)}<span class="mut" style="display:block;font-weight:500;font-size:12px">${cn} · ${when}</span></span><span class="a">${money(t.amt)}</span></button>`};
+function recent17(n){return S.txns.filter(t=>t.kind==='cat'||t.kind==='unsorted'||t.kind==='fixed'||t.bought).slice(0,n)}
+const txRow17=t=>{const cn=t.kind==='cat'?catName(t.ref):t.kind==='unsorted'?'Needs a category':t.bought?'Bought':'Subscription',dl=Math.floor((new Date(S.now.toDateString())-new Date(new Date(t.t).toDateString()))/DAY),when=dl===0?fmtTime(new Date(t.t)):dl===1?'Yesterday':fmtDay(new Date(t.t));
+ return `<button class="li tx17" data-a="push|txn|${J({id:t.id}).replace(/\|/g,'')}"><span class="d" style="${t.kind==='unsorted'?`border:1.5px dashed ${AMBER};background:none`:`background:${t.bought?SAVE:t.kind==='fixed'?FIXC:catColor2(t.ref)}`}"></span><span class="n" style="line-height:1.25">${esc(t.payee)}<span class="mut" style="display:block;font-weight:500;font-size:12px">${cn} · ${when}</span></span><span class="a">${money(t.amt)}</span></button>`};
 function cats17(){const sc=UI.sc||'week',[f,t]=inWin(sc),rows=catTotals(f,t),T=sumAmt(rows);
  const chips=`<div class="row" style="gap:8px;margin:12px 0 12px">${SCOPES.map(s=>`<button class="chip ${sc===s[0]?'on':''}" data-a="spscope|${s[0]}">${s[1]}</button>`).join('')}</div>`;
  if(!rows.length)return `<div class="sub" style="margin-top:6px">Nothing logged ${sc==='week'?'yet':'then'}.</div>${chips}`;
@@ -77,9 +77,9 @@ function cats17(){const sc=UI.sc||'week',[f,t]=inWin(sc),rows=catTotals(f,t),T=s
 SCREENS.spending=()=>{const rec=recent17(5),mo=S.bills.filter(b=>!b.ended&&!b.paused&&!(b.trialUntil&&S.now.getTime()<b.trialUntil)).reduce((a,b)=>a+perMonth(b),0),nb=S.bills.filter(b=>!b.ended).length;
  const nxt=S.bills.filter(b=>!b.ended&&b.nextDue).sort((a,b)=>new Date(a.nextDue)-new Date(b.nextDue))[0];
  return `<div class="title" style="margin-bottom:2px">Spending</div>${cats17()}
- <div class="row sp" style="margin:20px 0 8px;align-items:center"><span class="cap" style="margin:0">Recent</span><button class="lnk" style="font-size:14px" data-a="push|history">See all ›</button></div>
+ <div class="row sp" style="margin:38px 0 10px;align-items:center;padding-top:22px;border-top:1px solid var(--line)"><span class="cap" style="margin:0">Recent</span><button class="lnk" style="font-size:14px" data-a="push|history">See all ›</button></div>
  <div class="col" style="gap:6px">${rec.length?rec.map(txRow17).join(''):'<div class="sub">Nothing yet.</div>'}</div>
- <div class="col" style="gap:8px;margin-top:18px">${row17('Subscriptions',nb?`${money(mo)} a month${nxt?' · '+esc(nxt.name)+' '+shortD(new Date(nxt.nextDue).getTime()):''}`:'None yet','v15bills')}${(S.limits||[]).length?row17('Limits',`${S.limits.length} set`,'v16limits'):''}</div>`};
+ <div class="col" style="gap:8px;margin-top:34px">${row17('Subscriptions',nb?`${money(mo)} a month${nxt?' · '+esc(nxt.name)+' '+shortD(new Date(nxt.nextDue).getTime()):''}`:'None yet','v15bills')}${(S.limits||[]).length?row17('Limits',`${S.limits.length} set`,'v16limits'):''}</div>`};
 
 /* ---------- Savings is the third tab; income lives inside it ---------- */
 SCREENS.savings=()=>{const l=S.incomes||[],now=S.now.getTime(),run=l.filter(i=>!i.end||i.end+DAY>now);
@@ -92,7 +92,7 @@ SCREENS.ptrend=()=>back17('Home')+insCmp();
 SCREENS.history=()=>back17('Spending')+`<div class="title" style="margin-bottom:4px">All spends</div>`+spHist();
 
 /* ---------- category screen: "Where" rows say visits plainly ---------- */
-{const _cat=SCREENS.cat;SCREENS.cat=SCREENS.tcat=p=>_cat(p).replace(/<span class="t">(\d+)× · /g,(_,n)=>`<span class="t">${n} ${n==='1'?'visit':'visits'} · `).replace('<div class="cap" style="margin:18px 0 8px">Where</div>','<div class="cap" style="margin:18px 0 2px">Where you went</div><div class="sm" style="margin-bottom:8px">Tap a place to limit how often.</div>')}
+{const _cat=SCREENS.cat;SCREENS.cat=SCREENS.tcat=p=>_cat(p).replace(/<span class="t">(\d+)× · /g,(_,n)=>`<span class="t">${n} ${n==='1'?'visit':'visits'} · `).replace('<div class="cap" style="margin:30px 0 10px">Where</div>','<div class="cap" style="margin:18px 0 2px">Where you went</div><div class="sm" style="margin-bottom:8px">Tap a place to limit how often.</div>')}
 
 /* ---------- widget: log a spend or add money, never opens the app ---------- */
 const HSDUR=[['Just add it',null],['1 week',0],['1 month',1],['3 months',2],['6 months',3]];

@@ -7,7 +7,7 @@ window.TABS=[['home','Home'],['spending','Spending'],['money','Money']];
 window.TABALIAS={income:['money','inc'],savings:['money','sav'],insights:['spending','cat']};
 const back17=(label)=>`<button class="back" data-a="back">‹ ${label}</button>`;
 const row17=(label,value,act,o)=>{o=o||{};return `<button class="li" style="padding:13px 16px;${o.dim?'opacity:.6':''}" data-a="${act||'x'}"><span class="n" style="line-height:1.25"><span class="mut" style="display:block;font-weight:500;font-size:13px">${label}</span>${value}</span><span class="t">›</span></button>`};
-const sec17=t=>`<div class="cap" style="margin:22px 0 8px">${t}</div>`;
+const sec17=t=>`<div class="cap" style="margin:34px 0 10px">${t}</div>`;
 
 /* ---------- Home ---------- */
 function nextAct17(){const n=nextAct();if(n&&!n.low)return n;const a=awareness();if(a)return {t:a.t,a:'why|'+a.k+'|home',c:'tip'};return n}

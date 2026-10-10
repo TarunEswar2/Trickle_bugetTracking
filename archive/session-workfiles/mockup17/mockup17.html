@@ -258,6 +258,9 @@ body{background:#0A0C0E;font-size:16px}
 .cd17.lim17{min-height:190px}
 .cd17.lim17 .btn{white-space:nowrap;padding-left:10px;padding-right:10px}
 .cd17.lim17{position:relative;min-height:0}.x17{position:absolute;top:6px;right:8px;width:30px;height:30px;border:0;background:none;color:var(--ink3);font-size:22px;line-height:1;cursor:pointer}
+/* one filled green button per screen: small buttons in cards are tonal */
+#phone .btn.s:not(.q),#phone .btn.t{background:var(--bg3)!important;color:var(--accent)!important;border:1px solid var(--line)!important}
+.sec17gap{height:12px}
 </style></head><body>
 <div class="app"><div class="stage"><div id="frame"><div id="phone"><div class="notch"></div><div class="status"><span id="clk"></span><span>●●● 5G ▮</span></div><div id="glow"></div><div id="view"></div><div id="tabbar"></div><div id="layer"></div></div></div></div>
 <aside class="panel" id="panel"></aside></div>
@@ -1402,7 +1405,7 @@ function spCats(){const rows=S.cats.map((c,i)=>({c,i,v:wkCat(c,0)})).sort((a,b)=
  return `<div class="col" style="gap:8px">${li}${more}${bills}${edit}</div>`}
 var spHist=function(){const list=S.txns.slice(0,40);if(!list.length)return `<div class="title" style="font-size:22px">Nothing yet.</div>`;const groups={};list.forEach(t=>{const k=new Date(t.t).toDateString();(groups[k]=groups[k]||[]).push(t)});
  return Object.keys(groups).map(k=>{const d=new Date(k);const dl=Math.floor((new Date(S.now.toDateString())-d)/DAY);const name=dl===0?'Today':dl===1?'Yesterday':fmtDay(d);
-  return `<div class="cap" style="margin:14px 0 6px">${name}</div><div class="col" style="gap:6px">${groups[k].map(t=>`<button class="li" data-a="push|txn|${J({id:t.id}).replace(/\|/g,'')}"><span class="d" style="${t.kind==='unsorted'?`border:1.5px dashed ${AMBER};background:none`:`background:${t.kind==='fixed'?FIXC:t.kind==='goal'?SAVE:t.kind==='oneoff'?'#B48CFF':catColor2(t.ref)}`}"></span><span class="n">${esc(t.payee)}${t.kind==='oneoff'?' <span class="mut" style="font-weight:500">· one-off</span>':''}</span><span class="a">${money(t.amt)}</span></button>`).join('')}</div>`}).join('')}
+  return `<div class="cap" style="margin:30px 0 10px">${name}</div><div class="col" style="gap:6px">${groups[k].map(t=>`<button class="li" data-a="push|txn|${J({id:t.id}).replace(/\|/g,'')}"><span class="d" style="${t.kind==='unsorted'?`border:1.5px dashed ${AMBER};background:none`:`background:${t.kind==='fixed'?FIXC:t.kind==='goal'?SAVE:t.kind==='oneoff'?'#B48CFF':catColor2(t.ref)}`}"></span><span class="n">${esc(t.payee)}${t.kind==='oneoff'?' <span class="mut" style="font-weight:500">· one-off</span>':''}</span><span class="a">${money(t.amt)}</span></button>`).join('')}</div>`}).join('')}
 function patterns(){const out=[];const lim=S.now.getTime()-30*DAY;const tx=S.txns.filter(t=>t.t>=lim&&t.kind!=='fixed'&&t.kind!=='goal');
  if(tx.length>=5){const B=[['Morning',5,12,'in the morning'],['Afternoon',12,17,'in the afternoon'],['Evening',17,21,'in the evening'],['Night',21,29,'at night']];
   const sums=B.map(b=>tx.filter(t=>{let h=new Date(t.t).getHours();if(h<5)h+=24;return h>=b[1]&&h<b[2]}).reduce((a,t)=>a+t.amt,0));const mx=Math.max(...sums),i=sums.indexOf(mx);
@@ -1857,7 +1860,7 @@ SCREENS.cat=SCREENS.tcat=({id})=>{const c=S.cats.find(x=>x.id===id);if(!c)return
  <div style="margin-top:14px"><span class="hero" style="font-size:42px">${money(mine)}</span><span class="sub" style="margin-left:8px">this week${all&&mine?` · ${pct0(share)}% of spending`:''}</span></div>
  <div style="margin:18px 0 6px">${weeksBars(vals,col)}</div><div class="row sp sm" style="margin-bottom:16px"><span>8 weeks ago</span><span>This week</span></div>
  ${lim?`<button class="li" style="display:block;padding:12px 14px" data-a="limedit|${lim.id}"><span class="row sp"><span class="n">Limit</span><span class="t" style="${limTone(lim)?'color:'+limTone(lim):''}">${limText(lim)}</span></span>${limBar(lim,col)}</button>`:`<button class="li" data-a="limset|cat|${id}|amt"><span class="d" style="background:#B48CFF"></span><span class="n">Set a limit</span><span class="t">optional ›</span></button>`}
- ${sl.length?`<div class="cap" style="margin:18px 0 8px">Where</div><div class="col" style="gap:8px">${sl.map(p=>`<button class="li" data-a="limset|shop|${esc(p)}|times"><span class="n">${esc(p)}</span><span class="t">${shops[p].n}× · ${money(shops[p].amt)}</span></button>`).join('')}</div>`:''}
+ ${sl.length?`<div class="cap" style="margin:30px 0 10px">Where</div><div class="col" style="gap:8px">${sl.map(p=>`<button class="li" data-a="limset|shop|${esc(p)}|times"><span class="n">${esc(p)}</span><span class="t">${shops[p].n}× · ${money(shops[p].amt)}</span></button>`).join('')}</div>`:''}
  <div style="position:sticky;bottom:0;margin-top:18px;padding-top:10px"><button class="btn" data-a="pay|${id}">${payLabel()}</button></div>`};
 
 /* ---------- Insights: rhythm, repeats, trend. Rupees only. ---------- */
@@ -1935,7 +1938,7 @@ H.obm=a=>{const d=obD(),kp=d.kp;if(!d.cats.length)d.cats=[...BASIC6];d.limits=fa
 /* ---------- Pay: optional shop chips (so repeats and shop limits have data), limit note on the confirm ---------- */
 const _pay16=FLOWS.pay;
 FLOWS.pay=F=>{let h=_pay16(F);const d=F.d;
- if(F.step===0&&d.ask&&!d.oneoff){const ch=recentPayees().slice(0,3);if(ch.length)h=h.replace('<div style="height:90px"></div>',`<div class="cap" style="margin:16px 0 8px">Where?</div><div class="row wrap" style="gap:6px">${ch.map(p=>`<button class="chip ${d.payee===p?'on':''}" data-a="v16shop|${esc(p)}">${esc(p)}</button>`).join('')}</div><div style="height:90px"></div>`)}
+ if(F.step===0&&d.ask&&!d.oneoff){const ch=recentPayees().slice(0,3);if(ch.length)h=h.replace('<div style="height:90px"></div>',`<div class="cap" style="margin:30px 0 10px">Where?</div><div class="row wrap" style="gap:6px">${ch.map(p=>`<button class="chip ${d.payee===p?'on':''}" data-a="v16shop|${esc(p)}">${esc(p)}</button>`).join('')}</div><div style="height:90px"></div>`)}
  return h};
 H.v16shop=a=>{const d=UI.flow.d;d.payee=d.payee===a[0]?null:a[0];if(d.payee){const m=S.memory[d.payee];if(m&&S.cats.some(c=>c.id===m)){d.oneoff=false;if(planned()){d.toK=m;d.target={type:'cat',id:m}}else d.cid=m}}};
 function walletConfirm(F){const d=F.d,amt=amtOf(d.kp),W=Math.max(1,flexW()),L=Math.max(0,flexL()),over=Math.max(0,amt-L);
@@ -1972,7 +1975,7 @@ HI.ubpct=(a,el)=>{const d=UI.flow.d;d.pct=+el.value;d.savX=null;const {pct,sav,s
 /* ---------- History: every spend shows its category ---------- */
 spHist=function(){const full=UI.spAll,list=S.txns.slice(0,full?80:8);if(!list.length)return `<div class="title" style="font-size:22px">Nothing yet.</div>`;const groups={};list.forEach(t=>{const k=new Date(t.t).toDateString();(groups[k]=groups[k]||[]).push(t)});
  return Object.keys(groups).map(k=>{const d=new Date(k),dl=Math.floor((new Date(S.now.toDateString())-d)/DAY),name=dl===0?'Today':dl===1?'Yesterday':fmtDay(d),tot=groups[k].filter(isSp).reduce((a,t)=>a+t.amt,0);
-  return `<div class="row sp" style="margin:16px 0 6px"><span class="cap">${name}</span>${tot?`<span class="cap">${money(tot)}</span>`:''}</div><div class="col" style="gap:6px">${groups[k].map(t=>{const cn=t.kind==='cat'?catName(t.ref):t.kind==='unsorted'?'Needs a category':t.kind==='fixed'?'Subscription':t.kind==='oneoff'?'One-off':'Goal';
+  return `<div class="row sp" style="margin:16px 0 6px"><span class="cap">${name}</span>${tot?`<span class="cap">${money(tot)}</span>`:''}</div><div class="col" style="gap:6px">${groups[k].map(t=>{const cn=t.kind==='cat'?catName(t.ref):t.kind==='unsorted'?'Needs a category':t.kind==='fixed'?'Subscription':t.kind==='oneoff'?'One-off':(t.bought?'Bought':'Goal');
    return `<button class="li" data-a="push|txn|${J({id:t.id}).replace(/\|/g,'')}"><span class="d" style="${t.kind==='unsorted'?`border:1.5px dashed ${AMBER};background:none`:`background:${t.kind==='fixed'?FIXC:t.kind==='goal'?SAVE:t.kind==='oneoff'?'#B48CFF':catColor2(t.ref)}`}"></span><span class="n" style="line-height:1.25">${esc(t.payee)}<span class="mut" style="display:block;font-weight:500;font-size:12px">${cn}</span></span><span class="a">${money(t.amt)}</span></button>`}).join('')}</div>`}).join('')+(!full&&S.txns.length>8?`<button class="li" style="margin-top:12px" data-a="spall"><span class="n mut">Show all</span><span class="t">›</span></button>`:'')};
 
 /* ===== v16.1: an allowance bar instead of the grid; timing insights (hour, weekday, part of month);
@@ -2041,7 +2044,7 @@ const EVID={
  guess:{t:'Why guess first?',lvl:'Untested here',pts:['Guessing, then seeing the real number, shows how far your feel for spending is from the facts.','Whether it changes anything is something Trickle will measure (see the research plan).'],src:['karlan'],lim:'This is a method we are testing, not a proven one.'}};
 SHEETS.why=({k,from})=>{const e=EVID[k];if(!e)return '';
  return `<div class="cap">Evidence: ${e.lvl}</div><div class="title" style="font-size:25px;margin:4px 0 12px">${e.t}</div><div class="col" style="gap:8px">${e.pts.map(x=>`<div class="sub">• ${x}</div>`).join('')}</div>
- <div class="cap" style="margin:16px 0 6px">Sources</div><div class="col" style="gap:6px">${e.src.map(s=>`<div class="sm"><b style="color:var(--ink)">${SRC[s][0]}.</b> ${SRC[s][1]}</div>`).join('')}</div><div class="sm" style="margin-top:12px;color:var(--ink3)">${e.lim}</div>
+ <div class="cap" style="margin:30px 0 10px">Sources</div><div class="col" style="gap:6px">${e.src.map(s=>`<div class="sm"><b style="color:var(--ink)">${SRC[s][0]}.</b> ${SRC[s][1]}</div>`).join('')}</div><div class="sm" style="margin-top:12px;color:var(--ink3)">${e.lim}</div>
  <div class="col" style="gap:8px;margin-top:16px">${from==='home'?`<button class="btn q" data-a="nudgeoff">Stop heads-ups</button>`:''}<button class="btn" data-a="closesheet">Got it</button></div>`};
 H.why=a=>{openSheet('why',{k:a[0],from:a[1]});return false};
 H.nudgeoff=()=>{S.nudgeOff=true;UI.sheet=null;say('Heads-ups are off. Turn them back on in Insights.')};
@@ -2141,7 +2144,7 @@ function mnSav(){const act=S.goals.filter(g=>g.state!=='done');
  const {ser,M,T}=savingsSeries(),grew=ser.filter((v,i)=>i&&v!==ser[i-1]).length>=2,inGoals=act.reduce((a,g)=>a+(g.target>0?Math.min(g.saved,g.target):g.saved),0),free=Math.max(0,S.free),thisM=M[11];
  return `<div><span class="hero" style="font-size:46px">${money(T)}</span><div class="sub" style="margin-top:6px;font-size:16px">saved${thisM>0?` · up ${money(thisM)} this month`:''}</div></div>
  ${grew?`<div style="margin:20px 0 4px">${areaSvg(ser,'#7CE7C4')}</div>`:''}
- <div class="sm" style="margin:${grew?'4px':'14px'} 2px 18px">${money(inGoals)} in goals${free>0?` · ${money(free)} free`:''}</div>
+ <div class="sm" style="margin:${grew?'4px':'14px'} 2px 26px">${money(inGoals)} in goals${free>0?` · ${money(free)} free`:''}</div>
  <div class="col" style="gap:10px">${act.map(g=>{const col=goalCol(g),p=g.target>0?Math.min(1,g.saved/g.target):0;if(!(g.target>0))return `<button class="li" style="display:block;padding:14px 16px" data-a="push|goal|${J({id:g.id})}"><span class="row sp"><span class="n" style="flex:none;font-size:16px"><i style="width:10px;height:10px;border-radius:50%;background:${col};display:inline-block;margin-right:10px"></i>${esc(g.name)}</span><span class="hero" style="font-size:20px">${money(g.saved)}</span></span><span class="sm" style="display:block;margin-top:6px">No set amount</span></button>`;return `<button class="li gc" style="--glow:${col}66" data-a="push|goal|${J({id:g.id})}"><span class="row sp" style="margin-bottom:12px"><span class="n" style="flex:none;font-size:16px"><i style="width:10px;height:10px;border-radius:50%;background:${col};display:inline-block;margin-right:10px;box-shadow:0 0 10px ${col}88"></i>${esc(g.name)}</span><span class="pct" style="color:${col}">${Math.round(p*100)}%</span></span>${battery(g.saved,g.target,{col,sm:true,ms:true})}<span class="row sp sm" style="margin-top:10px"><span>${money(g.saved)} of ${money(g.target)}</span><span>${g.state==='reached'?'Reached':'Ready '+goalEta(g)}</span></span></button>`}).join('')}
  <button class="btn q" data-a="v15goal">+ Add a goal</button></div>`}
 
@@ -2233,7 +2236,7 @@ function calEnd(sf){const t0=day0(),cm=sf.cm2||0,m0=new Date(new Date(t0).getFul
   cells+=dis?`<span style="${st};display:flex;align-items:center;justify-content:center">${n}</span>`:`<button style="${st}" data-a="sfday2|${ts}">${n}</button>`}
  return `<div class="card" style="padding:10px 8px"><div class="row sp" style="margin:0 4px 6px"><button class="chip" style="${cm<=0?'opacity:.3;pointer-events:none':''}" data-a="sfmon2|-1">‹</button><b>${m0.toLocaleDateString('en-IN',{month:'long',year:'numeric'})}</b><button class="chip" data-a="sfmon2|1">›</button></div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:12px;color:var(--ink3);margin-bottom:4px">${DOW.map(d=>`<span>${d[0]}</span>`).join('')}</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px">${cells}</div></div>`}
 function endForm(sf){const k=sf.endKind||'none',lab={cancel:'Cancel by',trial:'Trial ends on',term:'Valid until'}[k],note={cancel:'Trickle reminds you a few days before. Cancel it yourself in the app or in UPI autopay.',trial:`Nothing is set aside until it ends. Then ${money(amtOf(sf.amt))} each time.`,term:'Payments stop after this date.'}[k];
- return `<div class="row wrap" style="gap:8px;margin:16px 0 8px">${ENDKINDS.map(e=>`<button class="chip ${k===e[0]?'on':''}" data-a="sfkind|${e[0]}">${e[1]}</button>`).join('')}</div>${k!=='none'?`<div class="cap" style="margin:14px 0 8px">${lab}: <b style="color:var(--ink);text-transform:none;letter-spacing:0">${fmtDate(sf.endDate)}</b></div>${calEnd(sf)}<div class="sm" style="margin-top:10px">${note}</div>`:`<div class="sm" style="margin-top:10px">Most subscriptions keep going until you cancel.</div>`}`}
+ return `<div class="row wrap" style="gap:8px;margin:16px 0 8px">${ENDKINDS.map(e=>`<button class="chip ${k===e[0]?'on':''}" data-a="sfkind|${e[0]}">${e[1]}</button>`).join('')}</div>${k!=='none'?`<div class="cap" style="margin:30px 0 10px">${lab}: <b style="color:var(--ink);text-transform:none;letter-spacing:0">${fmtDate(sf.endDate)}</b></div>${calEnd(sf)}<div class="sm" style="margin-top:10px">${note}</div>`:`<div class="sm" style="margin-top:10px">Most subscriptions keep going until you cancel.</div>`}`}
 H.sfday2=a=>{SFT().endDate=+a[0]};H.sfmon2=a=>{const sf=SFT();sf.cm2=Math.max(0,(sf.cm2||0)+(+a[0]))};
 H.sfkind=a=>{const sf=SFT();sf.endKind=a[0];if(a[0]!=='none'){sf.endDate=endDefault(a[0],sf);sf.cm2=Math.max(0,monOff(sf.endDate))}};
 H.sfnext2=()=>{const F=UI.flow;F.d.sf.endKind=F.d.sf.endKind||'none';F.step=3};
@@ -2262,7 +2265,7 @@ SHEETS.billsum=()=>{const now=S.now.getTime(),act=S.bills.filter(b=>!b.ended).so
  const st=b=>b.endPlan?`<span style="color:var(--amber)">Cancel by ${shortD(b.endPlan)}</span>`:b.trialUntil&&now<b.trialUntil?`Trial ends ${shortD(b.trialUntil)}`:b.validUntil?`Until ${shortD(b.validUntil)}`:b.paused?'Paused':`Next ${shortD(b.nextDue)} · ${EVLBL[b.every]||b.every}`;
  const row=(b,x)=>`<button class="li" data-a="sheet|bill|${J({id:b.id})}"><span class="d" style="background:${b.ended?'#59626F':FIXC}"></span><span class="n" style="line-height:1.25">${esc(b.name)}<span class="mut" style="display:block;font-weight:500;font-size:12.5px">${x}</span></span><span class="a">${money(b.amt)}</span></button>`;
  return `<div class="h2">Subscriptions</div><div class="sub" style="margin:4px 0 12px">${money(mo)} a month · ${money(mo*12)} a year</div><div class="col" style="gap:8px">${act.map(b=>row(b,st(b))).join('')||'<div class="card sub">None yet.</div>'}</div>
- ${end.length?`<div class="cap" style="margin:16px 0 8px">Cancelled</div><div class="col" style="gap:8px;opacity:.7">${end.map(b=>row(b,'Saved about '+money(perMonth(b))+' a month')).join('')}</div>`:''}<div style="margin-top:12px"><button class="btn o" data-a="addsub">+ Add a subscription</button></div>`};
+ ${end.length?`<div class="cap" style="margin:30px 0 10px">Cancelled</div><div class="col" style="gap:8px;opacity:.7">${end.map(b=>row(b,'Saved about '+money(perMonth(b))+' a month')).join('')}</div>`:''}<div style="margin-top:12px"><button class="btn o" data-a="addsub">+ Add a subscription</button></div>`};
 /* Home reminds about a cancel-by date, a trial ending or a term ending, within 3 days */
 function subAlert(){const now=S.now.getTime();let best=null;S.bills.forEach(b=>{if(b.ended)return;const t=[];if(b.endPlan)t.push([b.endPlan,`Cancel ${b.name} by ${shortD(b.endPlan)}`]);if(b.trialUntil&&now<b.trialUntil)t.push([b.trialUntil,`${b.name} trial ends ${shortD(b.trialUntil)}`]);if(b.validUntil)t.push([b.validUntil,`${b.name} ends ${shortD(b.validUntil)}`]);
   t.forEach(x=>{const d=Math.ceil((x[0]-now)/DAY);if(d<=3&&d>=-2&&(!best||d<best.d))best={d,t:d<0?'Past the date: '+x[1]:x[1],id:b.id}})});return best?{t:best.t,a:'sheet|bill|'+J({id:best.id}),c:'amber'}:null}
@@ -2317,7 +2320,7 @@ window.TABS=[['home','Home'],['spending','Spending'],['money','Money']];
 window.TABALIAS={income:['money','inc'],savings:['money','sav'],insights:['spending','cat']};
 const back17=(label)=>`<button class="back" data-a="back">‹ ${label}</button>`;
 const row17=(label,value,act,o)=>{o=o||{};return `<button class="li" style="padding:13px 16px;${o.dim?'opacity:.6':''}" data-a="${act||'x'}"><span class="n" style="line-height:1.25"><span class="mut" style="display:block;font-weight:500;font-size:13px">${label}</span>${value}</span><span class="t">›</span></button>`};
-const sec17=t=>`<div class="cap" style="margin:22px 0 8px">${t}</div>`;
+const sec17=t=>`<div class="cap" style="margin:34px 0 10px">${t}</div>`;
 
 /* ---------- Home ---------- */
 function nextAct17(){const n=nextAct();if(n&&!n.low)return n;const a=awareness();if(a)return {t:a.t,a:'why|'+a.k+'|home',c:'tip'};return n}
@@ -2416,9 +2419,9 @@ function insWhen(){const m=UI.rh||'hour';let body='';
  return body+foot}
 
 /* ---------- Spending: manage. Compact categories, recent spends, subscriptions, limits ---------- */
-function recent17(n){return S.txns.filter(t=>t.kind==='cat'||t.kind==='unsorted'||t.kind==='fixed').slice(0,n)}
-const txRow17=t=>{const cn=t.kind==='cat'?catName(t.ref):t.kind==='unsorted'?'Needs a category':'Subscription',dl=Math.floor((new Date(S.now.toDateString())-new Date(new Date(t.t).toDateString()))/DAY),when=dl===0?fmtTime(new Date(t.t)):dl===1?'Yesterday':fmtDay(new Date(t.t));
- return `<button class="li tx17" data-a="push|txn|${J({id:t.id}).replace(/\|/g,'')}"><span class="d" style="${t.kind==='unsorted'?`border:1.5px dashed ${AMBER};background:none`:`background:${t.kind==='fixed'?FIXC:catColor2(t.ref)}`}"></span><span class="n" style="line-height:1.25">${esc(t.payee)}<span class="mut" style="display:block;font-weight:500;font-size:12px">${cn} · ${when}</span></span><span class="a">${money(t.amt)}</span></button>`};
+function recent17(n){return S.txns.filter(t=>t.kind==='cat'||t.kind==='unsorted'||t.kind==='fixed'||t.bought).slice(0,n)}
+const txRow17=t=>{const cn=t.kind==='cat'?catName(t.ref):t.kind==='unsorted'?'Needs a category':t.bought?'Bought':'Subscription',dl=Math.floor((new Date(S.now.toDateString())-new Date(new Date(t.t).toDateString()))/DAY),when=dl===0?fmtTime(new Date(t.t)):dl===1?'Yesterday':fmtDay(new Date(t.t));
+ return `<button class="li tx17" data-a="push|txn|${J({id:t.id}).replace(/\|/g,'')}"><span class="d" style="${t.kind==='unsorted'?`border:1.5px dashed ${AMBER};background:none`:`background:${t.bought?SAVE:t.kind==='fixed'?FIXC:catColor2(t.ref)}`}"></span><span class="n" style="line-height:1.25">${esc(t.payee)}<span class="mut" style="display:block;font-weight:500;font-size:12px">${cn} · ${when}</span></span><span class="a">${money(t.amt)}</span></button>`};
 function cats17(){const sc=UI.sc||'week',[f,t]=inWin(sc),rows=catTotals(f,t),T=sumAmt(rows);
  const chips=`<div class="row" style="gap:8px;margin:12px 0 12px">${SCOPES.map(s=>`<button class="chip ${sc===s[0]?'on':''}" data-a="spscope|${s[0]}">${s[1]}</button>`).join('')}</div>`;
  if(!rows.length)return `<div class="sub" style="margin-top:6px">Nothing logged ${sc==='week'?'yet':'then'}.</div>${chips}`;
@@ -2430,9 +2433,9 @@ function cats17(){const sc=UI.sc||'week',[f,t]=inWin(sc),rows=catTotals(f,t),T=s
 SCREENS.spending=()=>{const rec=recent17(5),mo=S.bills.filter(b=>!b.ended&&!b.paused&&!(b.trialUntil&&S.now.getTime()<b.trialUntil)).reduce((a,b)=>a+perMonth(b),0),nb=S.bills.filter(b=>!b.ended).length;
  const nxt=S.bills.filter(b=>!b.ended&&b.nextDue).sort((a,b)=>new Date(a.nextDue)-new Date(b.nextDue))[0];
  return `<div class="title" style="margin-bottom:2px">Spending</div>${cats17()}
- <div class="row sp" style="margin:20px 0 8px;align-items:center"><span class="cap" style="margin:0">Recent</span><button class="lnk" style="font-size:14px" data-a="push|history">See all ›</button></div>
+ <div class="row sp" style="margin:38px 0 10px;align-items:center;padding-top:22px;border-top:1px solid var(--line)"><span class="cap" style="margin:0">Recent</span><button class="lnk" style="font-size:14px" data-a="push|history">See all ›</button></div>
  <div class="col" style="gap:6px">${rec.length?rec.map(txRow17).join(''):'<div class="sub">Nothing yet.</div>'}</div>
- <div class="col" style="gap:8px;margin-top:18px">${row17('Subscriptions',nb?`${money(mo)} a month${nxt?' · '+esc(nxt.name)+' '+shortD(new Date(nxt.nextDue).getTime()):''}`:'None yet','v15bills')}${(S.limits||[]).length?row17('Limits',`${S.limits.length} set`,'v16limits'):''}</div>`};
+ <div class="col" style="gap:8px;margin-top:34px">${row17('Subscriptions',nb?`${money(mo)} a month${nxt?' · '+esc(nxt.name)+' '+shortD(new Date(nxt.nextDue).getTime()):''}`:'None yet','v15bills')}${(S.limits||[]).length?row17('Limits',`${S.limits.length} set`,'v16limits'):''}</div>`};
 
 /* ---------- Savings is the third tab; income lives inside it ---------- */
 SCREENS.savings=()=>{const l=S.incomes||[],now=S.now.getTime(),run=l.filter(i=>!i.end||i.end+DAY>now);
@@ -2445,7 +2448,7 @@ SCREENS.ptrend=()=>back17('Home')+insCmp();
 SCREENS.history=()=>back17('Spending')+`<div class="title" style="margin-bottom:4px">All spends</div>`+spHist();
 
 /* ---------- category screen: "Where" rows say visits plainly ---------- */
-{const _cat=SCREENS.cat;SCREENS.cat=SCREENS.tcat=p=>_cat(p).replace(/<span class="t">(\d+)× · /g,(_,n)=>`<span class="t">${n} ${n==='1'?'visit':'visits'} · `).replace('<div class="cap" style="margin:18px 0 8px">Where</div>','<div class="cap" style="margin:18px 0 2px">Where you went</div><div class="sm" style="margin-bottom:8px">Tap a place to limit how often.</div>')}
+{const _cat=SCREENS.cat;SCREENS.cat=SCREENS.tcat=p=>_cat(p).replace(/<span class="t">(\d+)× · /g,(_,n)=>`<span class="t">${n} ${n==='1'?'visit':'visits'} · `).replace('<div class="cap" style="margin:30px 0 10px">Where</div>','<div class="cap" style="margin:18px 0 2px">Where you went</div><div class="sm" style="margin-bottom:8px">Tap a place to limit how often.</div>')}
 
 /* ---------- widget: log a spend or add money, never opens the app ---------- */
 const HSDUR=[['Just add it',null],['1 week',0],['1 month',1],['3 months',2],['6 months',3]];
@@ -2518,9 +2521,9 @@ H.fundgo=a=>{const amt=+a[1];if(amt>0)moveMoney(S,{type:'free'},{type:'goal',id:
 {const _ag=SHEETS.addgoal;SHEETS.addgoal=p=>_ag(p).replace(`<button class="chip ${p.name==='Trip'?'on':''}" data-a="gname|Trip">Trip</button>`,`<button class="chip ${p.name==='Emergency fund'?'on':''}" data-a="gname|Emergency fund">Emergency fund</button><button class="chip ${p.name==='Trip'?'on':''}" data-a="gname|Trip">Trip</button>`)}
 /* Savings tab: the action first */
 {const _ms=mnSav;mnSav=function(){const free=Math.floor(S.free),g=activeGoals();let top='';
-  if(free>=1&&g.length===0)top=`<div class="card" style="margin-bottom:14px"><div class="cap">Needs a job</div><div style="font-weight:650;font-size:17px;margin-top:4px">${money(free)} is saved but not in a goal.</div><div class="sub" style="margin-top:4px">Most people start with an emergency fund, about 3 months of spending: ${money(efTarget())}.</div><button class="btn" style="margin-top:12px" data-a="efund">Start an emergency fund</button></div>`;
-  else if(free>=1)top=`<div class="card" style="margin-bottom:14px"><div class="cap">Needs a job</div><div style="font-weight:650;font-size:17px;margin-top:4px">${money(free)} is saved but not in a goal.</div><button class="btn" style="margin-top:12px" data-a="choosegoal">Put it in a goal</button></div>`;
-  else if(g.length===0&&S.goals.length===0)top=`<div class="card" style="margin-bottom:14px"><div style="font-weight:650;font-size:17px">Start with an emergency fund.</div><div class="sub" style="margin-top:4px">A small pot for surprises. ${money(efTarget())} is about 3 months.</div><button class="btn" style="margin-top:12px" data-a="efund">Start it</button></div>`;
+  if(free>=1&&g.length===0)top=`<div class="card" style="margin-bottom:28px"><div class="cap">Needs a job</div><div style="font-weight:650;font-size:17px;margin-top:4px">${money(free)} is saved but not in a goal.</div><div class="sub" style="margin-top:4px">Most people start with an emergency fund, about 3 months of spending: ${money(efTarget())}.</div><button class="btn" style="margin-top:12px" data-a="efund">Start an emergency fund</button></div>`;
+  else if(free>=1)top=`<div class="card" style="margin-bottom:28px"><div class="cap">Needs a job</div><div style="font-weight:650;font-size:17px;margin-top:4px">${money(free)} is saved but not in a goal.</div><button class="btn" style="margin-top:12px" data-a="choosegoal">Put it in a goal</button></div>`;
+  else if(g.length===0&&S.goals.length===0)top=`<div class="card" style="margin-bottom:28px"><div style="font-weight:650;font-size:17px">Start with an emergency fund.</div><div class="sub" style="margin-top:4px">A small pot for surprises. ${money(efTarget())} is about 3 months.</div><button class="btn" style="margin-top:12px" data-a="efund">Start it</button></div>`;
   return top+_ms()}}
 /* Home: the only savings number is money that needs a decision */
 {const _c=cards17;cards17=function(){const out=_c(),free=Math.floor(S.free),g=activeGoals();let c=null;
@@ -2541,7 +2544,7 @@ H.gopen=a=>{const p=UI.sheet.p;p._set=true;p.open=a[0]==='1';if(!p.open&&!p.kp)p
 {H.gname=a=>{const p=UI.sheet.p;p.name=a[0];if(!p._set)p.open=a[0]==='Emergency fund'}}
 H.goaladd=()=>{const p=UI.sheet.p,t=p.open?0:amtOf(p.kp);if(!p.open&&!t)return false;const n=S.goals.length;addGoal(S,{name:p.name,target:t,byMonths:t?(p.by||0):0});UI.sheet=null;say(`${p.name} added.`);if(S.goals.length>n&&S.free>=1){const g=S.goals[S.goals.length-1];openSheet('fundgoal',{id:g.id})};return false};
 {const _sg=SCREENS.goal;SCREENS.goal=p=>{const g=S.goals.find(x=>x.id===p.id);if(!g||g.target>0)return _sg(p);const col=goalCol(g);
- return `<button class="back" data-a="back">‹ Savings</button><div class="title" style="font-size:30px">${esc(g.name)}</div><div class="sub" style="margin-top:6px">No set amount. It just grows.</div><div style="margin-top:20px"><span class="hero" style="font-size:42px">${money(g.saved)}</span><span class="sub" style="margin-left:8px">saved</span></div><div class="cap" style="margin:22px 0 8px">Added each month</div>${weeksBars((g.hist||[]).map(v=>Math.max(0,v)),col)}<div class="row sp sm" style="margin:8px 0 22px"><span>A year ago</span><span>This month</span></div><div class="col" style="gap:10px"><button class="btn" data-a="movefrom|${g.id}">Add money</button><button class="btn q" data-a="sheet|goaledit|${J({id:g.id})}">Edit</button></div>`}}
+ return `<button class="back" data-a="back">‹ Savings</button><div class="title" style="font-size:30px">${esc(g.name)}</div><div class="sub" style="margin-top:6px">No set amount. It just grows.</div><div style="margin-top:20px"><span class="hero" style="font-size:42px">${money(g.saved)}</span><span class="sub" style="margin-left:8px">saved</span></div><div class="cap" style="margin:30px 0 10px">Added each month</div>${weeksBars((g.hist||[]).map(v=>Math.max(0,v)),col)}<div class="row sp sm" style="margin:8px 0 22px"><span>A year ago</span><span>This month</span></div><div class="col" style="gap:10px"><button class="btn" data-a="movefrom|${g.id}">Add money</button><button class="btn q" data-a="sheet|goaledit|${J({id:g.id})}">Edit</button></div>`}}
 
 /* ===== v17.7 (9 Oct): editable goal name and target; custom categories back on the pay screen; clearer first nudge ===== */
 HI.gnametxt=(a,el)=>{UI.sheet.p.name=el.value;return false};
@@ -2645,17 +2648,22 @@ function limitsHome17(){if(!planned())return '';const now=S.now.getTime();
  const order=[];const c=cats.slice(),sh=shops.slice();while((c.length||sh.length)&&order.length<3){if(c.length){const r=c.shift();order.push({k:'c'+r.id,h:catCard(r)})}if(order.length<3&&sh.length){const l=sh.shift();order.push({k:'s'+l.payee,h:shopCard(l)})}}
  const shown=order.filter(o=>!S.limNo[o.k]).map(o=>o.h);
  const n=shown.length;if(!n)return '';
- return `<div class="car17" id="car17b" style="margin-top:8px">${shown.join('')}</div>${n>1?`<div class="dots17" id="dots17b">${Array.from({length:n},(_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}`}
+ return `<div class="car17" id="car17b" style="margin-top:26px">${shown.join('')}</div>${n>1?`<div class="dots17" id="dots17b">${Array.from({length:n},(_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}`}
 {const _ar4=window.afterRender;window.afterRender=()=>{if(_ar4)_ar4();const car=document.getElementById('car17b');const dots=document.querySelectorAll('#dots17b i');if(!car||!dots.length)return;car.addEventListener('scroll',()=>{const w=car.firstElementChild?car.firstElementChild.getBoundingClientRect().width+10:1,i=Math.round(car.scrollLeft/w);dots.forEach((d,k)=>d.classList.toggle('on',k===i))},{passive:true})}}
 H.limquick=a=>{const s=suggestions().find(x=>x.key===a[0]);if(!s)return false;S.limits=S.limits.filter(l=>!(l.scope===s.scope&&l.ref===s.ref));S.limits.push({id:'l'+(S.idc++),scope:s.scope,ref:s.ref,kind:s.kind,cap:limDefault(s.scope,s.ref,s.kind)});say('Limit set.');return false};
 H.limquickc=a=>{const id=a[0];if(!S.cats.some(c=>c.id===id))return false;S.limits=S.limits.filter(l=>!(l.scope==='cat'&&l.ref===id));S.limits.push({id:'l'+(S.idc++),scope:'cat',ref:id,kind:'amt',cap:limDefault('cat',id,'amt')});say(`Limit set for ${catName(id)}.`);return false};
 
 /* ===== v17.14: a reached goal gets a big card on Home, above the insights ===== */
 function reachedHome17(){const g=S.goals.find(x=>x.state==='reached');if(!g)return '';
- return `<div class="card" style="margin:0 0 16px;padding:16px;border-color:var(--accent)"><div class="cap" style="margin:0 0 6px;color:var(--accent)">Goal reached</div><div style="font-size:24px;font-weight:700;line-height:1.15">${esc(g.name)}: you saved ${money(g.target)}</div><div class="sub" style="margin:6px 0 12px">Buy your item, or raise the goal.</div>${battery(g.target,g.target,{col:SAVE,sm:true})}<div class="row" style="gap:8px;margin-top:14px"><button class="btn" style="flex:1;white-space:nowrap" data-a="goalbought|${g.id}">I bought it</button><button class="btn q" style="flex:1;white-space:nowrap;padding-left:8px;padding-right:8px" data-a="sheet|goaledit|${J({id:g.id}).replace(/\|/g,'')}">Raise the goal</button></div></div>`}
-H.goalbought=a=>{const g=S.goals.find(x=>x.id===a[0]);if(!g)return false;g.state='done';g.doneOn=new Date(S.now);g.boughtOn=new Date(S.now);g.saved=0;logE(S,`${g.name} bought`);if(UI.stack&&UI.stack.length)UI.stack=[];say('Enjoy your '+g.name+'.');return false};
+ return `<div class="card" style="margin:0 0 26px;padding:16px;border-color:var(--accent)"><div class="cap" style="margin:0 0 6px;color:var(--accent)">Goal reached</div><div style="font-size:24px;font-weight:700;line-height:1.15">${esc(g.name)}: you saved ${money(g.target)}</div><div class="sub" style="margin:6px 0 12px">Buy your item, or raise the goal.</div>${battery(g.target,g.target,{col:SAVE,sm:true})}<div class="row" style="gap:8px;margin-top:14px"><button class="btn t" style="flex:1;white-space:nowrap" data-a="goalbought|${g.id}">I bought it</button><button class="btn q" style="flex:1;white-space:nowrap;padding-left:8px;padding-right:8px" data-a="sheet|goaledit|${J({id:g.id}).replace(/\|/g,'')}">Raise the goal</button></div></div>`}
+H.goalbought=a=>{const g=S.goals.find(x=>x.id===a[0]);if(!g)return false;const amt=Math.max(0,Math.round(g.saved));g.state='done';g.doneOn=new Date(S.now);g.boughtOn=new Date(S.now);g.saved=0;if(amt>0)S.txns.unshift({id:'t'+(S.idc++),t:S.now.getTime(),payee:g.name,amt,kind:'goal',bought:true,note:'Bought with savings'});logE(S,`${g.name} bought`);if(UI.stack&&UI.stack.length)UI.stack=[];say('Enjoy your '+g.name+'.');return false};
 {const _c5=cards17;cards17=function(){return _c5().filter(x=>x.tag!=='Goal reached')}}
 {const _sg3=SCREENS.goal;SCREENS.goal=p=>_sg3(p).replace(/data-a="gdone\|([^"]+)">I bought it/,'data-a="goalbought|$1">I bought it')}
+
+/* ===== v17.15: a bought goal leaves a record; the link is retired so records never say "UPI link" ===== */
+{const _tx=SCREENS.txn;SCREENS.txn=p=>{const t=S.txns.find(x=>x.id===p.id);
+ if(t&&t.bought)return `<button class="back" data-a="back">‹ Back</button><div class="cap" style="margin-top:6px">${esc(t.payee)}</div><div class="hero" style="font-size:44px;margin:4px 0 18px">${money(t.amt)}</div><div class="card" style="display:grid;gap:12px"><div class="row sp"><span class="mut">What</span><b>Bought with savings</b></div><div class="row sp"><span class="mut">When</span><b>${fmtDay(new Date(t.t))}, ${fmtTime(new Date(t.t))}</b></div><div class="row sp"><span class="mut">Counts toward the week</span><b>No</b></div></div>`;
+ return _tx(p).replace('Seen on your UPI link','Logged in Trickle')}}
 
 /* ===== control panel ===== */
 function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,0).getTime(),label:'Allowance',amt:S.p.income,note:''}];if(S.p.six)seedSix();else if(S.p.W>0){S.planSet=true;S.cats.forEach(c=>c.full=c.amt);S.bufFull=S.bufAmt;S.firstDay=new Date(S.now.getTime()-S.p.weeks*7*DAY)}resetUI();window._celeLock=false;render();fitPhone()}

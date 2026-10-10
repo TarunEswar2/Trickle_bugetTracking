@@ -64,7 +64,7 @@ const EVID={
  guess:{t:'Why guess first?',lvl:'Untested here',pts:['Guessing, then seeing the real number, shows how far your feel for spending is from the facts.','Whether it changes anything is something Trickle will measure (see the research plan).'],src:['karlan'],lim:'This is a method we are testing, not a proven one.'}};
 SHEETS.why=({k,from})=>{const e=EVID[k];if(!e)return '';
  return `<div class="cap">Evidence: ${e.lvl}</div><div class="title" style="font-size:25px;margin:4px 0 12px">${e.t}</div><div class="col" style="gap:8px">${e.pts.map(x=>`<div class="sub">• ${x}</div>`).join('')}</div>
- <div class="cap" style="margin:16px 0 6px">Sources</div><div class="col" style="gap:6px">${e.src.map(s=>`<div class="sm"><b style="color:var(--ink)">${SRC[s][0]}.</b> ${SRC[s][1]}</div>`).join('')}</div><div class="sm" style="margin-top:12px;color:var(--ink3)">${e.lim}</div>
+ <div class="cap" style="margin:30px 0 10px">Sources</div><div class="col" style="gap:6px">${e.src.map(s=>`<div class="sm"><b style="color:var(--ink)">${SRC[s][0]}.</b> ${SRC[s][1]}</div>`).join('')}</div><div class="sm" style="margin-top:12px;color:var(--ink3)">${e.lim}</div>
  <div class="col" style="gap:8px;margin-top:16px">${from==='home'?`<button class="btn q" data-a="nudgeoff">Stop heads-ups</button>`:''}<button class="btn" data-a="closesheet">Got it</button></div>`};
 H.why=a=>{openSheet('why',{k:a[0],from:a[1]});return false};
 H.nudgeoff=()=>{S.nudgeOff=true;UI.sheet=null;say('Heads-ups are off. Turn them back on in Insights.')};
