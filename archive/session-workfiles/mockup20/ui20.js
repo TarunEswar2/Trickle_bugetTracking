@@ -93,3 +93,31 @@ scanConfirm=function(F){const d=F.d,amt=amtOf(d.kp),pl=planned(),W=Math.max(1,fl
   ${warn?`<div class="note20" style="text-align:left"><i style="background:${ST20.fast.c}"></i>${esc(warn)}</div>`:''}</div>
   <div class="mfoot"><div class="col" style="gap:8px"><button class="btn" data-a="pclose">Done</button>${d.scan?`<button class="btn q" data-a="scanremove">Didn't pay? Remove</button>`:''}</div></div>`}
  return _p(F)}}
+
+/* ===== v20.1 (10 Oct, Tarun): how long = weeks you add with + (or a calendar), not a dropdown. Plan screen in numbered blocks with one result ===== */
+const sun20=()=>wk0()+6*DAY;
+const wkCount20=end=>Math.max(1,Math.round((snapEnd(end)-sun20())/(7*DAY))+1);
+function setWeeks20(d,k){k=Math.max(1,Math.min(52,k));d.end=sun20()+(k-1)*7*DAY;d.dur='w';d.cal=false;const e=new Date(d.end),n=new Date(day0());d.cm=(e.getFullYear()-n.getFullYear())*12+e.getMonth()-n.getMonth()}
+H.incwk=a=>{const d=UI.flow.d,k=wkCount20(planNums18(d).end);setWeeks20(d,k+(+a[0]))};
+H.inccal20=()=>{const d=UI.flow.d;d.cal=!d.cal};
+function res20(n){return `<div class="sm">${money(n.sp)} ÷ ${n.days} days</div><div class="row" style="align-items:baseline;gap:8px;margin-top:4px"><span class="hero" style="font-size:46px;line-height:1">${money(n.wk)}</span><span style="font-size:17px;color:var(--ink2)">every week</span></div>${n.left<7?`<div class="sm" style="margin-top:6px">This week ${money(n.share)}, for the ${n.left} day${n.left>1?'s':''} left</div>`:''}`}
+function strip20(n){const w=weeks20(n);return `<div class="wk20">${w.map((b,i)=>`<i style="flex:${b.d}" class="${i===0?'now':''}"></i>`).join('')}</div><div class="row sp sm" style="margin-top:7px"><span>Today</span><span>Sun ${shortD(n.end)}</span></div>`}
+{const _inc=FLOWS.inc;FLOWS.inc=F=>{if(F.step===0)return _inc(F);
+ const d=F.d;if(!d.end)setWeeks20(d,5);const n=planNums18(d),k=wkCount20(n.end);
+ return `<div class="mbody"><button class="back" data-a="incback">‹ Back</button><div class="steps"><i class="on"></i><i class="on"></i></div>
+ <div class="title" style="margin-top:14px">Plan your ${money(n.a)}</div>
+ <div class="blk20"><div class="lab20"><span class="n20">1</span>Keep some aside?</div>
+  <input type="range" class="split18" min="0" max="100" step="1" value="${n.pct}" data-i="incpct20" style="--p:${n.pct}%" aria-label="How much to keep aside">
+  <div class="row sp"><button class="tapamt18" data-a="incedit|sav"><span class="k20"><i style="background:${SAVE}"></i>Keep aside</span><b id="inc-sav">${money(n.sav)}</b></button><button class="tapamt18 r" data-a="incedit|sp"><span class="k20"><i style="background:${SPEND}"></i>To spend</span><b id="inc-sp">${money(n.sp)}</b></button></div></div>
+ <div class="blk20"><div class="lab20"><span class="n20">2</span><span id="inc-q">How long should ${money(n.sp)} last?</span></div>
+  ${d.cal?`<div class="sm" style="margin-bottom:8px">Until Sunday ${fmtDate(n.end)}</div>${calHtml(d,n.t0,n.end)}`:`<div class="stp20"><button data-a="incwk|-1" aria-label="One week less" ${k<=1?'disabled':''}>−</button><div><b>${k} week${k>1?'s':''}</b><small>until Sun ${shortD(n.end)}</small></div><button data-a="incwk|1" aria-label="One more week">+</button></div>${strip20(n)}`}
+  <button class="lnk" style="margin-top:12px;font-size:14px" data-a="inccal20">${d.cal?'Count in weeks instead':'Pick a date on a calendar'}</button></div>
+ <div class="res20" id="eq20">${res20(n)}</div><div style="height:150px"></div></div>
+ <div class="mfoot"><div class="col" style="gap:8px"><button class="btn" data-a="incfinish">${planned()?'Update my week':'Start my week'}</button><button class="btn q" data-a="incdone">Just add the money</button></div></div>`}}
+HI.incpct20=(a,el)=>{const d=UI.flow.d;d.pct=+el.value;d.savX=null;const n=planNums18(d);el.style.setProperty('--p',n.pct+'%');$('#inc-sav').textContent=money(n.sav);$('#inc-sp').textContent=money(n.sp);$('#inc-q').textContent=`How long should ${money(n.sp)} last?`;$('#eq20').innerHTML=res20(n);return false};
+{const _n=H.incnext;H.incnext=a=>{_n(a);setWeeks20(UI.flow.d,5)}}
+
+/* plain-word tips (testers: "why are you riddling people") */
+TIPDEF.income={cap:'Money added',t:'Some kept aside. The rest is to spend.',b:()=>`You can spend ${money(S.W)} each week.`,c:ACC.b};
+TIPDEF.plan={cap:'Your week',t:'Your week is set.',b:()=>`${money(S.W)} to spend each week. Every spend comes out of it.`,c:ACC.g};
+TIPDEF.paid={cap:'Your first spend',t:'Logged.',b:'It comes off what is left this week.',c:ACC.g};

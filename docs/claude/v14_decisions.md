@@ -797,3 +797,10 @@ Research (web search, 10 Oct): Monzo's community thread on a budgeting widget (l
 | V20-10 | Coloured text only on things you can tap; data colours fill shapes only (goal %, Save/Spend labels, the purple heads-up banner on pay confirm are now plain) | Tester: "why is this purple, I thought it was a button" (R4) | Same question | PROPOSED |
 | V20-11 | "Unsorted" and "Needs a category" read "Other"; "Recommended: set a limit" in Spending rows reads "Set a limit" | Tester: "what is unsorted, it just has to be other" | none | CONFIRMED (Tarun's notes) |
 | V20-12 | The help sheet ("?") is a picture: ₹ left ÷ days = ₹ a day, the bar, and the three states | "Too much text to read" | Task 3 | PROPOSED |
+
+### V20-13…V20-15 (10 Oct, Tarun, after seeing v20)
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V20-13 | How long the money lasts is set in weeks with − and + (each + adds a week to the strip), or on a calendar ("Pick a date on a calendar"); the dropdown is gone. Default 5 weeks | Tarun: "this can just be a calendar or pressing a plus to add a week" | Test task 1 | CONFIRMED (Tarun); default 5 weeks is mine |
+| V20-14 | Plan screen in two numbered blocks (1 Keep some aside? 2 How long?) and one result card ("₹1,120 every week", with "₹7,200 ÷ 45 days" above it); the three equal tiles are gone | Tarun: "more distinction, more spacing, more hierarchy, more visually interesting" | Task 1 | PROPOSED |
+| V20-15 | Home: more space between sections (40 px), larger section titles, insight tiles narrower, suggestion cards wider with a bigger icon; tips rewritten in plain words ("Some kept aside. The rest is to spend.") | Same request; "riddling" from the test | Tarun review | PROPOSED |
