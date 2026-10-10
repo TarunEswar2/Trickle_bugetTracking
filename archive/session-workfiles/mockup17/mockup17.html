@@ -255,6 +255,8 @@ body{background:#0A0C0E;font-size:16px}
 #phone *{box-shadow:none!important;text-shadow:none!important;filter:none!important}
 #glow,.blobs{display:none!important}
 .tapamt{display:block;background:none;border:0;border-bottom:1px dashed var(--ink3);padding:0 0 2px;color:inherit;font-family:inherit;cursor:pointer;text-align:inherit}
+.cd17.lim17{min-height:190px}
+.cd17.lim17 .btn{white-space:nowrap;padding-left:10px;padding-right:10px}
 </style></head><body>
 <div class="app"><div class="stage"><div id="frame"><div id="phone"><div class="notch"></div><div class="status"><span id="clk"></span><span>●●● 5G ▮</span></div><div id="glow"></div><div id="view"></div><div id="tabbar"></div><div id="layer"></div></div></div></div>
 <aside class="panel" id="panel"></aside></div>
@@ -2629,12 +2631,14 @@ const limLabel17=(kind,cap)=>kind==='times'?`${cap} ${cap===1?'visit':'visits'} 
 function limitsHome17(){if(!planned())return '';const now=S.now.getTime(),sg=suggestions(),shopSg=sg.filter(x=>x.scope==='shop').slice(0,1);
  const wk=catTotals(now-7*DAY,now+1),mo=catTotals(now-30*DAY,now+1),wT=sumAmt(wk)||1,mT=sumAmt(mo)||1,byM={};mo.forEach(r=>byM[r.id]=r.amt);
  const recIds=new Set(sg.filter(x=>x.scope==='cat').map(x=>x.ref));
- const rows=wk.filter(r=>r.id!=='_u'&&r.amt>0&&!(S.limits||[]).some(l=>l.scope==='cat'&&l.ref===r.id)&&!S.limNo['c'+r.id]).sort((a,b)=>(recIds.has(b.id)-recIds.has(a.id))||b.amt-a.amt).slice(0,3);
- const cat=rows.map(r=>{const m=byM[r.id]||r.amt;return `<div class="card" style="padding:12px 14px;margin-top:10px"><div class="cap" style="margin:0 0 4px">Recommended</div><b style="font-size:17px">${esc(catName(r.id))}: set a limit</b>
-  <div class="row" style="gap:10px;margin-top:10px"><div style="flex:1"><div class="cap" style="margin:0">This week</div><div style="font-weight:700;font-size:17px">${money(r.amt)}</div><div class="sm">${pct0(r.amt/wT)}% of spending</div></div><div style="flex:1"><div class="cap" style="margin:0">This month</div><div style="font-weight:700;font-size:17px">${money(m)}</div><div class="sm">${pct0(m/mT)}% of spending</div></div></div>
-  <div class="row" style="gap:8px;margin-top:12px"><button class="btn s" style="flex:2" data-a="limset|cat|${r.id}|amt">Set a limit</button><button class="btn q s" style="flex:1" data-a="limno|c${r.id}">Not now</button></div></div>`}).join('');
- const shop=shopSg.map(s=>{const cap=limDefault(s.scope,s.ref,s.kind);return `<div class="card" style="padding:12px 14px;margin-top:10px"><div class="cap" style="margin:0 0 4px">Recommended</div><b style="font-size:17px">${esc(s.ref)}: set a limit</b><div class="sm" style="margin-top:2px">${esc(s.text)}</div><div class="row" style="gap:8px;margin-top:10px"><button class="btn s" style="flex:2" data-a="limquick|${s.key}">Set ${limLabel17(s.kind,cap)}</button><button class="btn q s" style="flex:1" data-a="limsug|${s.key}">Change</button></div></div>`}).join('');
- return cat||shop?`<div style="margin-top:6px">${cat}${shop}</div>`:''}
+ const rows=wk.filter(r=>r.id!=='_u'&&r.amt>0&&!(S.limits||[]).some(l=>l.scope==='cat'&&l.ref===r.id)&&!S.limNo['c'+r.id]).sort((a,b)=>(recIds.has(b.id)-recIds.has(a.id))||b.amt-a.amt).slice(0,4);
+ const cat=rows.map(r=>{const m=byM[r.id]||r.amt;return `<div class="cd17 lim17"><span class="tg">Recommended</span><b>${esc(catName(r.id))}: set a limit</b>
+  <div class="row" style="gap:10px;margin-top:2px"><div style="flex:1"><div class="cap" style="margin:0">This week</div><div style="font-weight:700;font-size:17px">${money(r.amt)}</div><div class="sm">${pct0(r.amt/wT)}% of spending</div></div><div style="flex:1"><div class="cap" style="margin:0">This month</div><div style="font-weight:700;font-size:17px">${money(m)}</div><div class="sm">${pct0(m/mT)}% of spending</div></div></div>
+  <div class="row" style="gap:8px;margin-top:auto;padding-top:8px"><button class="btn s" style="flex:3" data-a="limset|cat|${r.id}|amt">Set a limit</button><button class="btn q s" style="flex:2" data-a="limno|c${r.id}">Not now</button></div></div>`}).join('');
+ const shop=shopSg.map(s=>{const cap=limDefault(s.scope,s.ref,s.kind);return `<div class="cd17 lim17"><span class="tg">Recommended</span><b>${esc(s.ref)}: set a limit</b><span class="sb">${esc(s.text)}</span><div class="row" style="gap:8px;margin-top:auto;padding-top:8px"><button class="btn s" style="flex:2" data-a="limquick|${s.key}">Set ${limLabel17(s.kind,cap)}</button><button class="btn q s" style="flex:1" data-a="limsug|${s.key}">Change</button></div></div>`}).join('');
+ const n=rows.length+shopSg.length;if(!n)return '';
+ return `<div class="car17" id="car17b" style="margin-top:8px">${cat}${shop}</div>${n>1?`<div class="dots17" id="dots17b">${Array.from({length:n},(_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}`}
+{const _ar4=window.afterRender;window.afterRender=()=>{if(_ar4)_ar4();const car=document.getElementById('car17b');const dots=document.querySelectorAll('#dots17b i');if(!car||!dots.length)return;car.addEventListener('scroll',()=>{const w=car.firstElementChild?car.firstElementChild.getBoundingClientRect().width+10:1,i=Math.round(car.scrollLeft/w);dots.forEach((d,k)=>d.classList.toggle('on',k===i))},{passive:true})}}
 H.limquick=a=>{const s=suggestions().find(x=>x.key===a[0]);if(!s)return false;S.limits=S.limits.filter(l=>!(l.scope===s.scope&&l.ref===s.ref));S.limits.push({id:'l'+(S.idc++),scope:s.scope,ref:s.ref,kind:s.kind,cap:limDefault(s.scope,s.ref,s.kind)});say('Limit set.');return false};
 H.limquickc=a=>{const id=a[0];if(!S.cats.some(c=>c.id===id))return false;S.limits=S.limits.filter(l=>!(l.scope==='cat'&&l.ref===id));S.limits.push({id:'l'+(S.idc++),scope:'cat',ref:id,kind:'amt',cap:limDefault('cat',id,'amt')});say(`Limit set for ${catName(id)}.`);return false};
 

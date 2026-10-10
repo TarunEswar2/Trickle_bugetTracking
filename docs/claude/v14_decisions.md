@@ -640,3 +640,8 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 | ID | Domain | Evidence | Validation gate | Status |
 |---|---|---|---|---|
 | V17-34 | Home limits | Tarun: "instead of quick limits literally just have cards with a title Recommended, Food: set a limit, with the monthly and weekly spend and the percentage". The quick-limit chips are gone. Each card says "Recommended / Food: set a limit" and shows this week's and this month's (30 days) spend with the share of all spending, then "Set a limit" (opens the limit sheet) and "Not now". Up to 3 categories, the ones the suggestion rule flags first, then by spend; a shop with many visits gets a card with a one-tap limit. | Does the share make people choose a limit? | CONFIRMED (Tarun) |
+
+### V17-35 (10 Oct, Tarun): limit cards swipe. CONFIRMED (his words).
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V17-35 | Home limits | Tarun: "instead of a scrollable field make it card type swipes". The Recommended limit cards on Home are now a second swipeable row with dots, like the insight cards, so Home no longer scrolls down through a stack of cards. Up to 4 category cards plus one shop card. | Do testers find the next card by swiping? | CONFIRMED (Tarun) |
