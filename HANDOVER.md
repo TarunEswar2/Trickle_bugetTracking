@@ -1,5 +1,7 @@
 # Trickle — handover
 
+## v19.4 (10 Oct): hero rebuilt without repeated numbers or the status pill, 7 day-dots; category icons removed (V19-14…16). Open: whether colour alone says "fast" to students. The home-screen widget still has the pill.
+
 ## v19.3 (10 Oct): centre + button in the tab bar (Log expense, Add money, Move money), Settings in the tab bar, category emoji icons (V19-10…13). Tests updated to open the + sheet. Emoji look differs by phone; icon mapping is by name keywords only.
 
 ## v19 update (10 Oct): gradients removed at Tarun's request; flat v17 palette back, v19 structure kept (V19-9).
