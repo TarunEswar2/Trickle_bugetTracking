@@ -1,5 +1,7 @@
 # Trickle — handover
 
+## v21 (10 Oct): from the second test round (on v20). Read `docs/claude/v21_plan.md` (feedback F1–F13, research, principles, specs, checklist). Build `archive/session-workfiles/mockup21/` (`ui21.js` + last CSS block); decisions V21-1…14; screenshots `docs/claude/v21_screens/`. Open: V21-14 (tiny week after adding money midweek), day-colour thresholds, photos vs drawn goal pictures, and a committed visual direction (F13).
+
 ## v20.1 (10 Oct): weeks stepper (+/−) or calendar instead of the dropdown; plan screen in numbered blocks with one result card; more spacing on Home; plain tips (V20-13…15). Known issue, not fixed (model, pre-existing): right after adding money mid-week, Home can show a tiny amount left (e.g. ₹5 of ₹1,092), because this week only gets its share for the days left minus what was already spent. Needs a decision from Tarun.
 
 ## v20 (10 Oct): answers the first recorded 3-person test (of v19). Read `docs/claude/v20_user_test_report.md` first: findings, 7 root causes, what changed, and a 5-task test script with pass rules. Published at https://claude.ai/artifact/4T34qefkun2MSadzJm5nmX. Build in `archive/session-workfiles/mockup20/` (`ui20.js` + last CSS block in `shell.html`); decisions V20-1…12; screenshots in `docs/claude/v20_screens/`. Not redesigned: home-screen widget, goals, settings, insight detail screens. Next: run the 5-task test on v20 with 5 people, one row per person.

@@ -804,3 +804,21 @@ Research (web search, 10 Oct): Monzo's community thread on a budgeting widget (l
 | V20-13 | How long the money lasts is set in weeks with − and + (each + adds a week to the strip), or on a calendar ("Pick a date on a calendar"); the dropdown is gone. Default 5 weeks | Tarun: "this can just be a calendar or pressing a plus to add a week" | Test task 1 | CONFIRMED (Tarun); default 5 weeks is mine |
 | V20-14 | Plan screen in two numbered blocks (1 Keep some aside? 2 How long?) and one result card ("₹1,120 every week", with "₹7,200 ÷ 45 days" above it); the three equal tiles are gone | Tarun: "more distinction, more spacing, more hierarchy, more visually interesting" | Task 1 | PROPOSED |
 | V20-15 | Home: more space between sections (40 px), larger section titles, insight tiles narrower, suggestion cards wider with a bigger icon; tips rewritten in plain words ("Some kept aside. The rest is to spend.") | Same request; "riddling" from the test | Tarun review | PROPOSED |
+
+### V21-1…V21-14 (10 Oct): v21 from the second test round (on v20). Plan, research, specs and checklist: `docs/claude/v21_plan.md`. Build: `archive/session-workfiles/mockup21/` (`ui21.js` + last CSS block).
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V21-1 | Make v21 from a staged plan | Tarun, 10 Oct | none | CONFIRMED (Tarun) |
+| V21-2 | Hero week dots M–S; today is the larger ringed dot; past days green / yellow / amber by that day's spend against an even day (≤0.8×, ≤1.2×, above); future and pre-start days are grey rings; tap a dot for "Wednesday · ₹210 spent · a heavy day". "3 days left" removed | Tarun's idea; expense-app heatmaps (Flow, Onespend) | Task 3: "how was Wednesday?" | CONFIRMED (Tarun) for the idea; thresholds PROPOSED |
+| V21-3 | "₹X a day to last the week" is a small grey line under the dots | Tarun | none | CONFIRMED (Tarun) |
+| V21-4 | Heads-up rows leave the hero; insights are tiles led by the words ("8–10 pm" / "is when you spend most"), chart small, live one marked "Now" | Tarun: overload; put the insight as text in the card | Task 5 | CONFIRMED (Tarun); layout PROPOSED |
+| V21-5 | Bottom buttons "Scan & pay" (QR symbol) and "Add to balance"; scan screen "Enter manually"; confirm button "Pay ₹120" | Tarun | Task 4 | CONFIRMED (Tarun) |
+| V21-6 | Onboarding opens with a picture: balance → savings + to spend → weeks → "₹1,860 each week" (example numbers), then "What's your bank balance?" | Tarun | Task 1 | CONFIRMED (Tarun); example numbers mine |
+| V21-7 | Flow pagination "Step 1 of 2" with dots (current one longer) instead of two bars | Tarun | none | CONFIRMED (Tarun) |
+| V21-8 | Tips are coach marks: dim, cut-out around the real element, speech bubble, "Skip tips", "1 of 3" | Tarun; coach-mark guidance (≤3–4, skippable, in context) | Watch if people read them | CONFIRMED (Tarun); targets PROPOSED |
+| V21-9 | Savings hero = "Saved this month" with 6 month bars; total as a small line | Tarun | none | CONFIRMED (Tarun) |
+| V21-10 | Goal cards: picture tile (symbol chosen from the name), own colour, "₹1,800 of ₹5,000", bar, "Ready …"; "New goal" dashed button | Tarun ("feel personal, like a goal"); future-self picture studies (lab, not about objects) | Ask "which goal matters most to you?" | PROPOSED |
+| V21-11 | Plain savings words: "₹600 isn't in a goal yet" → Emergencies / Pick a goal; "Keep some money for emergencies"; add-goal sheet "It just grows. Add to it when you can."; no "3 months of spending" | Tarun: jargon | none | CONFIRMED (Tarun) |
+| V21-12 | No capital labels anywhere; Home says "Hi Tarun" with the date under it | Research on generic AI look; P3, P4 | Task: first impression | PROPOSED |
+| V21-13 | Tips rewritten in plain words that point at the thing ("Logged. The bar got shorter") | P3 | none | PROPOSED |
+| V21-14 | Open for Tarun, not changed: the low "this week" right after adding money midweek | Found 10 Oct | — | OPEN |
