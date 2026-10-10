@@ -11,15 +11,16 @@ function awareList17(){const out=[];if(S.nudgeOff||!planned())return out;const L
  const d=statsDay();if(d.ok&&dowIdx(S.now.getTime())===d.pk)out.push({k:'day',t:`${FULLDAY[d.pk]}s are your biggest day.`});
  const m=statsMonth();if(m.ok&&phaseNow()===m.pk)out.push({k:'month',t:`${PHASE[m.pk]} is when you spend most.`});
  const r=out.slice(0,2);if(r.length)r[r.length-1].s=tail;return r}
-function heroHome17(){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hs=homeState(),col=STATECOL[hs],dl=daysToGo(),ideal=weekIdeal(),rec=Math.round(ideal*W),aw=awareList17();
+function weekIdealEod(){const from=S.weekFrom||wk0(),end=wk0()+7*DAY,d=new Date(S.now);d.setHours(0,0,0,0);const eod=d.getTime()+DAY;return Math.max(0,Math.min(1,(end-eod)/Math.max(DAY,end-from)))}
+function heroHome17(){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hs=homeState(),col=STATECOL[hs],dl=daysToGo(),ideal=weekIdealEod(),rec=Math.round(ideal*W),aw=awareList17();
  const st=hs==='out'?(S.touched?'Over budget':'Budget used'):hs==='fast'?'Spending fast':'On track';
  return `<div class="hero17" style="border-color:${hs==='ok'?'#3B4553':col}">
  <div class="row sp" style="align-items:center"><span class="pill17" style="color:${col};background:${col}22"><i style="background:${col}"></i>${st}</span><button class="chip" data-a="gridhow">?</button></div>
  <div style="margin-top:14px"><span class="hero" style="font-size:72px;line-height:1;color:${hs==='out'?col:'var(--ink)'}">${money(L)}</span></div>
  <div style="font-size:18px;color:var(--ink2);margin-top:4px">left of ${money(W)} this week</div>
  <div class="row sp sm" style="margin:22px 0 8px"><span>₹0</span><span>${money(W)}</span></div>
- <div data-a="gridhow">${battery(L,W,{col,tick:ideal,label:'Recommended '+money(rec)})}</div>
- <div class="row" style="gap:12px;margin-top:46px;padding-top:14px;border-top:1px solid #3B4553"><div style="flex:1.1"><div style="font-size:18px;font-weight:700;white-space:nowrap">${dl===1?'Last day':dl+' days to go'}</div><div class="sm">${dl===1?'of this week':'this week'}</div></div><div style="flex:1.4">${L>0?`<div style="font-size:18px;font-weight:700;white-space:nowrap">${money(L/dl)} a day</div><div class="sm">to stay within budget</div>`:`<div style="font-size:18px;font-weight:700">Nothing to spend</div><div class="sm">until next week</div>`}</div></div>
+ <div data-a="gridhow">${battery(L,W,{col,tick:ideal,label:' '})}<div style="position:relative;height:30px;margin-top:6px"><span style="position:absolute;left:${(ideal*100).toFixed(1)}%;transform:translateX(-${(ideal*100).toFixed(1)}%);font-size:12.5px;font-weight:600;font-style:italic;color:var(--ink3);white-space:nowrap">Recommended ${money(rec)} by end of day</span></div></div>
+ <div class="row" style="gap:12px;margin-top:14px;padding-top:14px;border-top:1px solid #3B4553"><div style="flex:1.1"><div style="font-size:18px;font-weight:700;white-space:nowrap">${dl===1?'Last day':dl+' days to go'}</div><div class="sm">${dl===1?'of this week':'this week'}</div></div><div style="flex:1.4">${L>0?`<div style="font-size:18px;font-weight:700;white-space:nowrap">${money(L/dl)} a day</div><div class="sm">to stay within budget</div>`:`<div style="font-size:18px;font-weight:700">Nothing to spend</div><div class="sm">until next week</div>`}</div></div>
  ${aw.length?`<div class="hu17box"><div class="cap" style="margin:0 0 6px;color:#E6B24F">Heads-up</div>${aw.map(x=>`<button class="hu17" data-a="insgo|${x.k}"><span>${esc(x.t)}${x.s?' '+esc(x.s):''}</span><i>›</i></button>`).join('')}</div>`:''}</div>`}
 /* the heads-up lives in the hero, not in the cards */
 {const _c6=cards17;cards17=function(){return _c6().filter(x=>x.tag!=='Heads-up')}}
@@ -41,3 +42,26 @@ function idleWidget17(P){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hide=
  <div class="hs-apps">${['Phone','Messages','Camera','Photos'].map(n=>`<span><i style="background:#2A313A"></i>${n}</span>`).join('')}</div>
  <button class="hs-close" data-a="hsclose">Leave the home screen</button><div class="sm" style="text-align:center;margin-top:6px">Simulated Android home screen. The widget never opens Trickle.</div></div>`}
 {const _hs3=POPUPS.homescreen;POPUPS.homescreen=P=>{if(UI.hsAdd||UI.hsMoney)return _hs3(P).replace('Add a spend','Log expense');return idleWidget17(P)}}
+
+/* ===== v17.24: widget. Place chips back under the buttons; "Other" for food delivery, shopping and anything else ===== */
+{const _ih=idleWidget17;idleWidget17=function(P){let h=_ih(P);const chips=quickChips(),hide=UI.hsHide;
+  if(!chips.length)return h;
+  return h.replace('</div></div>\n <div class="hs-apps">',`</div><div class="hs-row" style="margin-top:8px">${chips.map((c,i)=>`<button class="hs-btn" data-a="hschip|${i}"><b>${esc(shortN(c.payee))}</b><i>${hide?'':money(c.amt)}</i></button>`).join('')}</div></div>\n <div class="hs-apps">`)}}
+function otherList17(){const a=UI.hsAdd,q=(a.q||'').trim().toLowerCase(),top=new Set(topCats().slice(0,5));
+ const rows=S.cats.filter(c=>!top.has(c.id)&&(!q||c.name.toLowerCase().includes(q)));const exact=S.cats.some(c=>c.name.toLowerCase()===q);
+ return rows.map(c=>`<button class="hs-c ${a.cat===c.id?'on':''}" data-a="hscat|${c.id}"><i style="background:${catCol(catIdx(c.id))}"></i>${esc(c.name)}</button>`).join('')+(q&&!exact?`<button class="hs-c" data-a="hsnewcat">+ Use “${esc(a.q.trim())}”</button>`:'')||'<span class="sm">Type a name above.</span>'}
+{const _hs4=POPUPS.homescreen;POPUPS.homescreen=P=>{const add=UI.hsAdd;if(!add||UI.hsMoney)return _hs4(P);
+  const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hide=UI.hsHide,am=v=>hide?'₹•••':money(v),amt=amtOf(add.kp),after=Math.max(0,L-amt),cats=topCats().slice(0,5),sel=add.cat,warn=sel&&amt?limWarn(sel,'Quick add',amt):'';
+  const selName=sel?(S.cats.find(c=>c.id===sel)||{}).name:'';
+  return `<div class="hs"><div class="hs-top"><span>${fmtTime(S.now)}</span><span>5G ▮</span></div><div class="hs-wid"><div class="row sp"><span class="cap">Log expense</span><button class="hs-eye" data-a="hseye">${hide?'Show amounts':'Hide amounts'}</button></div>
+  <div class="row sp" style="align-items:baseline;margin-top:4px"><span class="hero" style="font-size:44px">${hide?'₹•••':'₹'+(add.kp||'0')}</span><span class="sm" style="text-align:right">${amt?`<span style="color:var(--ink3)">${am(L)}</span> → <b style="color:var(--ink)">${am(after)}</b> left`:`${am(L)} left`}</span></div>
+  <div class="hs-chips">${[10,20,50,100].map(v=>`<button class="hs-c ${amt===v?'on':''}" data-a="hsamt|${v}">₹${v}</button>`).join('')}</div>
+  <div class="hs-kp">${['1','2','3','4','5','6','7','8','9','','0','⌫'].map(k=>k?`<button data-a="hsk|${k}">${k}</button>`:'<span></span>').join('')}</div>
+  <div class="cap" style="margin-top:10px">What for</div><div class="hs-chips" style="margin-top:4px">${cats.map(id=>{const c=S.cats.find(x=>x.id===id),i=catIdx(id);return `<button class="hs-c ${sel===id?'on':''}" data-a="hscat|${id}"><i style="background:${catCol(i)}"></i>${esc(c.name)}</button>`}).join('')}<button class="hs-c ${add.other?'on':''}" data-a="hsother">Other ›</button></div>
+  ${add.other?`<input class="field" style="width:100%;font-size:15px;margin-top:8px" placeholder="Type a name: Zomato, Amazon, Rent" value="${esc(add.q||'')}" data-i="hscatq" autocomplete="off"><div class="hs-chips" id="hs-ol" style="margin-top:6px;max-height:84px;overflow:auto">${otherList17()}</div>`:''}
+  ${sel&&!cats.includes(sel)?`<div class="sm" style="margin-top:6px">Selected: <b style="color:var(--ink)">${esc(selName)}</b></div>`:''}${warn?`<div class="sm" style="color:var(--amber);margin-top:8px">${esc(warn)}</div>`:''}
+  <div class="hs-row"><button class="hs-btn" style="flex:.6;height:46px" data-a="hscancel">Cancel</button><button class="hs-btn pri ${amt&&sel?'':'dis'}" style="height:46px" data-a="${amt&&sel?'hslog':'x'}">Log ${amt?money(amt):''}</button></div></div></div>`}}
+H.hsother=()=>{UI.hsAdd.other=!UI.hsAdd.other;UI.hsAdd.q=''};
+HI.hscatq=(a,el)=>{UI.hsAdd.q=el.value;const o=document.getElementById('hs-ol');if(o)o.innerHTML=otherList17();return false};
+H.hsnewcat=()=>{const a=UI.hsAdd,id=addCategory(a.q);if(id){a.cat=id;a.other=false;a.q=''}};
+{const _hc=H.hscat;H.hscat=a=>{_hc(a);if(UI.hsAdd&&UI.hsAdd.other&&!topCats().slice(0,5).includes(a[0])){UI.hsAdd.other=false;UI.hsAdd.q=''}}}
