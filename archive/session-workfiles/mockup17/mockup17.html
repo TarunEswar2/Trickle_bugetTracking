@@ -2710,7 +2710,7 @@ SHEETS.gridhow=()=>{const W=Math.max(1,flexW());return `<div class="title" style
 /* ===== v17.18 (10 Oct): savings goals, a better hero, a way into all insights ===== */
 function savingsPanel17(){const act=S.goals.filter(g=>g.state!=='done');if(!act.length&&S.free<=0)return '';
  const T=savedTotal(S),_M=savingsSeries().M,thisM=_M[_M.length-1];
- return `<div class="viz17" style="margin:4px 0 22px"><div class="cap" style="margin:0">Saved this month</div><div style="font-size:40px;font-weight:700;margin-top:4px;line-height:1.1">${thisM>0?money(thisM):'₹0'}</div><div class="sm" style="margin-top:6px">${money(T)} saved in total</div></div>`}
+ return `<div class="viz17" style="margin:4px 0 22px"><div class="cap" style="margin:0">Total saved</div><div style="font-size:40px;font-weight:700;margin-top:4px;line-height:1.1">${money(T)}</div><div style="margin-top:12px;padding-top:10px;border-top:1px solid #2A3846;display:flex;justify-content:space-between;align-items:baseline"><span class="sm">Saved this month</span><b style="font-size:18px">${thisM>0?money(thisM):'₹0'}</b></div></div>`}
 function incomeRow17(){const l=S.incomes||[],now=S.now.getTime(),run=l.filter(i=>!i.end||i.end+DAY>now);if(!planned()&&!l.length)return '';
  const inTxt=run.length?`${money(run.reduce((a,i)=>a+i.amt,0))} · ${run.length===1?(run[0].end?'until '+shortD(run[0].end):'added'):run.length+' running'}`:'Not added yet';
  return `<div style="margin-top:22px">${row17('Pocket money & income',inTxt,'push|incomes')}</div>`}
@@ -2735,6 +2735,21 @@ function heroHome17(){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hs=homeS
 /* a way into all the insights */
 {const _car2=carousel17;carousel17=function(){const h=_car2();if(!h)return '';return `<div class="row sp" style="align-items:center;margin:0 0 10px"><span class="cap" style="margin:0">Insights</span><button class="navi17" data-a="push|insall">All insights <i>›</i></button></div>`+h}}
 SCREENS.insall=()=>back17('Home')+`<div class="title" style="margin-bottom:6px">Insights</div>`+SCREENS.insights();
+
+/* ===== v17.23: the home-screen widget is the hero card, smaller, with Log expense and Add money ===== */
+function idleWidget17(P){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),hide=UI.hsHide,am=v=>hide?'₹•••':money(v),hs=homeState(),col=STATECOL[hs],dl=daysToGo(),ideal=weekIdeal(),dlt=UI.hsDelta;
+ const st=hs==='out'?(S.touched?'Over budget':'Budget used'):hs==='fast'?'Spending fast':'On track';
+ const last=UI.hsLast?S.txns.find(t=>t.id===UI.hsLast):null;
+ return `<div class="hs"><div class="hs-top"><span>${fmtTime(S.now)}</span><span>5G ▮</span></div><div class="hs-clock"><b>${fmtTime(S.now)}</b><span>${fmtDay(S.now)}</span></div>
+ <div class="hs-wid hw17"><div class="row sp" style="align-items:center"><span class="pill17" style="color:${col};background:${col}22;font-size:12px;padding:4px 10px"><i style="background:${col}"></i>${st}</span><button class="hs-eye" data-a="hseye">${hide?'Show amounts':'Hide amounts'}</button></div>
+ <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px"><span class="hero" style="font-size:44px;line-height:1;color:${hs==='out'?col:'var(--ink)'}">${am(L)}</span><span style="font-size:14px;color:var(--ink2)">left of ${am(W)}</span>${dlt&&!hide?`<span class="hs-delta">−${money(dlt)}</span>`:''}</div>
+ ${hide?'<div style="height:12px"></div>':`<div style="margin:12px 0 4px">${battery(L,W,{col,sm:true,tick:ideal,label:' ',prev:dlt?Math.min(1,(L+dlt)/W):undefined})}</div>`}
+ <div class="sm" style="margin-top:6px">${dl===1?'Last day':dl+' days to go'}${L>0?` · ${am(L/dl)} a day`:''}</div>
+ ${last?`<div class="hs-note"><span>Added ${hide?'':money(last.amt)+' · '}${esc(last.payee||'')}</span><button data-a="hsundo">Undo</button></div>`:''}${UI.hsNote?`<div class="hs-note"><span>${esc(UI.hsNote)}</span></div>`:''}
+ <div class="hs-row" style="margin-top:12px"><button class="hs-btn pri" style="height:44px" data-a="hsadd">Log expense</button><button class="hs-btn" style="height:44px;border:1px solid var(--line)" data-a="hsmoney">Add money</button></div></div>
+ <div class="hs-apps">${['Phone','Messages','Camera','Photos'].map(n=>`<span><i style="background:#2A313A"></i>${n}</span>`).join('')}</div>
+ <button class="hs-close" data-a="hsclose">Leave the home screen</button><div class="sm" style="text-align:center;margin-top:6px">Simulated Android home screen. The widget never opens Trickle.</div></div>`}
+{const _hs3=POPUPS.homescreen;POPUPS.homescreen=P=>{if(UI.hsAdd||UI.hsMoney)return _hs3(P).replace('Add a spend','Log expense');return idleWidget17(P)}}
 
 /* ===== control panel ===== */
 function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,0).getTime(),label:'Allowance',amt:S.p.income,note:''}];if(S.p.six)seedSix();else if(S.p.W>0){S.planSet=true;S.cats.forEach(c=>c.full=c.amt);S.bufFull=S.bufAmt;S.firstDay=new Date(S.now.getTime()-S.p.weeks*7*DAY)}resetUI();window._celeLock=false;render();fitPhone()}

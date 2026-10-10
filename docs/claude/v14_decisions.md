@@ -704,3 +704,9 @@ Tarun, 8 Oct, verbatim: "the reviews I got from user testing are the information
 |---|---|---|---|---|
 | V17-57 | Word for a savings target | Tarun (draft): "make savings pot just savings goal". Resolves V17-55: the word is "savings goal" everywhere ("Add a savings goal", "Put it in a savings goal"). | None | CONFIRMED (Tarun) |
 | V17-58 | Pocket money and income on Home | Tarun: move pocket money and income to Home, it does not make sense in Savings; on Savings just show saved this month. A "Pocket money & income" row sits at the bottom of Home content (it opens the list of incomes, back goes to Home). Savings shows "Saved this month ₹340" as the main figure with "₹3,000 saved in total" in small type (my reading of "just show saved this month"; he may want the total gone). | Where would a tester look to change their pocket money? | CONFIRMED (Tarun) for the move; the small total line is PROPOSED |
+
+### V17-59, V17-60 (10 Oct, Tarun). CONFIRMED (his words).
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V17-59 | Savings top card | Tarun: "show total saving and below it saved this month" (replaces the "just saved this month" reading in V17-58). The card shows "Total saved ₹23,600" and, below a divider, "Saved this month ₹3,020". | None | CONFIRMED (Tarun) |
+| V17-60 | Home-screen widget | Tarun: the widget shows the hero card, smaller, with a quick Add money and Log expense. The widget is a compact hero: status pill, amount and "left of", a bar with the pace marker, "3 days to go · ₹202 a day", then two buttons: Log expense (opens the in-widget amount and category keypad) and Add money (amount, save slider, how long). The quick place chips of V16-41 are no longer on the widget. It still never opens Trickle. | Walk three testers through logging a spend from the widget | CONFIRMED (Tarun) |
