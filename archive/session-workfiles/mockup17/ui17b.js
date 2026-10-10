@@ -32,7 +32,7 @@ H.addmoney17=()=>{openFlow('inc',{step:0,kp:''});return false};
 function barsChart(vals,labels,sel,o){o=o||{};const n=vals.length,mx=Math.max(1,...vals),H0=o.h||150,avg=vals.reduce((a,v)=>a+v,0)/n;
  const cols=vals.map((v,i)=>{const h=v>0?Math.max(6,Math.round(v/mx*H0)):2,on=i===sel;return `<button class="c17" data-a="inssel|${i}" style="height:${H0}px"><i style="height:${h}px;background:${on?'#6FD3AE':v>0?'#E9A15C':'#2A313A'}"></i></button>`}).join('');
  const labs=labels.map((l,i)=>l?`<span class="${o.today===i?'td':''}" style="left:${(o.edge?i/n:(i+.5)/n)*100}%;${o.edge?'':'transform:translateX(-50%)'}">${l}</span>`:'').join('');
- return `<div class="ch17"><div class="plot" style="height:${H0}px;grid-template-columns:repeat(${n},1fr)">${cols}<u style="bottom:${Math.round(avg/mx*H0)}px"></u></div><div class="axis">${labs}</div><div class="sm" style="margin-top:6px">Dashed line is your average.</div></div>`}
+ return `<div class="viz17"><div class="ch17"><div class="plot" style="height:${H0}px;grid-template-columns:repeat(${n},1fr)">${cols}<u style="bottom:${Math.round(avg/mx*H0)}px"></u></div><div class="axis">${labs}</div><div class="sm" style="margin-top:6px">Dashed line is your average.</div></div></div>`}
 
 /* ---------- month insight: a calendar ---------- */
 function spendByDay(){const m={};S.txns.filter(isSp).forEach(t=>{const d=new Date(t.t);const k=d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate();m[k]=(m[k]||0)+t.amt});return m}
@@ -45,7 +45,7 @@ function monthCal(){const off=UI.mcOff||0,m0=new Date(S.now.getFullYear(),S.now.
  const day=new Date(m0.getFullYear(),m0.getMonth(),sel||1),list=S.txns.filter(t=>isSp(t)&&new Date(t.t).toDateString()===day.toDateString());
  const dtxt=sel?`<div class="row sp" style="margin-top:14px;align-items:baseline"><b>${fmtDay(day)}</b><span class="hero" style="font-size:26px">${money(by[key(sel)]||0)}</span></div><div class="sm" style="margin-top:4px">${list.length?list.slice(0,3).map(t=>esc(t.payee)+' '+money(t.amt)).join(' · ')+(list.length>3?` · ${list.length-3} more`:''):'No spends.'}</div>`:'';
  return `<div class="row sp" style="margin:14px 0 8px;align-items:center"><button class="chip" style="${off<=-3?'opacity:.3;pointer-events:none':''}" data-a="mcnav|-1">‹</button><b>${m0.toLocaleDateString('en-IN',{month:'long',year:'numeric'})}</b><button class="chip" style="${off>=0?'opacity:.3;pointer-events:none':''}" data-a="mcnav|1">›</button></div>
- <div class="cal17">${['M','T','W','T','F','S','S'].map(x=>`<span class="cap">${x}</span>`).join('')}${cells}</div><div class="sm" style="margin-top:8px">Darker means you spent more that day. ${money(tot)} this month.</div>${dtxt}`}
+ <div class="viz17"><div class="cal17">${['M','T','W','T','F','S','S'].map(x=>`<span class="cap">${x}</span>`).join('')}${cells}</div></div><div class="sm" style="margin-top:8px">Darker means you spent more that day. ${money(tot)} this month.</div>${dtxt}`}
 H.mcnav=a=>{UI.mcOff=Math.max(-3,Math.min(0,(UI.mcOff||0)+(+a[0])));UI.mcSel=null};
 H.mcsel=a=>{UI.mcSel=+a[0]};
 
@@ -73,7 +73,7 @@ function cats17(){const sc=UI.sc||'week',[f,t]=inWin(sc),rows=catTotals(f,t),T=s
  const li=show.map(r=>{const l=(S.limits||[]).find(x=>x.scope==='cat'&&x.ref===r.id),go=r.id==='_u'?'push|sort':`push|cat|${J({id:r.id})}`,tone=l&&sc==='week'?limTone(l):'';
   const rec=sc==='week'&&!l&&r.id!=='_u'&&!S.limNo['c'+r.id]&&(sugs.some(x=>x.ref===r.id)||(firstNamed&&firstNamed.id===r.id&&r.share>=.25));
   return `<button class="cr17" data-a="${go}"><i style="background:${r.col}"></i><span class="nm">${esc(r.name)}${rec?`<span class="rec17" data-a="limset|cat|${r.id}|amt">Recommended: set a limit ›</span>`:''}</span>${l&&sc==='week'?`<span class="lm" style="${tone?'color:'+tone:''}">${limText(l)}</span>`:''}<b>${money(r.amt)}</b></button>`}).join('');
- return `<div class="row" style="align-items:baseline;gap:8px;margin-top:6px"><span class="hero" style="font-size:38px">${money(T)}</span><span class="sub">${sc==='week'?'this week':sc==='last'?'last week':'in 30 days'}</span></div><div style="margin:12px 0 0">${stackBar(rows)}</div>${chips}<div class="col" style="gap:0">${li}</div>${rows.length>4&&!UI.spAll?`<button class="lnk" style="margin-top:6px" data-a="spall">All ${rows.length} categories ›</button>`:''}`}
+ return `<div class="row" style="align-items:baseline;gap:8px;margin-top:6px"><span class="hero" style="font-size:38px">${money(T)}</span><span class="sub">${sc==='week'?'this week':sc==='last'?'last week':'in 30 days'}</span></div><div style="margin:12px 0 0">${stackBar(rows)}</div>${chips}<div class="panelC">${li}</div>${rows.length>4&&!UI.spAll?`<button class="lnk" style="margin-top:6px" data-a="spall">All ${rows.length} categories ›</button>`:''}`}
 SCREENS.spending=()=>{const rec=recent17(5),mo=S.bills.filter(b=>!b.ended&&!b.paused&&!(b.trialUntil&&S.now.getTime()<b.trialUntil)).reduce((a,b)=>a+perMonth(b),0),nb=S.bills.filter(b=>!b.ended).length;
  const nxt=S.bills.filter(b=>!b.ended&&b.nextDue).sort((a,b)=>new Date(a.nextDue)-new Date(b.nextDue))[0];
  return `<div class="title" style="margin-bottom:2px">Spending</div>${cats17()}

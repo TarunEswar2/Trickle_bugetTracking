@@ -261,6 +261,16 @@ body{background:#0A0C0E;font-size:16px}
 /* one filled green button per screen: small buttons in cards are tonal */
 #phone .btn.s:not(.q),#phone .btn.t{background:var(--bg3)!important;color:var(--accent)!important;border:1px solid var(--line)!important}
 .sec17gap{height:12px}
+/* v17.16 visual hierarchy: A = things to act on (lightest), B = records, C = graphs */
+:root{--card-a:#272E37;--rec-b:#171C21;--viz-c:#1A2430}
+#phone .cd17,#phone .card{background:var(--card-a);border-color:#343C47}
+#phone .cd17.hot{border-color:#E6B24F}
+#phone .tx17,#phone .li.tx17{background:var(--rec-b);border-color:transparent}
+.panelB{background:var(--rec-b);border-radius:12px;padding:2px 14px}.panelB .cr17{border-bottom-color:#222A31}.panelB .cr17:last-child{border-bottom:0}
+.viz17{background:var(--viz-c);border-radius:12px;padding:14px 14px 10px}
+#cta17{position:absolute;left:0;right:0;z-index:25;padding:12px 22px 12px;background:#0F1215;border-top:1px solid var(--line)}
+#view.home17{padding-bottom:190px}
+.panelC{background:var(--viz-c);border-radius:12px;padding:2px 14px}.panelC .cr17{border-bottom-color:#26323F}.panelC .cr17:last-child{border-bottom:0}
 </style></head><body>
 <div class="app"><div class="stage"><div id="frame"><div id="phone"><div class="notch"></div><div class="status"><span id="clk"></span><span>●●● 5G ▮</span></div><div id="glow"></div><div id="view"></div><div id="tabbar"></div><div id="layer"></div></div></div></div>
 <aside class="panel" id="panel"></aside></div>
@@ -2331,7 +2341,7 @@ SCREENS.home=()=>{const pl=planned();let top,viz,cap='';
   cap=empty?'':`<div class="row sp" style="align-items:center;margin:0 0 14px"><span class="sub">${money(L/dl)} a day for ${dl===1?'today':dl+' days'}</span><button class="chip" data-a="gridhow">?</button></div>`}
  else{const tot=wkTot(0);top=tot?`<div class="hero" style="font-size:52px;line-height:1.05">${money(tot)}</div><div class="sub" style="margin-top:6px;font-size:16px">spent this week</div>`:`<div class="title" style="font-size:28px">Nothing logged yet.</div>`;viz=`<div style="margin:22px 0 14px"><div class="batt idle"></div></div>`}
  return `<div style="min-height:100%;display:flex;flex-direction:column"><div class="row sp" style="margin-top:2px"><span></span><button class="chip" data-a="settings">Settings</button></div><div style="margin-top:14px">${top}</div>${viz}${cap}${reachedHome17()}${carousel17()}${limitsHome17()}
- <div style="position:sticky;bottom:-4px;margin:auto -22px 0;padding:14px 22px 6px;background:#0F1215"><div class="row" style="gap:10px"><button class="btn" style="flex:3" data-a="${scanOn()?'payscan':'pay'}">Log expense</button><button class="btn q" style="flex:2;white-space:nowrap" data-a="addmoney17">Add money</button></div></div></div>`};
+</div>`};
 SHEETS.gridhow=()=>{const W=Math.max(1,flexW());return `<div class="title" style="font-size:24px;margin-bottom:14px">How to read the bar</div><div style="margin:6px 0 34px">${battery(W*.62,W,{tick:.45,label:'Recommended'})}</div><div class="col" style="gap:10px"><div class="sub">The bar is what you have left this week.</div><div class="sub">The line is what we recommend you have left by now.</div><div class="sub"><b style="color:#6FD3AE">Green</b>: on track. <b style="color:#E6B24F">Yellow</b>: below the line, spending fast. <b style="color:#F26B6B">Red</b>: nothing left.</div></div><div class="row sp" style="margin-top:18px"><button class="lnk" data-a="why|bar">Why a bar?</button><button class="btn s" data-a="closesheet" style="width:auto">OK</button></div>`};
 
 /* ---------- Spending: one list. Patterns and records are one tap down ---------- */
@@ -2388,7 +2398,7 @@ H.addmoney17=()=>{openFlow('inc',{step:0,kp:''});return false};
 function barsChart(vals,labels,sel,o){o=o||{};const n=vals.length,mx=Math.max(1,...vals),H0=o.h||150,avg=vals.reduce((a,v)=>a+v,0)/n;
  const cols=vals.map((v,i)=>{const h=v>0?Math.max(6,Math.round(v/mx*H0)):2,on=i===sel;return `<button class="c17" data-a="inssel|${i}" style="height:${H0}px"><i style="height:${h}px;background:${on?'#6FD3AE':v>0?'#E9A15C':'#2A313A'}"></i></button>`}).join('');
  const labs=labels.map((l,i)=>l?`<span class="${o.today===i?'td':''}" style="left:${(o.edge?i/n:(i+.5)/n)*100}%;${o.edge?'':'transform:translateX(-50%)'}">${l}</span>`:'').join('');
- return `<div class="ch17"><div class="plot" style="height:${H0}px;grid-template-columns:repeat(${n},1fr)">${cols}<u style="bottom:${Math.round(avg/mx*H0)}px"></u></div><div class="axis">${labs}</div><div class="sm" style="margin-top:6px">Dashed line is your average.</div></div>`}
+ return `<div class="viz17"><div class="ch17"><div class="plot" style="height:${H0}px;grid-template-columns:repeat(${n},1fr)">${cols}<u style="bottom:${Math.round(avg/mx*H0)}px"></u></div><div class="axis">${labs}</div><div class="sm" style="margin-top:6px">Dashed line is your average.</div></div></div>`}
 
 /* ---------- month insight: a calendar ---------- */
 function spendByDay(){const m={};S.txns.filter(isSp).forEach(t=>{const d=new Date(t.t);const k=d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate();m[k]=(m[k]||0)+t.amt});return m}
@@ -2401,7 +2411,7 @@ function monthCal(){const off=UI.mcOff||0,m0=new Date(S.now.getFullYear(),S.now.
  const day=new Date(m0.getFullYear(),m0.getMonth(),sel||1),list=S.txns.filter(t=>isSp(t)&&new Date(t.t).toDateString()===day.toDateString());
  const dtxt=sel?`<div class="row sp" style="margin-top:14px;align-items:baseline"><b>${fmtDay(day)}</b><span class="hero" style="font-size:26px">${money(by[key(sel)]||0)}</span></div><div class="sm" style="margin-top:4px">${list.length?list.slice(0,3).map(t=>esc(t.payee)+' '+money(t.amt)).join(' · ')+(list.length>3?` · ${list.length-3} more`:''):'No spends.'}</div>`:'';
  return `<div class="row sp" style="margin:14px 0 8px;align-items:center"><button class="chip" style="${off<=-3?'opacity:.3;pointer-events:none':''}" data-a="mcnav|-1">‹</button><b>${m0.toLocaleDateString('en-IN',{month:'long',year:'numeric'})}</b><button class="chip" style="${off>=0?'opacity:.3;pointer-events:none':''}" data-a="mcnav|1">›</button></div>
- <div class="cal17">${['M','T','W','T','F','S','S'].map(x=>`<span class="cap">${x}</span>`).join('')}${cells}</div><div class="sm" style="margin-top:8px">Darker means you spent more that day. ${money(tot)} this month.</div>${dtxt}`}
+ <div class="viz17"><div class="cal17">${['M','T','W','T','F','S','S'].map(x=>`<span class="cap">${x}</span>`).join('')}${cells}</div></div><div class="sm" style="margin-top:8px">Darker means you spent more that day. ${money(tot)} this month.</div>${dtxt}`}
 H.mcnav=a=>{UI.mcOff=Math.max(-3,Math.min(0,(UI.mcOff||0)+(+a[0])));UI.mcSel=null};
 H.mcsel=a=>{UI.mcSel=+a[0]};
 
@@ -2429,7 +2439,7 @@ function cats17(){const sc=UI.sc||'week',[f,t]=inWin(sc),rows=catTotals(f,t),T=s
  const li=show.map(r=>{const l=(S.limits||[]).find(x=>x.scope==='cat'&&x.ref===r.id),go=r.id==='_u'?'push|sort':`push|cat|${J({id:r.id})}`,tone=l&&sc==='week'?limTone(l):'';
   const rec=sc==='week'&&!l&&r.id!=='_u'&&!S.limNo['c'+r.id]&&(sugs.some(x=>x.ref===r.id)||(firstNamed&&firstNamed.id===r.id&&r.share>=.25));
   return `<button class="cr17" data-a="${go}"><i style="background:${r.col}"></i><span class="nm">${esc(r.name)}${rec?`<span class="rec17" data-a="limset|cat|${r.id}|amt">Recommended: set a limit ›</span>`:''}</span>${l&&sc==='week'?`<span class="lm" style="${tone?'color:'+tone:''}">${limText(l)}</span>`:''}<b>${money(r.amt)}</b></button>`}).join('');
- return `<div class="row" style="align-items:baseline;gap:8px;margin-top:6px"><span class="hero" style="font-size:38px">${money(T)}</span><span class="sub">${sc==='week'?'this week':sc==='last'?'last week':'in 30 days'}</span></div><div style="margin:12px 0 0">${stackBar(rows)}</div>${chips}<div class="col" style="gap:0">${li}</div>${rows.length>4&&!UI.spAll?`<button class="lnk" style="margin-top:6px" data-a="spall">All ${rows.length} categories ›</button>`:''}`}
+ return `<div class="row" style="align-items:baseline;gap:8px;margin-top:6px"><span class="hero" style="font-size:38px">${money(T)}</span><span class="sub">${sc==='week'?'this week':sc==='last'?'last week':'in 30 days'}</span></div><div style="margin:12px 0 0">${stackBar(rows)}</div>${chips}<div class="panelC">${li}</div>${rows.length>4&&!UI.spAll?`<button class="lnk" style="margin-top:6px" data-a="spall">All ${rows.length} categories ›</button>`:''}`}
 SCREENS.spending=()=>{const rec=recent17(5),mo=S.bills.filter(b=>!b.ended&&!b.paused&&!(b.trialUntil&&S.now.getTime()<b.trialUntil)).reduce((a,b)=>a+perMonth(b),0),nb=S.bills.filter(b=>!b.ended).length;
  const nxt=S.bills.filter(b=>!b.ended&&b.nextDue).sort((a,b)=>new Date(a.nextDue)-new Date(b.nextDue))[0];
  return `<div class="title" style="margin-bottom:2px">Spending</div>${cats17()}
@@ -2664,6 +2674,22 @@ H.goalbought=a=>{const g=S.goals.find(x=>x.id===a[0]);if(!g)return false;const a
 {const _tx=SCREENS.txn;SCREENS.txn=p=>{const t=S.txns.find(x=>x.id===p.id);
  if(t&&t.bought)return `<button class="back" data-a="back">‹ Back</button><div class="cap" style="margin-top:6px">${esc(t.payee)}</div><div class="hero" style="font-size:44px;margin:4px 0 18px">${money(t.amt)}</div><div class="card" style="display:grid;gap:12px"><div class="row sp"><span class="mut">What</span><b>Bought with savings</b></div><div class="row sp"><span class="mut">When</span><b>${fmtDay(new Date(t.t))}, ${fmtTime(new Date(t.t))}</b></div><div class="row sp"><span class="mut">Counts toward the week</span><b>No</b></div></div>`;
  return _tx(p).replace('Seen on your UPI link','Logged in Trickle')}}
+
+/* ===== v17.16 (10 Oct): visual hierarchy. Three greys for three kinds of information, and the two main buttons snap to the bar above the tab bar ===== */
+/* 1. Log expense and Add money: a fixed bar sitting on the tab bar (Home only) */
+{const _ar6=window.afterRender;window.afterRender=()=>{if(_ar6)_ar6();const ph=document.getElementById('phone'),view=document.getElementById('view');if(!ph||!view)return;
+  const show=UI.tab==='home'&&!(UI.stack&&UI.stack.length)&&!UI.flow&&!UI.popup&&!UI.sheet&&S&&S.cats;let el=document.getElementById('cta17');
+  view.classList.toggle('home17',!!show);
+  if(!show){if(el)el.remove();return}
+  const tb=document.getElementById('tabbar');const h=tb?tb.offsetHeight:84;
+  if(!el){el=document.createElement('div');el.id='cta17';ph.appendChild(el)}
+  el.style.bottom=h+'px';
+  el.innerHTML=`<div class="row" style="gap:10px"><button class="btn" style="flex:3" data-a="${scanOn()?'payscan':'pay'}">Log expense</button><button class="btn q" style="flex:2;white-space:nowrap" data-a="addmoney17">Add money</button></div>`}}
+/* 2. graphs sit on their own surface */
+{const _sb=stackBar;stackBar=function(rows,h){return `<div class="viz17">${_sb(rows,h)}</div>`}}
+{const _as=areaSvg;areaSvg=function(v,c){return `<div class="viz17">${_as(v,c)}</div>`}}
+{const _wb=weeksBars;weeksBars=function(v,c){return `<div class="viz17">${_wb(v,c)}</div>`}}
+{const _ts=trendSvg;trendSvg=function(){return `<div class="viz17">${_ts.apply(null,arguments)}</div>`}}
 
 /* ===== control panel ===== */
 function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,0).getTime(),label:'Allowance',amt:S.p.income,note:''}];if(S.p.six)seedSix();else if(S.p.W>0){S.planSet=true;S.cats.forEach(c=>c.full=c.amt);S.bufFull=S.bufAmt;S.firstDay=new Date(S.now.getTime()-S.p.weeks*7*DAY)}resetUI();window._celeLock=false;render();fitPhone()}

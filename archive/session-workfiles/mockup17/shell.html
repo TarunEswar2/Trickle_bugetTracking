@@ -261,6 +261,16 @@ body{background:#0A0C0E;font-size:16px}
 /* one filled green button per screen: small buttons in cards are tonal */
 #phone .btn.s:not(.q),#phone .btn.t{background:var(--bg3)!important;color:var(--accent)!important;border:1px solid var(--line)!important}
 .sec17gap{height:12px}
+/* v17.16 visual hierarchy: A = things to act on (lightest), B = records, C = graphs */
+:root{--card-a:#272E37;--rec-b:#171C21;--viz-c:#1A2430}
+#phone .cd17,#phone .card{background:var(--card-a);border-color:#343C47}
+#phone .cd17.hot{border-color:#E6B24F}
+#phone .tx17,#phone .li.tx17{background:var(--rec-b);border-color:transparent}
+.panelB{background:var(--rec-b);border-radius:12px;padding:2px 14px}.panelB .cr17{border-bottom-color:#222A31}.panelB .cr17:last-child{border-bottom:0}
+.viz17{background:var(--viz-c);border-radius:12px;padding:14px 14px 10px}
+#cta17{position:absolute;left:0;right:0;z-index:25;padding:12px 22px 12px;background:#0F1215;border-top:1px solid var(--line)}
+#view.home17{padding-bottom:190px}
+.panelC{background:var(--viz-c);border-radius:12px;padding:2px 14px}.panelC .cr17{border-bottom-color:#26323F}.panelC .cr17:last-child{border-bottom:0}
 </style></head><body>
 <div class="app"><div class="stage"><div id="frame"><div id="phone"><div class="notch"></div><div class="status"><span id="clk"></span><span>●●● 5G ▮</span></div><div id="glow"></div><div id="view"></div><div id="tabbar"></div><div id="layer"></div></div></div></div>
 <aside class="panel" id="panel"></aside></div>
