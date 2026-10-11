@@ -1,6 +1,6 @@
 # Trickle — handover
 
-## v25 (11 Oct): one money model, balance is the master (V25-1, `docs/claude/v25_money_model.md`). Every number is worked out from one ledger; `mockup25/tests/model.js` checks the rules after random actions (0 failures in 4,200 steps). Build `archive/session-workfiles/mockup25/`.
+## v25 (11 Oct, https://claude.ai/artifact/3WypJhkBs1XME2WiecGtze): one money model, balance is the master (V25-1, `docs/claude/v25_money_model.md`). Every number is worked out from one ledger; `mockup25/tests/model.js` checks the rules after random actions (0 failures in 4,200 steps). Build `archive/session-workfiles/mockup25/`.
 
 ## v24 (11 Oct, https://claude.ai/artifact/TepQ3HPNts7nwyu9AqT2b3): v22 onboarding picture ("Plan out your budget and tackle it in weeks"), Balance screen with running balances, Sync with my bank (rules in V24-3), new goal-reached screen, Completed goals with "I bought it" off the balance, short-week hero text. Build `archive/session-workfiles/mockup24/`; V24-1…7; screenshots `docs/claude/v24_screens/`.
 
