@@ -822,3 +822,17 @@ Research (web search, 10 Oct): Monzo's community thread on a budgeting widget (l
 | V21-12 | No capital labels anywhere; Home says "Hi Tarun" with the date under it | Research on generic AI look; P3, P4 | Task: first impression | PROPOSED |
 | V21-13 | Tips rewritten in plain words that point at the thing ("Logged. The bar got shorter") | P3 | none | PROPOSED |
 | V21-14 | Open for Tarun, not changed: the low "this week" right after adding money midweek | Found 10 Oct | — | OPEN |
+
+### V23-1…V23-10 (11 Oct): v23 = v21's look with v22's learnings. Take/leave table: `docs/claude/v23_plan.md`. Build `archive/session-workfiles/mockup23/` (fork of mockup21; `ui23.js` + last CSS block). v22 (https://claude.ai/artifact/XNxSEidDvxz62LeZ2cN16K) was built in another session; its source is not in this repo.
+| ID | Domain | Evidence | Validation gate | Status |
+|---|---|---|---|---|
+| V23-1 | v23 keeps v21's look and takes v22's learnings | Tarun, 11 Oct | none | CONFIRMED (Tarun) |
+| V23-2 | Savings: the bottom bar is one "New goal" button; Scan & pay and Add to balance are not shown there | Tarun | none | CONFIRMED (Tarun) |
+| V23-3 | New-goal sheet: pick a kind (Phone, Laptop, Trip, Emergency, Bike, Course, Gift, Concert, Other) which sets the icon; name field empty ("e.g. New phone"); "How much is it? Skip if you're not sure" | Tarun; v22 sheet | none | CONFIRMED (Tarun) for kind and empty name; list of kinds PROPOSED |
+| V23-4 | Home shows Balance with "+ Add" (replaces "Pocket money & income · Not added yet") | v22; closes the "Add to balance" loop | Task: "how much money do you have?" | PROPOSED |
+| V23-5 | Add to balance and onboarding are 3 screens: how much → keep some aside (None/10/20/30% chips + bar) → how long (stepper, result, list of weeks with dates) | v22; hard rule "one question per screen" | Task 1 | PROPOSED |
+| V23-6 | Enter manually is one screen; button "Add ₹X spend", line "For cash, or a payment already made."; afterwards a toast "₹X spent on Food · Undo" | v22 review: "Save ₹X" read as saving | Task 4 | PROPOSED |
+| V23-7 | Savings hero adds "↑ ₹X more than September by this date" only from the 15th and only when better | v22 | none | PROPOSED |
+| V23-8 | Greeting "Good evening, Tarun" | v22 | none | PROPOSED |
+| V23-9 | Tips: one sentence; tapping the highlighted thing ends the tip | v22; coach-mark guidance | none | PROPOSED |
+| V23-10 | Not taken from v22: paper look and fonts, day cups, one-insight Home, limit ideas off Home, goal drawings, new scan flow, settings screen, block-push layout | Tarun wants v21's look; earlier Tarun decisions | Tarun can reopen any | PROPOSED |
