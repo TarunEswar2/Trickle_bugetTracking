@@ -1,0 +1,40 @@
+/* three states: green on track, amber below the Recommended line, red nothing left or savings touched */
+function homeState(){const p=typeof paceInfo==='function'?paceInfo():null;if(S.touched||flexL()<=0)return 'out';return p&&p.over?'fast':'ok'}
+const STATECOL={ok:'#6FD3AE',fast:'#E6B24F',out:'#F26B6B'};
+/* ===== v17: from the first user-testing reviews (8 Oct): the structure was bad, too many tabs, too much "AI look", sentences too complex.
+   Three tabs. Each tab is a short list that leads to detail screens (two levels, no tabs inside tabs). Flat visual style. Plain words. ===== */
+window.TABS=[['home','Home'],['spending','Spending'],['money','Money']];
+window.TABALIAS={income:['money','inc'],savings:['money','sav'],insights:['spending','cat']};
+const back17=(label)=>`<button class="back" data-a="back">‹ ${label}</button>`;
+const row17=(label,value,act,o)=>{o=o||{};return `<button class="li" style="padding:13px 16px;${o.dim?'opacity:.6':''}" data-a="${act||'x'}"><span class="n" style="line-height:1.25"><span class="mut" style="display:block;font-weight:500;font-size:13px">${label}</span>${value}</span><span class="t">›</span></button>`};
+const sec17=t=>`<div class="cap" style="margin:34px 0 10px">${t}</div>`;
+
+/* ---------- Home ---------- */
+function nextAct17(){const n=nextAct();if(n&&!n.low)return n;const a=awareness();if(a)return {t:a.t,a:'why|'+a.k+'|home',c:'tip'};return n}
+SCREENS.home=()=>{const pl=planned();let top,viz,cap='';
+ if(pl){const W=Math.max(1,flexW()),L=Math.max(0,flexL()),empty=L<=0,hs=homeState(),col=STATECOL[hs],dl=daysToGo();const st=hs==='out'?(S.touched?'Over this week. Savings used.':'Nothing left this week.'):hs==='fast'?'Spending a bit fast.':'';
+  top=heroHome17();viz='';cap=''}
+ else{const tot=wkTot(0);top=tot?`<div class="hero" style="font-size:52px;line-height:1.05">${money(tot)}</div><div class="sub" style="margin-top:6px;font-size:16px">spent this week</div>`:`<div class="title" style="font-size:28px">Nothing logged yet.</div>`;viz=`<div style="margin:22px 0 14px"><div class="batt idle"></div></div>`}
+ return `<div style="min-height:100%;display:flex;flex-direction:column"><div class="row sp" style="margin-top:2px;align-items:center"><span class="cap" style="margin:0;color:var(--ink2)">${fmtDay(S.now)}</span><button class="icon18" data-a="settings" aria-label="Settings">${window.GEAR18}</button></div><div style="margin-top:14px">${top}</div>${viz}${cap}${reachedHome17()}${carousel17()}${limitsHome17()}${incomeRow17()}
+</div>`};
+SHEETS.gridhow=()=>{const W=Math.max(1,flexW());return `<div class="title" style="font-size:24px;margin-bottom:14px">How to read the bar</div><div style="margin:6px 0 34px">${battery(W*.62,W,{tick:.45,label:'Recommended'})}</div><div class="col" style="gap:10px"><div class="sub">The bar is what you have left this week.</div><div class="sub">The line is what we recommend you have left by now.</div><div class="sub"><b style="color:#6FD3AE">Green</b>: on track. <b style="color:#E6B24F">Yellow</b>: below the line, spending fast. <b style="color:#F26B6B">Red</b>: nothing left.</div></div><div class="row sp" style="margin-top:18px"><button class="lnk" data-a="why|bar">Why a bar?</button><button class="btn s" data-a="closesheet" style="width:auto">OK</button></div>`};
+
+/* ---------- Spending: one list. Patterns and records are one tap down ---------- */
+function cmpNow(){const now=S.now.getTime(),ws=wk0(),td=dowIdx(now),day=(f,k)=>txIn(f+k*DAY,f+(k+1)*DAY).reduce((a,x)=>a+x.amt,0);let c=0,l=0;for(let k=0;k<=td;k++){c+=day(ws,k);l+=day(ws-7*DAY,k)}if(!c||!l)return null;const d=c-l;return Math.abs(d)<Math.max(20,l*.08)?'About the same':d>0?money(d)+' more':money(-d)+' less'}
+SCREENS.spending=()=>{const h=statsHour(),rep=shopList()[0],cmp=cmpNow();
+ return `<div class="title" style="margin-bottom:16px">Spending</div>${spCats()}
+ ${sec17('Patterns')}<div class="col" style="gap:8px">${row17('Busiest time',h.n>=8?bandLabel(h.pk):'Needs a week of spends',h.n>=8?'push|pwhen':'x',{dim:h.n<8})}${row17('Most visited',rep?`${esc(rep.payee)} · ${rep.n} visits`:'Nothing repeats yet',rep?'push|prep':'x',{dim:!rep})}${row17('This week and last',cmp||'Needs two weeks of spends',cmp?'push|ptrend':'x',{dim:!cmp})}</div>
+ ${sec17('Records')}<div class="col" style="gap:8px">${row17('All spends',`${S.txns.filter(isSp).length} spends`,'push|history')}${(S.limits||[]).length?row17('Limits',`${S.limits.length} set`,'v16limits'):''}</div>`};
+SCREENS.pwhen=()=>back17('Spending')+insWhen();
+SCREENS.prep=()=>back17('Spending')+insRep();
+SCREENS.ptrend=()=>back17('Spending')+insCmp();
+SCREENS.history=()=>back17('Spending')+`<div class="title" style="margin-bottom:4px">Past transactions</div>`+spHist();
+
+/* ---------- Money: one list ---------- */
+SCREENS.money=()=>{const l=S.incomes||[],now=S.now.getTime(),run=l.filter(i=>!i.end||i.end+DAY>now),mo=S.bills.filter(b=>!b.ended&&!b.paused&&!(b.trialUntil&&now<b.trialUntil)).reduce((a,b)=>a+perMonth(b),0),sav=savedTotal(S);
+ const inTxt=run.length?`${money(run.reduce((a,i)=>a+i.amt,0))} · ${run.length===1?'until '+shortD(run[0].end):run.length+' running'}`:planned()?'Not added yet':'Add what you get';
+ return `<div class="title" style="margin-bottom:8px">Money</div>${planned()?`<div class="hero" style="font-size:40px;margin-top:12px">${money(S.W)}</div><div class="sub" style="margin:4px 0 4px">to spend each week</div>`:`<div class="sub" style="margin:8px 0">Add your money. Trickle works out your week.</div>`}
+ <div class="col" style="gap:8px;margin-top:18px">${row17('Pocket money & income',inTxt,'push|incomes')}${row17('Savings',money(sav)+(S.goals.filter(g=>g.state!=='done').length?` · ${S.goals.filter(g=>g.state!=='done').length} goal${S.goals.filter(g=>g.state!=='done').length>1?'s':''}`:''),'push|savings')}${row17('Subscriptions',S.bills.filter(b=>!b.ended).length?`${money(mo)} a month`:'None yet','v15bills')}${row17('One-off money','A friend pays back, a gift','oneoff')}</div>`};
+SCREENS.incomes=()=>back17('Money')+`<div class="title" style="margin-bottom:12px">Pocket money & income</div>`+mnInc();
+SCREENS.savings=()=>back17('Money')+`<div class="title" style="margin-bottom:12px">Savings</div>`+mnSav();
+H.mnseg=()=>{};
