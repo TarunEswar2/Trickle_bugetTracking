@@ -3452,7 +3452,7 @@ function pic24(){const sp=exSplit24();
 H.replay24=()=>{const el=document.querySelector('.pic22');if(el){el.classList.remove('go');void el.offsetWidth;el.classList.add('go')}return false};
 
 /* ---------- balance: what is running, and the total (Tarun) ---------- */
-const running24=()=>{const t=S.now.getTime();return (S.incomes||[]).filter(i=>i.end&&i.end+DAY>t&&!i.stopped)};
+const running24=()=>{const t=S.now.getTime();return (S.incomes||[]).filter(i=>i.end&&i.end+DAY>t&&!i.stopped&&i.sp>0)};
 const perWeek24=i=>Math.round(i.sp/Math.max(1,daysIn(i.start,i.end))*7);
 incomeRow17=function(){const b=bal23(),run=running24();if(!planned()&&b==null)return '';
  return `<div class="bal23"><button class="l" data-a="push|bal24"><span class="sm">Balance</span><b>${b==null?'Not added yet':money(b)}</b>${run.length?`<small class="mut" style="font-size:12.5px;margin-top:2px">${run.length} running · ${money(S.W)} a week</small>`:''}</button><button class="add" data-a="addmoney17">${PLUS21}<span>Add</span></button></div>`};
@@ -3507,7 +3507,7 @@ H.sync24go=()=>{const d=UI.flow.d,n=syncNums24(d),t=S.now.getTime();
 {const _rp=recomputePlan;recomputePlan=function(f){const r=_rp(f);if(S.syncFrom&&S.wallet)S.bufLeft=Math.max(0,S.bufAmt-walletSpent());return r}}
 
 /* ---------- bought goals leave the balance ---------- */
-{const _b=bal23;bal23=function(){const v=_b();if(v==null)return v;const bought=S.txns.filter(t=>t.bought&&!S.b23ids.has(t.id)).reduce((a,t)=>a+t.amt,0);return Math.max(0,v-bought)}}
+
 
 /* ---------- goal completed screen (replaces the old grid celebration) ---------- */
 POPUPS.cele=P=>{const g=S.goals.find(x=>x.id===P.gid);if(!g)return '';const c=gcol21(g),days=Math.max(1,(g.createdMonthsAgo||0)*30+(S.now.getDate()||1)),amt=g.target>0?g.target:g.saved;
@@ -3529,6 +3529,28 @@ activeGoals=()=>S.goals.filter(g=>g.state!=='done'&&g.state!=='reached');
 /* ---------- a short week says its own amount (this week gets only the days left) ---------- */
 {const _h=heroHome17;heroHome17=function(){let h=_h();const wk=S.cats.reduce((a,c)=>a+(c.amt||0),0)+(S.bufAmt||0),W=Math.max(1,flexW());
  if(planned()&&wk>0&&wk<W-5){const dl=Math.max(1,7-dowIdx(S.now.getTime()));h=h.replace(`of ${money(W)} left this week`,`of ${money(wk)} left this week <span class="mut" style="font-size:13px">· ${dl}-day week</span>`).replace(/<div class="bar20w[\s\S]*?<\/div><\/div>/,bar20(Math.max(0,flexL()),wk,{col:ST20[hsNow20()].c}))}return h}}
+
+/* ===== v24.1 (11 Oct, Tarun): balance = savings + all spendable money left. Worked out from the plan every time, never stored,
+   so it cannot drift (the old "starting number + added − spent" could show ₹0 while savings were ₹175). ===== */
+function future24(){const t=S.now.getTime(),nx=wk0()+7*DAY;return running24().reduce((a,i)=>{const s=Math.max(i.start,nx);return a+(i.end>=s?perDay(i)*daysIn(s,i.end):0)},0)}
+function parts24(){const sv=Math.max(0,savedTotal(S)),wk=planned()?Math.max(0,flexL()):0,fut=planned()?Math.max(0,future24()):0;return {sv,wk,fut,sp:wk+fut,tot:Math.round(sv+wk+fut)}}
+/* The balance is a ledger: it starts at savings + spendable money (so the two always add up at the start), then
+   + money added − spends − bought goals. Savings + to spend = balance, always: "to spend" is balance − savings.
+   Sync with the bank sets it again from scratch. */
+bal23=function(){if(!S.l24){if(!planned()&&savedTotal(S)<=0)return null;const P=parts24();S.l24={a:Math.round(P.sv+P.sp),ids:new Set(S.txns.map(t=>t.id)),add:0}}
+ const out=S.txns.filter(t=>!S.l24.ids.has(t.id)&&(isSp(t)||t.kind==='fixed'||t.bought)).reduce((x,t)=>x+t.amt,0);return Math.max(0,Math.round(S.l24.a+S.l24.add-out))};
+balAdd23=function(v){if(S.l24)S.l24.add+=v};
+{const _f=H.incfinish;H.incfinish=a=>{bal23();return _f(a)}}
+{const _d=H.incdone;H.incdone=a=>{bal23();return _d(a)}}
+const split24=()=>{const b=bal23()||0,sv=Math.max(0,Math.round(savedTotal(S))),P=parts24();return {b,sv:Math.min(sv,b),sp:Math.max(0,b-sv),plan:Math.round(P.sp),wk:Math.round(P.wk),fut:Math.round(P.fut)}};
+/* the Balance screen shows the three parts */
+{const _b=SCREENS.bal24;SCREENS.bal24=()=>{const P=split24(),gap=P.sp-P.plan-((S.l24&&S.l24.g0)||0);return _b().replace('<div class="sm">What should be in your bank</div>','<div class="sm">Savings + money left to spend</div>')
+ .replace(/<div class="sb24">[\s\S]*?<\/div>/,`<div class="sb24"><i style="flex:${Math.max(P.sv,1)};background:${SAVE}"></i><i style="flex:${Math.max(P.sp,1)};background:${SPEND}"></i></div>`)
+ .replace(/<div class="row sp sm" style="margin-top:6px">[\s\S]*?<\/div>/,`<div class="row sp sm" style="margin-top:6px"><span><i class="kd24" style="background:${SAVE}"></i>Savings ${money(P.sv)}</span><span><i class="kd24" style="background:${SPEND}"></i>To spend ${money(P.sp)}</span></div>
+ <div class="sm mut" style="margin-top:6px;text-align:right">In your weeks: ${money(P.wk)} this week + ${money(P.fut)} later</div>
+ ${Math.abs(gap)>=50?`<div class="note20"><i style="background:${ST20.fast.c}"></i>${gap>0?`${money(gap)} of it isn't in your weeks yet.`:`Your weeks plan ${money(-gap)} more than you have.`} Sync with your bank to start again from the real number.</div>`:''}`)}}
+/* sync starts from scratch: the typed balance replaces everything; savings stay inside it; the rest is planned again from today */
+{const _go=H.sync24go;H.sync24go=()=>{const X=amtOf(UI.flow.d.kp);const r=_go();if(!(S.incomes||[]).some(i=>i.synced&&i.sp>0&&i.end+DAY>S.now.getTime())){S.W=0;S.flexW=0;S.bufFull=0;S.bufAmt=0;S.bufLeft=0;S.cats.forEach(c=>{c.amt=0;c.full=0;c.left=0})}S.l24={a:X,ids:new Set(S.txns.map(t=>t.id)),add:0};const P=split24();S.l24.g0=P.sp-P.plan;return r}}
 
 /* ===== control panel ===== */
 function loadProfile(k){S=newState(k);S.moneyIn=[{id:'m0',t:new Date(2026,9,1,9,0).getTime(),label:'Allowance',amt:S.p.income,note:''}];if(S.p.six)seedSix();else if(S.p.W>0){S.planSet=true;S.cats.forEach(c=>c.full=c.amt);S.bufFull=S.bufAmt;S.firstDay=new Date(S.now.getTime()-S.p.weeks*7*DAY)}resetUI();window._celeLock=false;render();fitPhone()}
