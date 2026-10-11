@@ -1,6 +1,6 @@
 # Trickle — handover
 
-## v23 (11 Oct): v21 look + v22 learnings. Read `docs/claude/v23_plan.md` (take/leave table and checklist). Build `archive/session-workfiles/mockup23/`; decisions V23-1…10; screenshots `docs/claude/v23_screens/`. v22 itself was made in another session (artifact XNxSEidDvxz62LeZ2cN16K); its source is not in this repo. Still open: V21-14 (tiny week after adding money midweek).
+## v23 (11 Oct): v21 look + v22 learnings. Published at https://claude.ai/artifact/Em997pAuBP4DL47VnQHYz3. Read `docs/claude/v23_plan.md` (take/leave table and checklist). Build `archive/session-workfiles/mockup23/`; decisions V23-1…10; screenshots `docs/claude/v23_screens/`. v22 itself was made in another session (artifact XNxSEidDvxz62LeZ2cN16K); its source is not in this repo. Still open: V21-14 (tiny week after adding money midweek).
 
 ## v21 (10 Oct): from the second test round (on v20). Published at https://claude.ai/artifact/GHBj9J2uLTpkitfYZAWGte. Read `docs/claude/v21_plan.md` (feedback F1–F13, research, principles, specs, checklist). Build `archive/session-workfiles/mockup21/` (`ui21.js` + last CSS block); decisions V21-1…14; screenshots `docs/claude/v21_screens/`. Open: V21-14 (tiny week after adding money midweek), day-colour thresholds, photos vs drawn goal pictures, and a committed visual direction (F13).
 
