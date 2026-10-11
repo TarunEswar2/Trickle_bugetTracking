@@ -1,0 +1,84 @@
+/* ===== v27 (11 Oct, Tarun): no balance on screen. Trickle shows the weekly allowance and the money you added with how long
+   it lasts; it does not talk about your bank balance. Savings have no deadline. "Start again" asks what you have now and
+   lets you split it into savings and spending again: savings stay as they are if the new split leaves room for them,
+   otherwise they go down (money not in a goal first, then each goal by its share). Explained in docs/claude/v27_money_model.md ===== */
+
+/* ---------- words: no "balance" ---------- */
+const WORDS27=[['Add to balance','Add income'],['What’s your bank balance?','How much money do you have to plan?'],['Type it in. Trickle never sees your bank.','Pocket money, stipend, anything. Trickle never sees your bank.'],['off your balance','out of your savings']];
+{const _o=FLOWS.onb;FLOWS.onb=F=>{let h=_o(F);WORDS27.forEach(([a,b])=>{h=h.split(a).join(b)});return h}}
+{const _a=window.afterRender;window.afterRender=()=>{if(_a)_a();const w=document.createTreeWalker(document.getElementById('phone')||document.body,NodeFilter.SHOW_TEXT);let n;
+ while((n=w.nextNode())){let t=n.nodeValue,o=t;WORDS27.forEach(([a,b])=>{if(t.includes(a))t=t.split(a).join(b)});t=t.replace(/Ready (₹[\d,]+ to go)/,'$1').replace(/Ready whenever you like\.?/,'It just grows');if(t!==o)n.nodeValue=t}}}
+
+/* ---------- savings have no deadline: no "Ready Aug 2027", no "by when", no "needs ₹X a month" ---------- */
+goalEta=function(g){const rem=Math.max(0,(g.target||0)-g.saved);if(!(g.target>0))return 'whenever you like';return rem<=0?'Reached':money(rem)+' to go'};
+{const _r=render;render=function(){if(S&&S.goals)S.goals.forEach(g=>{g.byMonths=0});return _r.apply(this,arguments)}}
+{const _sg=SCREENS.goal;SCREENS.goal=p=>_sg(p).replace(/Ready (₹[\d,]+ to go|Reached)\.?/,'')}
+{const _ge=SHEETS.goaledit;SHEETS.goaledit=p=>{const h=_ge(p);p.by=0;return h.replace(/<div class="cap"[^>]*>By when \(optional\)<\/div><div class="row wrap">[\s\S]*?<\/div>/,'')}}
+
+/* ---------- Home: what you have to spend and how long it lasts, not a balance ---------- */
+const until27=m=>m.active.length?Math.max(...m.active.map(p=>p.end)):null;
+incomeRow17=function(){const m=M25();if(!m||(!planned()&&m.Sp<=0))return '';const e=until27(m),wl=e?wksLeft25(S.now.getTime(),e):0;
+ return `<div class="bal23"><button class="l" data-a="push|bal24"><span class="sm">Money to last</span><b>${m.Sp<0?'−'+money(-m.Sp):money(m.Sp)}</b><small class="mut" style="font-size:12.5px;margin-top:2px">${e?`until Sun ${shortD(e)} · ${wl} week${wl>1?'s':''}`:'No plan yet'}</small></button><button class="add" data-a="addmoney17">${PLUS21}<span>Add</span></button></div>`};
+
+/* ---------- "Your money": the income you added and how long it lasts ---------- */
+SCREENS.bal24=()=>{const m=M25(),now=S.now.getTime(),e=until27(m);
+ const row=p=>{const tot=Math.max(1,p.end-p.start),pr=Math.max(0,Math.min(1,(now-p.start)/tot)),wl=wksLeft25(now,p.end);
+  return `<div class="rb24"><div class="row sp" style="align-items:baseline"><b>${money(p.rem)} <span class="sm" style="font-weight:500">left of ${money(p.amt)}</span></b></div>
+  <div class="sm" style="margin-top:2px">${esc((p.label||'Plan').replace('From your bank','Started again'))} · until Sun ${shortD(p.end)} · ${wl} week${wl>1?'s':''} left</div>
+  <div class="tl24"><i style="width:${(pr*100).toFixed(1)}%"></i></div><div class="row sp mut" style="font-size:12.5px;margin-top:5px"><span>${shortD(p.start)}</span><span>about ${money(p.rem/wl)} a week</span></div></div>`};
+ const line=(c,l,v,s)=>`<div class="ln25"><i style="background:${c}"></i><span>${l}${s?`<small>${s}</small>`:''}</span><b>${money(v)}</b></div>`,LATER=`color-mix(in srgb,${SPEND} 45%,#2A2D33)`;
+ return back17('Home')+`<div class="title" style="margin-bottom:2px">Your money</div><div class="sm">What you added, and how long it lasts</div>
+ <div class="hero" style="font-size:52px;margin-top:10px">${m.Sp<0?'−'+money(-m.Sp):money(m.Sp)}</div><div class="sm">${m.Sp<0?'':e?`to last until Sun ${shortD(e)}`:'not planned yet'}</div>
+ ${m.Sp<0?`<div class="note20"><i style="background:${ST20.out.c}"></i>You have spent ${money(-m.Sp)} more than you had. The next money you add pays it back first.</div>`:''}
+ ${m.Sp>0?`<div class="sb24"><i style="flex:${Math.max(m.left,1)};background:${SPEND}"></i>${m.later?`<i style="flex:${m.later};background:${LATER}"></i>`:''}${m.held?`<i style="flex:${m.held};background:#B9A57A"></i>`:''}${m.loose?`<i style="flex:${m.loose};background:#5A606A"></i>`:''}</div>`:''}
+ <div class="col" style="margin-top:14px">${line(SPEND,'Left this week',m.left,`of ${money(m.budget)}`)}${line(LATER,'Later weeks',m.later)}${m.held?line('#B9A57A','Held for subscriptions',m.held,'due before your plan ends'):''}${m.loose?line('#5A606A','Not in any week yet',m.loose):''}</div>
+ ${m.loose>=1?`<div class="nd21" style="margin-top:16px"><b>${money(m.loose)} isn't in any week</b><div class="sm" style="margin-top:4px">From a plan that ended, or money added without a plan.</div><div class="row" style="gap:8px;margin-top:12px"><button class="btn s q" data-a="loose25|save">Put in savings</button><button class="btn s q" data-a="loose25|plan">Spread over 4 weeks</button></div></div>`:''}
+ ${sec20('Running')}${m.active.length?`<div class="col" style="gap:10px">${m.active.map(row).join('')}</div>`:`<div class="sm">Nothing planned. Add income, or start again.</div>`}
+ <div class="col" style="gap:10px;margin-top:26px"><button class="btn" data-a="addmoney17">Add income</button><button class="btn q" data-a="sync24">Start again</button></div>
+ <div class="sm" style="margin-top:10px">Lost track? Start again with what you have now, and split it again.</div><div style="height:40px"></div>`};
+
+/* paying more than you have to spend: say where the rest comes from, without a balance */
+{const _sc=scanConfirm;scanConfirm=function(F){const m=M25(),a=amtOf(F.d.kp);let h=_sc(F);
+ return h.replace(/That is more than your balance \([^)]*\)\./,()=>a>Math.max(m.B,0)?'That is more than you have, savings included.':'')
+  .replace('<div class="mfoot">',m&&a>Math.max(m.Sp,0)&&a<=Math.max(m.B,0)&&!h.includes('note27')?`<div class="note20 note27" style="position:absolute;left:22px;right:22px;bottom:96px"><i style="background:${ST20.fast.c}"></i>${money(a-Math.max(m.Sp,0))} of it comes from savings.</div><div class="mfoot">`:'<div class="mfoot">')}}
+
+/* ---------- Start again: what you have now → keep some aside? → how long? ---------- */
+function syncNums24(d){const m=M25(),X=amtOf(d.kp),sv=Math.max(0,Math.round(savedTotal(S))),keep=d.keep==null?Math.min(sv,X):Math.max(0,Math.min(X,Math.round(d.keep))),sp=X-keep;
+ if(!d.end)setWeeks20(d,m&&m.active.length?wksLeft25(S.now.getTime(),Math.max(...m.active.map(p=>p.end))):4);
+ const end=snapEnd(d.end),wl=wksLeft25(S.now.getTime(),end),days=daysIn(day0(),end),held=Math.min(sp,reserve26(S.now.getTime(),end)),wk=Math.round((sp-held)/wl);return {X,sv,keep,cut:sv-keep,sp,end,days,wk,held,was:null,diff:null}}
+const steps27=i=>`<div class="steps">${[0,1,2].map(k=>`<i class="${k<=i?'on':''}"></i>`).join('')}</div>`;
+function keepNote27(n){if(n.cut>0)return `Savings go down by ${money(n.cut)}. Money not in a goal goes first, then each goal by its share.`;
+ if(n.cut<0)return `Your savings stay, and ${money(-n.cut)} more goes in.`;return n.sv>0?'Your savings stay as they are.':''}
+FLOWS.sync24=F=>{const d=F.d;
+ if(F.step===0){const a=amtOf(d.kp);return `<div class="mbody"><button class="back" data-a="pclose">‹ Close</button>${steps27(0)}
+  <div class="title" style="margin-top:14px">How much do you have now?</div><div class="sub" style="margin-top:6px">All of it, savings too. Trickle never sees your bank.</div>
+  <div class="hero" style="font-size:46px;margin:14px 0 4px;text-align:center;${a?'':'color:var(--ink3)'}">${a?money(a):'₹0'}</div>${keypad('kp')}</div>
+  <div class="mfoot"><button class="btn ${a?'':'d'}" data-a="${a?'sync24next':'x'}">Next</button></div>`}
+ const n=syncNums24(d),pct=n.X?Math.round(n.keep/n.X*100):0;
+ if(F.step===1){const asNow=Math.min(n.sv,n.X),ch=[[0,'None'],[10,'10%'],[20,'20%'],[30,'30%']];
+  return `<div class="mbody"><button class="back" data-a="sync24back">‹ Back</button>${steps27(1)}
+  <div class="title" style="margin-top:14px">Keep some aside?</div><div class="sub" style="margin-top:6px">Out of ${money(n.X)}. It goes to Savings.</div>
+  <div class="row wrap" style="gap:8px;margin-top:20px">${n.sv>0?`<button class="chip ${n.keep===asNow?'on':''}" data-a="keep27|now">As now, ${money(asNow)}</button>`:''}${ch.map(([v,l])=>`<button class="chip ${n.keep===Math.round(n.X*v/100)&&!(n.sv>0&&n.keep===asNow)?'on':''}" data-a="keep27|${v}">${l}</button>`).join('')}</div>
+  <div class="blk20" style="margin-top:18px"><input type="range" class="split18" min="0" max="100" step="1" value="${pct}" data-i="keep27" style="--p:${pct}%" aria-label="How much to keep aside">
+  <div class="row sp"><span class="tapamt18"><span class="k20"><i style="background:${SAVE}"></i>Keep aside</span><b id="k27-sav">${money(n.keep)}</b></span><span class="tapamt18 r"><span class="k20" style="justify-content:flex-end"><i style="background:${SPEND}"></i>To spend</span><b id="k27-sp">${money(n.sp)}</b></span></div></div>
+  <div class="note20" id="k27-note" style="margin-top:14px;${keepNote27(n)?'':'display:none'}"><i style="background:${n.cut>0?ST20.fast.c:SAVE}"></i><span>${keepNote27(n)}</span></div></div>
+  <div class="mfoot"><button class="btn" data-a="sync27next">Next</button></div>`}
+ const k=wkCount20(n.end);
+ return `<div class="mbody"><button class="back" data-a="sync27back">‹ Back</button>${steps27(2)}
+  ${n.sp>0?`<div class="title" style="margin-top:14px">How long should ${money(n.sp)} last?</div>
+  <div class="stp20" style="margin-top:18px"><button data-a="syncwk24|-1" ${k<=1?'disabled':''} aria-label="One week less">−</button><div><b>${k} week${k>1?'s':''}</b><small>until Sun ${shortD(n.end)}</small></div><button data-a="syncwk24|1" aria-label="One more week">+</button></div>
+  <div class="res20" style="margin-top:18px"><div class="sm">${n.held?`${money(n.sp)} − ${money(n.held)} for subscriptions, ÷ ${k} week${k>1?'s':''}`:`${money(n.sp)} ÷ ${k} week${k>1?'s':''}`}</div><div class="row" style="align-items:baseline;gap:8px;margin-top:4px"><span class="hero" style="font-size:42px;line-height:1">${money(n.wk)}</span><span style="font-size:17px;color:var(--ink2)">every week</span></div><div class="sm" style="margin-top:6px">This week gets a full share.</div></div>`
+  :`<div class="title" style="margin-top:14px">Nothing to spend</div><div class="sub" style="margin-top:6px">All ${money(n.X)} goes to Savings. Add income when more comes in.</div>`}<div style="height:150px"></div></div>
+  <div class="mfoot"><button class="btn" data-a="sync24go">Start again</button></div>`};
+H.sync24=()=>{openFlow('sync24',{step:0,kp:''});return false};
+H.sync24next=()=>{UI.flow.step=1;const d=UI.flow.d;if(d.keep==null)d.keep=syncNums24(d).keep};
+H.sync24back=()=>{UI.flow.step=0};H.sync27next=()=>{UI.flow.step=2};H.sync27back=()=>{UI.flow.step=1};
+H.keep27=a=>{const d=UI.flow.d,X=amtOf(d.kp);d.keep=a[0]==='now'?Math.min(Math.max(0,Math.round(savedTotal(S))),X):Math.round(X*(+a[0])/100)};
+HI.keep27=(a,el)=>{const d=UI.flow.d,X=amtOf(d.kp);d.keep=Math.round(X*(+el.value)/100);const n=syncNums24(d);el.style.setProperty('--p',el.value+'%');
+ $('#k27-sav').textContent=money(n.keep);$('#k27-sp').textContent=money(n.sp);const no=$('#k27-note'),t=keepNote27(n);if(no){no.style.display=t?'':'none';no.querySelector('span').textContent=t}
+ document.querySelectorAll('[data-a^="keep27|"]').forEach(b=>b.classList.remove('on'));return false};
+/* a split that keeps more than the savings now: the extra goes to savings (not in a goal) */
+{const _go=H.sync24go;H.sync24go=()=>{const n=syncNums24(UI.flow.d);const r=_go();if(n.cut<0)S.free+=-n.cut;S.cp26=[];render();return r}}
+{const _s=H.sync24go;H.sync24go=()=>{const r=_s();const m=M25();say(`Started again. ${money(m.budget)} for this week.`);return r}}
+/* the old week-end "Does your balance still look right?" step is skipped: Trickle does not ask about the bank */
+{const _ow=H.openweek;if(_ow)H.openweek=a=>{const r=_ow(a);if(UI.popup&&UI.popup.step==='bal')UI.popup.step=1;return r}}

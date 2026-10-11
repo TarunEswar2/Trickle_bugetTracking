@@ -1,5 +1,7 @@
 # Trickle — handover
 
+## v27 (11 Oct, https://claude.ai/artifact/9iayqqrRwrnV53oCzPemgo): no balance on screen (Tarun). Home shows the weekly allowance and "Money to last"; the Balance screen is now "Your money" (running income and dates); "Add income"; goals have no dates ("₹X to go"); Start again asks what you have now, then the savings/spend split, then how long (V27-1…4, `docs/claude/v27_money_model.md`). Build `archive/session-workfiles/mockup27/` (`ui27.js`). Tests: scenarios 9/9, model.js 0 failures on 9 seeds, screen tests pass. Open: "Add income" and "Money to last" wording (mine).
+
 ## v26 (11 Oct, https://claude.ai/artifact/U3Wr5zhCmymws5tcasyvXM): what you did is the truth, the bank balance is a check (V26-1…7, `docs/claude/v26_money_model.md`). Subscriptions held, goal purchase off the week, below zero defined, mid-week restart, goal shrink order, untracked weeks not swept, sync differences recorded. Build `archive/session-workfiles/mockup26/`; tests `tests/scenarios.js` (7/7) and `tests/model.js` (0 failures, 9 seeds). Next: Tarun checks V26-2…7.
 
 ## v25 (11 Oct, https://claude.ai/artifact/3WypJhkBs1XME2WiecGtze): one money model, balance is the master (V25-1, `docs/claude/v25_money_model.md`). Every number is worked out from one ledger; `mockup25/tests/model.js` checks the rules after random actions (0 failures in 4,200 steps). Build `archive/session-workfiles/mockup25/`.
