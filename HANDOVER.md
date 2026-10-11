@@ -1,5 +1,7 @@
 # Trickle — handover
 
+## v26 (11 Oct, https://claude.ai/artifact/U3Wr5zhCmymws5tcasyvXM): what you did is the truth, the bank balance is a check (V26-1…7, `docs/claude/v26_money_model.md`). Subscriptions held, goal purchase off the week, below zero defined, mid-week restart, goal shrink order, untracked weeks not swept, sync differences recorded. Build `archive/session-workfiles/mockup26/`; tests `tests/scenarios.js` (7/7) and `tests/model.js` (0 failures, 9 seeds). Next: Tarun checks V26-2…7.
+
 ## v25 (11 Oct, https://claude.ai/artifact/3WypJhkBs1XME2WiecGtze): one money model, balance is the master (V25-1, `docs/claude/v25_money_model.md`). Every number is worked out from one ledger; `mockup25/tests/model.js` checks the rules after random actions (0 failures in 4,200 steps). Build `archive/session-workfiles/mockup25/`.
 
 ## v24 (11 Oct, https://claude.ai/artifact/TepQ3HPNts7nwyu9AqT2b3): v22 onboarding picture ("Plan out your budget and tackle it in weeks"), Balance screen with running balances, Sync with my bank (rules in V24-3), new goal-reached screen, Completed goals with "I bought it" off the balance, short-week hero text. Build `archive/session-workfiles/mockup24/`; V24-1…7; screenshots `docs/claude/v24_screens/`.
