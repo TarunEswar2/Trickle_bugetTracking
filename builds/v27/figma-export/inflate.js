@@ -1,0 +1,11 @@
+function inflateRaw(src){let pos=0,bb=0,bc=0,out=[];
+const bits=n=>{let v=bb;while(bc<n){v|=src[pos++]<<bc;bc+=8}bb=v>>n;bc-=n;return v&((1<<n)-1)};
+const mk=(len,n)=>{const count=new Array(16).fill(0),sym=[],offs=[];for(let i=0;i<n;i++)count[len[i]]++;count[0]=0;offs[1]=0;for(let i=1;i<15;i++)offs[i+1]=offs[i]+count[i];for(let i=0;i<n;i++)if(len[i])sym[offs[len[i]]++]=i;return {count,sym}};
+const dec=h=>{let code=0,first=0,index=0;for(let l=1;l<16;l++){code|=bits(1);const c=h.count[l];if(code-c<first)return h.sym[index+(code-first)];index+=c;first+=c;first<<=1;code<<=1}throw 1};
+const LB=[3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258],LE=[0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,0],DB=[1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577],DE=[0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13];
+const codes=(lc,dc)=>{for(;;){let s=dec(lc);if(s<256)out.push(s);else if(s===256)return;else{s-=257;const len=LB[s]+bits(LE[s]);const ds=dec(dc);const dist=DB[ds]+bits(DE[ds]);for(let i=0;i<len;i++)out.push(out[out.length-dist])}}};
+let last;do{last=bits(1);const t=bits(2);if(t===0){bb=0;bc=0;const len=src[pos]|src[pos+1]<<8;pos+=4;for(let i=0;i<len;i++)out.push(src[pos++])}
+else if(t===1){const l=[];for(let i=0;i<288;i++)l[i]=i<144?8:i<256?9:i<280?7:8;codes(mk(l,288),mk(new Array(30).fill(5),30))}
+else{const nl=bits(5)+257,nd=bits(5)+1,nc=bits(4)+4,ORD=[16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15],lens=new Array(19).fill(0);for(let i=0;i<nc;i++)lens[ORD[i]]=bits(3);const lh=mk(lens,19),ll=[];let i=0;while(i<nl+nd){let s=dec(lh);if(s<16)ll[i++]=s;else{let p=0,r;if(s===16){p=ll[i-1];r=3+bits(2)}else if(s===17)r=3+bits(3);else r=11+bits(7);while(r--)ll[i++]=p}}
+codes(mk(ll.slice(0,nl),nl),mk(ll.slice(nl),nd))}}while(!last);return out}
+function utf8(a){let s='';for(let i=0;i<a.length;){const c=a[i++];if(c<128)s+=String.fromCharCode(c);else if(c<224)s+=String.fromCharCode((c&31)<<6|a[i++]&63);else if(c<240){s+=String.fromCharCode((c&15)<<12|(a[i++]&63)<<6|a[i++]&63)}else{const cp=((c&7)<<18|(a[i++]&63)<<12|(a[i++]&63)<<6|a[i++]&63)-65536;s+=String.fromCharCode(55296+(cp>>10),56320+(cp&1023))}}return s}

@@ -1,5 +1,7 @@
 # Trickle — handover
 
+## Figma (13 Oct): all v27 screens, messages, prompts, tips, widgets and cards are in Figma on the page "v27 · all screens" (108 frames, 13 sections): https://www.figma.com/design/b9MRkClYToyPjpMcDaPbeT . Editable layers, not auto-layout or components yet. Tooling and how to re-export: `builds/v27/figma-export/README.md`. The v14 look on Page 1 is untouched.
+
 ## Figma (12 Oct): the v27 onboarding picture screen is in the Figma file https://www.figma.com/design/b9MRkClYToyPjpMcDaPbeT on Page 1, to the right of the v14 export, as a frame named "v27 · 01 Onboarding · Picture" (node 60:2). Built with auto-layout and real text (Manrope), not a flat image. The rest of the Figma file is still the v14 look. The striped subscriptions piece is a solid colour there.
 
 ## v27.1 (12 Oct, same link https://claude.ai/artifact/9iayqqrRwrnV53oCzPemgo): moved to `builds/v27/` (README has every build detail). "Money to last" and the Your money screen removed; Settings full screen with a red Restart budgeting (warning, then the onboarding questions; past spends kept; savings shrink by the same percentage if they do not fit); subscriptions recalculate the week on add, change, pause, cancel or remove (V27-5…9). Tarun reported a crash when adding; not reproduced (5,000 random taps, every add path). Ask him for the exact steps if it happens again.
