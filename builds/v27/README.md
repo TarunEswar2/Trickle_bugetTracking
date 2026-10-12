@@ -13,6 +13,7 @@
 - **Settings:** full screen. At the bottom is the only red button, **Restart budgeting**. It shows a warning, then the onboarding questions. Past spends stay logged.
   - If savings don't fit the new split, everything in savings goes down by the same percentage.
 - **No bank balance** is shown or asked for.
+- **First onboarding picture:** ₹4,800 to spend − subscriptions = what is left; what is left ÷ weeks = the weekly amount (V27-10).
 
 ## How to build
 ```

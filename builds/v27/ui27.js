@@ -134,3 +134,37 @@ function subRecalc27(name,what){if(!S.m25)return;S.m25.reset=stamp26();render();
 /* demo profiles: their plan lasts as many weeks as their money covers at their weekly amount, so the first recalculation
    (a subscription, money in, Monday) gives about the same week instead of jumping */
 {const _i=init25;init25=function(){_i();const A=S.m25,p0=A&&A.pools.find(p=>p.seed);if(p0&&A.seed&&A.seed.budget>0){const k=Math.max(1,Math.round(p0.amt/A.seed.budget));p0.end=sow(A.t0)+6*DAY+(k-1)*WK}}}
+
+/* ===== v27.2 (12 Oct, Tarun): the onboarding picture shows the sum itself.
+   To spend − subscriptions = what is left; what is left ÷ weeks = the weekly amount. Same boxes as the "Your week" sheet. ===== */
+document.head.insertAdjacentHTML('beforeend',`<style>
+.pic27{position:relative;margin-top:24px}
+.pic27 .st{opacity:0}
+.pic27.go .s1{animation:op22 .3s ease-out .2s forwards}
+.pic27.go .s2{animation:dn22 .35s ease-out .9s forwards}
+.pic27.go .s3{animation:dn22 .35s ease-out 1.7s forwards}
+.pic27.go .s4{animation:dn22 .35s ease-out 2.5s forwards}
+.pic27.go .s5{animation:op22 .3s ease-out 3.2s forwards}
+.pic27 .lab{font-size:14px;color:var(--ink2)}
+.pic27 .bar27{display:flex;gap:3px;height:44px;margin-top:6px}
+.pic27 .bar27 i{display:flex;align-items:center;padding:0 10px;border-radius:8px;font-style:normal;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden}
+.pic27 .ends{display:flex;justify-content:space-between;margin-top:6px;font-size:14px;font-weight:600}
+.pic27 .sub27{background:repeating-linear-gradient(135deg,#B9A57A 0 6px,#a8946a 6px 12px);color:#1B1206}
+.pic27 .wk27{display:flex;gap:4px;margin-top:10px;height:34px}
+.pic27 .wk27 i{flex:1;background:color-mix(in srgb,var(--spend) 70%,#22252B);border-radius:8px;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12.5px;font-weight:700;color:#1B1206}
+.pic27 .foot{margin-top:14px;font-size:15px;line-height:21px;color:var(--ink)}
+#layer.still .pic27 .st{opacity:1}
+@media (prefers-reduced-motion:reduce){.pic27 .st{opacity:1}}
+</style>`);
+function pic24(){const B=6000,sv=1200,sp=B-sv,subs=400,left=sp-subs,wks=4,wk=left/wks;
+ return `<div class="pic27 go" role="img" aria-label="Example: ₹6,000. Save ₹1,200, ₹4,800 to spend. Subscriptions ₹400 come off first, leaving ₹4,400. ₹4,400 ÷ 4 weeks = ₹1,100 a week.">
+ <div class="st s1"><div class="lab">Say you have ${money(B)} <span class="mut" style="font-size:12px">(an example)</span></div>
+  <div class="bar27"><i style="flex:${sv};background:var(--save);color:#14161A">${money(sv)}</i><i style="flex:${sp};background:var(--spend);color:#1B1206">${money(sp)}</i></div>
+  <div class="ends"><span style="color:var(--save)">Save</span><span>To spend</span></div></div>
+ <div class="st s2" style="margin-top:16px"><div class="lab">Subscriptions come off first</div>
+  <div class="bar27"><i style="flex:${left};background:var(--spend);color:#1B1206">${money(left)} left</i><i class="sub27" style="flex:${subs*2}">−${money(subs)}</i></div>
+  <div class="ends"><span class="mut" style="font-weight:500">${money(sp)} − subscriptions</span><span class="mut" style="font-weight:500">Netflix, Spotify</span></div></div>
+ <div class="st s3" style="margin-top:16px"><div class="eq20">${eqT20(money(left),'left')}<span class="op">÷</span>${eqT20(wks+' weeks','to last')}<span class="op">=</span>${eqT20(money(wk),'a week',1)}</div></div>
+ <div class="st s4"><div class="wk27">${Array.from({length:wks},()=>`<i>${money(wk)}</i>`).join('')}</div></div>
+ <p class="st s5 foot">Your weekly amount. Change a subscription and it is worked out again.</p></div>`}
+H.replay24=()=>{const el=document.querySelector('.pic27,.pic22');if(el){el.classList.remove('go');void el.offsetWidth;el.classList.add('go')}return false};
