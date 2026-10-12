@@ -28,10 +28,19 @@ const out=await p.evaluate(()=>{window.TIPS=false;const R=[];const ok=(name,c,in
  const setup=()=>{fresh(5000,20,4);const g=addGoal(S,{name:'Phone',target:5000});g.saved=600;S.free=400;render();return g};
  const again=(X,keep)=>{UI.flow={id:'sync24',step:2,d:{kp:String(X),keep}};setWeeks20(UI.flow.d,4);const n=syncNums24(UI.flow.d);H.sync24go();UI.popup=null;return n};
  let gs=setup();let n=again(3000,null);m=M25();
- ok('start again, savings as now',m.B===3000&&gs.saved===600&&S.free===400&&m.Sp===2000&&m.budget===n.wk&&check25().length===0,`goal ${gs.saved}, not in a goal ${S.free}, to spend ${m.Sp}, week ${m.budget} (preview ${n.wk})`);
+ ok('restart, savings as now',m.B===3000&&gs.saved===600&&S.free===400&&m.Sp===2000&&m.budget===n.wk&&check25().length===0,`goal ${gs.saved}, not in a goal ${S.free}, to spend ${m.Sp}, week ${m.budget} (preview ${n.wk})`);
  gs=setup();n=again(3000,1500);m=M25();
- ok('start again, keep more',gs.saved===600&&S.free===900&&m.Sv===1500&&m.Sp===1500&&check25().length===0,`goal ${gs.saved}, not in a goal ${S.free}, to spend ${m.Sp}`);
+ ok('restart, keep more',gs.saved===600&&S.free===900&&m.Sv===1500&&m.Sp===1500&&check25().length===0,`goal ${gs.saved}, not in a goal ${S.free}, to spend ${m.Sp}`);
  gs=setup();again(3000,700);m=M25();const a1=[gs.saved,S.free];gs=setup();again(3000,200);m=M25();
- ok('start again, keep less',a1[0]===600&&a1[1]===100&&gs.saved===200&&S.free===0&&m.Sp===2800&&check25().length===0,`keep 700: goal ${a1[0]}, not in a goal ${a1[1]}; keep 200: goal ${gs.saved}, not in a goal ${S.free}`);
+ ok('restart, keep less: same share each',a1[0]===420&&a1[1]===280&&gs.saved===120&&S.free===80&&m.Sp===2800&&check25().length===0,`keep 700: goal ${a1[0]}, not in a goal ${a1[1]}; keep 200: goal ${gs.saved}, not in a goal ${S.free}`);
+ gs=setup();doPay(S,{amt:150,target:{type:'cat',id:S.cats[0].id},payee:'x'});const tx0=S.txns.length;again(3000,null);
+ ok('restart keeps past spends',S.txns.length===tx0,`entries ${tx0}→${S.txns.length}`);
+ // v27.1 subscriptions: adding one takes it out of the money to spend now and the week is worked out again; cancelling gives it back
+ fresh(4000,0,4);m=M25();const w0=m.budget,end=Math.max(...m.active.map(p=>p.end));
+ UI.flow={id:'subform',d:{}};S.bills.push({id:'bq',name:'Netflix',amt:200,every:'month',dueDay:1,reserve:0,nextDue:new Date(S.now.getTime()+5*DAY),paid:[]});subRecalc27('Netflix','added');UI.flow=null;
+ m=M25();const due=reserve26(S.now.getTime(),end),wl=wksLeft25(S.now.getTime(),end);
+ ok('subscription added',m.held===due&&m.budget===Math.round((m.Sp-due)/wl)&&check25().length===0,`week ${w0}→${m.budget} (= (${m.Sp} − ${due}) ÷ ${wl})`);
+ H.subended(['bq']);m=M25();
+ ok('subscription cancelled',m.held===0&&m.budget===Math.round(m.Sp/wl)&&check25().length===0,`week now ${m.budget}, held ${m.held}`);
  return R});
 console.log(out.join('\n'));console.log(errs);await b.close()})()

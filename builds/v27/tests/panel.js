@@ -1,6 +1,6 @@
 const {chromium}=require('/opt/node-tools/node_modules/playwright');
 (async()=>{const b=await chromium.launch();const p=await (await b.newContext({viewport:{width:1280,height:1000}})).newPage();const errs=[];p.on('pageerror',e=>errs.push(e.stack.split('\n').slice(0,3).join('|')));
-await p.goto('file:///home/user/Trickle_bugetTracking/archive/session-workfiles/mockup27/mockup27.html#demo');await p.waitForTimeout(1200);
+await p.goto('file://'+require('path').resolve(__dirname,'../mockup27.html')+'#demo');await p.waitForTimeout(1200);
 const bad=[];
 for(const prof of ['T','Y','G','M']){
  await p.click(`[data-p="${prof}"]`);await p.waitForTimeout(200);

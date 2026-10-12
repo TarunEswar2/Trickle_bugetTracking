@@ -1,6 +1,6 @@
 const {chromium}=require('/opt/node-tools/node_modules/playwright');
 (async()=>{const b=await chromium.launch();const p=await (await b.newContext({viewport:{width:1280,height:1000}})).newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
-await p.goto('file:///home/user/Trickle_bugetTracking/archive/session-workfiles/mockup27/mockup27.html');await p.waitForTimeout(1500);
+await p.goto('file://'+require('path').resolve(__dirname,'../mockup27.html'));await p.waitForTimeout(1500);
 const click=async sel=>{await p.click(sel,{timeout:4000});await p.waitForTimeout(250)};const log=[];const closeIf=async()=>{if(await p.$('#coach21 [data-a=closesheet]'))await click('#coach21 [data-a=closesheet]');else if(await p.$('.sheet [data-a=closesheet]'))await click('.sheet [data-a=closesheet]')};
 const tip=()=>p.evaluate(()=>UI.sheet&&UI.sheet.id==='tip'?UI.sheet.p.k:UI.sheet&&UI.sheet.id==='gridhow'?'grid':null);
 await p.evaluate(()=>startOnb());await p.waitForTimeout(300);

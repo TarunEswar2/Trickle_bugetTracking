@@ -1,6 +1,6 @@
 const {chromium}=require('/opt/node-tools/node_modules/playwright');
 (async()=>{const b=await chromium.launch();const p=await (await b.newContext({viewport:{width:1280,height:1000}})).newPage();const errs=[];p.on('pageerror',e=>errs.push(e.stack.split('\n').slice(0,3).join(' | ')));
-await p.goto('file:///home/user/Trickle_bugetTracking/archive/session-workfiles/mockup27/mockup27.html#demo');await p.waitForTimeout(1500);
+await p.goto('file://'+require('path').resolve(__dirname,'../mockup27.html')+'#demo');await p.waitForTimeout(1500);
 let seed=7;const rnd=()=>{seed=(seed*1664525+1013904223)%4294967296;return seed/4294967296};
 const bad=[];
 for(const prof of ['V','G','T','Y','N','H','M','fresh','track']){

@@ -82,3 +82,55 @@ HI.keep27=(a,el)=>{const d=UI.flow.d,X=amtOf(d.kp);d.keep=Math.round(X*(+el.valu
 {const _s=H.sync24go;H.sync24go=()=>{const r=_s();const m=M25();say(`Started again. ${money(m.budget)} for this week.`);return r}}
 /* the old week-end "Does your balance still look right?" step is skipped: Trickle does not ask about the bank */
 {const _ow=H.openweek;if(_ow)H.openweek=a=>{const r=_ow(a);if(UI.popup&&UI.popup.step==='bal')UI.popup.step=1;return r}}
+
+/* ===== v27.1 (12 Oct, Tarun): very simple. No "Money to last" and no Your money screen. Settings is full screen with one red
+   button at the bottom, "Restart budgeting": a warning, then the onboarding questions again. Past spends stay logged.
+   If savings do not fit the new split, every pot keeps the same share (free money and each goal shrink by the same percentage).
+   Adding, editing, pausing or cancelling a subscription takes it out of the money to spend now and works the week out again. ===== */
+document.head.insertAdjacentHTML('beforeend',`<style>
+.sheet:has(.fs27){top:0;max-height:none;border-radius:0;border-top:0;padding-top:58px;display:flex;flex-direction:column}
+.fs27{display:flex;flex-direction:column;min-height:100%}
+.btn.red27{background:#E5534B;color:#fff}
+.rs27{margin-top:auto;padding-top:28px}
+.fs27>.back{align-self:flex-start}
+</style>`);
+
+/* Home: nothing about money to last. Only if some money sits outside every week, one small card asks what to do with it */
+incomeRow17=function(){const m=M25();if(!m||m.loose<1)return '';
+ return `<div class="nd21" style="margin-top:6px"><b>${money(m.loose)} isn't in any week</b><div class="row" style="gap:8px;margin-top:12px"><button class="btn s q" data-a="loose25|save">Put in savings</button><button class="btn s q" data-a="loose25|plan">Spread over 4 weeks</button></div></div>`};
+
+/* Settings: full screen; Restart budgeting at the bottom, the only red button */
+{const _s=SHEETS.settings;SHEETS.settings=p=>{const h=_s(p);if(p&&p.sub)return `<div class="fs27">${h}</div>`;
+ return `<div class="fs27"><button class="back" data-a="closesheet">‹ Back</button>${h}<div class="rs27"><button class="btn red27" data-a="restart27">Restart budgeting</button><div class="sm" style="margin-top:8px;text-align:center">Set your money and weeks again. Past spends stay.</div></div></div>`}}
+SHEETS.restart27=()=>`<div class="title" style="font-size:26px">Restart your budget?</div>
+ <div class="sub" style="margin-top:8px">You will answer the first questions again: how much you have, what to keep aside, how long it lasts.</div>
+ <div class="sub" style="margin-top:8px">Your past spends stay logged. Your savings stay if they fit.</div>
+ <div class="col" style="gap:10px;margin-top:22px"><button class="btn red27" data-a="restart27go">Continue</button><button class="btn q" data-a="settings">Cancel</button></div>`;
+H.restart27=()=>{openSheet('restart27',{});return false};
+H.restart27go=()=>{UI.sheet=null;H.sync24();return false};
+
+/* when savings do not fit, every pot keeps the same share (Tarun): not-in-a-goal money and each goal shrink by the same percentage */
+function cutSavings26(cut){const gs=S.goals.filter(g=>g.state!=='done'&&g.saved>0),tot=S.free+gs.reduce((a,g)=>a+g.saved,0);if(!(cut>0)||tot<=0)return;
+ const keep=Math.max(0,tot-cut),f=keep/tot;let given=0;gs.forEach(g=>{g.saved=Math.round(g.saved*f);given+=g.saved});S.free=Math.max(0,Math.round(keep-given))}
+function keepNote27(n){if(n.cut>0)return `Your savings (${money(n.sv)}) don't fit. All of it goes down by ${Math.round(n.cut/n.sv*100)}%, so each goal keeps its share.`;
+ if(n.cut<0)return n.sv>0?`Your savings (${money(n.sv)}) fit. They stay, and ${money(-n.cut)} more goes in.`:'';return n.sv>0?'Your savings fit. They stay as they are.':''}
+
+/* the restart questions are the onboarding questions */
+{const _f=FLOWS.sync24;FLOWS.sync24=F=>{let h=_f(F);const d=F.d;
+ if(F.step===0){const ch=[3000,6000,10000,15000];h=h.replace('How much do you have now?','How much money do you have to plan?').replace('All of it, savings too. Trickle never sees your bank.','All of it, savings too. Trickle never sees your bank.')
+.replace(/(<div class="hero")/,`<div class="row wrap" style="gap:8px;margin-top:14px">${ch.map(v=>`<button class="chip" data-a="kp27|${v}">${money(v)}</button>`).join('')}</div>$1`)}
+ if(F.step===2)h=h.replace('>Start again</button>','>Restart my budget</button>');
+ return h.replace('‹ Close</button>','‹ Cancel</button>')}}
+H.kp27=a=>{UI.flow.d.kp=String(a[0])};
+{const _go=H.sync24go;H.sync24go=()=>{const r=_go();const m=M25();say(`Restarted. ${money(m.budget)} for this week.`);return r}}
+
+/* subscriptions: added, changed, paused, cancelled or removed → out of the money to spend now, and the week is worked out again */
+function subRecalc27(name,what){if(!S.m25)return;S.m25.reset=stamp26();render();const m=M25();say(`${name?name+' ':''}${what}. Your week is now ${money(m.budget)}.`)}
+['sfsave','addbill','subended','subpause','subremove'].forEach(k=>{const f=H[k];if(!f)return;H[k]=a=>{const n0=S.bills.length,ids=S.bills.map(b=>b.id+':'+b.amt+':'+(b.ended?1:0)+':'+(b.paused?1:0)).join();
+ const inOnb=UI.flow&&UI.flow.id==='onb';const r=f(a);if(inOnb)return r;
+ const ids1=S.bills.map(b=>b.id+':'+b.amt+':'+(b.ended?1:0)+':'+(b.paused?1:0)).join();if(ids1===ids)return r;
+ const b=S.bills.length>n0?S.bills[S.bills.length-1]:(a&&a[0]&&S.bills.find(x=>x.id===a[0]));
+ subRecalc27(b&&b.name,k==='subended'?'cancelled':k==='subpause'?(b&&b.paused?'paused':'back on'):k==='subremove'?'removed':S.bills.length>n0?'added':'changed');return false}});
+/* demo profiles: their plan lasts as many weeks as their money covers at their weekly amount, so the first recalculation
+   (a subscription, money in, Monday) gives about the same week instead of jumping */
+{const _i=init25;init25=function(){_i();const A=S.m25,p0=A&&A.pools.find(p=>p.seed);if(p0&&A.seed&&A.seed.budget>0){const k=Math.max(1,Math.round(p0.amt/A.seed.budget));p0.end=sow(A.t0)+6*DAY+(k-1)*WK}}}
