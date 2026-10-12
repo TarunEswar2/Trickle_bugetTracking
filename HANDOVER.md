@@ -1,5 +1,7 @@
 # Trickle — handover
 
+## Figma (12 Oct): the v27 onboarding picture screen is in the Figma file https://www.figma.com/design/b9MRkClYToyPjpMcDaPbeT on Page 1, to the right of the v14 export, as a frame named "v27 · 01 Onboarding · Picture" (node 60:2). Built with auto-layout and real text (Manrope), not a flat image. The rest of the Figma file is still the v14 look. The striped subscriptions piece is a solid colour there.
+
 ## v27.1 (12 Oct, same link https://claude.ai/artifact/9iayqqrRwrnV53oCzPemgo): moved to `builds/v27/` (README has every build detail). "Money to last" and the Your money screen removed; Settings full screen with a red Restart budgeting (warning, then the onboarding questions; past spends kept; savings shrink by the same percentage if they do not fit); subscriptions recalculate the week on add, change, pause, cancel or remove (V27-5…9). Tarun reported a crash when adding; not reproduced (5,000 random taps, every add path). Ask him for the exact steps if it happens again.
 
 ## v27 (11 Oct, https://claude.ai/artifact/9iayqqrRwrnV53oCzPemgo): no balance on screen (Tarun). Home shows the weekly allowance and "Money to last"; the Balance screen is now "Your money" (running income and dates); "Add income"; goals have no dates ("₹X to go"); Start again asks what you have now, then the savings/spend split, then how long (V27-1…4, `docs/claude/v27_money_model.md`). Build now in `builds/v27/` (`ui27.js`). Tests: scenarios 9/9, model.js 0 failures on 9 seeds, screen tests pass. Open: "Add income" and "Money to last" wording (mine).
