@@ -137,6 +137,12 @@ hr,.hr{border-color:var(--ink) !important}
 `;
 document.head.insertAdjacentHTML('beforeend','<style id="paper28">'+PAPER28+'</style>');
 const PAPER28B=`
+/* the simulator panel sits outside the phone and stays dark: give it the old dark tokens back */
+.panel{--bg0:#05070B;--bg1:#0B0E14;--bg2:#12161E;--bg3:#1A1F29;--line:#262C37;--ink:#F5F7FA;--ink2:#B4BCC8;--ink3:#8A92A1;--accent:#4FD1A0;--mint:#4FD1A0;color:#F5F7FA}
+.panel button,.panel input,.panel select{color:var(--ink) !important;box-shadow:none;transform:none}
+/* phone: small grey text darker */
+#phone .sm,#phone .sub{color:#4A4034}#phone .mut,#phone .cap{color:#6B6051}
+#phone .sm{font-size:14px}
 #phone .gcat23 button{background:#FFFAEE;border:2px solid var(--ink);color:var(--ink);box-shadow:2px 3px 0 var(--ink);border-radius:14px 12px 15px 12px}
 #phone .gcat23 button.on{background:var(--sun2);transform:rotate(-2deg)}
 #phone .gcat23 button small{color:var(--ink)}
