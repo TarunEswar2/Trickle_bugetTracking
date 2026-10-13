@@ -883,3 +883,11 @@ Research (web search, 10 Oct): Monzo's community thread on a budgeting widget (l
 | V27-8 | Adding, changing, pausing, cancelling or removing a subscription takes it out of the money to spend now (every payment due before the plan ends) and works the weekly allowance out again from that moment; the toast says the new week | Tarun (12 Oct): "deduct it from the spendable money and recalculate the weekly allowance again; if cancelled do the same" | scenarios.js "subscription added / cancelled"; model.js subAdd, subCancel | CONFIRMED (Tarun) |
 | V27-9 | Demo profiles: their starting plan lasts as many weeks as their money covers at their demo weekly amount, so the first recalculation does not jump | Found while testing V27-8 (₹1,072 → ₹495) | Mockup only | PROPOSED |
 | V27-10 | The first onboarding picture shows the sum: ₹6,000 → save ₹1,200 / to spend ₹4,800 → subscriptions ₹400 off first → ₹4,400 left ÷ 4 weeks = ₹1,100 a week, as bars, the "left ÷ weeks =" boxes and four equal week blocks (replaces the day grid) | Tarun (12 Oct): "just show 4800 − subscriptions; remaining amount / duration = weekly balance, of course using visuals" | Onboarding screen 1 | CONFIRMED (Tarun) for the sum; example numbers mine |
+
+## v28 "Paper" (13 Oct 2026)
+| ID | Domain | Decision | Evidence | Validation gate | Status |
+|---|---|---|---|---|---|
+| V28-1 | Visual | Change the whole visual language: more interesting, satisfying, human made | Tarun, 13 Oct | Tarun reviews build | CONFIRMED (direction) |
+| V28-2 | Visual | Paper-and-sticker language: warm paper, ink outlines, hard shadows, Fraunces / Figtree / Caveat | `v28_visual_language.md` | Tarun reviews; student round | PROPOSED |
+| V28-3 | Motion | Motion only on first appearance of a screen and on press; reduced-motion respected | Calm principle; v28 doc | Tarun reviews | PROPOSED |
+| V28-4 | Visual | Light only; dark mode dropped in this build | Paper needs a light page | Ask Tarun | PROPOSED |

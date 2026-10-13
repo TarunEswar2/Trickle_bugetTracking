@@ -1,5 +1,7 @@
 # Trickle — handover
 
+## v28 "Paper" (13 Oct): whole new visual language at Tarun's request (warm paper, ink outlines, sticker shadows, Fraunces/Figtree/Caveat, press and first-appearance motion). Money model = v27. Build `builds/v28/` (`ui28.js`), doc `docs/claude/v28_visual_language.md`, V28-1…4. Tests pass (scenarios, model, fuzz, panel, tips, scan5). Figma is still the v27 dark look: re-export only if Tarun asks. Open: does he like the direction? Dark mode dropped.
+
 ## Figma (13 Oct): all v27 screens, messages, prompts, tips, widgets and cards are in Figma on the page "v27 · all screens" (108 frames, 13 sections): https://www.figma.com/design/b9MRkClYToyPjpMcDaPbeT . Editable layers, not auto-layout or components yet. Tooling and how to re-export: `builds/v27/figma-export/README.md`. The v14 look on Page 1 is untouched.
 
 ## Figma (12 Oct): the v27 onboarding picture screen is in the Figma file https://www.figma.com/design/b9MRkClYToyPjpMcDaPbeT on Page 1, to the right of the v14 export, as a frame named "v27 · 01 Onboarding · Picture" (node 60:2). Built with auto-layout and real text (Manrope), not a flat image. The rest of the Figma file is still the v14 look. The striped subscriptions piece is a solid colour there.
